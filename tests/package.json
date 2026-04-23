@@ -1,0 +1,34 @@
+{
+  "name": "kptest-integration-tests",
+  "version": "1.0.0",
+  "description": "Integration tests for KPTEST system",
+  "scripts": {
+    "test": "playwright test",
+    "test:auth": "playwright test auth",
+    "test:api": "playwright test api",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "test:clean": "rm -rf playwright-report test-results.json test-results/",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.{ts,json}\""
+  },
+  "keywords": [
+    "kptest",
+    "playwright",
+    "e2e",
+    "integration-tests",
+    "api-tests"
+  ],
+  "author": "KPTEST Team",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@playwright/test": "^1.43.0",
+    "@types/node": "^20.12.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

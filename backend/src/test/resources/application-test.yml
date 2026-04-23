@@ -1,0 +1,76 @@
+# Test Configuration for KPTESTPRO Backend
+# Used for unit and integration tests
+
+spring:
+  application:
+    name: kptest-test
+  
+  # In-memory database for tests
+  datasource:
+    url: jdbc:tc:postgresql:15-alpine:///kptest_test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: test
+    password: test
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+  
+  # Disable Flyway for tests
+  flyway:
+    enabled: false
+  
+  # Redis configuration for tests
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: test
+  
+  # Disable email in tests
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
+
+# Security configuration
+kptest:
+  security:
+    max-login-attempts: 5
+    lockout-duration-minutes: 30
+  
+  # JWT configuration for tests
+  jwt:
+    secret: test-jwt-secret-key-for-testing-purposes-only-min-256-bits-required
+    expiration-ms: 3600000  # 1 hour
+    refresh-expiration-ms: 604800000  # 7 days
+    issuer: kptest-test
+
+# Disable OpenAPI/Swagger in tests
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# Logging configuration
+logging:
+  level:
+    root: WARN
+    com.kptest: DEBUG
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+
+# Actuator endpoints for tests
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

@@ -1,0 +1,119 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: kptest-backend
+  
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:kptest}
+    username: ${DB_USER:kptest}
+    password: ${DB_PASSWORD:kptest_password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+        default_schema: public
+  
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+  
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+  
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+
+# JWT Configuration
+kptest:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-key-must-be-at-least-32-characters-long-for-security}
+    expiration-ms: 900000  # 15 minutes
+    refresh-expiration-ms: 604800000  # 7 days
+    issuer: kptest-api
+  
+  security:
+    max-login-attempts: 5
+    lockout-duration-minutes: 15
+    password-min-length: 10
+    session-timeout-minutes: 30
+  
+  his:
+    base-url: ${HIS_BASE_URL:http://localhost:8081}
+    api-key: ${HIS_API_KEY:dev-api-key}
+    connect-timeout-ms: 5000
+    read-timeout-ms: 10000
+    fallback-enabled: true
+  
+  audit:
+    enabled: true
+    log-path: ${AUDIT_LOG_PATH:./logs/audit}
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  info:
+    git:
+      mode: full
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.kptest: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/kptest-backend.log

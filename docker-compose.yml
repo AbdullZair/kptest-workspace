@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: kptest-postgres
+    environment:
+      POSTGRES_DB: kptest
+      POSTGRES_USER: kptest
+      POSTGRES_PASSWORD: kptest_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./devops/backup:/backup
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kptest -d kptest"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kptest-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: kptest-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kptest-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kptest-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_HOST: postgres
+      DB_PASSWORD: kptest_password
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-change-in-production}
+      HIS_BASE_URL: http://his-mock:8081
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/logs:/app/logs
+    networks:
+      - kptest-network
+
+  # Frontend Web
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: kptest-frontend
+    environment:
+      VITE_API_URL: http://localhost:8080/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - kptest-network
+
+  # HIS Mock (for development)
+  his-mock:
+    build:
+      context: ./devops/his-mock
+      dockerfile: Dockerfile
+    container_name: kptest-his-mock
+    ports:
+      - "8081:8081"
+    networks:
+      - kptest-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  kptest-network:
+    driver: bridge

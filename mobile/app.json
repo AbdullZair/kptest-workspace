@@ -1,0 +1,72 @@
+{
+  "expo": {
+    "name": "KPTEST Mobile",
+    "slug": "kptest-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1a2e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kptest.mobile",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "KPTEST Mobile requires Face ID to authenticate you securely.",
+        "NSBiometricUsageDescription": "KPTEST Mobile requires biometric authentication to access your account."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1a1a2e"
+      },
+      "package": "com.kptest.mobile",
+      "versionCode": 1,
+      "permissions": [
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT",
+        "POST_NOTIFICATIONS",
+        "RECEIVE_BOOT_COMPLETED"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-notifications",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "KPTEST Mobile requires Face ID to authenticate you securely."
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "KPTEST Mobile requires Face ID to authenticate you securely."
+        }
+      ]
+    ],
+    "scheme": "kptest-mobile",
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/your-project-id"
+    },
+    "extra": {
+      "apiUrl": "https://api.kptest.com",
+      "environment": "production"
+    },
+    "runtimeVersion": "1.0.0",
+    "owner": "kptest"
+  }
+}

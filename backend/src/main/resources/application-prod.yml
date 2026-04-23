@@ -1,0 +1,25 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  
+  flyway:
+    clean-disabled: true
+  
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    root: WARN
+    com.kptest: INFO
+    org.springframework.security: WARN
+
+kptest:
+  jwt:
+    # Must be overridden by environment variable in production
+    secret: ${JWT_SECRET:CHANGE_ME_IN_PRODUCTION}
+  
+  his:
+    base-url: ${HIS_BASE_URL}
+    api-key: ${HIS_API_KEY}

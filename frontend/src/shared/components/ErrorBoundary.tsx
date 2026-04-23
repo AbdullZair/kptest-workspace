@@ -1,0 +1,169 @@
+import {
+  type ComponentType,
+  type ErrorInfo,
+  type PropsWithChildren,
+  Component,
+} from 'react'
+import { Button } from './Button'
+import { Card } from './Card'
+
+/**
+ * Error Boundary props interface
+ */
+interface ErrorBoundaryProps extends PropsWithChildren {
+  /** Custom fallback component */
+  fallback?: ComponentType<{ error: Error; resetError: () => void }>
+  /** Error message to display */
+  errorMessage?: string
+  /** Callback when error is caught */
+  onError?: (error: Error, errorInfo: ErrorInfo) => void
+  /** Whether to show reset button */
+  showResetButton?: boolean
+  /** Reset button text */
+  resetButtonText?: string
+}
+
+/**
+ * Error Boundary state
+ */
+interface ErrorBoundaryState {
+  hasError: boolean
+  error: Error | null
+  errorInfo: ErrorInfo | null
+}
+
+/**
+ * ErrorBoundary Component
+ *
+ * React Error Boundary for catching and handling errors
+ * in component trees with graceful degradation
+ *
+ * @example
+ * ```tsx
+ * <ErrorBoundary>
+ *   <PatientList />
+ * </ErrorBoundary>
+ *
+ * <ErrorBoundary
+ *   errorMessage="Something went wrong with this section"
+ *   onError={(error, info) => logError(error, info)}
+ * >
+ *   <Dashboard />
+ * </ErrorBoundary>
+ * ```
+ */
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props)
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    }
+  }
+
+  /**
+   * Static getDerivedStateFromError
+   * Updates state so the next render shows the fallback UI
+   */
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+    return { hasError: true, error }
+  }
+
+  /**
+   * componentDidCatch
+   * Logs error information to error reporting service
+   */
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    this.setState({ errorInfo })
+
+    // Call onError callback if provided
+    this.props.onError?.(error, errorInfo)
+
+    // Log error to console in development
+    if (import.meta.env.DEV) {
+      console.error('[ErrorBoundary] Caught error:', error, errorInfo)
+    }
+
+    // TODO: Send to error reporting service (Sentry, etc.)
+    // logErrorToService(error, errorInfo)
+  }
+
+  /**
+   * Reset error state
+   */
+  resetError = (): void => {
+    this.setState({
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    })
+  }
+
+  /**
+   * Render fallback UI or children
+   */
+  render(): React.ReactNode {
+    const { hasError, error } = this.state
+    const {
+      children,
+      fallback: Fallback,
+      errorMessage = 'Something went wrong',
+      showResetButton = true,
+      resetButtonText = 'Try again',
+    } = this.props
+
+    if (hasError) {
+      // Render custom fallback component
+      if (Fallback && error) {
+        return <Fallback error={error} resetError={this.resetError} />
+      }
+
+      // Render default error UI
+      return (
+        <Card variant="outlined" className="max-w-md mx-auto my-8">
+          <div className="text-center">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-error-100 mb-4">
+              <svg
+                className="h-6 w-6 text-error-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+
+            <h3 className="text-lg font-medium text-neutral-900 mb-2">
+              {errorMessage}
+            </h3>
+
+            {import.meta.env.DEV && error && (
+              <pre className="mt-4 p-4 bg-neutral-100 rounded-md text-sm text-left overflow-auto max-h-48">
+                <code>{error.message}</code>
+              </pre>
+            )}
+
+            {showResetButton && (
+              <div className="mt-6">
+                <Button onClick={this.resetError} variant="primary">
+                  {resetButtonText}
+                </Button>
+              </div>
+            )}
+          </div>
+        </Card>
+      )
+    }
+
+    return children
+  }
+}
+
+export default ErrorBoundary
