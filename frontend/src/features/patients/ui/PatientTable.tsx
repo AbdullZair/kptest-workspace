@@ -1,0 +1,309 @@
+import { memo, useMemo } from 'react'
+import { VerificationStatus, type VerificationStatusType } from './VerificationStatus'
+import type { Patient } from '../types'
+import { clsx } from 'clsx'
+
+/**
+ * PatientTable column definition
+ */
+export type SortField = 'name' | 'pesel' | 'created_at' | 'verification_status'
+
+/**
+ * Sort order
+ */
+export type SortOrder = 'asc' | 'desc'
+
+/**
+ * PatientTable component props
+ */
+export interface PatientTableProps {
+  patients: Patient[]
+  onPatientClick?: (patient: Patient) => void
+  onEdit?: (patient: Patient) => void
+  onDelete?: (patient: Patient) => void
+  sortField?: SortField
+  sortOrder?: SortOrder
+  onSortChange?: (field: SortField, order: SortOrder) => void
+  isLoading?: boolean
+  className?: string
+}
+
+/**
+ * Format date for display
+ */
+const formatDate = (dateString?: string): string => {
+  if (!dateString) return '-'
+  return new Date(dateString).toLocaleDateString('pl-PL')
+}
+
+/**
+ * Get gender label
+ */
+const getGenderLabel = (gender?: string): string => {
+  if (!gender) return '-'
+  const labels: Record<string, string> = {
+    MALE: 'M',
+    FEMALE: 'K',
+    OTHER: 'I',
+    UNKNOWN: 'N',
+  }
+  return labels[gender] || '-'
+}
+
+/**
+ * Sort icon component
+ */
+const SortIcon = ({ order, active }: { order: SortOrder; active: boolean }) => (
+  <span className={clsx('inline-flex flex-col ml-1', active ? 'opacity-100' : 'opacity-30')}>
+    <svg
+      className={clsx('w-3 h-3', order === 'asc' && 'text-primary-600')}
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+    <svg
+      className={clsx('w-3 h-3 -mt-1', order === 'desc' && 'text-primary-600')}
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        fillRule="evenodd"
+        d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  </span>
+)
+
+/**
+ * Sortable header cell
+ */
+const SortableHeader = ({
+  children,
+  field,
+  currentField,
+  order,
+  onSort,
+}: {
+  children: React.ReactNode
+  field: SortField
+  currentField?: SortField
+  order?: SortOrder
+  onSort?: (field: SortField, order: SortOrder) => void
+}) => {
+  const isActive = currentField === field
+  const nextOrder: SortOrder = isActive && order === 'asc' ? 'desc' : 'asc'
+
+  const handleClick = () => {
+    onSort?.(field, nextOrder)
+  }
+
+  return (
+    <th
+      className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider cursor-pointer hover:bg-neutral-50 transition-colors"
+      onClick={handleClick}
+      role="columnheader"
+      aria-sort={isActive ? (order === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
+      <span className="flex items-center">
+        {children}
+        <SortIcon order={isActive ? order : 'asc'} active={isActive} />
+      </span>
+    </th>
+  )
+}
+
+/**
+ * PatientTable Component
+ *
+ * Displays patients in a sortable table format
+ *
+ * @example
+ * ```tsx
+ * <PatientTable
+ *   patients={patients}
+ *   sortField="name"
+ *   sortOrder="asc"
+ *   onSortChange={handleSort}
+ *   onPatientClick={handleClick}
+ * />
+ * ```
+ */
+export const PatientTable = memo(function PatientTable({
+  patients,
+  onPatientClick,
+  onEdit,
+  onDelete,
+  sortField,
+  sortOrder,
+  onSortChange,
+  isLoading = false,
+  className,
+}: PatientTableProps) {
+  const handleSort = (field: SortField, order: SortOrder) => {
+    onSortChange?.(field, order)
+  }
+
+  const baseStyles = clsx('overflow-hidden rounded-lg border border-neutral-200', className)
+
+  if (isLoading) {
+    return (
+      <div className={baseStyles}>
+        <div className="animate-pulse">
+          <div className="h-12 bg-neutral-50 border-b border-neutral-200" />
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-16 border-b border-neutral-100" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (patients.length === 0) {
+    return (
+      <div className={baseStyles}>
+        <div className="text-center py-12">
+          <svg
+            className="w-16 h-16 mx-auto mb-4 text-neutral-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1}
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+          <p className="text-neutral-500">Brak pacjentów do wyświetlenia</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={baseStyles}>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-neutral-200">
+          <thead className="bg-neutral-50">
+            <tr>
+              <SortableHeader field="name" currentField={sortField} order={sortOrder} onSort={handleSort}>
+                Imię i nazwisko
+              </SortableHeader>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                PESEL
+              </th>
+              <th className="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                Data ur.
+              </th>
+              <th className="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                Płeć
+              </th>
+              <SortableHeader
+                field="verification_status"
+                currentField={sortField}
+                order={sortOrder}
+                onSort={handleSort}
+              >
+                Status
+              </SortableHeader>
+              <SortableHeader
+                field="created_at"
+                currentField={sortField}
+                order={sortOrder}
+                onSort={handleSort}
+              >
+                Dodano
+              </SortableHeader>
+              <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                Akcje
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-neutral-100">
+            {patients.map((patient) => (
+              <tr
+                key={patient.id}
+                className="hover:bg-neutral-50 transition-colors cursor-pointer"
+                onClick={() => onPatientClick?.(patient)}
+              >
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <div className="text-sm font-medium text-neutral-900">
+                    {patient.first_name} {patient.last_name}
+                  </div>
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <code className="text-sm text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
+                    {patient.pesel}
+                  </code>
+                </td>
+                <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-neutral-600">
+                  {formatDate(patient.date_of_birth)}
+                </td>
+                <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap text-sm text-neutral-600">
+                  {getGenderLabel(patient.gender)}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <VerificationStatus
+                    status={patient.verification_status as VerificationStatusType}
+                    size="sm"
+                    showLabel={false}
+                  />
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-neutral-600">
+                  {formatDate(patient.created_at)}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-right">
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onEdit?.(patient)
+                      }}
+                      className="text-primary-600 hover:text-primary-700 p-1 rounded hover:bg-primary-50 transition-colors"
+                      aria-label="Edytuj"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onDelete?.(patient)
+                      }}
+                      className="text-rose-600 hover:text-rose-700 p-1 rounded hover:bg-rose-50 transition-colors"
+                      aria-label="Usuń"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+})
+
+export default PatientTable

@@ -29,6 +29,20 @@ const PatientDetailPage = lazy(() => import('@pages/patients/PatientDetailPage')
 const AppointmentsPage = lazy(() => import('@pages/appointments/AppointmentsPage'))
 const SettingsPage = lazy(() => import('@pages/settings/SettingsPage'))
 const ProfilePage = lazy(() => import('@pages/profile/ProfilePage'))
+const ProjectsPage = lazy(() => import('@features/projects/ui/ProjectsPage'))
+const ProjectDetailPage = lazy(() => import('@features/projects/ui/ProjectDetailPage'))
+const ProjectPatientsPage = lazy(() => import('@features/projects/ui/ProjectPatientsPage'))
+
+/**
+ * Messages pages
+ */
+const MessagesPage = lazy(() => import('@features/messages/ui/MessagesPage'))
+const ConversationPage = lazy(() => import('@features/messages/ui/ConversationPage'))
+
+/**
+ * Calendar pages
+ */
+const CalendarPage = lazy(() => import('@features/calendar/ui/CalendarPage'))
 
 /**
  * Route configuration
@@ -143,6 +157,54 @@ export const routes: RouteObject[] = [
         element: (
           <Suspense fallback={<PageLoader />}>
             <ProfilePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'projects',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ProjectsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'projects/:id',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ProjectDetailPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'projects/:id/patients',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ProjectPatientsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'messages',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <MessagesPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'messages/:threadId',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ConversationPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'calendar',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <CalendarPage />
           </Suspense>
         ),
       },
