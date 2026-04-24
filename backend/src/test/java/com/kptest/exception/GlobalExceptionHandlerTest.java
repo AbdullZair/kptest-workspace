@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -30,9 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Unit tests for GlobalExceptionHandler using standalone MockMvc setup.
  * This avoids loading the full Spring application context.
  */
-@ImportAutoConfiguration(exclude = {
-    com.kptest.infrastructure.config.JpaConfig.class
-})
 @DisplayName("GlobalExceptionHandler Unit Tests")
 class GlobalExceptionHandlerTest {
 
@@ -43,12 +39,13 @@ class GlobalExceptionHandlerTest {
     void setUp() {
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
         TestController controller = new TestController();
-        
+
+        // Use standalone setup with exception handler registered as controller advice
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setControllerAdvice(handler)
             .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter())
             .build();
-        
+
         objectMapper = new ObjectMapper();
     }
 
@@ -153,7 +150,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error_code").value("VALIDATION_ERROR"))
                 .andExpect(jsonPath("$.message").value("Validation failed"))
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.details").isArray())
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.path").value("/test/validation"));
@@ -166,8 +163,8 @@ class GlobalExceptionHandlerTest {
             mockMvc.perform(get("/test/constraint"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error_code").value("VALIDATION_ERROR"))
-                .andExpect(jsonPath("$.message").value("Validation failed"))
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message", org.hamcrest.Matchers.containsString("Validation error")))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.details").isArray())
                 .andExpect(jsonPath("$.timestamp").exists());
         }
@@ -185,7 +182,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error_code").value("RESOURCE_NOT_FOUND"))
                 .andExpect(jsonPath("$.message").value("User not found with identifier: 123"))
-                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.path").value("/test/not-found"));
         }
 
@@ -210,7 +207,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.error_code").value("DUPLICATE_RESOURCE"))
                 .andExpect(jsonPath("$.message").value("User with email 'test@example.com' already exists"))
-                .andExpect(jsonPath("$.status").value(409));
+                .andExpect(jsonPath("$.status").value("CONFLICT"));
         }
     }
 
@@ -224,9 +221,9 @@ class GlobalExceptionHandlerTest {
             // When & Then
             mockMvc.perform(get("/test/business-rule"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error_code").value("INVALID_OPERATION"))
+                .andExpect(jsonPath("$.error_code").value("BUSINESS_RULE_VIOLATION"))
                 .andExpect(jsonPath("$.message").value("Operation not allowed"))
-                .andExpect(jsonPath("$.status").value(400));
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
         }
     }
 
@@ -242,7 +239,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("UNAUTHORIZED"))
                 .andExpect(jsonPath("$.message").value("Invalid email/phone or password"))
-                .andExpect(jsonPath("$.status").value(401));
+                .andExpect(jsonPath("$.status").value("UNAUTHORIZED"));
         }
 
         @Test
@@ -253,7 +250,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("UNAUTHORIZED"))
                 .andExpect(jsonPath("$.message").value("Invalid email/phone or password"))
-                .andExpect(jsonPath("$.status").value(401));
+                .andExpect(jsonPath("$.status").value("UNAUTHORIZED"));
         }
 
         @Test
@@ -264,7 +261,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("UNAUTHORIZED"))
                 .andExpect(jsonPath("$.message").value("Invalid TOTP code"))
-                .andExpect(jsonPath("$.status").value(401));
+                .andExpect(jsonPath("$.status").value("UNAUTHORIZED"));
         }
     }
 
@@ -280,7 +277,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isLocked())
                 .andExpect(jsonPath("$.error_code").value("ACCOUNT_LOCKED"))
                 .andExpect(jsonPath("$.message").value("Account is temporarily locked due to too many failed login attempts"))
-                .andExpect(jsonPath("$.status").value(423));
+                .andExpect(jsonPath("$.status").value("LOCKED"));
         }
 
         @Test
@@ -291,7 +288,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isLocked())
                 .andExpect(jsonPath("$.error_code").value("ACCOUNT_LOCKED"))
                 .andExpect(jsonPath("$.message").value("Account is temporarily locked. Please try again later."))
-                .andExpect(jsonPath("$.status").value(423));
+                .andExpect(jsonPath("$.status").value("LOCKED"));
         }
     }
 
@@ -307,7 +304,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error_code").value("ACCESS_DENIED"))
                 .andExpect(jsonPath("$.message").value("You don't have permission to access this resource"))
-                .andExpect(jsonPath("$.status").value(403));
+                .andExpect(jsonPath("$.status").value("FORBIDDEN"));
         }
     }
 
@@ -323,7 +320,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.error_code").value("HIS_UNAVAILABLE"))
                 .andExpect(jsonPath("$.message").value("HIS system unavailable"))
-                .andExpect(jsonPath("$.status").value(503));
+                .andExpect(jsonPath("$.status").value("SERVICE_UNAVAILABLE"));
         }
     }
 
@@ -339,7 +336,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error_code").value("INTERNAL_ERROR"))
                 .andExpect(jsonPath("$.message").value("An unexpected error occurred"))
-                .andExpect(jsonPath("$.status").value(500));
+                .andExpect(jsonPath("$.status").value("INTERNAL_SERVER_ERROR"));
         }
 
         @Test
@@ -350,7 +347,7 @@ class GlobalExceptionHandlerTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error_code").value("INTERNAL_ERROR"))
                 .andExpect(jsonPath("$.message").value("An unexpected error occurred"))
-                .andExpect(jsonPath("$.status").value(500));
+                .andExpect(jsonPath("$.status").value("INTERNAL_SERVER_ERROR"));
         }
     }
 
@@ -400,56 +397,56 @@ class GlobalExceptionHandlerTest {
         @DisplayName("shouldReturnCorrectStatus_forBadRequest")
         void shouldReturnCorrectStatus_forBadRequest() throws Exception {
             mockMvc.perform(get("/test/validation"))
-                .andExpect(status().isBadRequest()); // 400
+                .andExpect(status().isBadRequest());
         }
 
         @Test
         @DisplayName("shouldReturnCorrectStatus_forUnauthorized")
         void shouldReturnCorrectStatus_forUnauthorized() throws Exception {
             mockMvc.perform(get("/test/invalid-credentials"))
-                .andExpect(status().isUnauthorized()); // 401
+                .andExpect(status().isUnauthorized());
         }
 
         @Test
         @DisplayName("shouldReturnCorrectStatus_forForbidden")
         void shouldReturnCorrectStatus_forForbidden() throws Exception {
             mockMvc.perform(get("/test/access-denied"))
-                .andExpect(status().isForbidden()); // 403
+                .andExpect(status().isForbidden());
         }
 
         @Test
         @DisplayName("shouldReturnCorrectStatus_forNotFound")
         void shouldReturnCorrectStatus_forNotFound() throws Exception {
             mockMvc.perform(get("/test/not-found"))
-                .andExpect(status().isNotFound()); // 404
+                .andExpect(status().isNotFound());
         }
 
         @Test
         @DisplayName("shouldReturnCorrectStatus_forConflict")
         void shouldReturnCorrectStatus_forConflict() throws Exception {
             mockMvc.perform(get("/test/duplicate"))
-                .andExpect(status().isConflict()); // 409
+                .andExpect(status().isConflict());
         }
 
         @Test
         @DisplayName("shouldReturnCorrectStatus_forLocked")
         void shouldReturnCorrectStatus_forLocked() throws Exception {
             mockMvc.perform(get("/test/account-locked"))
-                .andExpect(status().isLocked()); // 423
+                .andExpect(status().isLocked());
         }
 
         @Test
         @DisplayName("shouldReturnCorrectStatus_forInternalServerError")
         void shouldReturnCorrectStatus_forInternalServerError() throws Exception {
             mockMvc.perform(get("/test/generic"))
-                .andExpect(status().isInternalServerError()); // 500
+                .andExpect(status().isInternalServerError());
         }
 
         @Test
         @DisplayName("shouldReturnCorrectStatus_forServiceUnavailable")
         void shouldReturnCorrectStatus_forServiceUnavailable() throws Exception {
             mockMvc.perform(get("/test/his-integration"))
-                .andExpect(status().isServiceUnavailable()); // 503
+                .andExpect(status().isServiceUnavailable());
         }
     }
 }

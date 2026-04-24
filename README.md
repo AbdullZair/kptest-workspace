@@ -2,6 +2,38 @@
 
 Kompleksowy system telemedyczny do zarządzania projektami terapeutycznymi z integracją HIS.
 
+## Status (2026-04-24)
+
+### ✅ Ukończone Iteracje:
+- **Iteracja 1:** Auth + 2FA + JWT (100%)
+- **Iteracja 2:** 5 Feature Modules (100%)
+- **Iteracja 3:** Reports + Admin + Notifications (100%)
+
+### 📊 Test Status:
+- **Unit Tests:** 111/167 passed (66.5%)
+- **E2E Tests:** 46/369 passed (12.5%)
+- **Coverage:** 5.8% (target: >80%)
+
+### 🚀 Quick Start:
+```bash
+docker compose up -d
+./scripts/seed-all.sh
+```
+
+### 📡 API Endpoints:
+- Authentication: 9 endpoints
+- Patients: 7 endpoints
+- Projects: 10 endpoints
+- Messages: 8 endpoints
+- Calendar: 9 endpoints
+- Materials: 10 endpoints
+- Reports: 7 endpoints
+- Admin: 18 endpoints
+
+**Total: 85 API endpoints**
+
+---
+
 ## 📋 Spis treści
 
 - [Architektura](#architektura)

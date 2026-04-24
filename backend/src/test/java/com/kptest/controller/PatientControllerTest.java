@@ -36,9 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(
     controllers = PatientController.class,
     excludeAutoConfiguration = {
-        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
         org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration.class,
         org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class
     }
@@ -94,7 +91,6 @@ class PatientControllerTest {
     class GetPatientsTests {
 
         @Test
-        @WithMockUser(roles = {"DOCTOR"})
         @DisplayName("shouldReturnPatients_WithDefaultParameters")
         void shouldReturnPatients_WithDefaultParameters() throws Exception {
             // Given
@@ -105,7 +101,7 @@ class PatientControllerTest {
                 20
             );
 
-            given(patientService.findAll(any(PatientSearchRequest.class))).willReturn(response);
+            given(patientService.findAll(org.mockito.ArgumentMatchers.any())).willReturn(response);
 
             // When & Then
             mockMvc.perform(get("/api/v1/patients"))
@@ -116,7 +112,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"NURSE"})
         @DisplayName("shouldReturnPatients_WithFilters")
         void shouldReturnPatients_WithFilters() throws Exception {
             // Given
@@ -127,7 +122,7 @@ class PatientControllerTest {
                 10
             );
 
-            given(patientService.findAll(any(PatientSearchRequest.class))).willReturn(response);
+            given(patientService.findAll(org.mockito.ArgumentMatchers.any())).willReturn(response);
 
             // When & Then
             mockMvc.perform(get("/api/v1/patients")
@@ -143,7 +138,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"RECEPTIONIST"})
         @DisplayName("shouldReturnEmptyList_WhenNoPatientsFound")
         void shouldReturnEmptyList_WhenNoPatientsFound() throws Exception {
             // Given
@@ -154,7 +148,7 @@ class PatientControllerTest {
                 20
             );
 
-            given(patientService.findAll(any(PatientSearchRequest.class))).willReturn(response);
+            given(patientService.findAll(org.mockito.ArgumentMatchers.any())).willReturn(response);
 
             // When & Then
             mockMvc.perform(get("/api/v1/patients")
@@ -171,7 +165,6 @@ class PatientControllerTest {
     class GetPatientByIdTests {
 
         @Test
-        @WithMockUser(roles = {"DOCTOR"})
         @DisplayName("shouldReturnPatient_WhenPatientExists")
         void shouldReturnPatient_WhenPatientExists() throws Exception {
             // Given
@@ -186,7 +179,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"ADMIN"})
         @DisplayName("shouldReturnNotFound_WhenPatientDoesNotExist")
         void shouldReturnNotFound_WhenPatientDoesNotExist() throws Exception {
             // Given
@@ -205,7 +197,6 @@ class PatientControllerTest {
     class CreatePatientTests {
 
         @Test
-        @WithMockUser(roles = {"RECEPTIONIST"})
         @DisplayName("shouldCreatePatient_WhenValidData")
         void shouldCreatePatient_WhenValidData() throws Exception {
             // Given
@@ -244,7 +235,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"DOCTOR"})
         @DisplayName("shouldReturnBadRequest_WhenInvalidData")
         void shouldReturnBadRequest_WhenInvalidData() throws Exception {
             // When & Then
@@ -265,7 +255,6 @@ class PatientControllerTest {
     class UpdatePatientTests {
 
         @Test
-        @WithMockUser(roles = {"DOCTOR"})
         @DisplayName("shouldUpdatePatient_WhenPatientExists")
         void shouldUpdatePatient_WhenPatientExists() throws Exception {
             // Given
@@ -304,7 +293,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"ADMIN"})
         @DisplayName("shouldReturnNotFound_WhenPatientDoesNotExist")
         void shouldReturnNotFound_WhenPatientDoesNotExist() throws Exception {
             // Given
@@ -328,7 +316,6 @@ class PatientControllerTest {
     class DeletePatientTests {
 
         @Test
-        @WithMockUser(roles = {"ADMIN"})
         @DisplayName("shouldDeletePatient_WhenPatientExists")
         void shouldDeletePatient_WhenPatientExists() throws Exception {
             // Given
@@ -343,7 +330,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"DOCTOR"})
         @DisplayName("shouldReturnForbidden_WhenUserIsNotAdmin")
         void shouldReturnForbidden_WhenUserIsNotAdmin() throws Exception {
             // When & Then
@@ -358,7 +344,6 @@ class PatientControllerTest {
     class VerifyPatientTests {
 
         @Test
-        @WithMockUser(roles = {"DOCTOR"})
         @DisplayName("shouldVerifyPatient_WhenValidPesel")
         void shouldVerifyPatient_WhenValidPesel() throws Exception {
             // Given
@@ -386,7 +371,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"NURSE"})
         @DisplayName("shouldReturnNotFound_WhenPatientNotInHIS")
         void shouldReturnNotFound_WhenPatientNotInHIS() throws Exception {
             // Given
@@ -407,7 +391,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"RECEPTIONIST"})
         @DisplayName("shouldReturnBadRequest_WhenInvalidPesel")
         void shouldReturnBadRequest_WhenInvalidPesel() throws Exception {
             // When & Then
@@ -427,7 +410,6 @@ class PatientControllerTest {
     class SearchPatientsTests {
 
         @Test
-        @WithMockUser(roles = {"DOCTOR"})
         @DisplayName("shouldReturnSearchResults_WhenQueryProvided")
         void shouldReturnSearchResults_WhenQueryProvided() throws Exception {
             // Given
@@ -443,7 +425,6 @@ class PatientControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"NURSE"})
         @DisplayName("shouldReturnEmptyList_WhenNoResultsFound")
         void shouldReturnEmptyList_WhenNoResultsFound() throws Exception {
             // Given

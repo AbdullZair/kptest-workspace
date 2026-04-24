@@ -174,7 +174,7 @@ class AuthenticationServiceTest {
             assertThat(result.requires2fa()).isFalse();
             assertThat(result.accessToken()).isEqualTo(TEST_ACCESS_TOKEN);
             assertThat(result.refreshToken()).isEqualTo(TEST_REFRESH_TOKEN);
-            assertThat(result.expiresIn()).isEqualTo(3600000L);
+            assertThat(result.expiresIn()).isEqualTo(3600L);
 
             then(userRepository).should().save(any(User.class)); // resetFailedLoginAttempts
             then(refreshTokenService).should().storeRefreshToken(testUser.getId(), TEST_REFRESH_TOKEN);

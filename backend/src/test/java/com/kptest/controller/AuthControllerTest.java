@@ -42,14 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Web MVC tests for AuthController.
  */
 @WebMvcTest(
-    controllers = AuthController.class,
-    excludeAutoConfiguration = {
-        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class
-    }
+    controllers = AuthController.class
 )
 @ImportAutoConfiguration(exclude = {
     com.kptest.infrastructure.config.JpaConfig.class
@@ -133,10 +126,10 @@ class AuthControllerTest {
             )).willReturn(testUser);
 
             given(userRepository.findById(TEST_USER_ID)).willReturn(Optional.of(testUser));
+            given(userRepository.findByEmailOrPhone(TEST_EMAIL)).willReturn(Optional.of(testUser));
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -167,7 +160,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
@@ -187,7 +179,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(incompleteJson))
                 .andExpect(status().isBadRequest());
@@ -214,7 +205,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict());
@@ -241,7 +231,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict());
@@ -271,7 +260,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -295,7 +283,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized());
@@ -316,7 +303,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -334,7 +320,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(emptyJson))
                 .andExpect(status().isBadRequest());
@@ -360,7 +345,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
@@ -395,7 +379,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/verify")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -417,7 +400,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/verify")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized());
@@ -443,8 +425,7 @@ class AuthControllerTest {
             given(authenticationService.enable2fa(TEST_USER_ID)).willReturn(setupResult);
 
             // When & Then
-            mockMvc.perform(post("/api/v1/auth/2fa/enable")
-                    .with(csrf()))
+            mockMvc.perform(post("/api/v1/auth/2fa/enable"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.enabled").value(false))
                 .andExpect(jsonPath("$.qr_code_url").value("otpauth://totp/test?secret=ABC123"))
@@ -463,7 +444,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/confirm")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -481,7 +461,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/confirm")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -499,7 +478,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/disable")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -510,18 +488,15 @@ class AuthControllerTest {
         @DisplayName("shouldReturn401_When2faManagementWithoutAuthentication")
         void shouldReturn401_When2faManagementWithoutAuthentication() throws Exception {
             // When & Then
-            mockMvc.perform(post("/api/v1/auth/2fa/enable")
-                    .with(csrf()))
+            mockMvc.perform(post("/api/v1/auth/2fa/enable"))
                 .andExpect(status().isUnauthorized());
 
             mockMvc.perform(post("/api/v1/auth/2fa/confirm")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{}"))
                 .andExpect(status().isUnauthorized());
 
             mockMvc.perform(post("/api/v1/auth/2fa/disable")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{}"))
                 .andExpect(status().isUnauthorized());
@@ -550,7 +525,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/refresh")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -569,7 +543,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/refresh")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized());
@@ -583,7 +556,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/refresh")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(emptyJson))
                 .andExpect(status().isBadRequest());
@@ -602,7 +574,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/forgot-password")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -617,7 +588,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/reset-password")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -637,8 +607,7 @@ class AuthControllerTest {
             given(userRepository.findById(TEST_USER_ID)).willReturn(Optional.of(testUser));
 
             // When & Then
-            mockMvc.perform(get("/api/v1/auth/me")
-                    .with(csrf()))
+            mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_id").value(TEST_USER_ID.toString()))
                 .andExpect(jsonPath("$.email").value(TEST_EMAIL))
@@ -649,8 +618,7 @@ class AuthControllerTest {
         @DisplayName("shouldReturn401_WhenGetUserProfileWithoutAuthentication")
         void shouldReturn401_WhenGetUserProfileWithoutAuthentication() throws Exception {
             // When & Then
-            mockMvc.perform(get("/api/v1/auth/me")
-                    .with(csrf()))
+            mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isUnauthorized());
         }
 
@@ -662,8 +630,7 @@ class AuthControllerTest {
             given(userRepository.findById(TEST_USER_ID)).willReturn(Optional.empty());
 
             // When & Then
-            mockMvc.perform(get("/api/v1/auth/me")
-                    .with(csrf()))
+            mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isNotFound());
         }
     }
@@ -683,7 +650,6 @@ class AuthControllerTest {
 
             // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
-                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isLocked());

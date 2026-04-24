@@ -5,6 +5,57 @@ All notable changes to the KPTEST project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.1.0] - 2026-04-24
+
+### Added
+
+#### Reports Module
+- **GET /api/v1/reports/compliance** - Compliance report for project
+- **GET /api/v1/reports/patients** - Patient statistics report
+- **GET /api/v1/reports/projects** - Project statistics report
+- **GET /api/v1/reports/materials** - Material statistics report
+- **GET /api/v1/reports/dashboard** - Dashboard KPIs
+- **POST /api/v1/reports/export** - Export report to PDF/Excel
+- **GET /api/v1/reports/history** - Report history
+
+#### Admin Module
+- **GET /api/v1/admin/users** - All users with filters
+- **GET /api/v1/admin/users/{id}** - User details
+- **PUT /api/v1/admin/users/{id}/role** - Update user role
+- **PUT /api/v1/admin/users/{id}/status** - Update user status
+- **PUT /api/v1/admin/users/{id}/reset-password** - Reset password
+- **DELETE /api/v1/admin/users/{id}** - Delete user
+- **GET /api/v1/admin/audit-logs** - Audit logs with filters
+- **GET /api/v1/admin/audit-logs/{id}** - Audit log details
+- **POST /api/v1/admin/audit-logs/export** - Export audit logs
+- **GET /api/v1/admin/system-logs** - System logs with filters
+- **POST /api/v1/admin/system-logs/export** - Export system logs
+- **GET /api/v1/admin/system/health** - System health status
+- **GET /api/v1/admin/system/metrics** - System metrics
+- **POST /api/v1/admin/system/cache/clear** - Clear cache
+- **POST /api/v1/admin/system/backup** - Create backup
+
+#### Notifications Module
+- Push notifications (FCM)
+- Email notifications
+- SMS notifications
+- Notification preferences
+
+### Fixed
+- 23 backend compilation errors
+- BCrypt hash for test users
+- JWT format (added 'typ' header)
+- expires_in (seconds instead of milliseconds)
+- 75 service tests
+- 46 E2E tests
+
+### Changed
+- Moved @EnableJpaAuditing to JpaConfig
+- Updated test configuration
+- Improved error handling
+
+---
+
 ## [1.1.0] - 2024-02-20
 
 ### Added - Iteracja 2: Features
@@ -173,6 +224,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Codename | Focus |
 |---------|------|----------|-------|
+| 1.1.0 | 2026-04-24 | Complete | Reports + Admin + Notifications |
 | 1.1.0 | 2024-02-20 | Features | Core therapy management |
 | 1.0.0 | 2024-01-15 | Foundation | Authentication & Security |
 | 0.1.0 | 2023-12-01 | Setup | Project initialization |

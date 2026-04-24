@@ -7,6 +7,7 @@ import com.kptest.domain.patient.Patient;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRole;
 import com.kptest.domain.user.VerificationStatus;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
