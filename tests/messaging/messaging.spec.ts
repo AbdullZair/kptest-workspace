@@ -21,9 +21,9 @@ test.describe('Messaging', () => {
   let testMessageId: string;
 
   /**
-   * Setup: Login before tests to get auth token
+   * Setup: Login before each test to get auth token
    */
-  test.beforeAll(async ({ request }) => {
+  test.beforeEach(async ({ request }) => {
     const loginResponse = await request.post(apiEndpoints.auth.login, {
       data: {
         identifier: testPatients.STANDARD.email,
@@ -42,7 +42,7 @@ test.describe('Messaging', () => {
     test('should create new message thread', async ({ request }) => {
       test.skip(!authToken, 'Auth token not available');
 
-      const uniqueSubject = `${testMessages.NEW_THREAD.subject}`;
+      const uniqueSubject = `${testMessages.NEW_THREAD.subject}-${Date.now()}`;
 
       const response = await request.post(apiEndpoints.messages.threads, {
         headers: {
@@ -285,9 +285,6 @@ test.describe('Messaging', () => {
     test('should upload file attachment', async ({ request }) => {
       test.skip(!authToken || !testThreadId, 'Auth token or thread ID not available');
 
-      // Create a test file
-      const testFilePath = path.join(__dirname, 'test-attachment.txt');
-      
       const response = await request.post(apiEndpoints.messages.attachments, {
         headers: {
           'Authorization': `Bearer ${authToken}`,
@@ -331,7 +328,7 @@ test.describe('Messaging', () => {
         },
       });
 
-      expect([httpStatus.BAD_REQUEST, httpStatus.PAYLOAD_TOO_LARGE, httpStatus.FORBIDDEN]).toContain(response.status());
+      expect([httpStatus.BAD_REQUEST, httpStatus.PAYLOAD_TOO_LARGE || 413, httpStatus.FORBIDDEN]).toContain(response.status());
     });
 
     test('should reject invalid file type', async ({ request }) => {

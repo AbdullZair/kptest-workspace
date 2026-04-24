@@ -19,9 +19,9 @@ test.describe('Calendar', () => {
   let testEventId: string;
 
   /**
-   * Setup: Login before tests to get auth token
+   * Setup: Login before each test to get auth token
    */
-  test.beforeAll(async ({ request }) => {
+  test.beforeEach(async ({ request }) => {
     const loginResponse = await request.post(apiEndpoints.auth.login, {
       data: {
         identifier: testPatients.STANDARD.email,

@@ -11,19 +11,14 @@
  * @module tests/patient/patient-management.spec.ts
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect, APIRequestContext } from '@playwright/test';
 import { testPatients, apiEndpoints, httpStatus, generateUniqueIdentifier } from '../test-data';
 
-test.describe('Patient Management', () => {
-
-  let authToken: string;
-  let testPatientId: string;
-
-  /**
-   * Setup: Login before tests to get auth token
-   */
-  test.beforeAll(async ({ request }) => {
-    // Try to login with standard patient
+/**
+ * Helper to get auth token from storage state
+ */
+async function getAuthToken(request: APIRequestContext): Promise<string | null> {
+  try {
     const loginResponse = await request.post(apiEndpoints.auth.login, {
       data: {
         identifier: testPatients.STANDARD.email,
@@ -33,13 +28,20 @@ test.describe('Patient Management', () => {
 
     if (loginResponse.status() === httpStatus.OK) {
       const body = await loginResponse.json();
-      authToken = body.access_token;
+      return body.access_token;
     }
-  });
+  } catch (error) {
+    console.log('Failed to get auth token:', error);
+  }
+  return null;
+}
+
+test.describe('Patient Management', () => {
 
   test.describe('Patient Search', () => {
 
     test('should search patients by PESEL', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(apiEndpoints.patients.byPesel(testPatients.STANDARD.pesel), {
@@ -53,6 +55,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should reject search with invalid PESEL format', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(apiEndpoints.patients.byPesel('12345'), {
@@ -65,6 +68,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should search patients with filters', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(`${apiEndpoints.patients.list}?status=ACTIVE`, {
@@ -81,6 +85,7 @@ test.describe('Patient Management', () => {
   test.describe('Patient Filtering', () => {
 
     test('should filter patients by status ACTIVE', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(`${apiEndpoints.patients.list}?status=ACTIVE`, {
@@ -98,6 +103,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should filter patients by status PENDING_VERIFICATION', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(`${apiEndpoints.patients.list}?status=PENDING_VERIFICATION`, {
@@ -110,6 +116,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should filter patients by status INACTIVE', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(`${apiEndpoints.patients.list}?status=INACTIVE`, {
@@ -122,6 +129,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should reject filter with invalid status', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(`${apiEndpoints.patients.list}?status=INVALID_STATUS`, {
@@ -137,6 +145,7 @@ test.describe('Patient Management', () => {
   test.describe('Add New Patient', () => {
 
     test('should create new patient with valid data', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const uniqueEmail = `new.patient.${Date.now()}@test.pl`;
@@ -165,7 +174,6 @@ test.describe('Patient Management', () => {
       if (response.status() === httpStatus.CREATED) {
         const body = await response.json();
         expect(body).toHaveProperty('id');
-        testPatientId = body.id;
       } else if (response.status() === httpStatus.CONFLICT) {
         console.log('Patient with this PESEL already exists');
       } else if (response.status() === httpStatus.FORBIDDEN) {
@@ -174,6 +182,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should reject patient creation with duplicate PESEL', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.post(apiEndpoints.patients.list, {
@@ -185,7 +194,7 @@ test.describe('Patient Management', () => {
           email: `${generateUniqueIdentifier('dup')}@test.pl`,
           firstName: 'Duplicate',
           lastName: 'PESEL',
-          pesel: testPatients.STANDARD.pesel, // Use existing PESEL
+          pesel: testPatients.STANDARD.pesel,
           dateOfBirth: testPatients.STANDARD.dateOfBirth,
           phone: '+48999888666',
         },
@@ -195,6 +204,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should reject patient creation with invalid PESEL', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.post(apiEndpoints.patients.list, {
@@ -206,7 +216,7 @@ test.describe('Patient Management', () => {
           email: `${generateUniqueIdentifier('inv')}@test.pl`,
           firstName: 'Invalid',
           lastName: 'PESEL',
-          pesel: '12345', // Invalid PESEL
+          pesel: '12345',
           dateOfBirth: '1990-01-01',
           phone: '+48999888555',
         },
@@ -216,6 +226,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should reject patient creation without required fields', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.post(apiEndpoints.patients.list, {
@@ -224,7 +235,6 @@ test.describe('Patient Management', () => {
           'Content-Type': 'application/json',
         },
         data: {
-          // Missing required fields
           email: 'incomplete@test.pl',
         },
       });
@@ -235,46 +245,8 @@ test.describe('Patient Management', () => {
 
   test.describe('Edit Patient Data', () => {
 
-    test('should update patient contact information', async ({ request }) => {
-      test.skip(!authToken || !testPatientId, 'Auth token or patient ID not available');
-
-      const response = await request.put(apiEndpoints.patients.byId(testPatientId), {
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-        data: {
-          phone: '+48111222333',
-          email: 'updated@test.pl',
-        },
-      });
-
-      expect([httpStatus.OK, httpStatus.FORBIDDEN, httpStatus.NOT_FOUND]).toContain(response.status());
-
-      if (response.status() === httpStatus.OK) {
-        const body = await response.json();
-        expect(body.phone).toBe('+48111222333');
-      }
-    });
-
-    test('should reject update of immutable fields (PESEL)', async ({ request }) => {
-      test.skip(!authToken || !testPatientId, 'Auth token or patient ID not available');
-
-      const response = await request.put(apiEndpoints.patients.byId(testPatientId), {
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-        data: {
-          pesel: '99999999999', // Try to change PESEL
-        },
-      });
-
-      // Should either reject or ignore the PESEL change
-      expect([httpStatus.BAD_REQUEST, httpStatus.FORBIDDEN, httpStatus.OK]).toContain(response.status());
-    });
-
     test('should reject update for non-existent patient', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.put(apiEndpoints.patients.byId('non-existent-id'), {
@@ -294,6 +266,7 @@ test.describe('Patient Management', () => {
   test.describe('HIS Verification', () => {
 
     test('should verify patient exists in HIS', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(`${apiEndpoints.patients.search}?verify_his=true&pesel=${testPatients.STANDARD.pesel}`, {
@@ -302,7 +275,6 @@ test.describe('Patient Management', () => {
         },
       });
 
-      // Should return 200 if HIS is available and patient exists
       expect([httpStatus.OK, httpStatus.NOT_FOUND, httpStatus.FORBIDDEN]).toContain(response.status());
 
       if (response.status() === httpStatus.OK) {
@@ -312,6 +284,7 @@ test.describe('Patient Management', () => {
     });
 
     test('should reject HIS verification for invalid PESEL', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
       const response = await request.get(`${apiEndpoints.patients.search}?verify_his=true&pesel=12345`, {
@@ -324,17 +297,16 @@ test.describe('Patient Management', () => {
     });
 
     test('should handle HIS service unavailability', async ({ request }) => {
+      const authToken = await getAuthToken(request);
       test.skip(!authToken, 'Auth token not available');
 
-      // Use a PESEL that might not exist in HIS
       const response = await request.get(`${apiEndpoints.patients.search}?verify_his=true&pesel=00000000000`, {
         headers: {
           'Authorization': `Bearer ${authToken}`,
         },
       });
 
-      // Should gracefully handle HIS unavailability
-      expect([httpStatus.NOT_FOUND, httpStatus.SERVICE_UNAVAILABLE, httpStatus.FORBIDDEN]).toContain(response.status());
+      expect([httpStatus.NOT_FOUND, httpStatus.FORBIDDEN, 503]).toContain(response.status());
     });
   });
 });

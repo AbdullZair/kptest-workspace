@@ -6,15 +6,15 @@
       "localStorage": [
         {
           "name": "auth_refresh_token",
-          "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmNjA3NTA2OC05YTFjLTRkZDMtOGE3MS05MzJhNTkzZjYyYTEiLCJpc3MiOiJrcHRlc3QtYXBpIiwiaWF0IjoxNzc3MDMwNDE1LCJleHAiOjE3Nzc2MzUyMTV9.xv4DmNHNKL-Ukgb5rylvlT5LbYZJvhevXYY5qZMKb_GAtN1a84acjUOxliySkR-B"
+          "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmNjA3NTA2OC05YTFjLTRkZDMtOGE3MS05MzJhNTkzZjYyYTEiLCJpc3MiOiJrcHRlc3QtYXBpIiwiaWF0IjoxNzc3MDMzNjkxLCJleHAiOjE3Nzc2Mzg0OTF9.YoXyXN_9KKRbewS3NmUdcodkBi_caDCXX3drLZvLIgmJkvlIROTiCrChapNp3Ywn"
         },
         {
           "name": "auth_token_expiry",
-          "value": "1777930416783"
+          "value": "1777933692242"
         },
         {
           "name": "auth_access_token",
-          "value": "eyJhbGciOiJIUzM4NCJ9.eyIyZmFfdmVyaWZpZWQiOnRydWUsInN1YiI6ImY2MDc1MDY4LTlhMWMtNGRkMy04YTcxLTkzMmE1OTNmNjJhMSIsInJvbGUiOiJQQVRJRU5UIiwiaXNzIjoia3B0ZXN0LWFwaSIsImlhdCI6MTc3NzAzMDQxNSwiZXhwIjoxNzc3MDMxMzE1fQ.Wcw1aURe0Nm3-t5alrxFJq1dDbLjjiR0ZjFG9AglN4ft0JI23wrouetnaM5akKAS"
+          "value": "eyJhbGciOiJIUzM4NCJ9.eyIyZmFfdmVyaWZpZWQiOnRydWUsInN1YiI6ImY2MDc1MDY4LTlhMWMtNGRkMy04YTcxLTkzMmE1OTNmNjJhMSIsInJvbGUiOiJQQVRJRU5UIiwiaXNzIjoia3B0ZXN0LWFwaSIsImlhdCI6MTc3NzAzMzY5MSwiZXhwIjoxNzc3MDM0NTkxfQ.NoAVqrhcJNfl8D3jmMgBiqNAtNRuc7x1F_XxSMoA1T487e66GhXyAd3Cn19YXMiE"
         }
       ]
     }

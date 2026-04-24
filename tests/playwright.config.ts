@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as path from 'path';
 
 /**
  * Playwright configuration for KPTEST integration tests.
@@ -32,23 +33,23 @@ export default defineConfig({
   use: {
     ignoreHTTPSErrors: true,
   },
-  
+
   // Fail the build on CI if you accidentally left test.only in the source code
   forbidOnly: !!process.env.CI,
-  
+
   // Retry on CI only
   retries: process.env.CI ? 2 : 0,
-  
+
   // Opt out of parallel tests
-  workers: process.env.CI ? 1 : undefined,
-  
+  workers: 1,
+
   // Reporter configuration
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
     ['list'],
     ['json', { outputFile: 'test-results.json' }],
   ],
-  
+
   // Shared settings for all the projects below
   use: {
     // Base URL for API requests
@@ -57,8 +58,8 @@ export default defineConfig({
     // Base URL for web UI (if testing portal)
     // baseURL: process.env.FRONTEND_BASE_URL || 'http://localhost:3000',
 
-    // Storage state - disabled until global-setup is fixed
-    // storageState: 'tests/.auth/user.json',
+    // Storage state for authenticated tests
+    storageState: path.join(__dirname, '.auth/user.json'),
 
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',
@@ -75,8 +76,8 @@ export default defineConfig({
       'Accept': 'application/json',
     },
   },
-  
-  // API test configuration
+
+  // Test projects configuration
   projects: [
     {
       name: 'api',
@@ -85,27 +86,12 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
       },
     },
-    
-    // E2E browser tests (if testing mobile app via web or portal)
+
+    // E2E browser tests
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
       testMatch: /.*\.spec\.ts/,
     },
-    
-    // Mobile viewport for responsive testing
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-      testMatch: /.*\.spec\.ts/,
-    },
   ],
-  
-  // Web server configuration (optional - if you need to start backend for tests)
-  // webServer: {
-  //   command: 'cd ../backend && ./gradlew bootRun',
-  //   url: 'http://localhost:8080/api/v1/auth/login',
-  //   timeout: 120 * 1000,
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });

@@ -8,13 +8,15 @@ import com.kptest.application.service.RegistrationService;
 import com.kptest.domain.patient.Patient;
 import com.kptest.domain.user.AccountStatus;
 import com.kptest.domain.user.User;
-import com.kptest.domain.user.UserRepository;
 import com.kptest.domain.user.UserRole;
 import com.kptest.exception.AccountLockedException;
 import com.kptest.exception.DuplicateResourceException;
 import com.kptest.exception.InvalidCredentialsException;
 import com.kptest.infrastructure.config.CustomUserDetailsService;
 import com.kptest.infrastructure.security.JwtService;
+import com.kptest.domain.user.UserRepository;
+import com.kptest.infrastructure.security.RefreshTokenService;
+import com.kptest.infrastructure.security.TotpService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,14 +42,14 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Web MVC tests for AuthController.
- */
 @WebMvcTest(
     controllers = AuthController.class
 )
 @ImportAutoConfiguration(exclude = {
-    com.kptest.infrastructure.config.JpaConfig.class
+    SecurityAutoConfiguration.class,
+    SecurityFilterAutoConfiguration.class,
+    com.kptest.infrastructure.config.JpaConfig.class,
+    com.kptest.infrastructure.config.SecurityConfig.class
 })
 @DisplayName("AuthController Web MVC Tests")
 class AuthControllerTest {
@@ -66,10 +70,16 @@ class AuthControllerTest {
     private JwtService jwtService;
 
     @MockBean
-    private UserRepository userRepository;
+    private TotpService totpService;
 
     @MockBean
-    private com.kptest.infrastructure.config.CustomUserDetailsService customUserDetailsService;
+    private RefreshTokenService refreshTokenService;
+
+    @MockBean
+    private CustomUserDetailsService customUserDetailsService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     private User testUser;
     private Patient testPatient;
@@ -109,7 +119,6 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldRegisterPatient_WhenValidRequest")
         void shouldRegisterPatient_WhenValidRequest() throws Exception {
-            // Given
             RegisterRequest request = new RegisterRequest(
                 TEST_EMAIL,
                 TEST_PASSWORD,
@@ -121,14 +130,12 @@ class AuthControllerTest {
                 "true"
             );
 
-            given(registrationService.registerPatient(
-                any(), any(), any(), any(), any(), any(), any()
-            )).willReturn(testUser);
+            given(registrationService.registerPatient(any(), any(), any(), any(), any(), any(), any()))
+                .willReturn(testUser);
 
             given(userRepository.findById(TEST_USER_ID)).willReturn(Optional.of(testUser));
             given(userRepository.findByEmailOrPhone(TEST_EMAIL)).willReturn(Optional.of(testUser));
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -146,19 +153,10 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn400_WhenInvalidRegistrationData")
         void shouldReturn400_WhenInvalidRegistrationData() throws Exception {
-            // Given
             RegisterRequest invalidRequest = new RegisterRequest(
-                "", // Empty identifier
-                "weak", // Weak password
-                "", // Empty PESEL
-                "", // Empty first name
-                "", // Empty last name
-                "invalid-email", // Invalid email
-                "invalid-phone", // Invalid phone
-                "" // No terms acceptance
+                "", "weak", "", "", "", "invalid-email", "invalid-phone", ""
             );
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(invalidRequest)))
@@ -170,14 +168,12 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn400_WhenMissingRequiredFields")
         void shouldReturn400_WhenMissingRequiredFields() throws Exception {
-            // Given
             String incompleteJson = """
                 {
                     "password": "TestPassword123!"
                 }
                 """;
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(incompleteJson))
@@ -187,23 +183,14 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn409_WhenEmailAlreadyExists")
         void shouldReturn409_WhenEmailAlreadyExists() throws Exception {
-            // Given
             RegisterRequest request = new RegisterRequest(
-                TEST_EMAIL,
-                TEST_PASSWORD,
-                TEST_PESEL,
-                TEST_FIRST_NAME,
-                TEST_LAST_NAME,
-                TEST_EMAIL,
-                "+48123456789",
-                "true"
+                TEST_EMAIL, TEST_PASSWORD, TEST_PESEL, TEST_FIRST_NAME,
+                TEST_LAST_NAME, TEST_EMAIL, "+48123456789", "true"
             );
 
-            given(registrationService.registerPatient(
-                any(), any(), any(), any(), any(), any(), any()
-            )).willThrow(new DuplicateResourceException("User", "email", TEST_EMAIL));
+            given(registrationService.registerPatient(any(), any(), any(), any(), any(), any(), any()))
+                .willThrow(new DuplicateResourceException("User", "email", TEST_EMAIL));
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -213,23 +200,14 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn409_WhenPeselAlreadyExists")
         void shouldReturn409_WhenPeselAlreadyExists() throws Exception {
-            // Given
             RegisterRequest request = new RegisterRequest(
-                TEST_EMAIL,
-                TEST_PASSWORD,
-                TEST_PESEL,
-                TEST_FIRST_NAME,
-                TEST_LAST_NAME,
-                TEST_EMAIL,
-                "+48123456789",
-                "true"
+                TEST_EMAIL, TEST_PASSWORD, TEST_PESEL, TEST_FIRST_NAME,
+                TEST_LAST_NAME, TEST_EMAIL, "+48123456789", "true"
             );
 
-            given(registrationService.registerPatient(
-                any(), any(), any(), any(), any(), any(), any()
-            )).willThrow(new DuplicateResourceException("Patient", "pesel", TEST_PESEL));
+            given(registrationService.registerPatient(any(), any(), any(), any(), any(), any(), any()))
+                .willThrow(new DuplicateResourceException("Patient", "pesel", TEST_PESEL));
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -244,21 +222,15 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldLogin_WhenValidCredentials")
         void shouldLogin_WhenValidCredentials() throws Exception {
-            // Given
             LoginRequest request = new LoginRequest(TEST_EMAIL, TEST_PASSWORD, null);
 
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
-                TEST_ACCESS_TOKEN,
-                TEST_REFRESH_TOKEN,
-                3600L,
-                false,
-                null
+                TEST_ACCESS_TOKEN, TEST_REFRESH_TOKEN, 3600L, false, null
             );
 
             given(authenticationService.authenticate(TEST_EMAIL, TEST_PASSWORD, null))
                 .willReturn(authResult);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -275,13 +247,11 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn401_WhenInvalidCredentials")
         void shouldReturn401_WhenInvalidCredentials() throws Exception {
-            // Given
             LoginRequest request = new LoginRequest(TEST_EMAIL, "wrongpassword", null);
 
             given(authenticationService.authenticate(TEST_EMAIL, "wrongpassword", null))
                 .willThrow(new InvalidCredentialsException());
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -293,7 +263,6 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn2faRequired_When2faEnabled")
         void shouldReturn2faRequired_When2faEnabled() throws Exception {
-            // Given
             LoginRequest request = new LoginRequest(TEST_EMAIL, TEST_PASSWORD, null);
 
             AuthenticationService.AuthResult authResult = AuthenticationService.AuthResult.requires2fa("temp_token_123");
@@ -301,7 +270,6 @@ class AuthControllerTest {
             given(authenticationService.authenticate(TEST_EMAIL, TEST_PASSWORD, null))
                 .willReturn(authResult);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -315,35 +283,25 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn400_WhenMissingCredentials")
         void shouldReturn400_WhenMissingCredentials() throws Exception {
-            // Given
-            String emptyJson = "{}";
-
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(emptyJson))
+                    .content("{}"))
                 .andExpect(status().isBadRequest());
         }
 
         @Test
         @DisplayName("shouldLoginWithTotpCode_WhenProvided")
         void shouldLoginWithTotpCode_WhenProvided() throws Exception {
-            // Given
             String totpCode = "123456";
             LoginRequest request = new LoginRequest(TEST_EMAIL, TEST_PASSWORD, totpCode);
 
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
-                TEST_ACCESS_TOKEN,
-                TEST_REFRESH_TOKEN,
-                3600L,
-                false,
-                null
+                TEST_ACCESS_TOKEN, TEST_REFRESH_TOKEN, 3600L, false, null
             );
 
             given(authenticationService.authenticate(TEST_EMAIL, TEST_PASSWORD, totpCode))
                 .willReturn(authResult);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -360,24 +318,14 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldVerify2fa_WhenValidTempTokenAndCode")
         void shouldVerify2fa_WhenValidTempTokenAndCode() throws Exception {
-            // Given
-            Map<String, String> request = Map.of(
-                "temp_token", "temp_token_123",
-                "totp_code", "123456"
-            );
+            Map<String, String> request = Map.of("temp_token", "temp_token_123", "totp_code", "123456");
 
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
-                TEST_ACCESS_TOKEN,
-                TEST_REFRESH_TOKEN,
-                3600L,
-                false,
-                null
+                TEST_ACCESS_TOKEN, TEST_REFRESH_TOKEN, 3600L, false, null
             );
 
-            given(authenticationService.verify2fa("temp_token_123", "123456"))
-                .willReturn(authResult);
+            given(authenticationService.verify2fa("temp_token_123", "123456")).willReturn(authResult);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/verify")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -389,16 +337,11 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn401_WhenInvalid2faCode")
         void shouldReturn401_WhenInvalid2faCode() throws Exception {
-            // Given
-            Map<String, String> request = Map.of(
-                "temp_token", "temp_token_123",
-                "totp_code", "wrong_code"
-            );
+            Map<String, String> request = Map.of("temp_token", "temp_token_123", "totp_code", "wrong_code");
 
             given(authenticationService.verify2fa("temp_token_123", "wrong_code"))
                 .willThrow(new InvalidCredentialsException());
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/verify")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -412,19 +355,14 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("shouldEnable2fa_WhenAuthenticated")
-        @WithMockUser(username = "test-user-id")
+        @WithMockUser(username = "test-user-id", roles = {"PATIENT"})
         void shouldEnable2fa_WhenAuthenticated() throws Exception {
-            // Given
             AuthenticationService.TwoFaSetupResult setupResult = new AuthenticationService.TwoFaSetupResult(
-                false,
-                "otpauth://totp/test?secret=ABC123",
-                "ABC123",
-                new String[]{"CODE1", "CODE2", "CODE3"}
+                false, "otpauth://totp/test?secret=ABC123", "ABC123", new String[]{"CODE1", "CODE2", "CODE3"}
             );
 
             given(authenticationService.enable2fa(TEST_USER_ID)).willReturn(setupResult);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/enable"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.enabled").value(false))
@@ -435,14 +373,12 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("shouldConfirm2fa_WhenValidCode")
-        @WithMockUser(username = "test-user-id")
+        @WithMockUser(username = "test-user-id", roles = {"PATIENT"})
         void shouldConfirm2fa_WhenValidCode() throws Exception {
-            // Given
             Map<String, String> request = Map.of("totp_code", "123456");
 
             given(authenticationService.confirm2fa(TEST_USER_ID, "123456")).willReturn(true);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/confirm")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -452,14 +388,12 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("shouldReturnFalse_WhenConfirm2faWithInvalidCode")
-        @WithMockUser(username = "test-user-id")
+        @WithMockUser(username = "test-user-id", roles = {"PATIENT"})
         void shouldReturnFalse_WhenConfirm2faWithInvalidCode() throws Exception {
-            // Given
             Map<String, String> request = Map.of("totp_code", "wrong_code");
 
             given(authenticationService.confirm2fa(TEST_USER_ID, "wrong_code")).willReturn(false);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/confirm")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -469,14 +403,12 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("shouldDisable2fa_WhenValidCode")
-        @WithMockUser(username = "test-user-id")
+        @WithMockUser(username = "test-user-id", roles = {"PATIENT"})
         void shouldDisable2fa_WhenValidCode() throws Exception {
-            // Given
             Map<String, String> request = Map.of("totp_code", "123456");
 
             willDoNothing().given(authenticationService).disable2fa(TEST_USER_ID, "123456");
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/disable")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -487,7 +419,6 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn401_When2faManagementWithoutAuthentication")
         void shouldReturn401_When2faManagementWithoutAuthentication() throws Exception {
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/2fa/enable"))
                 .andExpect(status().isUnauthorized());
 
@@ -510,20 +441,14 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldRefreshToken_WhenValidRefreshToken")
         void shouldRefreshToken_WhenValidRefreshToken() throws Exception {
-            // Given
             RefreshTokenRequest request = new RefreshTokenRequest(TEST_REFRESH_TOKEN);
 
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
-                TEST_ACCESS_TOKEN,
-                TEST_REFRESH_TOKEN + "_new",
-                3600L,
-                false,
-                null
+                TEST_ACCESS_TOKEN, TEST_REFRESH_TOKEN + "_new", 3600L, false, null
             );
 
             given(authenticationService.refreshTokens(TEST_REFRESH_TOKEN)).willReturn(authResult);
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/refresh")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -535,13 +460,11 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn401_WhenInvalidRefreshToken")
         void shouldReturn401_WhenInvalidRefreshToken() throws Exception {
-            // Given
             RefreshTokenRequest request = new RefreshTokenRequest("invalid_token");
 
             given(authenticationService.refreshTokens("invalid_token"))
                 .willThrow(new InvalidCredentialsException());
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/refresh")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -551,13 +474,9 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn400_WhenMissingRefreshToken")
         void shouldReturn400_WhenMissingRefreshToken() throws Exception {
-            // Given
-            String emptyJson = "{}";
-
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/refresh")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(emptyJson))
+                    .content("{}"))
                 .andExpect(status().isBadRequest());
         }
     }
@@ -569,10 +488,8 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturnSuccess_WhenForgotPasswordRequest")
         void shouldReturnSuccess_WhenForgotPasswordRequest() throws Exception {
-            // Given
             ForgotPasswordRequest request = new ForgotPasswordRequest(TEST_EMAIL, "email");
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/forgot-password")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -583,10 +500,8 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturnSuccess_WhenResetPasswordRequest")
         void shouldReturnSuccess_WhenResetPasswordRequest() throws Exception {
-            // Given
             ResetPasswordRequest request = new ResetPasswordRequest("token123", "NewPassword123!");
 
-            // When & Then
             mockMvc.perform(post("/api/v1/auth/reset-password")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
@@ -601,12 +516,10 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("shouldGetCurrentUserProfile_WhenAuthenticated")
-        @WithMockUser(username = "test-user-id")
+        @WithMockUser(username = "test-user-id", roles = {"PATIENT"})
         void shouldGetCurrentUserProfile_WhenAuthenticated() throws Exception {
-            // Given
             given(userRepository.findById(TEST_USER_ID)).willReturn(Optional.of(testUser));
 
-            // When & Then
             mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_id").value(TEST_USER_ID.toString()))
@@ -617,19 +530,16 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn401_WhenGetUserProfileWithoutAuthentication")
         void shouldReturn401_WhenGetUserProfileWithoutAuthentication() throws Exception {
-            // When & Then
             mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isUnauthorized());
         }
 
         @Test
         @DisplayName("shouldReturn404_WhenUserNotFound")
-        @WithMockUser(username = "test-user-id")
+        @WithMockUser(username = "test-user-id", roles = {"PATIENT"})
         void shouldReturn404_WhenUserNotFound() throws Exception {
-            // Given
             given(userRepository.findById(TEST_USER_ID)).willReturn(Optional.empty());
 
-            // When & Then
             mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isNotFound());
         }
@@ -642,13 +552,14 @@ class AuthControllerTest {
         @Test
         @DisplayName("shouldReturn423_WhenAccountLocked")
         void shouldReturn423_WhenAccountLocked() throws Exception {
-            // Given
             LoginRequest request = new LoginRequest(TEST_EMAIL, TEST_PASSWORD, null);
 
-            given(authenticationService.authenticate(TEST_EMAIL, TEST_PASSWORD, null))
-                .willThrow(new AccountLockedException());
+            User lockedUser = createUser();
+            lockedUser.setStatus(AccountStatus.BLOCKED);
+            lockedUser.setLockedUntil(Instant.now().plusSeconds(1800));
 
-            // When & Then
+            given(userRepository.findByEmailOrPhone(TEST_EMAIL)).willReturn(Optional.of(lockedUser));
+
             mockMvc.perform(post("/api/v1/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))

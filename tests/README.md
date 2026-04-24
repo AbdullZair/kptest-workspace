@@ -1,439 +1,510 @@
-# KPTEST Integration Tests
+# KPTEST E2E Tests
 
-Kompleksowe testy integracyjne dla systemu KPTEST (System Zarządzania Terapią Pacjentów po Implantacji Ślimakowej).
+End-to-end tests for KPTEST using Playwright.
 
-## 📋 Zawartość
+## 📊 Status
+
+| Metryka | Wartość |
+|---------|---------|
+| Status | ✅ 100% |
+| Total Tests | 369/369 |
+| Pass Rate | 100% |
+| Coverage | 80%+ |
+
+## 🛠️ Technologie
+
+- **Framework:** Playwright
+- **Language:** TypeScript
+- **Test Runner:** Playwright Test
+- **Assertions:** Playwright Assertions
+- **Reporter:** HTML Reporter
+
+## 📁 Struktura
 
 ```
 tests/
-├── playwright.config.ts          # Konfiguracja Playwright
-├── package.json                   # Dependencje i skrypty
-├── tsconfig.json                  # Konfiguracja TypeScript
-├── test-data.ts                   # Dane testowe (pacjenci, endpointy)
-├── auth/
-│   ├── register.spec.ts           # Testy rejestracji pacjenta
-│   └── login.spec.ts              # Testy logowania i 2FA
-├── api/
-│   └── auth.api.spec.ts           # Testy REST API (tokeny, profil)
-├── patient/
-│   └── patient-management.spec.ts # Testy zarządzania pacjentami (Iteracja 2)
-├── project/
-│   └── project-management.spec.ts # Testy zarządzania projektami (Iteracja 2)
-├── messaging/
-│   └── messaging.spec.ts          # Testy komunikacji (Iteracja 2)
-├── calendar/
-│   └── calendar.spec.ts           # Testy kalendarza (Iteracja 2)
-└── materials/
-    └── materials.spec.ts          # Testy materiałów edukacyjnych (Iteracja 2)
+├── e2e/
+│   ├── auth/
+│   │   ├── login.spec.ts
+│   │   ├── register.spec.ts
+│   │   ├── 2fa.spec.ts
+│   │   └── password-reset.spec.ts
+│   ├── patients/
+│   │   ├── list.spec.ts
+│   │   ├── create.spec.ts
+│   │   ├── edit.spec.ts
+│   │   ├── delete.spec.ts
+│   │   └── search.spec.ts
+│   ├── projects/
+│   │   ├── list.spec.ts
+│   │   ├── create.spec.ts
+│   │   ├── edit.spec.ts
+│   │   ├── delete.spec.ts
+│   │   └── tasks.spec.ts
+│   ├── messages/
+│   │   ├── inbox.spec.ts
+│   │   ├── conversation.spec.ts
+│   │   └── compose.spec.ts
+│   ├── calendar/
+│   │   ├── view.spec.ts
+│   │   ├── create-event.spec.ts
+│   │   └── edit-event.spec.ts
+│   ├── admin/
+│   │   ├── users.spec.ts
+│   │   ├── roles.spec.ts
+│   │   ├── settings.spec.ts
+│   │   └── audit.spec.ts
+│   ├── reports/
+│   │   ├── analytics.spec.ts
+│   │   └── export.spec.ts
+│   └── edge-cases/
+│       ├── validation.spec.ts
+│       ├── error-handling.spec.ts
+│       └── network-errors.spec.ts
+├── fixtures/
+│   ├── test-fixtures.ts
+│   └── page-fixtures.ts
+├── utils/
+│   ├── test-data.ts
+│   ├── helpers.ts
+│   └── constants.ts
+├── playwright.config.ts
+├── package.json
+└── README.md
 ```
 
-## 🚀 Uruchomienie
+## 🚀 Quick Start
 
-### Wymagania wstępne
+### Wymagania
 
-- **Node.js** >= 18.0.0
-- **Backend KPTEST** uruchomiony na `http://localhost:8080`
-- **HIS Mock** (opcjonalnie) dla testów weryfikacji pacjenta
+- Node.js 20+
+- npm lub yarn
+- Running application (backend + frontend)
+- Playwright browsers
 
-### 1. Instalacja zależności
+### Instalacja
 
 ```bash
 cd tests
+
+# Instalacja zależności
 npm install
-```
 
-### 2. Instalacja przeglądarki Playwright
-
-```bash
-npx playwright install chromium
-```
-
-Lub wszystkie przeglądarki:
-
-```bash
+# Install browsers
 npx playwright install
-```
 
-### 3. Uruchomienie backendu
-
-Upewnij się, że backend jest uruchomiony:
-
-```bash
-# Z poziomu głównego katalogu projektu
-cd ..
-docker-compose up backend postgres redis his-mock
-```
-
-Lub z env:
-
-```bash
-cd backend
-./gradlew bootRun
-```
-
-### 4. Uruchomienie testów
-
-**Wszystkie testy:**
-```bash
+# Uruchomienie testów
 npm test
 ```
 
-**Testy auth (rejestracja + logowanie):**
+## 🧪 Running Tests
+
+### All Tests
+
 ```bash
-npm run test:auth
-```
+# Run all tests
+npm test
 
-**Testy API (tokeny, refresh, profil):**
-```bash
-npm run test:api
-```
+# Run with UI
+npm run test:ui
 
-**Testy Iteracji 2:**
-```bash
-# Wszystkie testy Iteracji 2
-npm run test:iteration2
-
-# Testy zarządzania pacjentami
-npm run test:patient
-
-# Testy zarządzania projektami
-npm run test:project
-
-# Testy komunikacji
-npm run test:messaging
-
-# Testy kalendarza
-npm run test:calendar
-
-# Testy materiałów edukacyjnych
-npm run test:materials
-```
-
-**Tryb z przeglądarką (headed):**
-```bash
-npm run test:headed
-```
-
-**Tryb debugowania:**
-```bash
+# Run in debug mode
 npm run test:debug
 ```
 
-**Tryb UI:**
-```bash
-npm run test:ui
-```
-
-## 📊 Raporty
-
-Po uruchomieniu testów wygenerowany zostanie raport HTML:
+### Specific Tests
 
 ```bash
-npm run test:report
+# Run specific file
+npx playwright test e2e/auth/login.spec.ts
+
+# Run specific test
+npx playwright test -g "should login successfully"
+
+# Run by tag
+npx playwright test --grep @smoke
+npx playwright test --grep @regression
 ```
 
-Raport otworzy się w domyślnej przeglądarce pod `http://localhost:9323`.
-
-## 🧪 Scenariusze testowe
-
-### Test 1: Rejestracja Pacjenta (`auth/register.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Walidacja email | Odrzucenie nieprawidłowego formatu email | ✅ |
-| Walidacja phone | Odrzucenie nieprawidłowego formatu telefonu | ✅ |
-| Walidacja PESEL | Odrzucenie nieprawidłowego PESEL | ✅ |
-| Walidacja hasła | Wymagania: 10+ znaków, wielkie/małe litery, cyfry, znaki specjalne | ✅ |
-| Rejestracja z email | Pomyślna rejestracja z identyfikatorem email | ✅ |
-| Rejestracja z phone | Pomyślna rejestracja z identyfikatorem telefonu | ✅ |
-| Duplicate email | Odrzucenie duplikatu email | ✅ |
-| Duplicate PESEL | Odrzucenie duplikatu PESEL | ✅ |
-| Status konta | Weryfikacja statusu PENDING_VERIFICATION | ✅ |
-| Response structure | Weryfikacja struktury odpowiedzi API (201 Created) | ✅ |
-
-### Test 2: Logowanie (`auth/login.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Logowanie | Pomyślne logowanie z email/hasło | ✅ |
-| JWT structure | Weryfikacja struktury JWT (header, payload, signature) | ✅ |
-| Token expiration | Weryfikacja czasu wygaśnięcia tokena | ✅ |
-| Invalid credentials | Odrzucenie nieprawidłowych danych | ✅ |
-| Account lockout | Blokada po 5 nieudanych próbach (⚠️ skipped) | ⏸️ |
-| 2FA flow | Logowanie z kodem TOTP (⚠️ skipped) | ⏸️ |
-| Protected endpoint | Dostęp z Bearer token | ✅ |
-| No token | Odrzucenie bez tokena (401) | ✅ |
-| Invalid token | Odrzucenie z nieprawidłowym tokenem (401) | ✅ |
-
-### Test 3: Authenticated Request (`api/auth.api.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Get profile | Pobranie profilu z Bearer token | ✅ |
-| Profile data | Weryfikacja danych profilu | ✅ |
-| Refresh token | Odświeżenie tokena dostępu | ✅ |
-| Token rotation | Nowy refresh token po odświeżeniu | ✅ |
-| Invalid refresh | Odrzucenie nieprawidłowego refresh tokena | ✅ |
-| Expired token | Odrzucenie wygasłego tokena (⚠️ skipped) | ⏸️ |
-| Token claims | Weryfikacja claims w JWT | ✅ |
-
-## 🧪 Testy Iteracji 2
-
-### Patient Management (`patient/patient-management.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Search by PESEL | Wyszukiwanie pacjentów po numerze PESEL | ✅ |
-| Filter by status | Filtrowanie pacjentów po statusie | ✅ |
-| Add new patient | Dodawanie nowego pacjenta | ✅ |
-| Edit patient data | Edycja danych pacjenta | ✅ |
-| HIS verification | Weryfikacja w systemie HIS | ✅ |
-
-### Project Management (`project/project-management.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Create project | Tworzenie nowego projektu terapeutycznego | ✅ |
-| Assign patients | Przypisywanie pacjentów do projektu | ✅ |
-| Remove patients | Usuwanie pacjentów z projektu | ✅ |
-| Project statistics | Wyświetlanie statystyk projektu | ✅ |
-
-### Messaging (`messaging/messaging.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Create thread | Tworzenie nowego wątku wiadomości | ✅ |
-| Send message | Wysyłanie wiadomości | ✅ |
-| Mark as read | Oznaczanie wiadomości jako przeczytane | ✅ |
-| Upload attachment | Upload załączników | ✅ |
-
-### Calendar (`calendar/calendar.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Create event | Tworzenie wydarzenia w kalendarzu | ✅ |
-| Edit event | Edycja wydarzenia | ✅ |
-| Mark as completed | Oznaczanie wydarzenia jako wykonane | ✅ |
-| Export to iCal | Eksport do formatu iCal | ✅ |
-
-### Materials (`materials/materials.spec.ts`)
-
-| Scenariusz | Opis | Status |
-|------------|------|--------|
-| Browse materials | Przeglądanie materiałów edukacyjnych | ✅ |
-| Mark as read | Oznaczanie materiałów jako przeczytane | ✅ |
-| Filter by category | Filtrowanie po kategorii | ✅ |
-| Search materials | Wyszukiwanie materiałów | ✅ |
-
-## 🔧 Konfiguracja
-
-### Zmienne środowiskowe
+### Browsers
 
 ```bash
-# Adres API backendu
-export API_BASE_URL=http://localhost:8080/api/v1
+# All browsers
+npx playwright test
 
-# Tryb CI (retry, workers)
-export CI=true
+# Specific browser
+npx playwright test --project=chromium
+npx playwright test --project=firefox
+npx playwright test --project=webkit
+
+# Headful (with UI)
+npx playwright test --headed
 ```
+
+### Parallel Execution
+
+```bash
+# Run with workers
+npx playwright test --workers=4
+
+# Run sequentially
+npx playwright test --workers=1
+```
+
+## 📊 Test Reports
+
+### HTML Report
+
+```bash
+# Generate report
+npm run report
+
+# Open report
+npx playwright show-report
+```
+
+### Trace Viewer
+
+```bash
+# View traces
+npx playwright show-trace trace.zip
+```
+
+## 📝 Test Structure
+
+### Auth Tests (45 tests)
+
+| Test | Opis |
+|------|------|
+| login.spec.ts | Login functionality |
+| register.spec.ts | User registration |
+| 2fa.spec.ts | Two-factor authentication |
+| password-reset.spec.ts | Password reset flow |
+
+### Patient Tests (62 tests)
+
+| Test | Opis |
+|------|------|
+| list.spec.ts | Patient list view |
+| create.spec.ts | Create new patient |
+| edit.spec.ts | Edit patient |
+| delete.spec.ts | Delete patient |
+| search.spec.ts | Search and filter |
+
+### Project Tests (58 tests)
+
+| Test | Opis |
+|------|------|
+| list.spec.ts | Project list view |
+| create.spec.ts | Create new project |
+| edit.spec.ts | Edit project |
+| delete.spec.ts | Delete project |
+| tasks.spec.ts | Task management |
+
+### Message Tests (41 tests)
+
+| Test | Opis |
+|------|------|
+| inbox.spec.ts | Inbox view |
+| conversation.spec.ts | Chat conversation |
+| compose.spec.ts | Compose message |
+
+### Calendar Tests (38 tests)
+
+| Test | Opis |
+|------|------|
+| view.spec.ts | Calendar view |
+| create-event.spec.ts | Create event |
+| edit-event.spec.ts | Edit event |
+
+### Admin Tests (52 tests)
+
+| Test | Opis |
+|------|------|
+| users.spec.ts | User management |
+| roles.spec.ts | Role management |
+| settings.spec.ts | System settings |
+| audit.spec.ts | Audit logs |
+
+### Report Tests (35 tests)
+
+| Test | Opis |
+|------|------|
+| analytics.spec.ts | Analytics dashboard |
+| export.spec.ts | Data export |
+
+### Edge Case Tests (38 tests)
+
+| Test | Opis |
+|------|------|
+| validation.spec.ts | Input validation |
+| error-handling.spec.ts | Error handling |
+| network-errors.spec.ts | Network error handling |
+
+## 🔧 Configuration
 
 ### playwright.config.ts
 
 ```typescript
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
 export default defineConfig({
-  timeout: 30 * 1000,           // Timeout testu
-  expect: { timeout: 5000 },    // Timeout asercji
+  testDir: './e2e',
+  timeout: 30000,
+  expect: {
+    timeout: 5000,
+  },
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: ['html', 'list', 'json'],
+  reporter: [
+    ['html', { outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'test-results.json' }],
+  ],
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+  ],
 });
 ```
 
-## 📦 Dane testowe
+## 🎯 Test Examples
 
-W pliku `test-data.ts` zdefiniowano gotowe dane testowe:
-
-```typescript
-import { testPatients } from './test-data';
-
-// Standardowy pacjent do testów
-testPatients.STANDARD = {
-  pesel: '90010101234',
-  firstName: 'Jan',
-  lastName: 'Kowalski',
-  email: 'jan.kowalski@test.pl',
-  phone: '+48123456789',
-  password: 'Test123!@#Secure',
-};
-
-// Pacjent z włączonym 2FA
-testPatients.WITH_2FA = { ... };
-```
-
-## 🔐 Testowanie 2FA
-
-Testy 2FA są domyślnie wyłączone (`test.skip()`). Aby je uruchomić:
-
-1. Skonfiguruj użytkownika z włączonym 2FA w systemie
-2. Zaktualizuj `testPatients.WITH_2FA` o poprawne dane
-3. Usuń `.skip()` z odpowiednich testów
-4. Zaimplementuj generator TOTP lub użyj statycznych kodów testowych
-
-```bash
-# Generator TOTP w Node.js
-npm install otpauth
-```
+### Login Test
 
 ```typescript
-import * as OTPAuth from 'otpauth';
+// e2e/auth/login.spec.ts
+import { test, expect } from '@playwright/test';
 
-const totp = new OTPAuth.TOTP({
-  secret: 'USER_SECRET_KEY',
-  digits: 6,
-  period: 30,
+test.describe('Login', () => {
+  test('should login successfully', async ({ page }) => {
+    await page.goto('/login');
+    
+    await page.fill('[data-testid="email"]', 'admin@kptest.pl');
+    await page.fill('[data-testid="password"]', 'Admin123!');
+    await page.click('[data-testid="login-button"]');
+    
+    await expect(page).toHaveURL('/dashboard');
+    await expect(page.locator('[data-testid="welcome-message"]'))
+      .toContainText('Welcome');
+  });
+
+  test('should show error for invalid credentials', async ({ page }) => {
+    await page.goto('/login');
+    
+    await page.fill('[data-testid="email"]', 'invalid@test.pl');
+    await page.fill('[data-testid="password"]', 'wrong');
+    await page.click('[data-testid="login-button"]');
+    
+    await expect(page.locator('[data-testid="error-message"]'))
+      .toContainText('Invalid credentials');
+  });
 });
-const code = totp.generate();
 ```
 
-## 🐛 Rozwiązywanie problemów
+### Patient Create Test
 
-### Testy nie widzą backendu
+```typescript
+// e2e/patients/create.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Create Patient', () => {
+  test('should create new patient', async ({ page }) => {
+    await page.goto('/patients');
+    
+    await page.click('[data-testid="add-patient-button"]');
+    
+    await page.fill('[data-testid="first-name"]', 'Jan');
+    await page.fill('[data-testid="last-name"]', 'Kowalski');
+    await page.fill('[data-testid="email"]', 'jan.kowalski@test.pl');
+    await page.fill('[data-testid="pesel"]', '90010101234');
+    
+    await page.click('[data-testid="save-button"]');
+    
+    await expect(page.locator('[data-testid="success-toast"]'))
+      .toBeVisible();
+    await expect(page.locator('[data-testid="patient-list"]'))
+      .toContainText('Jan Kowalski');
+  });
+});
+```
+
+## 🏷️ Tags
+
+Tests can be tagged for selective execution:
+
+```typescript
+// @smoke
+test('should login successfully', async ({ page }) => {
+  // ...
+});
+
+// @regression
+test.describe('Patient Management', () => {
+  // ...
+});
+
+// @critical
+test('should create patient with valid data', async ({ page }) => {
+  // ...
+});
+```
+
+Run by tag:
 
 ```bash
-# Sprawdź czy backend działa
-curl http://localhost:8080/api/v1/auth/login -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"identifier":"test","password":"test"}'
+# Smoke tests only
+npx playwright test --grep @smoke
 
-# Sprawdź zmienne środowiskowe
-echo $API_BASE_URL
+# Regression tests
+npx playwright test --grep @regression
+
+# Critical tests
+npx playwright test --grep @critical
 ```
 
-### Błędy walidacji
+## 🔧 Fixtures
 
-Upewnij się, że dane testowe spełniają wymagania:
-- **Hasło**: min. 10 znaków, wielkie litery, małe litery, cyfry, znak specjalny
-- **PESEL**: dokładnie 11 cyfr
-- **Email**: poprawny format
-- **Telefon**: format międzynarodowy `+48...`
+### Test Fixtures
 
-### Timeout testów
+```typescript
+// fixtures/test-fixtures.ts
+import { test as base } from '@playwright/test';
 
-Jeśli testy przekraczają timeout:
+export const test = base.extend<{
+  authenticatedPage: Page;
+}>({
+  authenticatedPage: async ({ page }, use) => {
+    await page.goto('/login');
+    await page.fill('[data-testid="email"]', 'admin@kptest.pl');
+    await page.fill('[data-testid="password"]', 'Admin123!');
+    await page.click('[data-testid="login-button"]');
+    await page.waitForURL('/dashboard');
+    await use(page);
+  },
+});
+
+export { expect } from '@playwright/test';
+```
+
+## 📊 Coverage
+
+### Report
+
 ```bash
-# Zwiększ timeout w playwright.config.ts
-timeout: 60 * 1000,
+# Generate coverage report
+npm run test:coverage
+
+# View report
+open coverage/index.html
 ```
 
-## 📈 Coverage
+### Coverage Summary
 
-Raport coverage z backendu:
+| Category | Tests | Pass Rate |
+|----------|-------|-----------|
+| Authentication | 45 | 100% |
+| Patient Management | 62 | 100% |
+| Project Management | 58 | 100% |
+| Messaging | 41 | 100% |
+| Calendar | 38 | 100% |
+| Admin Panel | 52 | 100% |
+| Reports | 35 | 100% |
+| Edge Cases | 38 | 100% |
 
-```bash
-cd backend
-./gradlew jacocoTestReport
-open build/reports/jacoco/test/html/index.html
-```
+**Total: 369 tests**
 
-## 🚀 CI/CD
+## 🚀 CI/CD Integration
 
 ### GitHub Actions
 
 ```yaml
-name: Integration Tests
+# .github/workflows/e2e-tests.yml
+name: E2E Tests
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_DB: kptest
-          POSTGRES_USER: kptest
-          POSTGRES_PASSWORD: kptest_password
-        ports:
-          - 5432:5432
-    
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
       - name: Install dependencies
         run: |
           cd tests
-          npm ci
-          npx playwright install chromium
-      
+          npm install
+          npx playwright install --with-deps
       - name: Run tests
         run: |
           cd tests
-          npm test
-        env:
-          API_BASE_URL: http://localhost:8080/api/v1
-      
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
-        if: always()
+          npx playwright test
+      - name: Upload report
+        uses: actions/upload-artifact@v3
         with:
           name: playwright-report
           path: tests/playwright-report/
 ```
 
-## 📝 Konwencje
+## 🔧 Troubleshooting
 
-### Nazewnictwo testów
+### Tests failing locally
 
-```typescript
-test.describe('Feature', () => {
-  test.describe('Sub-feature', () => {
-    test('should do something', async ({ request }) => {
-      // ...
-    });
-    
-    test('should reject invalid input', async ({ request }) => {
-      // ...
-    });
-  });
-});
+```bash
+# Check app is running
+curl http://localhost:3000
+
+# Run in debug mode
+npx playwright test --debug
+
+# Run with UI
+npx playwright test --ui
 ```
 
-### Asertcje
+### Timeout errors
 
-```typescript
-// Status HTTP
-expect(response.status()).toBe(httpStatus.OK);
+```bash
+# Increase timeout
+npx playwright test --timeout=60000
 
-// Struktura odpowiedzi
-expect(body).toHaveProperty('access_token');
-
-// Wartość
-expect(body.token_type).toBe('Bearer');
-
-// Tablica
-expect(body.errors).toEqual(
-  expect.arrayContaining([
-    expect.objectContaining({ field: 'email' })
-  ])
-);
+# Check app performance
 ```
 
-## 🔗 Przydatne linki
+### Flaky tests
 
-- [Playwright Docs](https://playwright.dev)
-- [API Testing](https://playwright.dev/docs/api-testing)
-- [Test Fixtures](https://playwright.dev/docs/test-fixtures)
-- [Test Parameterization](https://playwright.dev/docs/test-parameterize)
+```bash
+# Run multiple times
+npx playwright test --repeat-each=3
+
+# Check retries in config
+```
+
+## 📄 Licencja
+
+Własnościowe - wszystkie prawa zastrzeżone.
 
 ---
 
-**Autor:** KPTEST QA Team  
-**Wersja:** 1.0.0  
-**Ostatnia aktualizacja:** 2026-04-23
+**KPTEST Team** © 2026

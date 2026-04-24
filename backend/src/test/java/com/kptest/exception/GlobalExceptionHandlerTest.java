@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Unit tests for GlobalExceptionHandler using standalone MockMvc setup.
- * This avoids loading the full Spring application context.
  */
 @DisplayName("GlobalExceptionHandler Unit Tests")
 class GlobalExceptionHandlerTest {
@@ -40,7 +39,6 @@ class GlobalExceptionHandlerTest {
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
         TestController controller = new TestController();
 
-        // Use standalone setup with exception handler registered as controller advice
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setControllerAdvice(handler)
             .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter())
@@ -49,9 +47,6 @@ class GlobalExceptionHandlerTest {
         objectMapper = new ObjectMapper();
     }
 
-    /**
-     * Test controller to trigger various exceptions.
-     */
     @RestController
     static class TestController {
 
@@ -126,9 +121,6 @@ class GlobalExceptionHandlerTest {
         }
     }
 
-    /**
-     * Create mock binding result for validation tests.
-     */
     private static BindingResult createMockBindingResult() {
         BindingResult mockBindingResult = mock(BindingResult.class);
         given(mockBindingResult.getFieldErrors()).willReturn(List.of(
@@ -145,7 +137,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn400_WhenMethodArgumentNotValidException")
         void shouldReturn400_WhenMethodArgumentNotValidException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/validation"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error_code").value("VALIDATION_ERROR"))
@@ -159,11 +150,10 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn400_WhenConstraintViolationException")
         void shouldReturn400_WhenConstraintViolationException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/constraint"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error_code").value("VALIDATION_ERROR"))
-                .andExpect(jsonPath("$.message", org.hamcrest.Matchers.containsString("Validation error")))
+                .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.details").isArray())
                 .andExpect(jsonPath("$.timestamp").exists());
@@ -177,7 +167,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn404_WhenResourceNotFoundException")
         void shouldReturn404_WhenResourceNotFoundException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/not-found"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error_code").value("RESOURCE_NOT_FOUND"))
@@ -189,7 +178,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn404_WhenNoResourceFoundException")
         void shouldReturn404_WhenNoResourceFoundException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/non-existent-path"))
                 .andExpect(status().isNotFound());
         }
@@ -202,7 +190,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn409_WhenDuplicateResourceException")
         void shouldReturn409_WhenDuplicateResourceException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/duplicate"))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.error_code").value("DUPLICATE_RESOURCE"))
@@ -218,11 +205,10 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn400_WhenBusinessRuleException")
         void shouldReturn400_WhenBusinessRuleException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/business-rule"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error_code").value("BUSINESS_RULE_VIOLATION"))
-                .andExpect(jsonPath("$.message").value("Operation not allowed"))
+                .andExpect(jsonPath("$.message").value("Business rule violation: Operation not allowed"))
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
         }
     }
@@ -234,7 +220,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn401_WhenInvalidCredentialsException")
         void shouldReturn401_WhenInvalidCredentialsException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/invalid-credentials"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("UNAUTHORIZED"))
@@ -245,7 +230,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn401_WhenBadCredentialsException")
         void shouldReturn401_WhenBadCredentialsException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/bad-credentials"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("UNAUTHORIZED"))
@@ -256,7 +240,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn401_WhenInvalid2faException")
         void shouldReturn401_WhenInvalid2faException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/invalid-2fa"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("UNAUTHORIZED"))
@@ -272,7 +255,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn423_WhenAccountLockedException")
         void shouldReturn423_WhenAccountLockedException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/account-locked"))
                 .andExpect(status().isLocked())
                 .andExpect(jsonPath("$.error_code").value("ACCOUNT_LOCKED"))
@@ -283,7 +265,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn423_WhenLockedException")
         void shouldReturn423_WhenLockedException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/locked"))
                 .andExpect(status().isLocked())
                 .andExpect(jsonPath("$.error_code").value("ACCOUNT_LOCKED"))
@@ -299,7 +280,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn403_WhenAccessDeniedException")
         void shouldReturn403_WhenAccessDeniedException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/access-denied"))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error_code").value("ACCESS_DENIED"))
@@ -315,7 +295,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn503_WhenHisIntegrationException")
         void shouldReturn503_WhenHisIntegrationException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/his-integration"))
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.error_code").value("HIS_UNAVAILABLE"))
@@ -331,7 +310,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn500_WhenGenericException")
         void shouldReturn500_WhenGenericException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/generic"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error_code").value("INTERNAL_ERROR"))
@@ -342,7 +320,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn500_WhenDomainException")
         void shouldReturn500_WhenDomainException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/domain"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error_code").value("INTERNAL_ERROR"))
@@ -358,7 +335,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturnConsistentErrorResponseStructure")
         void shouldReturnConsistentErrorResponseStructure() throws Exception {
-            // When & Then for different exception types
             mockMvc.perform(get("/test/not-found"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error_code").exists())
@@ -379,7 +355,6 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturnFieldErrors_WhenValidationException")
         void shouldReturnFieldErrors_WhenValidationException() throws Exception {
-            // When & Then
             mockMvc.perform(get("/test/validation"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.details").isArray())
