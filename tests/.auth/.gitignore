@@ -1,0 +1,3 @@
+# tests/.auth/
+*.json
+!*.example.json

@@ -2,6 +2,7 @@ package com.kptest.api.controller;
 
 import com.kptest.api.dto.*;
 import com.kptest.application.service.PatientService;
+import com.kptest.domain.user.VerificationStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

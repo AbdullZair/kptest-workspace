@@ -60,8 +60,12 @@ public class PatientService {
             filters.project()
         );
 
+        List<PatientDto> patientDtos = patients.stream()
+            .map(PatientDto::fromPatient)
+            .toList();
+
         return PatientSearchResponse.fromPage(
-            patients,
+            patientDtos,
             total,
             filters.page(),
             filters.size()

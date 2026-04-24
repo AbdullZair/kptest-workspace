@@ -29,8 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -85,14 +87,18 @@ public class ReportService {
         Boolean isCompliant = overallCompliance >= complianceThreshold;
 
         // Calculate task statistics
-        List<TherapyEvent> events = therapyEventRepository.findByProjectIdAndDateRange(projectId, dateFrom, dateTo);
+        List<TherapyEvent> events = therapyEventRepository.findByProjectIdAndDateRange(
+            projectId, 
+            dateFrom.atStartOfDay(ZoneId.systemDefault()).toInstant(), 
+            dateTo.atTime(23, 59, 59).atZone(ZoneId.systemDefault()).toInstant()
+        );
         Integer totalTasks = events.size();
         Integer completedTasks = (int) events.stream()
             .filter(e -> e.getStatus() == com.kptest.domain.schedule.EventStatus.COMPLETED)
             .count();
         Integer overdueTasks = (int) events.stream()
             .filter(e -> e.getStatus() != com.kptest.domain.schedule.EventStatus.COMPLETED)
-            .filter(e -> e.getScheduledDate().isBefore(LocalDate.now()))
+            .filter(e -> e.getScheduledAt().isBefore(java.time.Instant.now()))
             .count();
 
         // Compliance by stage
@@ -175,10 +181,10 @@ public class ReportService {
         // Material statistics
         List<MaterialProgress> materialProgresses = materialProgressRepository.findByPatientId(patientId);
         Integer materialsCompleted = (int) materialProgresses.stream()
-            .filter(mp -> mp.getProgress() == 100)
+            .filter(mp -> mp.getStatus() == MaterialProgress.MaterialStatus.COMPLETED)
             .count();
         Integer materialsInProgress = (int) materialProgresses.stream()
-            .filter(mp -> mp.getProgress() > 0 && mp.getProgress() < 100)
+            .filter(mp -> mp.getStatus() == MaterialProgress.MaterialStatus.IN_PROGRESS)
             .count();
 
         // Message statistics
@@ -306,9 +312,9 @@ public class ReportService {
         List<ProjectStatsDto.RecentEventEntry> recentEventsDto = recentEvents.stream()
             .map(e -> new ProjectStatsDto.RecentEventEntry(
                 e.getId(),
-                e.getEventType().name(),
+                e.getType().name(),
                 e.getTitle(),
-                e.getScheduledDate().format(DATE_FORMATTER),
+                e.getScheduledAt().atZone(ZoneId.systemDefault()).toLocalDate().format(DATE_FORMATTER),
                 e.getStatus().name()
             ))
             .toList();
@@ -356,7 +362,7 @@ public class ReportService {
             .collect(Collectors.toSet());
 
         // Get all materials assigned to patients in this project
-        List<MaterialProgress> allProgresses = materialProgressRepository.findByPatientIdIn(patientIds);
+        List<MaterialProgress> allProgresses = materialProgressRepository.findByPatientIdIn(new java.util.ArrayList<>(patientIds));
         List<EducationalMaterial> allMaterials = educationalMaterialRepository.findAll();
 
         Integer totalMaterials = allMaterials.size();
@@ -365,12 +371,12 @@ public class ReportService {
             .distinct()
             .count();
         Integer materialsCompleted = (int) allProgresses.stream()
-            .filter(mp -> mp.getProgress() == 100)
+            .filter(mp -> mp.getStatus() == MaterialProgress.MaterialStatus.COMPLETED)
             .map(MaterialProgress::getMaterialId)
             .distinct()
             .count();
         Integer materialsInProgress = (int) allProgresses.stream()
-            .filter(mp -> mp.getProgress() > 0 && mp.getProgress() < 100)
+            .filter(mp -> mp.getStatus() == MaterialProgress.MaterialStatus.IN_PROGRESS)
             .map(MaterialProgress::getMaterialId)
             .distinct()
             .count();
@@ -405,7 +411,7 @@ public class ReportService {
                 
                 long assignedCount = materialProgresses.stream().map(MaterialProgress::getPatientId).distinct().count();
                 long completedCount = materialProgresses.stream()
-                    .filter(mp -> mp.getProgress() == 100)
+                    .filter(mp -> mp.getStatus() == MaterialProgress.MaterialStatus.COMPLETED)
                     .map(MaterialProgress::getPatientId)
                     .distinct()
                     .count();
@@ -434,7 +440,7 @@ public class ReportService {
                 
                 int assigned = patientProgresses.size();
                 int completed = (int) patientProgresses.stream()
-                    .filter(mp -> mp.getProgress() == 100)
+                    .filter(mp -> mp.getStatus() == MaterialProgress.MaterialStatus.COMPLETED)
                     .count();
                 
                 Double progressPercentage = assigned > 0 
@@ -483,7 +489,7 @@ public class ReportService {
         long totalProjects = projectRepository.count();
         long activeProjects = projectRepository.countByStatus(ProjectStatus.ACTIVE);
         long totalPatients = patientRepository.count();
-        long activePatients = patientRepository.countByUserStatus(com.kptest.domain.user.UserStatus.ACTIVE);
+        long activePatients = patientRepository.countByUserStatus(com.kptest.domain.user.AccountStatus.ACTIVE);
         long totalStaff = staffRepository.count();
 
         // Average compliance across all active patient projects
@@ -509,17 +515,17 @@ public class ReportService {
         // Materials completion
         List<MaterialProgress> allMaterialProgress = materialProgressRepository.findAll();
         long materialsCompleted = allMaterialProgress.stream()
-            .filter(mp -> mp.getProgress() == 100)
+            .filter(mp -> mp.getStatus() == MaterialProgress.MaterialStatus.COMPLETED)
             .count();
-        Double materialsCompletionRate = allMaterialProgress.size() > 0 
-            ? (double) materialsCompleted / allMaterialProgress.size() * 100 
+        Double materialsCompletionRate = allMaterialProgress.size() > 0
+            ? (double) materialsCompleted / allMaterialProgress.size() * 100
             : 0.0;
 
         // Pending messages
         long pendingMessages = messageRepository.countByIsReadFalse();
 
         // Upcoming sessions (next 7 days)
-        LocalDate nextWeek = LocalDate.now().plusDays(7);
+        Instant nextWeek = Instant.now().plus(7, java.time.temporal.ChronoUnit.DAYS);
         long upcomingSessions = therapyEventRepository.countByScheduledDateBefore(nextWeek);
 
         // Projects at risk (compliance below threshold)
@@ -609,8 +615,12 @@ public class ReportService {
                 "0000000214 00000 n \n" +
                 "trailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n" +
                 (214 + jsonContent.length() + 16) + "\n%%EOF";
-            
-            baos.write(pdfContent.getBytes());
+
+            try {
+                baos.write(pdfContent.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to write PDF content", e);
+            }
             return new ByteArrayResource(baos.toByteArray());
         } catch (JsonProcessingException e) {
             log.error("Error generating PDF", e);
@@ -624,20 +634,20 @@ public class ReportService {
     @Transactional(readOnly = true)
     public ByteArrayResource exportToExcel(Object reportData, String reportType) {
         log.info("Exporting {} report to Excel", reportType);
-        
+
         // Placeholder Excel generation - in production would use Apache POI
         try {
             String jsonContent = objectMapper.writeValueAsString(reportData);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            
+
             // Simple CSV-like format as placeholder
             baos.write(("Report Type: " + reportType + "\n").getBytes());
             baos.write(("Generated: " + LocalDate.now().format(DATE_FORMATTER) + "\n").getBytes());
             baos.write("\n".getBytes());
             baos.write(jsonContent.getBytes());
-            
+
             return new ByteArrayResource(baos.toByteArray());
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             log.error("Error generating Excel", e);
             throw new RuntimeException("Failed to generate Excel", e);
         }
@@ -690,7 +700,7 @@ public class ReportService {
                 if (report.getGeneratedBy() != null) {
                     User user = userRepository.findById(report.getGeneratedBy()).orElse(null);
                     if (user != null) {
-                        builder.generatedByName(user.getFirstName() + " " + user.getLastName());
+                        builder.generatedByName(user.getEmail());
                     }
                 }
 

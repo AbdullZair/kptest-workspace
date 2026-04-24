@@ -4,7 +4,10 @@
   "description": "Integration tests for KPTEST system",
   "scripts": {
     "test": "playwright test",
-    "test:auth": "playwright test auth",
+    "test:setup": "npx playwright install",
+    "test:seed": "bash ../scripts/seed-all.sh",
+    "test:full": "npm run test:seed && npm test",
+    "test:auth": "playwright test --grep @auth",
     "test:api": "playwright test api",
     "test:patient": "playwright test patient",
     "test:project": "playwright test project",

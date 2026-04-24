@@ -124,7 +124,7 @@ public class Message {
      */
     public void addAttachment(MessageAttachment attachment) {
         this.attachments.add(attachment);
-        attachment.message = this;
+        attachment.setMessage(this);
     }
 
     /**
@@ -132,6 +132,6 @@ public class Message {
      */
     public void removeAttachment(MessageAttachment attachment) {
         this.attachments.remove(attachment);
-        attachment.message = null;
+        attachment.setMessage(null);
     }
 }

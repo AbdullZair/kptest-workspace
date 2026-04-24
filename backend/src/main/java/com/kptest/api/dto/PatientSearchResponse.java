@@ -32,15 +32,11 @@ public record PatientSearchResponse(
 ) {
 
     public static PatientSearchResponse fromPage(
-        List<Patient> patients,
+        List<PatientDto> patientDtos,
         long total,
         int page,
         int size
     ) {
-        List<PatientDto> patientDtos = patients.stream()
-            .map(PatientDto::fromPatient)
-            .toList();
-
         int totalPages = (int) Math.ceil((double) total / size);
 
         return new PatientSearchResponse(

@@ -2,8 +2,6 @@ package com.kptest.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kptest.domain.material.EducationalMaterial;
-import com.kptest.domain.material.EducationalMaterial.DifficultyLevel;
-import com.kptest.domain.material.EducationalMaterial.MaterialType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,7 +32,7 @@ public record EducationalMaterialDto(
 
     @JsonProperty("type")
     @NotNull(message = "Type is required")
-    MaterialType type,
+    EducationalMaterial.MaterialType type,
 
     @JsonProperty("file_url")
     @Size(max = 500, message = "File URL must be less than 500 characters")
@@ -50,7 +48,7 @@ public record EducationalMaterialDto(
 
     @JsonProperty("difficulty")
     @NotNull(message = "Difficulty is required")
-    DifficultyLevel difficulty,
+    EducationalMaterial.DifficultyLevel difficulty,
 
     @JsonProperty("assigned_to_patients")
     List<UUID> assignedToPatients,
@@ -111,11 +109,11 @@ public record EducationalMaterialDto(
         private UUID projectId;
         private String title;
         private String content;
-        private MaterialType type;
+        private EducationalMaterial.MaterialType type;
         private String fileUrl;
         private String externalUrl;
         private String category;
-        private DifficultyLevel difficulty;
+        private EducationalMaterial.DifficultyLevel difficulty;
         private List<UUID> assignedToPatients;
         private List<UUID> assignedToStages;
         private Integer viewCount;
@@ -146,7 +144,7 @@ public record EducationalMaterialDto(
             return this;
         }
 
-        public Builder type(MaterialType type) {
+        public Builder type(EducationalMaterial.MaterialType type) {
             this.type = type;
             return this;
         }
@@ -166,7 +164,7 @@ public record EducationalMaterialDto(
             return this;
         }
 
-        public Builder difficulty(DifficultyLevel difficulty) {
+        public Builder difficulty(EducationalMaterial.DifficultyLevel difficulty) {
             this.difficulty = difficulty;
             return this;
         }

@@ -43,8 +43,30 @@ export const authApiSlice = api.injectEndpoints({
       query: (credentials) => ({
         url: '/auth/login',
         method: 'POST',
-        body: credentials,
+        body: {
+          identifier: credentials.email,
+          password: credentials.password,
+        },
       }),
+      transformResponse: (response: {
+        access_token: string
+        refresh_token: string
+        token_type: string
+        expires_in: number
+        requires2fa: boolean
+      }) => {
+        // Transform backend response to frontend format
+        return {
+          tokens: {
+            accessToken: response.access_token,
+            refreshToken: response.refresh_token,
+            tokenType: response.token_type as 'Bearer',
+            expiresIn: response.expires_in,
+          },
+          requires2FA: response.requires2fa,
+          user: null as any, // User will be fetched separately via getCurrentUser
+        }
+      },
       invalidatesTags: ['User'],
     }),
 

@@ -47,9 +47,10 @@ public class JwtService {
         claims.put("sub", userId.toString());
         claims.put("role", role.name());
         claims.put("2fa_verified", twoFaVerified);
-        
+
         return Jwts.builder()
             .claims(claims)
+            .header().add("typ", "JWT").and()
             .issuer(jwtIssuer)
             .issuedAt(new Date())
             .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))

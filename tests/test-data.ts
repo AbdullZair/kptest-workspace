@@ -1,5 +1,5 @@
 /**
- * Test data for KPTEST integration tests.
+ * Test patients for KPTEST integration tests.
  *
  * This module contains test patient data that mirrors HIS Mock patients.
  * Use these fixtures for consistent test execution.
@@ -162,55 +162,55 @@ export const invalidData = {
  */
 export const apiEndpoints = {
   auth: {
-    register: '/auth/register',
-    login: '/auth/login',
-    logout: '/auth/logout',
-    refresh: '/auth/refresh',
-    me: '/auth/me',
-    forgotPassword: '/auth/forgot-password',
-    resetPassword: '/auth/reset-password',
+    register: 'http://localhost:8080/api/v1/auth/register',
+    login: 'http://localhost:8080/api/v1/auth/login',
+    logout: 'http://localhost:8080/api/v1/auth/logout',
+    refresh: 'http://localhost:8080/api/v1/auth/refresh',
+    me: 'http://localhost:8080/api/v1/auth/me',
+    forgotPassword: 'http://localhost:8080/api/v1/auth/forgot-password',
+    resetPassword: 'http://localhost:8080/api/v1/auth/reset-password',
   },
   twoFactor: {
-    enable: '/auth/2fa/enable',
-    confirm: '/auth/2fa/confirm',
-    disable: '/auth/2fa/disable',
-    verify: '/auth/2fa/verify',
+    enable: 'http://localhost:8080/api/v1/auth/2fa/enable',
+    confirm: 'http://localhost:8080/api/v1/auth/2fa/confirm',
+    disable: 'http://localhost:8080/api/v1/auth/2fa/disable',
+    verify: 'http://localhost:8080/api/v1/auth/2fa/verify',
   },
   // Iteration 2 - Patient Management
   patients: {
-    list: '/patients',
-    search: '/patients/search',
-    byId: (id: string) => `/patients/${id}`,
-    byPesel: (pesel: string) => `/patients/pesel/${pesel}`,
+    list: 'http://localhost:8080/api/v1/patients',
+    search: 'http://localhost:8080/api/v1/patients/search',
+    byId: (id: string) => `http://localhost:8080/api/v1/patients/${id}`,
+    byPesel: (pesel: string) => `http://localhost:8080/api/v1/patients/pesel/${pesel}`,
   },
   // Iteration 2 - Project Management
   projects: {
-    list: '/projects',
-    byId: (id: string) => `/projects/${id}`,
-    patients: (id: string) => `/projects/${id}/patients`,
-    stats: (id: string) => `/projects/${id}/stats`,
+    list: 'http://localhost:8080/api/v1/projects',
+    byId: (id: string) => `http://localhost:8080/api/v1/projects/${id}`,
+    patients: (id: string) => `http://localhost:8080/api/v1/projects/${id}/patients`,
+    stats: (id: string) => `http://localhost:8080/api/v1/projects/${id}/stats`,
   },
   // Iteration 2 - Messaging
   messages: {
-    list: '/messages',
-    threads: '/messages/threads',
-    byId: (id: string) => `/messages/${id}`,
-    send: '/messages/send',
-    markRead: (id: string) => `/messages/${id}/read`,
-    attachments: '/messages/attachments',
+    list: 'http://localhost:8080/api/v1/messages',
+    threads: 'http://localhost:8080/api/v1/messages/threads',
+    byId: (id: string) => `http://localhost:8080/api/v1/messages/${id}`,
+    send: 'http://localhost:8080/api/v1/messages/send',
+    markRead: (id: string) => `http://localhost:8080/api/v1/messages/${id}/read`,
+    attachments: 'http://localhost:8080/api/v1/messages/attachments',
   },
   // Iteration 2 - Calendar
   calendar: {
-    events: '/calendar/events',
-    byId: (id: string) => `/calendar/events/${id}`,
-    export: '/calendar/export',
+    events: 'http://localhost:8080/api/v1/calendar/events',
+    byId: (id: string) => `http://localhost:8080/api/v1/calendar/events/${id}`,
+    export: 'http://localhost:8080/api/v1/calendar/export',
   },
   // Iteration 2 - Materials
   materials: {
-    list: '/materials',
-    byId: (id: string) => `/materials/${id}`,
-    categories: '/materials/categories',
-    markRead: (id: string) => `/materials/${id}/read`,
+    list: 'http://localhost:8080/api/v1/materials',
+    byId: (id: string) => `http://localhost:8080/api/v1/materials/${id}`,
+    categories: 'http://localhost:8080/api/v1/materials/categories',
+    markRead: (id: string) => `http://localhost:8080/api/v1/materials/${id}/read`,
   },
 };
 
@@ -376,4 +376,39 @@ export const validationPatterns = {
   phone: /^\+?[1-9]\d{1,14}$/,
   pesel: /^\d{11}$/,
   password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+};
+
+/**
+ * Test users for authentication flows.
+ * Used by globalSetup and fixtures for E2E tests.
+ */
+export const testUsers = {
+  patient: {
+    email: 'patient1@kptest.com',
+    password: 'TestP@ssw0rd123',
+    expected: {
+      role: 'PATIENT',
+      // expires_in w sekundach (900 = 15 minut)
+      expiresIn: 900,
+      tokenType: 'Bearer',
+    },
+  },
+  provider: {
+    email: 'provider1@kptest.com',
+    password: 'TestP@ssw0rd123',
+    expected: {
+      role: 'PROVIDER',
+      expiresIn: 900,
+      tokenType: 'Bearer',
+    },
+  },
+  admin: {
+    email: 'admin@kptest.com',
+    password: 'TestP@ssw0rd123',
+    expected: {
+      role: 'ADMIN',
+      expiresIn: 900,
+      tokenType: 'Bearer',
+    },
+  },
 };

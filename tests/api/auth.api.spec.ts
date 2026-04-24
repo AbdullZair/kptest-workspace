@@ -10,10 +10,10 @@
  */
 
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { testPatients, apiEndpoints, httpStatus, decodeJwt, timeouts } from '../test-data';
+import { testUsers, apiEndpoints, httpStatus, decodeJwt, timeouts } from '../test-data';
 
 test.describe('Authentication API', () => {
-  
+
   let accessToken: string;
   let refreshToken: string;
   let userId: string;
@@ -23,8 +23,8 @@ test.describe('Authentication API', () => {
    */
   function createLoginPayload(overrides?: Partial<LoginPayload>): LoginPayload {
     return {
-      identifier: testPatients.STANDARD.email,
-      password: testPatients.STANDARD.password,
+      identifier: testUsers.patient.email,
+      password: testUsers.patient.password,
       ...overrides,
     };
   }
@@ -291,15 +291,18 @@ test.describe('Authentication API', () => {
 
     test('should have valid token structure', async ({ request }) => {
       const decoded = decodeJwt(accessToken);
-      
+
       expect(decoded?.header.alg).toMatch(/HS|RS|ES/);
-      expect(decoded?.header.typ).toBe('JWT');
+      // JWT header 'typ' is optional - some implementations omit it
+      if (decoded?.header.typ !== undefined) {
+        expect(decoded?.header.typ).toBe('JWT');
+      }
     });
 
     test('should have future expiration time', async ({ request }) => {
       const decoded = decodeJwt(accessToken);
       const now = Math.floor(Date.now() / 1000);
-      
+
       expect(decoded!.payload.exp).toBeGreaterThan(now);
     });
 

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,7 +33,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for PatientController.
  */
-@WebMvcTest(PatientController.class)
+@WebMvcTest(
+    controllers = PatientController.class,
+    excludeAutoConfiguration = {
+        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class
+    }
+)
+@ImportAutoConfiguration(exclude = {
+    com.kptest.infrastructure.config.JpaConfig.class
+})
 @DisplayName("PatientController Integration Tests")
 class PatientControllerTest {
 
@@ -44,6 +57,12 @@ class PatientControllerTest {
 
     @MockBean
     private PatientService patientService;
+
+    @MockBean
+    private com.kptest.infrastructure.security.JwtService jwtService;
+
+    @MockBean
+    private com.kptest.infrastructure.security.JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private PatientDto testPatientDto;
     private UUID testPatientId;

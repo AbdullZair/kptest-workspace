@@ -19,6 +19,9 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    hmr: {
+      overlay: false,
+    },
     proxy: {
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:8080',
@@ -26,6 +29,9 @@ export default defineConfig({
         secure: false,
       },
     },
+  },
+  optimizeDeps: {
+    exclude: ['react-router-dom'],
   },
   build: {
     outDir: 'dist',

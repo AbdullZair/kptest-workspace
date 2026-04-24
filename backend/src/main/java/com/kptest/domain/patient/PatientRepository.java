@@ -1,5 +1,6 @@
 package com.kptest.domain.patient;
 
+import com.kptest.domain.user.AccountStatus;
 import com.kptest.domain.user.VerificationStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -115,5 +116,5 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
      * Count patients by user status.
      */
     @Query("SELECT COUNT(p) FROM Patient p JOIN p.user u WHERE u.status = :status")
-    long countByUserStatus(@Param("status") com.kptest.domain.user.UserStatus status);
+    long countByUserStatus(@Param("status") AccountStatus status);
 }

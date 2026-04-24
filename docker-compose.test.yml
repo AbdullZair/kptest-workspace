@@ -1,0 +1,38 @@
+version: '3.8'
+
+# Docker Compose for manual test environment
+# Note: TestContainers automatically manages containers during tests
+# This file is provided for manual testing and debugging purposes
+
+services:
+  test-db:
+    image: postgres:15-alpine
+    container_name: kptest-test-db
+    environment:
+      POSTGRES_DB: kptest_test
+      POSTGRES_USER: kptest
+      POSTGRES_PASSWORD: kptest
+    ports:
+      - "5433:5432"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kptest -d kptest_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  test-redis:
+    image: redis:7-alpine
+    container_name: kptest-test-redis
+    command: redis-server --requirepass kptest
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "kptest", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  test-db-data:

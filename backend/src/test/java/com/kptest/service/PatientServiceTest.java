@@ -64,15 +64,10 @@ class PatientServiceTest {
     }
 
     private Patient createTestPatient() {
-        Patient patient = new Patient();
+        Patient patient = Patient.create(testUser, TEST_PESEL, TEST_FIRST_NAME, TEST_LAST_NAME);
         patient.setId(TEST_PATIENT_ID);
-        patient.setUser(testUser);
-        patient.setPesel(TEST_PESEL);
-        patient.setFirstName(TEST_FIRST_NAME);
-        patient.setLastName(TEST_LAST_NAME);
         patient.setDateOfBirth(LocalDate.of(1990, 1, 1));
         patient.setGender(Patient.Gender.MALE);
-        patient.setVerificationStatus(VerificationStatus.PENDING);
         return patient;
     }
 
@@ -81,7 +76,7 @@ class PatientServiceTest {
     class FindAllTests {
 
         @Test
-        @DisplayName("shouldFindAllPatients_WithDefaultFilters")
+        @DisplayName("should return all patients with default filters")
         void shouldFindAllPatients_WithDefaultFilters() {
             // Given
             PatientSearchRequest filters = PatientSearchRequest.builder()
@@ -109,7 +104,7 @@ class PatientServiceTest {
 
             then(patientRepository).should().findAllWithFilters(
                 null, null, null, null, null, null,
-                PageRequest.of(0, 20, Sort.by(Sort.Direction.ASC, "lastName"))
+                PageRequest.of(0, 20, Sort.by(Sort.Direction.ASC, "firstName"))
             );
         }
 

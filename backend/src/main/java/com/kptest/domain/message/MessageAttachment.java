@@ -15,7 +15,6 @@ import java.util.UUID;
 @Table(name = "message_attachments")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class MessageAttachment {
@@ -43,6 +42,13 @@ public class MessageAttachment {
     @CreatedDate
     @Column(name = "uploaded_at", nullable = false, updatable = false)
     private Instant uploadedAt;
+
+    /**
+     * Set the message for this attachment (package-private for Message entity).
+     */
+    void setMessage(Message message) {
+        this.message = message;
+    }
 
     /**
      * Factory method for creating an attachment.

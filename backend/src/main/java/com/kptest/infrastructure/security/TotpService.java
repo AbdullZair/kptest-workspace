@@ -163,7 +163,39 @@ class Base32 {
     }
 
     public static byte[] decode(String encoded) {
-        // Implementation for decoding if needed
-        return new byte[0];
+        // Remove padding and whitespace
+        encoded = encoded.toUpperCase().replaceAll("[^A-Z2-7]", "");
+        
+        if (encoded.isEmpty()) {
+            return new byte[0];
+        }
+        
+        // Map Base32 chars to values
+        int[] table = new int[256];
+        for (int i = 0; i < 32; i++) {
+            table["ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".charAt(i)] = i;
+        }
+        
+        // Decode to bytes
+        int buffer = 0;
+        int bitsLeft = 0;
+        byte[] result = new byte[(encoded.length() * 5 + 7) / 8];
+        int index = 0;
+        
+        for (char c : encoded.toCharArray()) {
+            int val = table[c];
+            if (val == -1) {
+                throw new IllegalArgumentException("Invalid Base32 character: " + c);
+            }
+            buffer = (buffer << 5) | val;
+            bitsLeft += 5;
+            if (bitsLeft >= 8) {
+                bitsLeft -= 8;
+                result[index++] = (byte) ((buffer >> bitsLeft) & 0xFF);
+            }
+        }
+        
+        // Return only the filled portion
+        return java.util.Arrays.copyOf(result, index);
     }
 }

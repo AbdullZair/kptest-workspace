@@ -15,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,12 +53,12 @@ public class NotificationController {
         @Parameter(description = "Page size")
         @RequestParam(defaultValue = "20") int size,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("GET /api/v1/notifications - userId={}, type={}, read={}, page={}, size={}", userId, type, read, page, size);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("GET /api/v1/notifications - userId={}, type={}, read={}, page={}, size={}", userUuid, type, read, page, size);
 
-        List<NotificationDto> notifications = notificationService.getNotifications(userId, type, read, page, size);
+        List<NotificationDto> notifications = notificationService.getNotifications(userUuid, type, read, page, size);
 
         return ResponseEntity.ok(notifications);
     }
@@ -72,12 +70,12 @@ public class NotificationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'USER')")
     @Operation(summary = "Get unread notifications", description = "Returns unread notifications for the current user")
     public ResponseEntity<List<NotificationDto>> getUnreadNotifications(
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("GET /api/v1/notifications/unread - userId={}", userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("GET /api/v1/notifications/unread - userId={}", userUuid);
 
-        List<NotificationDto> notifications = notificationService.getUnreadNotifications(userId);
+        List<NotificationDto> notifications = notificationService.getUnreadNotifications(userUuid);
 
         return ResponseEntity.ok(notifications);
     }
@@ -89,12 +87,12 @@ public class NotificationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'USER')")
     @Operation(summary = "Get unread count", description = "Returns the count of unread notifications for the current user")
     public ResponseEntity<Map<String, Long>> getUnreadCount(
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("GET /api/v1/notifications/count - userId={}", userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("GET /api/v1/notifications/count - userId={}", userUuid);
 
-        long count = notificationService.getUnreadCount(userId);
+        long count = notificationService.getUnreadCount(userUuid);
 
         return ResponseEntity.ok(Map.of(
             "count", count
@@ -111,10 +109,10 @@ public class NotificationController {
         @Parameter(description = "Notification ID")
         @PathVariable UUID id,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("PUT /api/v1/notifications/{}/read - userId={}", id, userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("PUT /api/v1/notifications/{}/read - userId={}", id, userUuid);
 
         NotificationDto notification = notificationService.markAsRead(id);
 
@@ -128,12 +126,12 @@ public class NotificationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'USER')")
     @Operation(summary = "Mark all notifications as read", description = "Marks all notifications as read for the current user")
     public ResponseEntity<Void> markAllAsRead(
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("PUT /api/v1/notifications/read-all - userId={}", userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("PUT /api/v1/notifications/read-all - userId={}", userUuid);
 
-        notificationService.markAllAsRead(userId);
+        notificationService.markAllAsRead(userUuid);
 
         return ResponseEntity.ok().build();
     }
@@ -148,10 +146,10 @@ public class NotificationController {
         @Parameter(description = "Notification ID")
         @PathVariable UUID id,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("DELETE /api/v1/notifications/{} - userId={}", id, userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("DELETE /api/v1/notifications/{} - userId={}", id, userUuid);
 
         notificationService.deleteNotification(id);
 
@@ -165,12 +163,12 @@ public class NotificationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'USER')")
     @Operation(summary = "Get notification preferences", description = "Returns notification preferences for the current user")
     public ResponseEntity<NotificationPreferenceDto> getPreferences(
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("GET /api/v1/notifications/preferences - userId={}", userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("GET /api/v1/notifications/preferences - userId={}", userUuid);
 
-        NotificationPreferenceDto preferences = notificationService.getPreferences(userId);
+        NotificationPreferenceDto preferences = notificationService.getPreferences(userUuid);
 
         return ResponseEntity.ok(preferences);
     }
@@ -185,12 +183,12 @@ public class NotificationController {
         @Parameter(description = "Preferences update data")
         @Valid @RequestBody UpdateNotificationPreferencesRequest request,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("PUT /api/v1/notifications/preferences - userId={}", userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("PUT /api/v1/notifications/preferences - userId={}", userUuid);
 
-        NotificationPreferenceDto preferences = notificationService.updatePreferences(userId, request);
+        NotificationPreferenceDto preferences = notificationService.updatePreferences(userUuid, request);
 
         return ResponseEntity.ok(preferences);
     }
@@ -205,14 +203,14 @@ public class NotificationController {
         @Parameter(description = "Test notification data")
         @Valid @RequestBody(required = false) SendNotificationRequest request,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        log.info("POST /api/v1/notifications/test - userId={}", userId);
+        UUID userUuid = UUID.fromString(userId);
+        log.info("POST /api/v1/notifications/test - userId={}", userUuid);
 
         // Use default test notification if no request provided
         SendNotificationRequest testRequest = request != null ? request : new SendNotificationRequest(
-            userId,
+            userUuid,
             NotificationType.REMINDER,
             "Test Notification",
             "This is a test notification to verify the notification system is working correctly.",
@@ -225,7 +223,7 @@ public class NotificationController {
 
         // Override userId to ensure it matches the authenticated user
         SendNotificationRequest finalRequest = new SendNotificationRequest(
-            userId,
+            userUuid,
             testRequest.type(),
             testRequest.title(),
             testRequest.content(),

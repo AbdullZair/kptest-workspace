@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,11 +89,11 @@ public class MessageController {
         @Parameter(description = "Thread data")
         @Valid @RequestBody CreateThreadRequest request,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
         log.info("POST /api/v1/messages/threads - title: {}, type: {}", request.title(), request.type());
 
-        UUID createdBy = UUID.fromString(jwt.getSubject());
+        UUID createdBy = UUID.fromString(userId);
         MessageThreadDto thread = messageService.createThread(request, createdBy);
 
         return ResponseEntity
@@ -139,11 +137,11 @@ public class MessageController {
         @Parameter(description = "Message data")
         @Valid @RequestBody SendMessageRequest request,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
         log.info("POST /api/v1/messages/threads/{}/messages - thread: {}", id, id);
 
-        UUID senderId = UUID.fromString(jwt.getSubject());
+        UUID senderId = UUID.fromString(userId);
         MessageDto message = messageService.sendMessage(id, request, senderId);
 
         return ResponseEntity
@@ -161,12 +159,12 @@ public class MessageController {
         @Parameter(description = "Message ID")
         @PathVariable UUID id,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
         log.info("POST /api/v1/messages/messages/{}/read", id);
 
-        UUID userId = UUID.fromString(jwt.getSubject());
-        MessageDto message = messageService.markAsRead(id, userId);
+        UUID userIdParam = UUID.fromString(userId);
+        MessageDto message = messageService.markAsRead(id, userIdParam);
 
         return ResponseEntity.ok(message);
     }
@@ -184,12 +182,12 @@ public class MessageController {
         @Parameter(description = "File to upload")
         @RequestParam("file") MultipartFile file,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) throws IOException {
         log.info("POST /api/v1/messages/messages/{}/attachments - file: {}", id, file.getOriginalFilename());
 
-        UUID userId = UUID.fromString(jwt.getSubject());
-        MessageAttachmentDto attachment = messageService.uploadAttachment(id, file, userId);
+        UUID userIdParam = UUID.fromString(userId);
+        MessageAttachmentDto attachment = messageService.uploadAttachment(id, file, userIdParam);
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -212,14 +210,14 @@ public class MessageController {
         @Parameter(description = "Page size")
         @RequestParam(defaultValue = "20") int size,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        
-        log.info("GET /api/v1/messages/unread - userId={}, projectId={}, page={}, size={}", userId, projectId, page, size);
+        UUID userUuid = UUID.fromString(userId);
 
-        long count = messageService.getUnreadCount(userId, projectId);
-        List<MessageDto> messages = messageService.getUnreadMessages(userId, projectId, page, size);
+        log.info("GET /api/v1/messages/unread - userId={}, projectId={}, page={}, size={}", userUuid, projectId, page, size);
+
+        long count = messageService.getUnreadCount(userUuid, projectId);
+        List<MessageDto> messages = messageService.getUnreadMessages(userUuid, projectId, page, size);
 
         return ResponseEntity.ok(Map.of(
             "data", messages,
@@ -237,13 +235,13 @@ public class MessageController {
         @Parameter(description = "Project ID to filter by")
         @RequestParam(required = false) UUID projectId,
 
-        @AuthenticationPrincipal Jwt jwt
+        @RequestParam String userId
     ) {
-        UUID userId = UUID.fromString(jwt.getSubject());
-        
-        log.info("GET /api/v1/messages/unread/count - userId={}, projectId={}", userId, projectId);
+        UUID userUuid = UUID.fromString(userId);
 
-        long count = messageService.getUnreadCount(userId, projectId);
+        log.info("GET /api/v1/messages/unread/count - userId={}, projectId={}", userUuid, projectId);
+
+        long count = messageService.getUnreadCount(userUuid, projectId);
 
         return ResponseEntity.ok(Map.of(
             "count", count

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,7 +41,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Web MVC tests for AuthController.
  */
-@WebMvcTest(AuthController.class)
+@WebMvcTest(
+    controllers = AuthController.class,
+    excludeAutoConfiguration = {
+        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class
+    }
+)
+@ImportAutoConfiguration(exclude = {
+    com.kptest.infrastructure.config.JpaConfig.class
+})
 @DisplayName("AuthController Web MVC Tests")
 class AuthControllerTest {
 
@@ -60,10 +73,10 @@ class AuthControllerTest {
     private JwtService jwtService;
 
     @MockBean
-    private CustomUserDetailsService userDetailsService;
+    private UserRepository userRepository;
 
     @MockBean
-    private UserRepository userRepository;
+    private com.kptest.infrastructure.config.CustomUserDetailsService customUserDetailsService;
 
     private User testUser;
     private Patient testPatient;
@@ -248,7 +261,7 @@ class AuthControllerTest {
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
                 TEST_ACCESS_TOKEN,
                 TEST_REFRESH_TOKEN,
-                3600000L,
+                3600L,
                 false,
                 null
             );
@@ -265,7 +278,7 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.access_token").value(TEST_ACCESS_TOKEN))
                 .andExpect(jsonPath("$.refresh_token").value(TEST_REFRESH_TOKEN))
                 .andExpect(jsonPath("$.token_type").value("Bearer"))
-                .andExpect(jsonPath("$.expires_in").value(3600000L))
+                .andExpect(jsonPath("$.expires_in").value(3600L))
                 .andExpect(jsonPath("$.requires_2fa").doesNotExist());
 
             then(authenticationService).should().authenticate(TEST_EMAIL, TEST_PASSWORD, null);
@@ -337,7 +350,7 @@ class AuthControllerTest {
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
                 TEST_ACCESS_TOKEN,
                 TEST_REFRESH_TOKEN,
-                3600000L,
+                3600L,
                 false,
                 null
             );
@@ -372,7 +385,7 @@ class AuthControllerTest {
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
                 TEST_ACCESS_TOKEN,
                 TEST_REFRESH_TOKEN,
-                3600000L,
+                3600L,
                 false,
                 null
             );
@@ -528,7 +541,7 @@ class AuthControllerTest {
             AuthenticationService.AuthResult authResult = new AuthenticationService.AuthResult(
                 TEST_ACCESS_TOKEN,
                 TEST_REFRESH_TOKEN + "_new",
-                3600000L,
+                3600L,
                 false,
                 null
             );

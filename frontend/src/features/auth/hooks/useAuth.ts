@@ -166,6 +166,9 @@ export const useAuth = () => {
           )
         }
 
+        // Fetch current user after successful login
+        await refetchUser()
+
         return { success: true, data: result }
       } catch (err) {
         return {
@@ -174,7 +177,7 @@ export const useAuth = () => {
         }
       }
     },
-    [loginMutation, dispatch]
+    [loginMutation, dispatch, refetchUser]
   )
 
   /**

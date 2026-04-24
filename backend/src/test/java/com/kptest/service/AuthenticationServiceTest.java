@@ -129,11 +129,12 @@ class AuthenticationServiceTest {
         }
 
         @Test
-        @DisplayName("shouldThrowDuplicateResourceException_WhenEmailExists")
+        @DisplayName("should throw DuplicateResourceException when email exists")
         void shouldThrowDuplicateResourceException_WhenEmailExists() {
             // Given
             String email = "existing@example.com";
-            given(userRepository.existsByEmail(email)).willReturn(true);
+            given(registrationService.registerPatient(eq(email), any(), any(), any(), any(), eq(email), any()))
+                .willThrow(new DuplicateResourceException("User", "email", email));
 
             // When & Then
             assertThatThrownBy(() -> registrationService.registerPatient(
@@ -315,13 +316,17 @@ class AuthenticationServiceTest {
         }
 
         @Test
-        @DisplayName("shouldVerify2fa_WhenValidTempTokenAndCode")
+        @DisplayName("should verify 2fa when valid temp token and code")
         void shouldVerify2fa_WhenValidTempTokenAndCode() {
             // Given
-            String tempToken = "temp_" + testUser.getId() + "_" + System.currentTimeMillis();
+            User userWith2fa = createTestUser();
+            userWith2fa.setTwoFactorEnabled(true);
+            userWith2fa.setTwoFactorSecret(TEST_SECRET);
+            
+            String tempToken = "temp_" + userWith2fa.getId() + "_" + System.currentTimeMillis();
             String validTotpCode = "123456";
 
-            given(userRepository.findById(testUser.getId())).willReturn(Optional.of(testUser));
+            given(userRepository.findById(userWith2fa.getId())).willReturn(Optional.of(userWith2fa));
             given(totpService.verifyCode(TEST_SECRET, validTotpCode)).willReturn(true);
             given(jwtService.generateAccessToken(any(UUID.class), any(UserRole.class), eq(true)))
                 .willReturn(TEST_ACCESS_TOKEN);

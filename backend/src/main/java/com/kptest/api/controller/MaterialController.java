@@ -4,6 +4,7 @@ import com.kptest.api.dto.EducationalMaterialDto;
 import com.kptest.api.dto.MaterialFilters;
 import com.kptest.api.dto.MaterialProgressDto;
 import com.kptest.application.service.MaterialService;
+import com.kptest.domain.material.EducationalMaterial;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,10 +48,10 @@ public class MaterialController {
         @RequestParam(required = false) String category,
 
         @Parameter(description = "Difficulty level to filter by")
-        @RequestParam(required = false) EducationalMaterialDto.DifficultyLevel difficulty,
+        @RequestParam(required = false) EducationalMaterial.DifficultyLevel difficulty,
 
         @Parameter(description = "Material type to filter by")
-        @RequestParam(required = false) EducationalMaterialDto.MaterialType type,
+        @RequestParam(required = false) EducationalMaterial.MaterialType type,
 
         @Parameter(description = "Published status to filter by")
         @RequestParam(required = false) Boolean published

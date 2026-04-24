@@ -59,25 +59,24 @@ public class AdminService {
         int size = filters.size() != null ? filters.size() : 20;
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        Page<User> users;
+        Page<User> users = userRepository.findAll(pageable);
+        List<UserAdminDto> allDtos = users.stream().map(UserAdminDto::fromUser).toList();
 
-        if (filters.role() != null && filters.status() != null) {
-            users = userRepository.findAll(pageable);
-            return users.map(UserAdminDto::fromUser).filter(user ->
-                user.role().equals(filters.role()) && user.status().equals(filters.status())
-            );
-        } else if (filters.role() != null) {
-            UserRole role = UserRole.valueOf(filters.role());
-            users = userRepository.findAll(pageable);
-            return users.map(UserAdminDto::fromUser).filter(user -> user.role().equals(filters.role()));
-        } else if (filters.status() != null) {
-            AccountStatus status = AccountStatus.valueOf(filters.status());
-            users = userRepository.findAll(pageable);
-            return users.map(UserAdminDto::fromUser).filter(user -> user.status().equals(filters.status()));
-        } else {
-            users = userRepository.findAll(pageable);
-            return users.map(UserAdminDto::fromUser);
+        List<UserAdminDto> filtered = allDtos;
+        if (filters.role() != null) {
+            String roleFilter = filters.role();
+            filtered = filtered.stream().filter(user -> user.role().equals(roleFilter)).toList();
         }
+        if (filters.status() != null) {
+            String statusFilter = filters.status();
+            filtered = filtered.stream().filter(user -> user.status().equals(statusFilter)).toList();
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filtered.size());
+        List<UserAdminDto> pageContent = filtered.subList(start, end);
+
+        return new org.springframework.data.domain.PageImpl<>(pageContent, pageable, filtered.size());
     }
 
     /**
@@ -199,8 +198,8 @@ public class AdminService {
         Instant dateFrom = parseDate(filters.dateFrom());
         Instant dateTo = parseDate(filters.dateTo());
 
-        if (filters.user_id() != null) {
-            UUID userId = UUID.fromString(filters.user_id());
+        if (filters.userId() != null) {
+            UUID userId = UUID.fromString(filters.userId());
             if (dateFrom != null && dateTo != null) {
                 logs = auditLogRepository.findByUserIdAndDateRange(userId, dateFrom, dateTo, pageable);
             } else {
@@ -213,8 +212,8 @@ public class AdminService {
             } else {
                 logs = auditLogRepository.findByAction(action, pageable);
             }
-        } else if (filters.entity_type() != null) {
-            logs = auditLogRepository.findByEntityType(filters.entity_type(), pageable);
+        } else if (filters.entityType() != null) {
+            logs = auditLogRepository.findByEntityType(filters.entityType(), pageable);
         } else if (dateFrom != null && dateTo != null) {
             logs = auditLogRepository.findByDateRange(dateFrom, dateTo, pageable);
         } else {
@@ -255,9 +254,16 @@ public class AdminService {
 
         final String search = filters.search();
         if (search != null && !search.isBlank()) {
-            return logs.map(SystemLogResponse::fromSystemLog).filter(log ->
-                log.message().toLowerCase().contains(search.toLowerCase())
-            );
+            List<SystemLogResponse> allDtos = logs.stream().map(SystemLogResponse::fromSystemLog).toList();
+            List<SystemLogResponse> filtered = allDtos.stream()
+                .filter(log -> log.message().toLowerCase().contains(search.toLowerCase()))
+                .toList();
+
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), filtered.size());
+            List<SystemLogResponse> pageContent = filtered.subList(start, end);
+
+            return new org.springframework.data.domain.PageImpl<>(pageContent, pageable, filtered.size());
         }
 
         return logs.map(SystemLogResponse::fromSystemLog);

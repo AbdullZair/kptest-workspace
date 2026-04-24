@@ -92,8 +92,8 @@ public class AuthenticationService {
         
         // Generate tokens
         String accessToken = jwtService.generateAccessToken(
-            user.getId(), 
-            user.getRole(), 
+            user.getId(),
+            user.getRole(),
             true // 2FA verified or not required
         );
         String refreshToken = jwtService.generateRefreshToken(user.getId());
@@ -102,7 +102,8 @@ public class AuthenticationService {
         refreshTokenService.storeRefreshToken(user.getId(), refreshToken);
 
         log.info("User {} logged in successfully", user.getEmail());
-        return AuthResult.success(accessToken, refreshToken, jwtService.getAccessTokenExpirationMs());
+        // Return expires_in in seconds (not milliseconds)
+        return AuthResult.success(accessToken, refreshToken, jwtService.getAccessTokenExpirationMs() / 1000);
     }
 
     /**
@@ -133,7 +134,8 @@ public class AuthenticationService {
 
         refreshTokenService.storeRefreshToken(user.getId(), refreshToken);
 
-        return AuthResult.success(accessToken, refreshToken, jwtService.getAccessTokenExpirationMs());
+        // Return expires_in in seconds (not milliseconds)
+        return AuthResult.success(accessToken, refreshToken, jwtService.getAccessTokenExpirationMs() / 1000);
     }
 
     /**
@@ -230,7 +232,8 @@ public class AuthenticationService {
         // Rotate refresh token
         refreshTokenService.rotateRefreshToken(userId, refreshToken, newRefreshToken);
 
-        return AuthResult.success(newAccessToken, newRefreshToken, jwtService.getAccessTokenExpirationMs());
+        // Return expires_in in seconds (not milliseconds)
+        return AuthResult.success(newAccessToken, newRefreshToken, jwtService.getAccessTokenExpirationMs() / 1000);
     }
 
     private void handleSuccessfulLogin(User user) {

@@ -7,6 +7,7 @@ import com.kptest.domain.project.*;
 import com.kptest.domain.staff.Staff;
 import com.kptest.domain.staff.StaffRepository;
 import com.kptest.domain.user.User;
+import com.kptest.domain.user.UserRepository;
 import com.kptest.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class ProjectService {
     private final ProjectTeamRepository projectTeamRepository;
     private final StaffRepository staffRepository;
     private final PatientRepository patientRepository;
+    private final UserRepository userRepository;
 
     /**
      * Find all projects with optional filtering.
@@ -396,8 +398,7 @@ public class ProjectService {
                 continue;
             }
 
-            User user = new User();
-            user.setId(userId);
+            User user = userRepository.getReferenceById(userId);
 
             ProjectTeam team = ProjectTeam.assign(project, user, ProjectRole.THERAPIST);
             projectTeamRepository.save(team);

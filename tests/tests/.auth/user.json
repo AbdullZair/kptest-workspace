@@ -1,0 +1,22 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "auth_refresh_token",
+          "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmNjA3NTA2OC05YTFjLTRkZDMtOGE3MS05MzJhNTkzZjYyYTEiLCJpc3MiOiJrcHRlc3QtYXBpIiwiaWF0IjoxNzc3MDI3MDA5LCJleHAiOjE3Nzc2MzE4MDl9.y-O77Ylj97eWycaJtOzzH8BSR6TILB-kxZRY7W-Y7jz7feo2x4LIM0pxgR5QNdQW"
+        },
+        {
+          "name": "auth_token_expiry",
+          "value": "1777927010471"
+        },
+        {
+          "name": "auth_access_token",
+          "value": "eyJhbGciOiJIUzM4NCJ9.eyIyZmFfdmVyaWZpZWQiOnRydWUsInN1YiI6ImY2MDc1MDY4LTlhMWMtNGRkMy04YTcxLTkzMmE1OTNmNjJhMSIsInJvbGUiOiJQQVRJRU5UIiwiaXNzIjoia3B0ZXN0LWFwaSIsImlhdCI6MTc3NzAyNzAwOSwiZXhwIjoxNzc3MDI3OTA5fQ.gYs5ux-Sd6vjzdYSd8_eHhEFGp-xsFPCpVYwJNTOvNiqEHaDZcPvUFOZ7HOW3ARa"
+        }
+      ]
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -158,32 +159,32 @@ public interface TherapyEventRepository extends JpaRepository<TherapyEvent, UUID
      * Find events by project ID and date range.
      */
     @Query("SELECT e FROM TherapyEvent e WHERE e.projectId = :projectId " +
-           "AND e.scheduledDate >= :dateFrom AND e.scheduledDate <= :dateTo " +
-           "ORDER BY e.scheduledDate ASC")
+           "AND e.scheduledAt >= :dateFrom AND e.scheduledAt <= :dateTo " +
+           "ORDER BY e.scheduledAt ASC")
     List<TherapyEvent> findByProjectIdAndDateRange(
         @Param("projectId") UUID projectId,
-        @Param("dateFrom") LocalDate dateFrom,
-        @Param("dateTo") LocalDate dateTo
+        @Param("dateFrom") Instant dateFrom,
+        @Param("dateTo") Instant dateTo
     );
 
     /**
      * Find top 10 events by project ID ordered by scheduled date descending.
      */
     @Query("SELECT e FROM TherapyEvent e WHERE e.projectId = :projectId " +
-           "ORDER BY e.scheduledDate DESC")
+           "ORDER BY e.scheduledAt DESC")
     List<TherapyEvent> findTop10ByProjectIdOrderByScheduledDateDesc(@Param("projectId") UUID projectId);
 
     /**
      * Count events scheduled before a date.
      */
-    @Query("SELECT COUNT(e) FROM TherapyEvent e WHERE e.scheduledDate < :date")
-    long countByScheduledDateBefore(@Param("date") LocalDate date);
+    @Query("SELECT COUNT(e) FROM TherapyEvent e WHERE e.scheduledAt < :date")
+    long countByScheduledDateBefore(@Param("date") Instant date);
 
     /**
      * Find overdue events.
      */
     @Query("SELECT e FROM TherapyEvent e WHERE e.status != 'COMPLETED' " +
-           "AND e.scheduledDate < CURRENT_DATE")
+           "AND e.scheduledAt < CURRENT_TIMESTAMP")
     List<TherapyEvent> findOverdueEvents();
 
     /**

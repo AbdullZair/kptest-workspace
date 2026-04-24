@@ -1,79 +1,55 @@
 package com.kptest.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kptest.api.controller.AuthController;
-import com.kptest.api.dto.LoginRequest;
-import com.kptest.application.service.AuthenticationService;
-import com.kptest.application.service.RegistrationService;
-import com.kptest.domain.user.UserRepository;
-import com.kptest.infrastructure.config.CustomUserDetailsService;
-import com.kptest.infrastructure.security.JwtService;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
-import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Unit tests for GlobalExceptionHandler.
+ * Unit tests for GlobalExceptionHandler using standalone MockMvc setup.
+ * This avoids loading the full Spring application context.
  */
-@WebMvcTest(GlobalExceptionHandlerTest.TestController.class)
+@ImportAutoConfiguration(exclude = {
+    com.kptest.infrastructure.config.JpaConfig.class
+})
 @DisplayName("GlobalExceptionHandler Unit Tests")
 class GlobalExceptionHandlerTest {
 
-    @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private TestService testService;
-
-    // Mock beans required by AuthController (not used but needed for context)
-    @MockBean
-    private AuthenticationService authenticationService;
-
-    @MockBean
-    private RegistrationService registrationService;
-
-    @MockBean
-    private JwtService jwtService;
-
-    @MockBean
-    private CustomUserDetailsService userDetailsService;
-
-    @MockBean
-    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        reset(testService);
+        GlobalExceptionHandler handler = new GlobalExceptionHandler();
+        TestController controller = new TestController();
+        
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+            .setControllerAdvice(handler)
+            .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter())
+            .build();
+        
+        objectMapper = new ObjectMapper();
     }
 
     /**
@@ -81,9 +57,6 @@ class GlobalExceptionHandlerTest {
      */
     @RestController
     static class TestController {
-
-        @Autowired
-        private TestService testService;
 
         @GetMapping("/test/validation")
         public String triggerValidationException() throws MethodArgumentNotValidException {
@@ -154,18 +127,6 @@ class GlobalExceptionHandlerTest {
         public String triggerDomainException() {
             throw new DomainException("DOMAIN_ERROR", "Domain error occurred") {};
         }
-
-        @PostMapping("/test/service")
-        public String triggerServiceException(@RequestBody Map<String, String> request) {
-            return testService.execute(request.get("type"));
-        }
-    }
-
-    /**
-     * Test service interface.
-     */
-    interface TestService {
-        String execute(String type);
     }
 
     /**

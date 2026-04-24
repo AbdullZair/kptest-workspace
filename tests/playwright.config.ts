@@ -16,13 +16,21 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: '.',
-  
+
+  // Global setup - runs once before all tests
+  globalSetup: require.resolve('./global-setup'),
+
   // Timeout for individual tests
   timeout: 30 * 1000,
-  
+
   // Timeout for expect assertions
   expect: {
     timeout: 5000,
+  },
+
+  // Ignore HMR overlay errors
+  use: {
+    ignoreHTTPSErrors: true,
   },
   
   // Fail the build on CI if you accidentally left test.only in the source code
@@ -45,19 +53,22 @@ export default defineConfig({
   use: {
     // Base URL for API requests
     baseURL: process.env.API_BASE_URL || 'http://localhost:8080/api/v1',
-    
+
     // Base URL for web UI (if testing portal)
     // baseURL: process.env.FRONTEND_BASE_URL || 'http://localhost:3000',
-    
+
+    // Storage state - disabled until global-setup is fixed
+    // storageState: 'tests/.auth/user.json',
+
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',
-    
+
     // Screenshot on failure
     screenshot: 'only-on-failure',
-    
+
     // Video on failure
     video: 'retain-on-failure',
-    
+
     // Extra HTTP headers for all requests
     extraHTTPHeaders: {
       'Content-Type': 'application/json',

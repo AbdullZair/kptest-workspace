@@ -21,7 +21,11 @@
       "Bash(git remote *)",
       "Bash(git push *)",
       "Bash(ls *)",
-      "Bash(ssh-add *)"
+      "Bash(ssh-add *)",
+      "Bash(npm test)",
+      "Bash(./gradlew *)",
+      "Bash(git stash)",
+      "Bash(npm run *)"
     ]
   },
   "$version": 3

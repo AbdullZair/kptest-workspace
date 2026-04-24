@@ -1,17 +1,14 @@
 # Test Configuration for KPTESTPRO Backend
-# Used for unit and integration tests
+# Used for integration tests with TestContainers
 
 spring:
   application:
     name: kptest-test
-  
-  # In-memory database for tests
+
+  # DataSource - configured dynamically by TestContainers via @DynamicPropertySource
   datasource:
-    url: jdbc:tc:postgresql:15-alpine:///kptest_test
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    username: test
-    password: test
-  
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -20,31 +17,36 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
-  
-  # Disable Flyway for tests
+
+  # Flyway for database migrations - disabled for @WebMvcTest
   flyway:
     enabled: false
-  
-  # Redis configuration for tests
+
+  # Redis - configured dynamically by TestContainers
   data:
     redis:
       host: localhost
       port: 6379
-      password: test
-  
-  # Disable email in tests
+
+  # Email configuration for tests
   mail:
     host: localhost
     port: 25
     username: test
     password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
 
 # Security configuration
 kptest:
   security:
     max-login-attempts: 5
     lockout-duration-minutes: 30
-  
+
   # JWT configuration for tests
   jwt:
     secret: test-jwt-secret-key-for-testing-purposes-only-min-256-bits-required
@@ -52,7 +54,7 @@ kptest:
     refresh-expiration-ms: 604800000  # 7 days
     issuer: kptest-test
 
-# Disable OpenAPI/Swagger in tests
+# OpenAPI/Swagger documentation
 springdoc:
   api-docs:
     enabled: false
@@ -67,6 +69,8 @@ logging:
     org.springframework.security: WARN
     org.hibernate.SQL: WARN
     org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.testcontainers: INFO
+    org.testcontainers.containers: INFO
 
 # Actuator endpoints for tests
 management:
