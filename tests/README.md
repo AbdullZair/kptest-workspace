@@ -13,8 +13,18 @@ tests/
 ├── auth/
 │   ├── register.spec.ts           # Testy rejestracji pacjenta
 │   └── login.spec.ts              # Testy logowania i 2FA
-└── api/
-    └── auth.api.spec.ts           # Testy REST API (tokeny, profil)
+├── api/
+│   └── auth.api.spec.ts           # Testy REST API (tokeny, profil)
+├── patient/
+│   └── patient-management.spec.ts # Testy zarządzania pacjentami (Iteracja 2)
+├── project/
+│   └── project-management.spec.ts # Testy zarządzania projektami (Iteracja 2)
+├── messaging/
+│   └── messaging.spec.ts          # Testy komunikacji (Iteracja 2)
+├── calendar/
+│   └── calendar.spec.ts           # Testy kalendarza (Iteracja 2)
+└── materials/
+    └── materials.spec.ts          # Testy materiałów edukacyjnych (Iteracja 2)
 ```
 
 ## 🚀 Uruchomienie
@@ -76,6 +86,27 @@ npm run test:auth
 **Testy API (tokeny, refresh, profil):**
 ```bash
 npm run test:api
+```
+
+**Testy Iteracji 2:**
+```bash
+# Wszystkie testy Iteracji 2
+npm run test:iteration2
+
+# Testy zarządzania pacjentami
+npm run test:patient
+
+# Testy zarządzania projektami
+npm run test:project
+
+# Testy komunikacji
+npm run test:messaging
+
+# Testy kalendarza
+npm run test:calendar
+
+# Testy materiałów edukacyjnych
+npm run test:materials
 ```
 
 **Tryb z przeglądarką (headed):**
@@ -145,6 +176,54 @@ Raport otworzy się w domyślnej przeglądarce pod `http://localhost:9323`.
 | Invalid refresh | Odrzucenie nieprawidłowego refresh tokena | ✅ |
 | Expired token | Odrzucenie wygasłego tokena (⚠️ skipped) | ⏸️ |
 | Token claims | Weryfikacja claims w JWT | ✅ |
+
+## 🧪 Testy Iteracji 2
+
+### Patient Management (`patient/patient-management.spec.ts`)
+
+| Scenariusz | Opis | Status |
+|------------|------|--------|
+| Search by PESEL | Wyszukiwanie pacjentów po numerze PESEL | ✅ |
+| Filter by status | Filtrowanie pacjentów po statusie | ✅ |
+| Add new patient | Dodawanie nowego pacjenta | ✅ |
+| Edit patient data | Edycja danych pacjenta | ✅ |
+| HIS verification | Weryfikacja w systemie HIS | ✅ |
+
+### Project Management (`project/project-management.spec.ts`)
+
+| Scenariusz | Opis | Status |
+|------------|------|--------|
+| Create project | Tworzenie nowego projektu terapeutycznego | ✅ |
+| Assign patients | Przypisywanie pacjentów do projektu | ✅ |
+| Remove patients | Usuwanie pacjentów z projektu | ✅ |
+| Project statistics | Wyświetlanie statystyk projektu | ✅ |
+
+### Messaging (`messaging/messaging.spec.ts`)
+
+| Scenariusz | Opis | Status |
+|------------|------|--------|
+| Create thread | Tworzenie nowego wątku wiadomości | ✅ |
+| Send message | Wysyłanie wiadomości | ✅ |
+| Mark as read | Oznaczanie wiadomości jako przeczytane | ✅ |
+| Upload attachment | Upload załączników | ✅ |
+
+### Calendar (`calendar/calendar.spec.ts`)
+
+| Scenariusz | Opis | Status |
+|------------|------|--------|
+| Create event | Tworzenie wydarzenia w kalendarzu | ✅ |
+| Edit event | Edycja wydarzenia | ✅ |
+| Mark as completed | Oznaczanie wydarzenia jako wykonane | ✅ |
+| Export to iCal | Eksport do formatu iCal | ✅ |
+
+### Materials (`materials/materials.spec.ts`)
+
+| Scenariusz | Opis | Status |
+|------------|------|--------|
+| Browse materials | Przeglądanie materiałów edukacyjnych | ✅ |
+| Mark as read | Oznaczanie materiałów jako przeczytane | ✅ |
+| Filter by category | Filtrowanie po kategorii | ✅ |
+| Search materials | Wyszukiwanie materiałów | ✅ |
 
 ## 🔧 Konfiguracja
 

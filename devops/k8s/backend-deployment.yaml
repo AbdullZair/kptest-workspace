@@ -26,8 +26,13 @@ spec:
               name: http
               protocol: TCP
           env:
+            # Spring Configuration
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
+            - name: SERVER_PORT
+              value: "8080"
+            
+            # Database Configuration
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
@@ -50,15 +55,21 @@ spec:
                 secretKeyRef:
                   name: kptest-secrets
                   key: db-password
+            
+            # JWT Configuration
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: kptest-secrets
                   key: jwt-secret
+            
+            # Redis Configuration
             - name: REDIS_HOST
               value: "kptest-redis"
             - name: REDIS_PORT
               value: "6379"
+            
+            # Email Configuration
             - name: MAIL_HOST
               valueFrom:
                 secretKeyRef:
@@ -74,11 +85,20 @@ spec:
                 secretKeyRef:
                   name: kptest-secrets
                   key: mail-password
+            
+            # HIS Integration
             - name: HIS_BASE_URL
               valueFrom:
                 secretKeyRef:
                   name: kptest-secrets
                   key: his-base-url
+            
+            # API URL from ConfigMap
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kptest-config
+                  key: api-url
           resources:
             requests:
               memory: "512Mi"

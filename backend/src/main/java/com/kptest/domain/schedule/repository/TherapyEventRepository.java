@@ -153,4 +153,46 @@ public interface TherapyEventRepository extends JpaRepository<TherapyEvent, UUID
      * Count events by patient and status.
      */
     long countByPatientIdAndStatus(UUID patientId, EventStatus status);
+
+    /**
+     * Find events by project ID and date range.
+     */
+    @Query("SELECT e FROM TherapyEvent e WHERE e.projectId = :projectId " +
+           "AND e.scheduledDate >= :dateFrom AND e.scheduledDate <= :dateTo " +
+           "ORDER BY e.scheduledDate ASC")
+    List<TherapyEvent> findByProjectIdAndDateRange(
+        @Param("projectId") UUID projectId,
+        @Param("dateFrom") LocalDate dateFrom,
+        @Param("dateTo") LocalDate dateTo
+    );
+
+    /**
+     * Find top 10 events by project ID ordered by scheduled date descending.
+     */
+    @Query("SELECT e FROM TherapyEvent e WHERE e.projectId = :projectId " +
+           "ORDER BY e.scheduledDate DESC")
+    List<TherapyEvent> findTop10ByProjectIdOrderByScheduledDateDesc(@Param("projectId") UUID projectId);
+
+    /**
+     * Count events scheduled before a date.
+     */
+    @Query("SELECT COUNT(e) FROM TherapyEvent e WHERE e.scheduledDate < :date")
+    long countByScheduledDateBefore(@Param("date") LocalDate date);
+
+    /**
+     * Find overdue events.
+     */
+    @Query("SELECT e FROM TherapyEvent e WHERE e.status != 'COMPLETED' " +
+           "AND e.scheduledDate < CURRENT_DATE")
+    List<TherapyEvent> findOverdueEvents();
+
+    /**
+     * Find events by patient ID.
+     */
+    List<TherapyEvent> findByPatientId(UUID patientId);
+
+    /**
+     * Find all events.
+     */
+    List<TherapyEvent> findAll();
 }

@@ -30,10 +30,11 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["app/*"],
-      "@features/*": ["features/*"],
+      "@features/*": ["features/*", "src/features/*"],
       "@entities/*": ["entities/*"],
       "@shared/*": ["shared/*"],
-      "@screens/*": ["screens/*"]
+      "@screens/*": ["screens/*"],
+      "@src/*": ["src/*"]
     }
   },
   "include": [

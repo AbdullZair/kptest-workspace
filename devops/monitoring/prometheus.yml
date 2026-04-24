@@ -1,0 +1,99 @@
+# Prometheus Configuration for KPTEST
+# Monitors backend, frontend, database, and Redis services
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'kptest-monitor'
+    environment: 'development'
+
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# Load rules files
+rule_files:
+  - "alert-rules.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    metrics_path: /metrics
+    scheme: http
+
+  # Backend API (Spring Boot Actuator)
+  - job_name: 'backend'
+    static_configs:
+      - targets: ['kptest-backend:8080']
+        labels:
+          application: 'kptest-backend'
+          service: 'api'
+    metrics_path: /actuator/prometheus
+    scheme: http
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # Frontend (Node.js)
+  - job_name: 'frontend'
+    static_configs:
+      - targets: ['kptest-frontend:3000']
+        labels:
+          application: 'kptest-frontend'
+          service: 'web'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # PostgreSQL Database
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['kptest-postgres:9187']
+        labels:
+          application: 'kptest-postgres'
+          service: 'database'
+    scrape_interval: 30s
+
+  # Redis Cache
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['kptest-redis:9121']
+        labels:
+          application: 'kptest-redis'
+          service: 'cache'
+    scrape_interval: 30s
+
+  # HIS Mock Service
+  - job_name: 'his-mock'
+    static_configs:
+      - targets: ['kptest-his-mock:8081']
+        labels:
+          application: 'kptest-his-mock'
+          service: 'integration'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Node Exporter (Host metrics)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          application: 'node-exporter'
+          service: 'infrastructure'
+    scrape_interval: 30s
+
+  # Docker Metrics (if using docker daemon metrics)
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['docker-host:9323']
+        labels:
+          application: 'docker'
+          service: 'infrastructure'
+    scrape_interval: 30s

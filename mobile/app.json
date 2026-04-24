@@ -18,6 +18,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.kptest.mobile",
       "buildNumber": "1",
+      "associatedDomains": [
+        "applinks:kptest.com"
+      ],
       "infoPlist": {
         "NSFaceIDUsageDescription": "KPTEST Mobile requires Face ID to authenticate you securely.",
         "NSBiometricUsageDescription": "KPTEST Mobile requires biometric authentication to access your account."
@@ -35,12 +38,27 @@
         "USE_FINGERPRINT",
         "POST_NOTIFICATIONS",
         "RECEIVE_BOOT_COMPLETED"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "kptest",
+              "host": "kptest.com",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
       ]
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
+    "scheme": "kptest",
     "plugins": [
       "expo-notifications",
       [

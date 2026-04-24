@@ -1,6 +1,6 @@
 /**
  * Test data for KPTEST integration tests.
- * 
+ *
  * This module contains test patient data that mirrors HIS Mock patients.
  * Use these fixtures for consistent test execution.
  */
@@ -83,6 +83,68 @@ export const testPatients: Record<string, TestPatient> = {
 };
 
 /**
+ * Iteration 2 - Project Management Test Data
+ */
+export const testProjects = {
+  STANDARD: {
+    name: 'Testowy Projekt Terapeutyczny',
+    description: 'Projekt testowy dla potrzeb testów E2E',
+    goals: ['Cel 1: Poprawa słyszenia', 'Cel 2: Rehabilitacja mowy'],
+    startDate: '2026-01-01',
+    endDate: '2026-12-31',
+  },
+  NEW: {
+    name: `Nowy Projekt ${Date.now()}`,
+    description: 'Nowy projekt utworzony w teście',
+    goals: ['Cel testowy'],
+    startDate: '2026-04-23',
+    endDate: '2027-04-23',
+  },
+};
+
+/**
+ * Iteration 2 - Messaging Test Data
+ */
+export const testMessages = {
+  NEW_THREAD: {
+    subject: `Testowy wątek ${Date.now()}`,
+    content: 'Treść testowej wiadomości',
+  },
+  REPLY: {
+    content: 'Treść odpowiedzi na wiadomość',
+  },
+};
+
+/**
+ * Iteration 2 - Calendar Test Data
+ */
+export const testCalendar = {
+  EVENT: {
+    title: 'Wizyta kontrolna',
+    description: 'Kontrolna wizyta u lekarza',
+    startTime: '2026-05-01T10:00:00',
+    endTime: '2026-05-01T11:00:00',
+    location: 'Gabinet 123',
+    type: 'APPOINTMENT',
+  },
+  REMINDER: {
+    title: 'Przypomnienie o leku',
+    description: 'Zażyć lek o godzinie 8:00',
+    startTime: '2026-05-02T08:00:00',
+    endTime: '2026-05-02T08:30:00',
+    type: 'REMINDER',
+  },
+};
+
+/**
+ * Iteration 2 - Materials Test Data
+ */
+export const testMaterials = {
+  CATEGORY: 'Edukacja',
+  SEARCH_QUERY: 'ślimak',
+};
+
+/**
  * Invalid test data for negative scenarios.
  */
 export const invalidData = {
@@ -113,6 +175,42 @@ export const apiEndpoints = {
     confirm: '/auth/2fa/confirm',
     disable: '/auth/2fa/disable',
     verify: '/auth/2fa/verify',
+  },
+  // Iteration 2 - Patient Management
+  patients: {
+    list: '/patients',
+    search: '/patients/search',
+    byId: (id: string) => `/patients/${id}`,
+    byPesel: (pesel: string) => `/patients/pesel/${pesel}`,
+  },
+  // Iteration 2 - Project Management
+  projects: {
+    list: '/projects',
+    byId: (id: string) => `/projects/${id}`,
+    patients: (id: string) => `/projects/${id}/patients`,
+    stats: (id: string) => `/projects/${id}/stats`,
+  },
+  // Iteration 2 - Messaging
+  messages: {
+    list: '/messages',
+    threads: '/messages/threads',
+    byId: (id: string) => `/messages/${id}`,
+    send: '/messages/send',
+    markRead: (id: string) => `/messages/${id}/read`,
+    attachments: '/messages/attachments',
+  },
+  // Iteration 2 - Calendar
+  calendar: {
+    events: '/calendar/events',
+    byId: (id: string) => `/calendar/events/${id}`,
+    export: '/calendar/export',
+  },
+  // Iteration 2 - Materials
+  materials: {
+    list: '/materials',
+    byId: (id: string) => `/materials/${id}`,
+    categories: '/materials/categories',
+    markRead: (id: string) => `/materials/${id}/read`,
   },
 };
 
@@ -185,12 +283,12 @@ export function generatePesel(
   const mm = peselMonth.toString().padStart(2, '0');
   const dd = day.toString().padStart(2, '0');
   const zzz = Math.floor(Math.random() * 900 + 100).toString();
-  const genderDigit = gender === 'male' 
+  const genderDigit = gender === 'male'
     ? (parseInt(zzz[2]) % 2 === 0 ? parseInt(zzz[2]) + 1 : parseInt(zzz[2]))
     : (parseInt(zzz[2]) % 2 === 1 ? parseInt(zzz[2]) - 1 : parseInt(zzz[2]));
-  
+
   const partial = `${yy}${mm}${dd}${zzz}${genderDigit}`;
-  
+
   // Calculate checksum
   const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
   let sum = 0;
@@ -198,7 +296,7 @@ export function generatePesel(
     sum += parseInt(partial[i]) * weights[i];
   }
   const checksum = (10 - (sum % 10)) % 10;
-  
+
   return partial + checksum;
 }
 
@@ -210,21 +308,21 @@ export function generateStrongPassword(length: number = 12): string {
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
   const digits = '0123456789';
   const special = '!@#$%^&*';
-  
+
   const all = uppercase + lowercase + digits + special;
   let password = '';
-  
+
   // Ensure at least one of each type
   password += uppercase[Math.floor(Math.random() * uppercase.length)];
   password += lowercase[Math.floor(Math.random() * lowercase.length)];
   password += digits[Math.floor(Math.random() * digits.length)];
   password += special[Math.floor(Math.random() * special.length)];
-  
+
   // Fill remaining length
   for (let i = password.length; i < length; i++) {
     password += all[Math.floor(Math.random() * all.length)];
   }
-  
+
   // Shuffle
   return password.split('').sort(() => Math.random() - 0.5).join('');
 }
@@ -239,10 +337,10 @@ export function decodeJwt(token: string): JwtStructure | null {
     if (parts.length !== 3) {
       return null;
     }
-    
+
     const header = JSON.parse(atob(parts[0].replace(/-/g, '+').replace(/_/g, '/')));
     const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-    
+
     return {
       header,
       payload,
@@ -259,13 +357,13 @@ export function decodeJwt(token: string): JwtStructure | null {
 export const timeouts = {
   /** Default test timeout */
   TEST: 30000,
-  
+
   /** API request timeout */
   API_REQUEST: 10000,
-  
+
   /** Email/SMS delivery simulation timeout */
   NOTIFICATION: 5000,
-  
+
   /** Token expiration check timeout */
   TOKEN_EXPIRY: 2000,
 };

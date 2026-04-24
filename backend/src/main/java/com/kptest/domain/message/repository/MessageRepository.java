@@ -103,4 +103,21 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
      */
     @Query("SELECT m FROM Message m WHERE m.parentMessage.id = :parentId ORDER BY m.sentAt ASC")
     List<Message> findReplies(@Param("parentId") UUID parentId);
+
+    /**
+     * Count messages by patient ID (sent).
+     */
+    @Query("SELECT COUNT(m) FROM Message m JOIN m.thread t WHERE t.patientId = :patientId")
+    int countByPatientId(@Param("patientId") UUID patientId);
+
+    /**
+     * Count messages received by patient (as recipient).
+     */
+    @Query("SELECT COUNT(m) FROM Message m JOIN m.thread t WHERE t.patientId = :patientId AND m.senderId != :patientId")
+    int countByRecipientPatientId(@Param("patientId") UUID patientId);
+
+    /**
+     * Count unread messages.
+     */
+    long countByIsReadFalse();
 }

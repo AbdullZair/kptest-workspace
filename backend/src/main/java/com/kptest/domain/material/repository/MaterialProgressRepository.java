@@ -76,4 +76,15 @@ public interface MaterialProgressRepository extends JpaRepository<MaterialProgre
         @Param("materialId") UUID materialId,
         @Param("patientId") UUID patientId
     );
+
+    /**
+     * Find progress by patient IDs.
+     */
+    @Query("SELECT p FROM MaterialProgress p WHERE p.patientId IN :patientIds")
+    List<MaterialProgress> findByPatientIdIn(@Param("patientIds") List<UUID> patientIds);
+
+    /**
+     * Find all progress records.
+     */
+    List<MaterialProgress> findAll();
 }

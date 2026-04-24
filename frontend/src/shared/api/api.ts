@@ -298,6 +298,11 @@ export const api = createApi({
     'ProjectTeam',
     'Material',
     'MaterialProgress',
+    'AdminUser',
+    'AuditLog',
+    'SystemLog',
+    'SystemHealth',
+    'SystemMetrics',
   ],
   endpoints: () => ({}),
 })

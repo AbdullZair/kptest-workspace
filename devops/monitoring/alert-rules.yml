@@ -1,0 +1,172 @@
+# Prometheus Alert Rules for KPTEST
+# These rules define conditions that trigger alerts
+
+groups:
+  - name: kptest-alerts
+    interval: 30s
+    rules:
+      # Backend Alerts
+      - alert: BackendDown
+        expr: up{job="backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: backend
+        annotations:
+          summary: "Backend service is down"
+          description: "The KPTEST backend service has been unreachable for more than 1 minute."
+
+      - alert: BackendHighErrorRate
+        expr: rate(http_server_requests_seconds_count{application="kptest-backend",status=~"5.."}[5m]) / rate(http_server_requests_seconds_count{application="kptest-backend"}[5m]) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "Backend high error rate"
+          description: "Backend error rate is above 5% (current value: {{ $value }}%)"
+
+      - alert: BackendSlowResponse
+        expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{application="kptest-backend"}[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "Backend slow response time"
+          description: "Backend 95th percentile response time is above 2 seconds (current value: {{ $value }}s)"
+
+      - alert: BackendHighMemoryUsage
+        expr: jvm_memory_used_bytes{application="kptest-backend",area="heap"} / jvm_memory_max_bytes{application="kptest-backend",area="heap"} * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "Backend high memory usage"
+          description: "Backend JVM heap usage is above 85% (current value: {{ $value }}%)"
+
+      - alert: BackendHighCpuUsage
+        expr: process_cpu_usage{application="kptest-backend"} * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "Backend high CPU usage"
+          description: "Backend CPU usage is above 80% (current value: {{ $value }}%)"
+
+      # PostgreSQL Alerts
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL is down"
+          description: "PostgreSQL database has been unreachable for more than 1 minute."
+
+      - alert: PostgreSQLHighConnections
+        expr: pg_stat_activity_count{datname="kptest"} > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL high connection count"
+          description: "PostgreSQL has more than 80 active connections (current value: {{ $value }})"
+
+      - alert: PostgreSQLLowDiskSpace
+        expr: pg_database_size_bytes{datname="kptest"} / pg_tablespace_size_bytes * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+          service: postgresql
+        annotations:
+          summary: "PostgreSQL low disk space"
+          description: "PostgreSQL database is using more than 85% of allocated disk space."
+
+      # Redis Alerts
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: redis
+        annotations:
+          summary: "Redis is down"
+          description: "Redis cache has been unreachable for more than 1 minute."
+
+      - alert: RedisHighMemoryUsage
+        expr: redis_used_memory / redis_memory_max_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis high memory usage"
+          description: "Redis memory usage is above 85% (current value: {{ $value }}%)"
+
+      - alert: RedisLowHitRate
+        expr: redis_keyspace_hits_total / (redis_keyspace_hits_total + redis_keyspace_misses_total) * 100 < 80
+        for: 10m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis low cache hit rate"
+          description: "Redis cache hit rate is below 80% (current value: {{ $value }}%)"
+
+      # Frontend Alerts
+      - alert: FrontendDown
+        expr: up{job="frontend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: frontend
+        annotations:
+          summary: "Frontend is down"
+          description: "Frontend service has been unreachable for more than 1 minute."
+
+      # HIS Mock Alerts
+      - alert: HISMockDown
+        expr: up{job="his-mock"} == 0
+        for: 1m
+        labels:
+          severity: warning
+          service: his-mock
+        annotations:
+          summary: "HIS Mock is down"
+          description: "HIS Mock service has been unreachable for more than 1 minute."
+
+      # Infrastructure Alerts
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "High system memory usage"
+          description: "System memory usage is above 85% (current value: {{ $value }}%)"
+
+      - alert: HighDiskUsage
+        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "High disk usage"
+          description: "System disk usage is above 85% (current value: {{ $value }}%)"
+
+      - alert: ContainerRestarted
+        expr: changes(container_last_seen[5m]) > 2
+        for: 2m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "Container restarted frequently"
+          description: "Container {{ $labels.name }} has restarted more than 2 times in 5 minutes."

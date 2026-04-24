@@ -6,6 +6,7 @@ Kompleksowy system telemedyczny do zarządzania projektami terapeutycznymi z int
 
 - [Architektura](#architektura)
 - [Technologie](#technologie)
+- [Iteracja 2 - Features](#iteracja-2---features)
 - [Quick Start](#quick-start)
 - [Struktura projektu](#struktura-projektu)
 - [Developers Guide](#developers-guide)
@@ -67,6 +68,47 @@ Kompleksowy system telemedyczny do zarządzania projektami terapeutycznymi z int
 - **Docker** + Docker Compose
 - **GitHub Actions** - CI/CD
 - **Flyway** - database migrations
+
+## 🎯 Iteracja 2 - Features
+
+Iteracja 2 rozszerza system o pełną funkcjonalność zarządzania terapią pacjentów:
+
+### Pacjenci
+- CRUD pacjentów z integracją HIS
+- Weryfikacja tożsamości w systemie szpitalnym
+- Wyszukiwanie po PESEL, nazwisku, HIS ID
+- Kontakt awaryjny
+
+### Projekty Terapeutyczne
+- Tworzenie i zarządzanie projektami
+- Przypisywanie pacjentów do projektów (indywidualnie i grupowo)
+- Zarządzanie zespołem projektu
+- Statystyki projektu (compliance, aktywność, postępy)
+
+### Komunikacja
+- Wiadomości tekstowe w wątkach
+- Konwersacje indywidualne i grupowe
+- Załączniki do 10MB
+- Statusy wiadomości (doręczona, przeczytana)
+- Powiadomienia o nowych wiadomościach
+
+### Kalendarz
+- Wydarzenia terapeutyczne (wizyty, sesje, ćwiczenia, przypomnienia)
+- Wydarzenia cykliczne
+- Eksport do iCal
+- Powiadomienia i przypomnienia
+- Oznaczanie wykonania z notatkami
+
+### Materiały Edukacyjne
+- Różne typy materiałów (artykuły, PDF, video, audio, quizy)
+- Kategorie i poziomy trudności
+- Śledzenie postępów pacjenta
+- Statystyki wyświetleń i ukończeń
+
+### Dokumentacja
+- [Sequence Diagrams](./docs/architecture/sequence-diagrams.md)
+- [ADR-004: Messaging Architecture](./docs/decisions/ADR-004-messaging-architecture.md)
+- [API Documentation](./docs/api/)
 
 ## 🚀 Quick Start
 
@@ -223,31 +265,99 @@ npm run build:ios
 
 ## 📡 API Endpoints
 
-### Authentication
+### Authentication (v1.0.0)
 ```
-POST   /api/auth/login           # Logowanie
-POST   /api/auth/register        # Rejestracja
-POST   /api/auth/refresh         # Refresh token
-POST   /api/auth/2fa/enable      # Włącz 2FA
-POST   /api/auth/2fa/verify      # Weryfikuj 2FA
-```
-
-### Patients
-```
-GET    /api/patients             # Lista pacjentów
-GET    /api/patients/{id}        # Szczegóły pacjenta
-POST   /api/patients             # Dodaj pacjenta
-PUT    /api/patients/{id}        # Aktualizuj pacjenta
-DELETE /api/patients/{id}        # Usuń pacjenta
+POST   /api/v1/auth/login           # Logowanie
+POST   /api/v1/auth/register        # Rejestracja z weryfikacją HIS
+POST   /api/v1/auth/refresh         # Refresh token
+POST   /api/v1/auth/2fa/enable      # Włącz 2FA
+POST   /api/v1/auth/2fa/verify      # Weryfikuj 2FA
+POST   /api/v1/auth/forgot-password # Reset hasła
+POST   /api/v1/auth/reset-password  # Ustaw nowe hasło
 ```
 
-### Therapeutic Projects
+### Patients (v1.1.0)
 ```
-GET    /api/projects             # Lista projektów
-POST   /api/projects             # Utwórz projekt
-GET    /api/projects/{id}        # Szczegóły projektu
-PUT    /api/projects/{id}        # Aktualizuj projekt
+GET    /api/v1/patients             # Lista pacjentów z filtrami
+GET    /api/v1/patients/{id}        # Szczegóły pacjenta
+POST   /api/v1/patients             # Dodaj pacjenta
+PUT    /api/v1/patients/{id}        # Aktualizuj pacjenta
+DELETE /api/v1/patients/{id}        # Usuń pacjenta (soft delete)
+POST   /api/v1/patients/verify      # Weryfikacja HIS
+GET    /api/v1/patients/search      # Wyszukiwanie pacjentów
 ```
+
+### Therapeutic Projects (v1.1.0)
+```
+GET    /api/v1/projects             # Lista projektów
+GET    /api/v1/projects/my/active   # Moje aktywne projekty
+POST   /api/v1/projects             # Utwórz projekt
+GET    /api/v1/projects/{id}        # Szczegóły projektu
+PUT    /api/v1/projects/{id}        # Aktualizuj projekt
+DELETE /api/v1/projects/{id}        # Usuń projekt
+POST   /api/v1/projects/{id}/patients       # Przypisz pacjentów
+DELETE /api/v1/projects/{id}/patients       # Usuń pacjentów z projektu
+GET    /api/v1/projects/{id}/patients       # Pacjenci w projekcie
+GET    /api/v1/projects/{id}/team           # Zespół projektu
+GET    /api/v1/projects/{id}/statistics     # Statystyki projektu
+```
+
+### Messages (v1.1.0)
+```
+GET    /api/v1/messages/threads             # Lista wątków
+POST   /api/v1/messages/threads             # Utwórz wątek
+GET    /api/v1/messages/threads/{id}        # Szczegóły wątku
+GET    /api/v1/messages/threads/{id}/messages  # Wiadomości w wątku
+POST   /api/v1/messages/threads/{id}/messages  # Wyślij wiadomość
+POST   /api/v1/messages/messages/{id}/read     # Oznacz jako przeczytane
+POST   /api/v1/messages/messages/{id}/attachments  # Dodaj załącznik
+GET    /api/v1/messages/unread              # Nieprzeczytane wiadomości
+GET    /api/v1/messages/unread/count        # Liczba nieprzeczytanych
+```
+
+### Calendar (v1.1.0)
+```
+GET    /api/v1/calendar/events          # Lista wydarzeń
+GET    /api/v1/calendar/events/{id}     # Szczegóły wydarzenia
+POST   /api/v1/calendar/events          # Utwórz wydarzenie
+PUT    /api/v1/calendar/events/{id}     # Aktualizuj wydarzenie
+DELETE /api/v1/calendar/events/{id}     # Usuń wydarzenie
+POST   /api/v1/calendar/events/{id}/complete  # Oznacz jako wykonane
+GET    /api/v1/calendar/upcoming        # Nadchodzące wydarzenia
+POST   /api/v1/calendar/events/{id}/ics # Eksport do iCal
+```
+
+### Educational Materials (v1.1.0)
+```
+GET    /api/v1/materials                # Lista materiałów
+GET    /api/v1/materials/my             # Materiały pacjenta
+POST   /api/v1/materials                # Dodaj materiał
+GET    /api/v1/materials/{id}           # Szczegóły materiału
+PUT    /api/v1/materials/{id}           # Aktualizuj materiał
+DELETE /api/v1/materials/{id}          # Usuń materiał
+POST   /api/v1/materials/{id}/publish   # Opublikuj materiał
+POST   /api/v1/materials/{id}/unpublish # Cofnij publikację
+POST   /api/v1/materials/{id}/view      # Zarejestruj wyświetlenie
+POST   /api/v1/materials/{id}/complete  # Oznacz jako ukończone
+GET    /api/v1/materials/progress       # Postępy pacjenta
+```
+
+### Health & Monitoring
+```
+GET    /api/v1/health                   # Health check
+GET    /api/v1/actuator/metrics         # Metryki systemu
+```
+
+## 📚 API Documentation
+
+Szczegółowa dokumentacja API:
+
+- [Authentication API](./docs/api/authentication.md)
+- [Patients API](./docs/api/patients.md)
+- [Projects API](./docs/api/projects.md)
+- [Messages API](./docs/api/messages.md)
+- [Calendar API](./docs/api/calendar.md)
+- [Materials API](./docs/api/materials.md)
 
 ## 🔧 Konfiguracja
 

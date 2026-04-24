@@ -37,4 +37,9 @@ public interface StaffRepository extends JpaRepository<Staff, UUID> {
      */
     @Query("SELECT COUNT(s) FROM Staff s WHERE s.active = true")
     long countActive();
+
+    /**
+     * Count all staff members.
+     */
+    long count();
 }

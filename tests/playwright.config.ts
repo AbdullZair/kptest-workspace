@@ -2,15 +2,20 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright configuration for KPTEST integration tests.
- * 
+ *
  * Usage:
  *   npx playwright test                    # Run all tests
  *   npx playwright test auth               # Run auth tests only
+ *   npx playwright test patient            # Run patient management tests
+ *   npx playwright test project            # Run project management tests
+ *   npx playwright test messaging          # Run messaging tests
+ *   npx playwright test calendar           # Run calendar tests
+ *   npx playwright test materials          # Run materials tests
  *   npx playwright test --headed           # Run with browser UI
  *   npx playwright test --ui               # Open UI mode
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: '.',
   
   // Timeout for individual tests
   timeout: 30 * 1000,
