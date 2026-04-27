@@ -2,16 +2,20 @@ package com.kptest.application.service;
 
 import com.kptest.api.dto.NotificationDto;
 import com.kptest.api.dto.NotificationPreferenceDto;
+import com.kptest.api.dto.PushPayload;
 import com.kptest.api.dto.SendNotificationRequest;
 import com.kptest.api.dto.UpdateNotificationPreferencesRequest;
 import com.kptest.domain.notification.Notification;
 import com.kptest.domain.notification.NotificationPreference;
 import com.kptest.domain.notification.NotificationType;
+import com.kptest.domain.notification.UserDeviceToken;
 import com.kptest.domain.notification.repository.NotificationPreferenceRepository;
 import com.kptest.domain.notification.repository.NotificationRepository;
+import com.kptest.domain.notification.repository.UserDeviceTokenRepository;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRepository;
 import com.kptest.exception.ResourceNotFoundException;
+import com.kptest.infrastructure.push.PushNotificationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -38,6 +43,8 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationPreferenceRepository preferenceRepository;
     private final UserRepository userRepository;
+    private final UserDeviceTokenRepository deviceTokenRepository;
+    private final PushNotificationProvider pushNotificationProvider;
 
     /**
      * Get notifications for a user with optional filtering.
@@ -304,10 +311,56 @@ public class NotificationService {
      * @param body Notification body
      */
     public void sendPushNotification(UUID userId, String title, String body) {
-        log.info("Sending push notification to user: {}, title: {}", userId, title);
-        // TODO: Implement actual push notification via FCM/APNS
-        // For now, just log the notification
-        log.debug("Push notification queued: userId={}, title={}, body={}", userId, title, body);
+        sendPushNotification(userId, new PushPayload(title, body, Map.of(), PushPayload.PushType.MESSAGE));
+    }
+
+    /**
+     * Send a push notification to a user with full payload.
+     *
+     * @param userId User ID
+     * @param payload The notification payload
+     */
+    public void sendPushNotification(UUID userId, PushPayload payload) {
+        log.info("Sending push notification to user: {}, title: {}", userId, payload.title());
+
+        List<UserDeviceToken> deviceTokens = deviceTokenRepository.findByUserId(userId);
+        
+        if (deviceTokens.isEmpty()) {
+            log.debug("No device tokens found for user: {}", userId);
+            return;
+        }
+
+        for (UserDeviceToken deviceToken : deviceTokens) {
+            try {
+                pushNotificationProvider.send(deviceToken.getToken(), payload);
+                deviceToken.markAsUsed();
+            } catch (Exception e) {
+                log.error("Failed to send push notification to device: {}", deviceToken.getId(), e);
+            }
+        }
+    }
+
+    /**
+     * Register a device token for a user.
+     *
+     * @param userId User ID
+     * @param token Device token
+     * @param platform Device platform
+     * @return The created device token
+     */
+    public UserDeviceToken registerDeviceToken(UUID userId, String token, UserDeviceToken.Platform platform) {
+        log.info("Registering device token for user: {}, platform: {}", userId, platform);
+
+        // Check if token already exists for this user
+        return deviceTokenRepository.findByUserIdAndToken(userId, token)
+            .map(existing -> {
+                existing.markAsUsed();
+                return deviceTokenRepository.save(existing);
+            })
+            .orElseGet(() -> {
+                UserDeviceToken deviceToken = UserDeviceToken.create(userId, token, platform);
+                return deviceTokenRepository.save(deviceToken);
+            });
     }
 
     /**
