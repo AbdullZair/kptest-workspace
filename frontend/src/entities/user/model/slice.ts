@@ -6,8 +6,8 @@ import type { UserEntity, toUserEntity } from './types'
  * User entity adapter
  */
 const usersAdapter = createEntityAdapter<UserEntity>({
-  selectId: (user) => user.id,
-  sortComparer: (a, b) => a.lastName.localeCompare(b.lastName),
+  selectId: (user: UserEntity) => user.id,
+  sortComparer: (a: UserEntity, b: UserEntity) => a.lastName.localeCompare(b.lastName),
 })
 
 /**
@@ -51,10 +51,10 @@ const userSlice = createSlice({
           ...state.currentUser,
           ...action.payload,
           fullName: action.payload.firstName
-            ? `${action.payload.firstName} ${action.payload.lastName || state.currentUser.lastName}`
+            ? `${action.payload.firstName} ${action.payload.lastName ?? state.currentUser.lastName}`
             : state.currentUser.fullName,
           initials: action.payload.firstName
-            ? `${action.payload.firstName.charAt(0)}${(action.payload.lastName || state.currentUser.lastName).charAt(0)}`
+            ? `${action.payload.firstName.charAt(0)}${(action.payload.lastName ?? state.currentUser.lastName).charAt(0)}`
             : state.currentUser.initials,
         }
       }
@@ -79,21 +79,17 @@ const userSlice = createSlice({
 /**
  * Actions
  */
-export const {
-  setCurrentUser,
-  updateUser,
-  setLoading,
-  setError,
-  clearUser,
-} = userSlice.actions
+export const { setCurrentUser, updateUser, setLoading, setError, clearUser } = userSlice.actions
 
 /**
  * Selectors
  */
-export const selectCurrentUser = (state: { user: UserState }) => state.user.currentUser
-export const selectIsLoading = (state: { user: UserState }) => state.user.isLoading
-export const selectError = (state: { user: UserState }) => state.user.error
-export const selectIsAuthenticated = (state: { user: UserState }) => state.user.currentUser !== null
+export const selectCurrentUser = (state: { user: UserState }): UserEntity | null =>
+  state.user.currentUser
+export const selectIsLoading = (state: { user: UserState }): boolean => state.user.isLoading
+export const selectError = (state: { user: UserState }): string | null => state.user.error
+export const selectIsAuthenticated = (state: { user: UserState }): boolean =>
+  state.user.currentUser !== null
 
 /**
  * Adapter selectors (for future use with multiple users)
