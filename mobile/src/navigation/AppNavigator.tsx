@@ -67,6 +67,7 @@ export type SettingsStackParamList = {
   Security: undefined;
   Appearance: undefined;
   About: undefined;
+  ChangePassword: undefined;
 };
 
 // Bottom Tabs
@@ -319,6 +320,11 @@ function SettingsStackNavigator() {
         name="About"
         component={() => null}
         options={{ title: 'O aplikacji' }}
+      />
+      <SettingsStack.Screen
+        name="ChangePassword"
+        component={React.lazy(() => import('@features/settings/screens/ChangePasswordScreen'))}
+        options={{ title: 'Zmień hasło' }}
       />
     </SettingsStack.Navigator>
   );

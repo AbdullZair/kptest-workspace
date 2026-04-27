@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { LoginRequest, LoginResponse, RegisterRequest, AuthState } from './types';
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  AuthState,
+  ChangePasswordRequest,
+} from './types';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -103,6 +109,16 @@ export const authApi = createApi({
       }),
       invalidatesTags: ['Auth'],
     }),
+
+    // Change password
+    changePassword: builder.mutation<{ success: boolean }, ChangePasswordRequest>({
+      query: (data) => ({
+        url: '/auth/change-password',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Auth'],
+    }),
   }),
 });
 
@@ -116,6 +132,7 @@ export const {
   useLogoutMutation,
   useGetCurrentUserQuery,
   useRefreshTokenMutation,
+  useChangePasswordMutation,
 } = authApi;
 
 export default authApi;

@@ -1,7 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors, spacing, typography, borderRadius, shadows } from '@app/theme';
+import { useLogoutMutation } from '@features/auth/api/authApi';
+import { logout } from '@features/auth/slices/authSlice';
+import { useAppDispatch } from '@app/store';
+import { unregisterPushAsync } from '@features/notifications/services/pushRegistration';
 
 interface SettingsHomeScreenNavigationProps {
   navigate: (screen: string) => void;
@@ -9,6 +13,39 @@ interface SettingsHomeScreenNavigationProps {
 
 export function SettingsHomeScreen(): JSX.Element {
   const navigation = useNavigation<SettingsHomeScreenNavigationProps>();
+  const dispatch = useAppDispatch();
+  const [logoutApi, { isLoading: isLoggingOut }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    Alert.alert(
+      'Wyloguj się',
+      'Czy na pewno chcesz się wylogować?',
+      [
+        {
+          text: 'Anuluj',
+          style: 'cancel',
+        },
+        {
+          text: 'Wyloguj',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              // Unregister push notifications
+              await unregisterPushAsync();
+              // Call logout API
+              await logoutApi().unwrap();
+              // Clear local state
+              dispatch(logout());
+            } catch (error) {
+              console.error('Logout error:', error);
+              // Still clear local state even if API call fails
+              dispatch(logout());
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const settingsItems = [
     {
@@ -28,6 +65,12 @@ export function SettingsHomeScreen(): JSX.Element {
       title: 'Bezpieczeństwo',
       description: 'Hasło, 2FA, biometria',
       screen: 'Security',
+    },
+    {
+      icon: '🔑',
+      title: 'Zmień hasło',
+      description: 'Zmień swoje hasło',
+      screen: 'ChangePassword',
     },
     {
       icon: '🌙',
@@ -76,7 +119,7 @@ export function SettingsHomeScreen(): JSX.Element {
               ]}
               onPress={() => {
                 if (item.screen === 'Logout') {
-                  // Handle logout
+                  handleLogout();
                 } else {
                   navigation.navigate(item.screen);
                 }
