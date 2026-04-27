@@ -68,7 +68,10 @@ dependencies {
     
     // JSON
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    
+
+    // PDF Export - Apache PDFBox
+    implementation 'org.apache.pdfbox:pdfbox:3.0.1'
+
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'

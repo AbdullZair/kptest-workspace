@@ -26,6 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+
 /**
  * Message service handling all message-related operations.
  */
@@ -317,5 +323,115 @@ public class MessageService {
     private MessageThread findThreadById(UUID id) {
         return threadRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Thread not found with id: " + id));
+    }
+
+    /**
+     * Export thread conversation as PDF.
+     *
+     * @param threadId Thread ID to export
+     * @return PDF document as byte array
+     * @throws ResourceNotFoundException if thread not found
+     */
+    @Transactional(readOnly = true)
+    public byte[] exportThreadAsPdf(UUID threadId) {
+        log.info("Exporting thread {} as PDF", threadId);
+
+        MessageThread thread = threadRepository.findById(threadId)
+            .orElseThrow(() -> new ResourceNotFoundException("Thread not found with id: " + threadId));
+
+        List<Message> messages = messageRepository.findByThreadIdDescending(threadId, PageRequest.of(0, 1000));
+        List<Message> reversed = messages.reversed();
+
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+            // Title
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+            contentStream.beginText();
+            contentStream.newLineAtOffset(50, 750);
+            contentStream.showText("Konwersacja: " + thread.getTitle());
+            contentStream.endText();
+
+            // Thread info
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 10);
+            contentStream.beginText();
+            contentStream.newLineAtOffset(50, 720);
+            contentStream.showText("Projekt: " + thread.getProjectId().toString());
+            contentStream.newLineAtOffset(0, -15);
+            contentStream.showText("Data utworzenia: " + thread.getCreatedAt().toString());
+            contentStream.newLineAtOffset(0, -15);
+            contentStream.showText("Liczba wiadomosci: " + messages.size());
+            contentStream.endText();
+
+            // Messages
+            float yPosition = 680;
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter
+                .ofPattern("yyyy-MM-dd HH:mm")
+                .withZone(java.time.ZoneId.systemDefault());
+
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 11);
+
+            for (Message message : reversed) {
+                // Check if we need a new page
+                if (yPosition < 50) {
+                    contentStream.close();
+                    page = new PDPage();
+                    document.addPage(page);
+                    contentStream = new PDPageContentStream(document, page);
+                    yPosition = 750;
+                }
+
+                // Sender and date
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, yPosition);
+                contentStream.showText("Od: " + message.getSenderId() + " | " + formatter.format(message.getSentAt()));
+                contentStream.endText();
+
+                // Content
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 10);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, yPosition - 15);
+
+                // Word wrap content
+                String content = message.getContent();
+                String[] words = content.split(" ");
+                StringBuilder line = new StringBuilder();
+                float xPosition = 50;
+                PDType1Font font = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+
+                for (String word : words) {
+                    float wordWidth = font.getStringWidth(word) / 1000 * 10;
+                    if (xPosition + wordWidth > 500) {
+                        contentStream.showText(line.toString());
+                        line = new StringBuilder(word + " ");
+                        xPosition = 50;
+                        yPosition -= 15;
+                        contentStream.newLineAtOffset(-line.length() * 5, -15);
+                    } else {
+                        line.append(word).append(" ");
+                        xPosition += wordWidth + 5;
+                    }
+                }
+                if (line.length() > 0) {
+                    contentStream.showText(line.toString());
+                }
+                contentStream.endText();
+
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 11);
+                yPosition -= 40;
+            }
+
+            contentStream.close();
+
+            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+            document.save(baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            log.error("Error exporting thread {} as PDF", threadId, e);
+            throw new RuntimeException("Failed to export thread as PDF", e);
+        }
     }
 }

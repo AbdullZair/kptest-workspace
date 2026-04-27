@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+
 /**
  * Message REST Controller.
  * Handles all message and conversation thread operations.
@@ -246,5 +249,32 @@ public class MessageController {
         return ResponseEntity.ok(Map.of(
             "count", count
         ));
+    }
+
+    /**
+     * Export thread conversation as PDF.
+     */
+    @PostMapping("/threads/{id}/export")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST', 'USER')")
+    @Operation(summary = "Export thread as PDF", description = "Exports a conversation thread as PDF document")
+    public ResponseEntity<byte[]> exportThreadAsPdf(
+        @Parameter(description = "Thread ID")
+        @PathVariable UUID id,
+
+        @Parameter(description = "Export format (pdf)")
+        @RequestParam(defaultValue = "pdf") String format
+    ) {
+        log.info("POST /api/v1/messages/threads/{}/export - format={}", id, format);
+
+        byte[] pdfContent = messageService.exportThreadAsPdf(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "conversation-" + id.toString() + ".pdf");
+
+        return ResponseEntity
+            .ok()
+            .headers(headers)
+            .body(pdfContent);
     }
 }
