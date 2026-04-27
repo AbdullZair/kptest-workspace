@@ -90,6 +90,30 @@ export const inboxApiSlice = api.injectEndpoints({
       query: () => '/inbox/unread-count',
       providesTags: ['InboxThread'],
     }),
+
+    /**
+     * Assign thread to user
+     */
+    assignThread: builder.mutation<InboxThread, { threadId: string; assigneeId: string }>({
+      query: ({ threadId, assigneeId }) => ({
+        url: `/inbox/threads/${threadId}/assign`,
+        method: 'POST',
+        body: { assignee_id: assigneeId },
+      }),
+      invalidatesTags: ['InboxThread'],
+    }),
+
+    /**
+     * Set thread priority
+     */
+    setThreadPriority: builder.mutation<InboxThread, { threadId: string; priority: string }>({
+      query: ({ threadId, priority }) => ({
+        url: `/inbox/threads/${threadId}/priority`,
+        method: 'POST',
+        body: { priority },
+      }),
+      invalidatesTags: ['InboxThread'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -104,6 +128,8 @@ export const {
   useUpdateThreadStatusMutation,
   useMarkThreadAsReadMutation,
   useGetUnreadCountQuery,
+  useAssignThreadMutation,
+  useSetThreadPriorityMutation,
 } = inboxApiSlice
 
 export default inboxApiSlice

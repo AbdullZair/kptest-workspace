@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { useGetInboxThreadsQuery, useMarkThreadAsReadMutation } from '../api/inboxApi'
+import { useGetInboxThreadsQuery } from '../api/inboxApi'
 import { InboxFilters } from '../components/InboxFilters'
 import { MessageDelegateModal } from '../components/MessageDelegateModal'
+import InboxThreadActions from './InboxThreadActions'
+import ExportConversationButton from './ExportConversationButton'
 import type { InboxThread, ThreadStatus } from '../types'
 
 export const InboxPage: React.FC = () => {
@@ -9,11 +11,10 @@ export const InboxPage: React.FC = () => {
     page: 0,
     size: 20,
   })
-  const [selectedThread, setSelectedThread] = useState<InboxThread | null>(null)
+  const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null)
   const [isDelegateModalOpen, setIsDelegateModalOpen] = useState(false)
 
   const { data, isLoading, error, refetch } = useGetInboxThreadsQuery(filters)
-  const [markAsRead] = useMarkThreadAsReadMutation()
 
   const handleFilterChange = (newFilters: Partial<InboxFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters, page: 0 }))
@@ -23,18 +24,9 @@ export const InboxPage: React.FC = () => {
     setFilters({ page: 0, size: 20 })
   }
 
-  const handleDelegateClick = (thread: InboxThread) => {
-    setSelectedThread(thread)
+  const handleDelegateClick = (threadId: string) => {
+    setSelectedThreadId(threadId)
     setIsDelegateModalOpen(true)
-  }
-
-  const handleMarkAsRead = async (threadId: string) => {
-    try {
-      await markAsRead(threadId).unwrap()
-      refetch()
-    } catch (err) {
-      console.error('Failed to mark as read:', err)
-    }
   }
 
   const getStatusBadgeClass = (status: ThreadStatus): string => {
@@ -196,20 +188,19 @@ export const InboxPage: React.FC = () => {
                   )}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                  <button
-                    onClick={() => handleDelegateClick(thread)}
-                    className="text-blue-600 hover:text-blue-900 mr-3"
-                  >
-                    Deleguj
-                  </button>
-                  {thread.status === 'NEW' && (
+                  <div className="flex items-center justify-end space-x-2">
                     <button
-                      onClick={() => handleMarkAsRead(thread.id)}
-                      className="text-green-600 hover:text-green-900"
+                      onClick={() => handleDelegateClick(thread.id)}
+                      className="text-blue-600 hover:text-blue-900"
                     >
-                      Oznacz jako przeczytane
+                      Deleguj
                     </button>
-                  )}
+                    <InboxThreadActions thread={thread} onActionComplete={refetch} />
+                    <ExportConversationButton
+                      threadId={thread.id}
+                      threadTitle={thread.title}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}
@@ -251,15 +242,15 @@ export const InboxPage: React.FC = () => {
       )}
 
       {/* Delegate Modal */}
-      {selectedThread && (
+      {selectedThreadId && (
         <MessageDelegateModal
           isOpen={isDelegateModalOpen}
           onClose={() => {
             setIsDelegateModalOpen(false)
-            setSelectedThread(null)
+            setSelectedThreadId(null)
           }}
-          threadId={selectedThread.id}
-          threadTitle={selectedThread.title}
+          threadId={selectedThreadId}
+          threadTitle={data?.content.find((t) => t.id === selectedThreadId)?.title || ''}
         />
       )}
     </div>
