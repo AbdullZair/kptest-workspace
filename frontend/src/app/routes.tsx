@@ -68,7 +68,9 @@ const AdminAuditLogsPage = lazy(() => import('@features/admin/ui/AdminAuditLogsP
 const AdminSystemPage = lazy(() => import('@features/admin/ui/AdminSystemPage'))
 const AdminSystemLogsPage = lazy(() => import('@features/admin/ui/AdminSystemLogsPage'))
 const PatientDataAdminPage = lazy(() => import('@features/admin/ui/PatientDataAdminPage'))
-const DataProcessingActivitiesPage = lazy(() => import('@features/admin/ui/DataProcessingActivitiesPage'))
+const DataProcessingActivitiesPage = lazy(
+  () => import('@features/admin/ui/DataProcessingActivitiesPage')
+)
 
 /**
  * Route configuration
@@ -293,57 +295,71 @@ export const routes: RouteObject[] = [
       {
         path: 'admin',
         element: (
-          <Suspense fallback={<PageLoader />}>
-            <AdminDashboard />
-          </Suspense>
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <AdminDashboard />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
         path: 'admin/users',
         element: (
-          <Suspense fallback={<PageLoader />}>
-            <AdminUsersPage />
-          </Suspense>
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <AdminUsersPage />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
         path: 'admin/audit-logs',
         element: (
-          <Suspense fallback={<PageLoader />}>
-            <AdminAuditLogsPage />
-          </Suspense>
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <AdminAuditLogsPage />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
         path: 'admin/system',
         element: (
-          <Suspense fallback={<PageLoader />}>
-            <AdminSystemPage />
-          </Suspense>
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <AdminSystemPage />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
         path: 'admin/system/logs',
         element: (
-          <Suspense fallback={<PageLoader />}>
-            <AdminSystemLogsPage />
-          </Suspense>
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <AdminSystemLogsPage />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
         path: 'admin/patients/:id/data',
         element: (
-          <Suspense fallback={<PageLoader />}>
-            <PatientDataAdminPage />
-          </Suspense>
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <PatientDataAdminPage />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
         path: 'admin/data-processing-activities',
         element: (
-          <Suspense fallback={<PageLoader />}>
-            <DataProcessingActivitiesPage />
-          </Suspense>
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <DataProcessingActivitiesPage />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
     ],

@@ -3,10 +3,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { api } from '@shared/api'
-import { DataProcessingActivitiesPage } from '../ui/DataProcessingActivitiesPage'
+import { DataProcessingActivitiesPage } from '../DataProcessingActivitiesPage'
 
 // Mock the RTK Query hooks
-vi.mock('../api/adminApi', () => ({
+vi.mock('../../api/adminApi', () => ({
   useGetDataProcessingActivitiesQuery: () => ({
     data: {
       content: [

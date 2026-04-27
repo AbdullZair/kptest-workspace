@@ -6,7 +6,7 @@ import { api } from '@shared/api'
 import { AnonymizePatientDialog } from '../AnonymizePatientDialog'
 
 // Mock the RTK Query hook
-vi.mock('../api/adminApi', () => ({
+vi.mock('../../api/adminApi', () => ({
   useAnonymizePatientMutation: () => [
     vi.fn(() => Promise.resolve({ unwrap: () => Promise.resolve({ patient_id: 'test-id', anonymized_at: new Date().toISOString(), audit_log_id: 'audit-123', message: 'Success' }) })),
     { isLoading: false, error: null },
@@ -99,7 +99,7 @@ describe('AnonymizePatientDialog', () => {
   })
 
   it('calls onSuccess and onClose after successful submission', async () => {
-    const { useAnonymizePatientMutation } = await import('../api/adminApi')
+    const { useAnonymizePatientMutation } = await import('../../api/adminApi')
     const mockAnonymize = vi.fn(() => Promise.resolve({ unwrap: () => Promise.resolve({ patient_id: 'test-id', anonymized_at: new Date().toISOString(), audit_log_id: 'audit-123', message: 'Success' }) }))
     vi.mocked(useAnonymizePatientMutation).mockReturnValue([mockAnonymize, { isLoading: false, error: null }])
 
