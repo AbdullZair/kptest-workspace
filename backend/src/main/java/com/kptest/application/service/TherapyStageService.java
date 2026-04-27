@@ -70,7 +70,7 @@ public class TherapyStageService {
         log.info("Creating therapy stage: {}", stageDto.name());
 
         // Get project
-        var projectRef = new Project();
+        var projectRef = Project.create(null, "Reference", null, null);
         projectRef.setId(stageDto.projectId());
 
         // Get next order index
@@ -193,7 +193,7 @@ public class TherapyStageService {
         log.info("Initializing stage progress for patient project: {}", patientProjectId);
 
         // Get patient project to find project ID
-        var patientProject = new PatientProject();
+        var patientProject = PatientProject.enroll(null, null);
         patientProject.setId(patientProjectId);
 
         // Get all stages for the project (we need to get project ID first from patientProject)

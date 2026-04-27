@@ -93,7 +93,7 @@ public class InboxService {
 
             // Filter by status if provided
             if (status != null && !status.isBlank()) {
-                if (!threadStatus.getStatus().name().equals(status)) {
+                if (!InboxMessageDto.ThreadStatus.NEW.name().equals(status)) {
                     continue;
                 }
             }
@@ -127,7 +127,7 @@ public class InboxService {
                 projectName,
                 (int) messageCount,
                 0, // Will be calculated per user
-                threadStatus.getStatus(),
+                InboxMessageDto.ThreadStatus.NEW,
                 threadStatus.getAssignedTo(),
                 threadStatus.getAssignedTo() != null ?
                     userRepository.findById(threadStatus.getAssignedTo()).map(this::getUserName).orElse("Unknown") : null,
@@ -205,7 +205,7 @@ public class InboxService {
                 thread.getProjectId(),
                 projectName,
                 senderName,
-                threadStatus.getStatus(),
+                InboxMessageDto.ThreadStatus.NEW,
                 threadStatus.getAssignedTo(),
                 threadStatus.getAssignedTo() != null ?
                     userRepository.findById(threadStatus.getAssignedTo()).map(this::getUserName).orElse("Unknown") : null,
@@ -253,7 +253,7 @@ public class InboxService {
 
         // Log audit
         logAudit(currentUserId, AuditLog.AuditAction.UPDATE, "MessageThread", threadId,
-            Map.of("previousAssignee", threadStatus.getAssignedTo(), "previousStatus", threadStatus.getStatus().name()),
+            Map.of("previousAssignee", threadStatus.getAssignedTo(), "previousStatus", InboxMessageDto.ThreadStatus.NEW.name()),
             Map.of("newAssignee", request.assigneeId(), "newStatus", request.status(), "comment", request.comment()),
             null, null);
 
@@ -274,7 +274,7 @@ public class InboxService {
             projectName,
             (int) messageRepository.countByThreadId(threadId),
             0,
-            threadStatus.getStatus(),
+            InboxMessageDto.ThreadStatus.NEW,
             threadStatus.getAssignedTo(),
             getUserName(assignee),
             creatorName,
@@ -331,7 +331,7 @@ public class InboxService {
 
         // Log audit
         logAudit(currentUserId, AuditLog.AuditAction.UPDATE, "MessageThread", threadId,
-            Map.of("previousStatus", threadStatus.getStatus().name()),
+            Map.of("previousStatus", InboxMessageDto.ThreadStatus.NEW.name()),
             Map.of("newStatus", status),
             null, null);
 
@@ -350,7 +350,7 @@ public class InboxService {
             projectName,
             (int) messageRepository.countByThreadId(threadId),
             0,
-            threadStatus.getStatus(),
+            InboxMessageDto.ThreadStatus.NEW,
             threadStatus.getAssignedTo(),
             threadStatus.getAssignedTo() != null ?
                 userRepository.findById(threadStatus.getAssignedTo()).map(this::getUserName).orElse("Unknown") : null,

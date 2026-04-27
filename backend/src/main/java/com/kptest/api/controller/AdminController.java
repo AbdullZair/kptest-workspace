@@ -177,7 +177,7 @@ public class AdminController {
         @Parameter(description = "Reset request with reason")
         @Valid @RequestBody ForcePasswordResetRequest request
     ) {
-        log.info("POST /api/v1/admin/users/{}/force-password-reset - reason: {}", id, request.reason());
+        log.info("POST /api/v1/admin/users/{}/force-password-reset", id);
 
         ResetPasswordResponse response = adminService.forcePasswordReset(id, request.reason());
 
@@ -195,9 +195,10 @@ public class AdminController {
         @PathVariable UUID id,
 
         @Parameter(description = "Clear request with reason")
-        @RequestParam String reason
+        @RequestParam("reason") String reason,
+        @RequestParam("temporaryPassword") String temporaryPassword
     ) {
-        log.info("POST /api/v1/admin/users/{}/clear-2fa - reason: {}", id, request.reason());
+        log.info("POST /api/v1/admin/users/{}/clear-2fa - reason: {}", id, reason);
 
         Clear2faResponse response = adminService.clear2fa(id, reason);
 

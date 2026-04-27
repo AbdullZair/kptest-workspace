@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,12 +31,12 @@ public class EventChangeRequestController {
     @PostMapping
     public ResponseEntity<EventChangeRequestDto> createChangeRequest(
             @Valid @RequestBody CreateEventChangeRequestRequest request,
-            @RequestParam UUID patientId
+            @AuthenticationPrincipal String userId
     ) {
         log.info("Creating event change request - event: {}", request.eventId());
 
-        UUID patientId = UUID.fromString(jwt.getClaim("sub"));
-        EventChangeRequestDto result = changeRequestService.createChangeRequest(request, patientId);
+        
+        EventChangeRequestDto result = changeRequestService.createChangeRequest(request, UUID.fromString(userId));
 
         return ResponseEntity.ok(result);
     }
@@ -70,12 +72,12 @@ public class EventChangeRequestController {
      */
     @GetMapping("/my-requests")
     public ResponseEntity<List<EventChangeRequestDto>> getMyChangeRequests(
-            @RequestParam UUID patientId
+            @AuthenticationPrincipal String userId
     ) {
-        UUID patientId = UUID.fromString(jwt.getClaim("sub"));
-        log.debug("Getting change requests for patient: {}", patientId);
+        
+        log.debug("Getting change requests for patient: {}", userId);
 
-        List<EventChangeRequestDto> result = changeRequestService.getChangeRequestsForPatient(patientId);
+        List<EventChangeRequestDto> result = changeRequestService.getChangeRequestsForPatient(UUID.fromString(userId));
 
         return ResponseEntity.ok(result);
     }
@@ -101,12 +103,12 @@ public class EventChangeRequestController {
     public ResponseEntity<EventChangeRequestDto> acceptChangeRequest(
             @PathVariable UUID requestId,
             @Valid @RequestBody AcceptEventChangeRequestRequest request,
-            @RequestParam UUID patientId
+            @AuthenticationPrincipal String userId
     ) {
         log.info("Accepting change request: {}", requestId);
 
-        UUID staffId = UUID.fromString(jwt.getClaim("sub"));
-        EventChangeRequestDto result = changeRequestService.acceptChangeRequest(requestId, request, staffId);
+        
+        EventChangeRequestDto result = changeRequestService.acceptChangeRequest(requestId, request, UUID.fromString(userId));
 
         return ResponseEntity.ok(result);
     }
@@ -118,12 +120,12 @@ public class EventChangeRequestController {
     public ResponseEntity<EventChangeRequestDto> rejectChangeRequest(
             @PathVariable UUID requestId,
             @Valid @RequestBody RejectEventChangeRequestRequest request,
-            @RequestParam UUID patientId
+            @AuthenticationPrincipal String userId
     ) {
         log.info("Rejecting change request: {}", requestId);
 
-        UUID staffId = UUID.fromString(jwt.getClaim("sub"));
-        EventChangeRequestDto result = changeRequestService.rejectChangeRequest(requestId, request, staffId);
+        
+        EventChangeRequestDto result = changeRequestService.rejectChangeRequest(requestId, request, UUID.fromString(userId));
 
         return ResponseEntity.ok(result);
     }
@@ -134,12 +136,12 @@ public class EventChangeRequestController {
     @PostMapping("/{requestId}/cancel")
     public ResponseEntity<EventChangeRequestDto> cancelChangeRequest(
             @PathVariable UUID requestId,
-            @RequestParam UUID patientId
+            @AuthenticationPrincipal String userId
     ) {
         log.info("Cancelling change request: {}", requestId);
 
-        UUID patientId = UUID.fromString(jwt.getClaim("sub"));
-        EventChangeRequestDto result = changeRequestService.cancelChangeRequest(requestId, patientId);
+        
+        EventChangeRequestDto result = changeRequestService.cancelChangeRequest(requestId, UUID.fromString(userId));
 
         return ResponseEntity.ok(result);
     }

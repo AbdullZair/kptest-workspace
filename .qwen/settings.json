@@ -29,7 +29,19 @@
       "Bash(ssh *)",
       "Bash(sed *)",
       "Bash(npm install)",
-      "Bash(timeout *)"
+      "Bash(timeout *)",
+      "Bash(npx *)",
+      "Bash(du *)",
+      "Bash(cat)",
+      "Bash(script)",
+      "Bash(chmod *)",
+      "Bash(bash *)",
+      "Bash(mkdir *)",
+      "Bash(mv *)",
+      "Bash(cp *)",
+      "Bash(docker exec *)",
+      "Bash(docker rmi *)",
+      "Bash(docker *)"
     ]
   },
   "$version": 3

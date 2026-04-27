@@ -41,6 +41,14 @@ public class QuizAnswer {
     @Column(name = "explanation", columnDefinition = "TEXT")
     private String explanation;
 
+    /**
+     * Check if this answer is correct.
+     * @return true if correct
+     */
+    public boolean isCorrect() {
+        return Boolean.TRUE.equals(correct);
+    }
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
     private Instant createdAt;

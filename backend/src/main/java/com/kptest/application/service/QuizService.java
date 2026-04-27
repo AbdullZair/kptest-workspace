@@ -337,7 +337,7 @@ public class QuizService {
         long totalAttempts = quizAttemptRepository.countByQuizId(quizId);
         double averageScore = quizAttemptRepository.findAveragePercentageByQuizId(quizId);
 
-        return new QuizStatsDto(totalAttempts, averageScore != null ? averageScore : 0.0);
+        return new QuizStatsDto(totalAttempts, Double.compare(averageScore, 0.0) != 0 ? averageScore : 0.0);
     }
 
     /**

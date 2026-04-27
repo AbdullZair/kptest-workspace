@@ -1,6 +1,5 @@
 package com.kptest.infrastructure.security;
 
-import com.kptest.domain.user.UserRole;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,14 +50,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             
             // Validate and extract claims
             if (!jwtService.isTokenExpired(jwt)) {
-                final UUID userId = jwtService.getUserId(jwt);
-                final UserRole role = jwtService.getUserRole(jwt);
+                final String userId = jwtService.getUserId(jwt).toString();
+                final String role = jwtService.getUserRole(jwt).name();
                 final boolean twoFaVerified = jwtService.is2faVerified(jwt);
                 
                 // Set authentication in security context
-                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
                 var authentication = new UsernamePasswordAuthenticationToken(
-                    userId,
+                    userId,  // Use String userId (not UUID)
                     null,
                     authorities
                 );

@@ -1,4 +1,5 @@
 package com.kptest.application.service;
+import com.kptest.domain.gamification.BadgeCategory;
 
 import com.kptest.api.dto.BadgeDto;
 import com.kptest.api.dto.PatientBadgeDto;
@@ -211,7 +212,7 @@ public class BadgeService {
     public void checkEventsCompleted(UUID patientId, String eventType) {
         log.debug("Checking events completed badges for patient: {}, event: {}", patientId, eventType);
 
-        List<Badge> badges = badgeRepository.findByActive(true);
+        List<Badge> badges = badgeRepository.findAll();
 
         for (Badge badge : badges) {
             for (BadgeRule rule : badge.getRules()) {
@@ -240,7 +241,7 @@ public class BadgeService {
     public void checkComplianceThreshold(UUID patientId, double complianceScore) {
         log.debug("Checking compliance badges for patient: {}, score: {}", patientId, complianceScore);
 
-        List<Badge> badges = badgeRepository.findByActive(true);
+        List<Badge> badges = badgeRepository.findAll();
 
         for (Badge badge : badges) {
             for (BadgeRule rule : badge.getRules()) {
@@ -262,7 +263,7 @@ public class BadgeService {
     public void checkMaterialsRead(UUID patientId, String category) {
         log.debug("Checking materials read badges for patient: {}, category: {}", patientId, category);
 
-        List<Badge> badges = badgeRepository.findByActive(true);
+        List<Badge> badges = badgeRepository.findAll();
 
         for (Badge badge : badges) {
             for (BadgeRule rule : badge.getRules()) {
@@ -291,7 +292,7 @@ public class BadgeService {
     public void checkQuizPassed(UUID patientId, UUID quizId) {
         log.debug("Checking quiz passed badges for patient: {}, quiz: {}", patientId, quizId);
 
-        List<Badge> badges = badgeRepository.findByActive(true);
+        List<Badge> badges = badgeRepository.findAll();
 
         for (Badge badge : badges) {
             for (BadgeRule rule : badge.getRules()) {

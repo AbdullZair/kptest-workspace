@@ -79,17 +79,21 @@ const userSlice = createSlice({
 /**
  * Actions
  */
-export const { setCurrentUser, updateUser, setLoading, setError, clearUser } = userSlice.actions
+export const {
+  setCurrentUser,
+  updateUser,
+  setLoading,
+  setError,
+  clearUser,
+} = userSlice.actions
 
 /**
  * Selectors
  */
-export const selectCurrentUser = (state: { user: UserState }): UserEntity | null =>
-  state.user.currentUser
+export const selectCurrentUser = (state: { user: UserState }): UserEntity | null => state.user.currentUser
 export const selectIsLoading = (state: { user: UserState }): boolean => state.user.isLoading
 export const selectError = (state: { user: UserState }): string | null => state.user.error
-export const selectIsAuthenticated = (state: { user: UserState }): boolean =>
-  state.user.currentUser !== null
+export const selectIsAuthenticated = (state: { user: UserState }): boolean => state.user.currentUser !== null
 
 /**
  * Adapter selectors (for future use with multiple users)

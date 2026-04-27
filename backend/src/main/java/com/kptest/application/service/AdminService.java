@@ -258,15 +258,15 @@ public class AdminService {
             Map.of(
                 "action", "clear_2fa",
                 "reason", reason,
-                "oldTwoFactorEnabled", oldTwoFactorEnabled,
-                "oldTwoFactorSecret", oldTwoFactorSecret != null ? "[REDACTED]" : null
+                "oldTwoFactorEnabled", user.isTwoFactorEnabled(),
+                "oldTwoFactorSecret", user.getTwoFactorSecret() != null ? "[REDACTED]" : null
             ),
             Map.of("twoFactorEnabled", false, "twoFactorSecret", "cleared"),
             null, null);
 
         return new Clear2faResponse(
-            user.getId().toString(),
-            "2FA configuration has been cleared. Reason: " + reason
+            true,
+            "2FA configuration has been cleared successfully"
         );
     }
 

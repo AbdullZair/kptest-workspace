@@ -1,4 +1,5 @@
 package com.kptest.domain.gamification.repository;
+import com.kptest.domain.gamification.Badge;
 
 import com.kptest.domain.gamification.BadgeCategory;
 import com.kptest.domain.gamification.PatientBadge;
@@ -46,7 +47,7 @@ public interface PatientBadgeRepository extends JpaRepository<PatientBadge, UUID
      * Count badges by category for a patient.
      */
     @Query("SELECT COUNT(pb) FROM PatientBadge pb JOIN pb.badge b WHERE pb.patient.id = :patientId AND b.category = :category")
-    long countByPatientIdAndBadgeCategory(@Param("patientId") UUID patientId, @Param("category") BadgeCategory category);
+    long countByPatientIdAndBadgeCategory(@Param("patientId") UUID patientId, @Param("category") Badge.BadgeCategory category);
 
     /**
      * Find recent badges earned by patient.
