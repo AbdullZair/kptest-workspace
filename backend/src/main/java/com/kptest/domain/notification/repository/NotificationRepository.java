@@ -93,4 +93,9 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
      */
     @Query("SELECT COUNT(n) FROM Notification n WHERE n.userId = :userId AND n.read = false AND n.type = :type")
     long countUnreadByUserIdAndType(@Param("userId") UUID userId, @Param("type") NotificationType type);
+
+    /**
+     * Delete all notifications for a user.
+     */
+    void deleteByUserId(@Param("userId") UUID userId);
 }

@@ -2,8 +2,10 @@ package com.kptest.application.service;
 
 import com.kptest.api.dto.*;
 import com.kptest.domain.audit.AuditLog;
+import com.kptest.domain.audit.DataProcessingErasureLog;
 import com.kptest.domain.audit.SystemLog;
 import com.kptest.domain.audit.repository.AuditLogRepository;
+import com.kptest.domain.audit.repository.DataProcessingErasureLogRepository;
 import com.kptest.domain.audit.repository.SystemLogRepository;
 import com.kptest.domain.gamification.Badge;
 import com.kptest.domain.gamification.PatientBadge;
@@ -14,8 +16,14 @@ import com.kptest.domain.material.MaterialProgress;
 import com.kptest.domain.material.repository.EducationalMaterialRepository;
 import com.kptest.domain.material.repository.MaterialProgressRepository;
 import com.kptest.domain.message.Message;
+import com.kptest.domain.message.MessageAttachment;
+import com.kptest.domain.message.repository.MessageAttachmentRepository;
 import com.kptest.domain.message.repository.MessageRepository;
+import com.kptest.domain.notification.Notification;
+import com.kptest.domain.notification.repository.NotificationRepository;
 import com.kptest.domain.patient.ActivationCode;
+import com.kptest.domain.patient.EmergencyContact;
+import com.kptest.domain.patient.EmergencyContactRepository;
 import com.kptest.domain.patient.Patient;
 import com.kptest.domain.patient.PatientRepository;
 import com.kptest.domain.patient.repository.ActivationCodeRepository;
@@ -24,8 +32,10 @@ import com.kptest.domain.project.PatientProjectRepository;
 import com.kptest.domain.project.Project;
 import com.kptest.domain.project.ProjectRepository;
 import com.kptest.domain.quiz.Quiz;
+import com.kptest.domain.quiz.QuizAnswerSelection;
 import com.kptest.domain.quiz.QuizAttempt;
 import com.kptest.domain.quiz.repository.QuizAttemptRepository;
+import com.kptest.domain.quiz.repository.QuizAnswerSelectionRepository;
 import com.kptest.domain.quiz.repository.QuizRepository;
 import com.kptest.domain.schedule.TherapyEvent;
 import com.kptest.domain.schedule.repository.TherapyEventRepository;
@@ -33,6 +43,7 @@ import com.kptest.domain.user.AccountStatus;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRepository;
 import com.kptest.domain.user.UserRole;
+import com.kptest.exception.BusinessRuleException;
 import com.kptest.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,8 +96,13 @@ public class AdminService {
     private final TherapyEventRepository therapyEventRepository;
     private final QuizAttemptRepository quizAttemptRepository;
     private final QuizRepository quizRepository;
+    private final QuizAnswerSelectionRepository quizAnswerSelectionRepository;
     private final PatientBadgeRepository patientBadgeRepository;
     private final BadgeRepository badgeRepository;
+    private final MessageAttachmentRepository messageAttachmentRepository;
+    private final NotificationRepository notificationRepository;
+    private final EmergencyContactRepository emergencyContactRepository;
+    private final DataProcessingErasureLogRepository dataProcessingErasureLogRepository;
     private ObjectMapper objectMapper;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_INSTANT;
@@ -1087,5 +1103,131 @@ public class AdminService {
             log.error("Failed to export patient data as PDF", e);
             throw new RuntimeException("Failed to export patient data as PDF", e);
         }
+    }
+
+    // ==================== RODO: PATIENT DATA ERASURE (US-A-12) ====================
+
+    /**
+     * Erase patient data (RODO Art. 17 - right to be forgotten).
+     * Hard-deletes patient data after 30-day cooling period or with force flag.
+     * 
+     * @param patientId Patient ID to erase
+     * @param request Erasure request with reason and confirmation
+     * @param currentUserId ID of the admin performing the erasure
+     * @param force If true, bypasses the 30-day cooling period (requires higher auth)
+     */
+    public void erasePatient(UUID patientId, ErasureRequest request, UUID currentUserId, boolean force) {
+        log.info("Erasing patient with ID: {}, force: {}", patientId, force);
+
+        Patient patient = patientRepository.findById(patientId)
+            .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
+
+        // Verify cooling period (30 days) unless force flag is set
+        Instant deletedAt = patient.getDeletedAt();
+        if (!force && deletedAt != null) {
+            Instant thirtyDaysAgo = Instant.now().minusSeconds(30L * 24 * 60 * 60);
+            if (deletedAt.isAfter(thirtyDaysAgo)) {
+                throw new BusinessRuleException(
+                    "Patient must be in deleted state for at least 30 days before erasure. " +
+                    "Deleted at: " + deletedAt + ", can erase after: " + thirtyDaysAgo);
+            }
+        } else if (!force && deletedAt == null) {
+            throw new BusinessRuleException(
+                "Patient must be soft-deleted before erasure. Use anonymize or soft-delete first.");
+        }
+
+        // Log audit before erasure
+        logAuditLog(
+            currentUserId,
+            AuditLog.AuditAction.DELETE,
+            "Patient",
+            patientId,
+            Map.of("action", "erasure_initiated", "reason", request.reason()),
+            null,
+            null,
+            null
+        );
+
+        // Hard-delete in order (foreign key dependencies)
+        // 1. PatientBadge
+        List<PatientBadge> patientBadges = patientBadgeRepository.findByPatientIdOrderByEarnedAtDesc(patientId);
+        patientBadgeRepository.deleteAll(patientBadges);
+        log.debug("Deleted {} PatientBadge records for patient {}", patientBadges.size(), patientId);
+
+        // 2. MaterialProgress
+        materialProgressRepository.deleteByPatientId(patientId);
+        log.debug("Deleted MaterialProgress records for patient {}", patientId);
+
+        // 3. QuizAnswerSelection (via attempts)
+        quizAnswerSelectionRepository.deleteByAttemptPatientId(patientId);
+        log.debug("Deleted QuizAnswerSelection records for patient {}", patientId);
+
+        // 4. QuizAttempt
+        List<QuizAttempt> quizAttempts = quizAttemptRepository.findByPatientId(patientId);
+        quizAttemptRepository.deleteAll(quizAttempts);
+        log.debug("Deleted {} QuizAttempt records for patient {}", quizAttempts.size(), patientId);
+
+        // 5. MessageAttachment (via messages from this patient)
+        if (patient.getUser() != null) {
+            List<Message> patientMessages = messageRepository.findBySenderId(patient.getUser().getId());
+            for (Message msg : patientMessages) {
+                messageAttachmentRepository.deleteByMessageId(msg.getId());
+            }
+            log.debug("Deleted MessageAttachment records for patient {}", patientId);
+        }
+
+        // 6. Notification
+        notificationRepository.deleteByUserId(patient.getUser() != null ? patient.getUser().getId() : patientId);
+        log.debug("Deleted Notification records for patient {}", patientId);
+
+        // 7. EmergencyContact
+        emergencyContactRepository.deleteByPatientId(patientId);
+        log.debug("Deleted EmergencyContact records for patient {}", patientId);
+
+        // Anonymize related data (don't delete, just remove PII references)
+        // 8. Message - set sender to null
+        if (patient.getUser() != null) {
+            List<Message> patientMessages = messageRepository.findBySenderId(patient.getUser().getId());
+            for (Message msg : patientMessages) {
+                msg.setSenderId(null);
+                messageRepository.save(msg);
+            }
+            log.debug("Anonymized senderId in {} Message records for patient {}", patientMessages.size(), patientId);
+        }
+
+        // 9. AuditLog - keep entityId but zero PII in old/new values
+        List<AuditLog> patientAuditLogs = auditLogRepository.findByEntityTypeAndEntityId("Patient", patientId);
+        for (AuditLog auditLog : patientAuditLogs) {
+            auditLog.setOldValue("{\"erased\": true}");
+            auditLog.setNewValue("{\"erased\": true}");
+            auditLogRepository.save(auditLog);
+        }
+        log.debug("Anonymized {} AuditLog records for patient {}", patientAuditLogs.size(), patientId);
+
+        // Hard-delete Patient
+        patientRepository.delete(patient);
+        log.info("Deleted Patient record for {}", patientId);
+
+        // Hard-delete associated User (if dedicated for patient)
+        if (patient.getUser() != null) {
+            User user = patient.getUser();
+            userRepository.delete(user);
+            log.info("Deleted User record {} for patient {}", user.getId(), patientId);
+        }
+
+        // Record erasure in DataProcessingErasureLog
+        DataProcessingErasureLog erasureLog = DataProcessingErasureLog.create(patientId, request.reason(), currentUserId);
+        dataProcessingErasureLogRepository.save(erasureLog);
+        log.info("Created DataProcessingErasureLog {} for patient {} erasure", erasureLog.getId(), patientId);
+    }
+
+    /**
+     * Get erasure logs for a patient.
+     */
+    public List<ErasureLogResponse> getErasureLogs(UUID patientId) {
+        return dataProcessingErasureLogRepository.findByPatientId(patientId, org.springframework.data.domain.PageRequest.of(0, 100))
+            .stream()
+            .map(log -> new ErasureLogResponse(log.getId(), log.getPatientId(), log.getReason(), log.getErasedBy(), log.getErasedAt()))
+            .toList();
     }
 }

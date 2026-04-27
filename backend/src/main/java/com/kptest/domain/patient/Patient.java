@@ -73,6 +73,9 @@ public class Patient {
     @Column(name = "address_postal_code", length = 20)
     private String addressPostalCode;
 
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

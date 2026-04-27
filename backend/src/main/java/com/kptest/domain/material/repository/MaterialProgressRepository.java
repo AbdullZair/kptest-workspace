@@ -87,4 +87,9 @@ public interface MaterialProgressRepository extends JpaRepository<MaterialProgre
      * Find all progress records.
      */
     List<MaterialProgress> findAll();
+
+    /**
+     * Delete all progress for a patient.
+     */
+    void deleteByPatientId(@Param("patientId") UUID patientId);
 }

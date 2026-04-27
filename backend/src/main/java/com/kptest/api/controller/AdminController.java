@@ -498,6 +498,48 @@ public class AdminController {
     }
 
     /**
+     * Erase patient data (US-A-12).
+     * Hard-deletes patient data after 30-day cooling period (RODO Art. 17 - right to be forgotten).
+     */
+    @DeleteMapping("/patients/{id}/erase")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Erase patient data", description = "US-A-12: Hard-deletes patient data (RODO Art. 17 - right to be forgotten). Requires patient to be in deleted state for at least 30 days (cooling period).")
+    public ResponseEntity<Void> erasePatient(
+        @Parameter(description = "Patient ID")
+        @PathVariable UUID id,
+
+        @Parameter(description = "Erasure request with reason")
+        @Valid @RequestBody ErasureRequest request,
+
+        @Parameter(description = "Force erasure without cooling period (requires super-admin)")
+        @RequestParam(defaultValue = "false") boolean force
+    ) {
+        log.info("DELETE /api/v1/admin/patients/{}/erase - force: {}", id, force);
+
+        UUID currentUserId = getCurrentUserId();
+        adminService.erasePatient(id, request, currentUserId, force);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Get erasure logs for a patient.
+     */
+    @GetMapping("/patients/{id}/erasure-logs")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get patient erasure logs", description = "Returns erasure audit trail for a patient.")
+    public ResponseEntity<java.util.List<ErasureLogResponse>> getErasureLogs(
+        @Parameter(description = "Patient ID")
+        @PathVariable UUID id
+    ) {
+        log.info("GET /api/v1/admin/patients/{}/erasure-logs", id);
+
+        var logs = adminService.getErasureLogs(id);
+
+        return ResponseEntity.ok(logs);
+    }
+
+    /**
      * Get current user ID from security context.
      */
     private UUID getCurrentUserId() {
