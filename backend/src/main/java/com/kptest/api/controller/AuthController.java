@@ -203,6 +203,23 @@ public class AuthController {
     }
 
     /**
+     * Change password for authenticated user.
+     */
+    @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Map<String, String>> changePassword(
+            @AuthenticationPrincipal String userIdStr,
+            @Valid @RequestBody ChangePasswordRequest request) {
+
+        UUID userId = UUID.fromString(userIdStr);
+        log.info("Change password request for user: {}", userId);
+
+        authenticationService.changePassword(userId, request.currentPassword(), request.newPassword());
+
+        return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
+    }
+
+    /**
      * Reset password with token.
      */
     @PostMapping("/reset-password")

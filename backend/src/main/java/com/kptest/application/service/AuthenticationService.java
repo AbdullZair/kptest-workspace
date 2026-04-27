@@ -1,8 +1,11 @@
 package com.kptest.application.service;
 
+import com.kptest.domain.audit.AuditLog;
+import com.kptest.domain.audit.repository.AuditLogRepository;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRepository;
 import com.kptest.exception.AccountLockedException;
+import com.kptest.exception.BusinessRuleException;
 import com.kptest.exception.InvalidCredentialsException;
 import com.kptest.infrastructure.security.JwtService;
 import com.kptest.infrastructure.security.RefreshTokenService;
@@ -31,6 +34,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final TotpService totpService;
     private final RefreshTokenService refreshTokenService;
+    private final AuditLogRepository auditLogRepository;
 
     @Value("${kptest.security.max-login-attempts}")
     private int maxLoginAttempts;
@@ -234,6 +238,80 @@ public class AuthenticationService {
 
         // Return expires_in in seconds (not milliseconds)
         return AuthResult.success(newAccessToken, newRefreshToken, jwtService.getAccessTokenExpirationMs() / 1000);
+    }
+
+    /**
+     * Change password for authenticated user.
+     *
+     * @param userId User ID
+     * @param currentPassword Current password for verification
+     * @param newPassword New password to set
+     * @throws InvalidCredentialsException if currentPassword is wrong
+     * @throws BusinessRuleException if new password doesn't meet requirements or equals current
+     */
+    public void changePassword(UUID userId, String currentPassword, String newPassword) {
+        log.info("Change password request for user: {}", userId);
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new InvalidCredentialsException());
+
+        // Verify current password
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            log.warn("Invalid current password for user: {}", userId);
+            throw new InvalidCredentialsException();
+        }
+
+        // Validate: new password != current password
+        if (passwordEncoder.matches(newPassword, user.getPasswordHash())) {
+            log.warn("New password equals current password for user: {}", userId);
+            throw new BusinessRuleException("New password cannot be the same as current password");
+        }
+
+        // Validate: password policy (min 12 chars, uppercase, lowercase, digit, special char)
+        validatePasswordPolicy(newPassword);
+
+        // Update password
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        user.setPasswordChangedAt(Instant.now());
+        userRepository.save(user);
+
+        // Revoke all refresh tokens
+        refreshTokenService.revokeAllUserTokens(userId);
+
+        // Create audit log
+        AuditLog auditLog = AuditLog.create(userId, AuditLog.AuditAction.PASSWORD_CHANGED, "User", userId);
+        auditLogRepository.save(auditLog);
+
+        log.info("Password changed successfully for user: {}", userId);
+    }
+
+    /**
+     * Validate password meets security policy.
+     */
+    private void validatePasswordPolicy(String password) {
+        if (password == null || password.length() < 12) {
+            throw new BusinessRuleException("Password must be at least 12 characters long");
+        }
+
+        boolean hasUppercase = !password.equals(password.toLowerCase()) && 
+            password.chars().anyMatch(Character::isUpperCase);
+        boolean hasLowercase = !password.equals(password.toUpperCase()) && 
+            password.chars().anyMatch(Character::isLowerCase);
+        boolean hasDigit = password.chars().anyMatch(Character::isDigit);
+        boolean hasSpecial = password.chars().anyMatch(c -> "@$!%*?&#".indexOf(c) != -1);
+
+        if (!hasUppercase) {
+            throw new BusinessRuleException("Password must contain at least one uppercase letter");
+        }
+        if (!hasLowercase) {
+            throw new BusinessRuleException("Password must contain at least one lowercase letter");
+        }
+        if (!hasDigit) {
+            throw new BusinessRuleException("Password must contain at least one digit");
+        }
+        if (!hasSpecial) {
+            throw new BusinessRuleException("Password must contain at least one special character (@$!%*?&#)");
+        }
     }
 
     private void handleSuccessfulLogin(User user) {

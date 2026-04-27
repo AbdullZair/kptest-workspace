@@ -62,7 +62,8 @@ public class AuditLog {
         DELETE,
         VIEW,
         LOGIN,
-        LOGOUT
+        LOGOUT,
+        PASSWORD_CHANGED
     }
 
     /**
