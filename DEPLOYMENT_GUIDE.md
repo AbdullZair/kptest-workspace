@@ -1,400 +1,428 @@
-# Deployment Guide
+# KPTEST Deployment Guide
 
-Kompleksowy przewodnik wdrażania systemu KPTEST.
+## Overview
+
+Kompleksowy przewodnik wdrożenia systemu KPTEST na środowiska staging i production.
 
 ---
 
-## Local Development
+## Table of Contents
 
-### Prerequisites
+1. [Wymagania wstępne](#wymagania-wstępne)
+2. [Środowiska](#środowiska)
+3. [Wdrożenie lokalne (Development)](#wdrożenie-lokalne-development)
+4. [Wdrożenie na Staging](#wdrożenie-na-staging)
+5. [Wdrożenie na Production](#wdrożenie-na-production)
+6. [Monitoring i Logs](#monitoring-i-logs)
+7. [Backup & Recovery](#backup--recovery)
+8. [Troubleshooting](#troubleshooting)
 
-- Docker 20.10+
-- Docker Compose 2.0+
-- Java 17+
-- Node.js 20+
+---
 
-### Quick Start
+## Wymagania wstępne
 
-```bash
-# Clone repository
-git clone https://github.com/your-org/kptest-workspace.git
-cd kptest-workspace
+### Software
+- Docker 24+ z Docker Compose
+- Kubernetes 1.27+ (dla production)
+- kubectl skonfigurowane z klastrem
+- Helm 3+ (opcjonalnie)
+- Git
 
-# Start all services
-docker compose up -d
+### Dostęp do GitHub
+- Repozytorium: `https://github.com/AbdullZair/kptest-workspace`
+- Branch: `main`
 
-# Seed database with test data
-./scripts/seed-all.sh
+### GitHub Secrets (wymagane)
 
-# Verify services
-docker compose ps
-```
-
-### Access Points
-
-| Service | URL | Port |
-|---------|-----|------|
-| Frontend | http://localhost:3000 | 3000 |
-| Backend API | http://localhost:8080/api | 8080 |
-| API Docs (Swagger) | http://localhost:8080/swagger-ui.html | 8080 |
-| HIS Mock | http://localhost:8081 | 8081 |
-| PostgreSQL | localhost:5432 | 5432 |
-| Redis | localhost:6379 | 6379 |
-
-### Environment Variables
-
-Create `.env` file in project root:
+Ustaw w GitHub → Settings → Secrets and variables → Actions:
 
 ```bash
 # Database
-DB_PASSWORD=your_secure_password
+DB_HOST=<postgres-host>
+DB_PORT=5432
+DB_NAME=kptest
+DB_USER=kptest
+DB_PASSWORD=<secure-password>
 
 # JWT
-JWT_SECRET=your-secret-key-min-32-chars
+JWT_SECRET=<min-32-characters-secret>
 
-# HIS Integration
-HIS_BASE_URL=http://his-mock:8081
-HIS_API_KEY=test-api-key
+# Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
 
-# Email (2FA)
-MAIL_HOST=smtp.gmail.com
-MAIL_USERNAME=noreply@kptest.com
-MAIL_PASSWORD=your-app-password
+# Email (SendGrid)
+SENDGRID_API_KEY=<your-api-key>
+MAIL_FROM=noreply@kptest.com
+
+# SMS (Twilio/SMSAPI)
+TWILIO_ACCOUNT_SID=<account-sid>
+TWILIO_AUTH_TOKEN=<auth-token>
+TWILIO_PHONE_NUMBER=+48123456789
+
+# Kubernetes (dla production)
+KUBE_CONFIG=<base64-encoded-kubeconfig>
+GHCR_TOKEN=<github-container-registry-token>
 ```
 
 ---
 
-## Production (Kubernetes)
+## Środowiska
 
-### Prerequisites
-
-- Kubernetes 1.25+
-- kubectl configured
-- kustomize (optional)
-- Helm 3.0+ (optional)
-
-### Namespace Setup
-
-```bash
-kubectl apply -f devops/k8s/namespace.yaml
-```
-
-### Configuration
-
-```bash
-# Create ConfigMap
-kubectl apply -f devops/k8s/configmap.yaml
-
-# Create Secrets (update values first)
-kubectl apply -f devops/k8s/secrets.yaml
-```
-
-### Database
-
-```bash
-# Deploy PostgreSQL
-kubectl apply -f devops/k8s/postgres-deployment.yaml
-
-# Verify
-kubectl get pods -l app=postgres -n kptest
-```
-
-### Cache
-
-```bash
-# Deploy Redis
-kubectl apply -f devops/k8s/redis-deployment.yaml
-
-# Verify
-kubectl get pods -l app=redis -n kptest
-```
-
-### Backend
-
-```bash
-# Deploy Backend
-kubectl apply -f devops/k8s/backend-deployment.yaml
-
-# Verify
-kubectl get pods -l app=backend -n kptest
-kubectl logs -l app=backend -n kptest
-```
-
-### Frontend
-
-```bash
-# Deploy Frontend
-kubectl apply -f devops/k8s/frontend-deployment.yaml
-
-# Verify
-kubectl get pods -l app=frontend -n kptest
-```
-
-### Ingress
-
-```bash
-# Deploy Ingress
-kubectl apply -f devops/k8s/ingress.yaml
-
-# Verify
-kubectl get ingress -n kptest
-```
-
-### Full Deployment Script
-
-```bash
-#!/bin/bash
-# deploy.sh
-
-set -e
-
-echo "Deploying KPTEST to Kubernetes..."
-
-kubectl apply -f devops/k8s/namespace.yaml
-kubectl apply -f devops/k8s/configmap.yaml
-kubectl apply -f devops/k8s/secrets.yaml
-kubectl apply -f devops/k8s/postgres-deployment.yaml
-kubectl apply -f devops/k8s/redis-deployment.yaml
-kubectl apply -f devops/k8s/backend-deployment.yaml
-kubectl apply -f devops/k8s/frontend-deployment.yaml
-kubectl apply -f devops/k8s/ingress.yaml
-
-echo "Waiting for deployments..."
-kubectl rollout status deployment/backend -n kptest
-kubectl rollout status deployment/frontend -n kptest
-kubectl rollout status deployment/postgres -n kptest
-kubectl rollout status deployment/redis -n kptest
-
-echo "Deployment complete!"
-kubectl get all -n kptest
-```
+| Środowisko | URL | Przeznaczenie |
+|------------|-----|---------------|
+| **Local** | localhost:3000 | Development |
+| **Staging** | staging.kptest.com | Testing, UAT |
+| **Production** | kptest.com | Production users |
 
 ---
 
-## GitHub Actions CI/CD
+## Wdrożenie lokalne (Development)
 
-### Workflows
-
-#### Backend CI
-**File:** `.github/workflows/backend-ci.yml`
-
-```yaml
-name: Backend CI
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: Run tests
-        run: ./gradlew test jacocoTestReport
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-```
-
-#### Frontend CI
-**File:** `.github/workflows/frontend-ci.yml`
-
-```yaml
-name: Frontend CI
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
-      - name: Run tests
-        run: npm run test
-```
-
-#### Deploy
-**File:** `.github/workflows/deploy.yml`
-
-```yaml
-name: Deploy to Production
-
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Configure kubectl
-        uses: azure/k8s-set-context@v3
-        with:
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      - name: Deploy
-        run: |
-          kubectl apply -f devops/k8s/
-          kubectl rollout restart deployment/backend -n kptest
-          kubectl rollout restart deployment/frontend -n kptest
-```
-
----
-
-## Docker Deployment
-
-### Build Images
+### Krok 1: Klonowanie repozytorium
 
 ```bash
-# Backend
-docker build -t kptest/backend:latest -f devops/docker/Dockerfile.backend .
-
-# Frontend
-docker build -t kptest/frontend:latest -f devops/docker/Dockerfile.frontend .
+git clone https://github.com/AbdullZair/kptest-workspace.git
+cd kptest-workspace
 ```
 
-### Docker Compose Production
+### Krok 2: Uruchomienie Docker Compose
 
-```yaml
-# docker-compose.prod.yml
-version: '3.8'
+```bash
+# Uruchom wszystkie usługi
+docker compose up -d
 
-services:
-  backend:
-    image: kptest/backend:latest
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - DB_HOST=postgres
-      - DB_PASSWORD=${DB_PASSWORD}
-      - JWT_SECRET=${JWT_SECRET}
-    depends_on:
-      - postgres
-      - redis
+# Sprawdź status
+docker compose ps
 
-  frontend:
-    image: kptest/frontend:latest
-    depends_on:
-      - backend
-
-  postgres:
-    image: postgres:15-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  redis:
-    image: redis:7-alpine
-    volumes:
-      - redis_data:/data
-
-volumes:
-  postgres_data:
-  redis_data:
+# Zobacz logi
+docker compose logs -f
 ```
 
----
-
-## Monitoring & Health Checks
-
-### Health Endpoints
+### Krok 3: Weryfikacja
 
 ```bash
 # Backend health
-curl http://localhost:8080/api/actuator/health
+curl http://localhost:8080/api/v1/health
 
-# Database health
-curl http://localhost:8080/api/actuator/health/db
+# Frontend
+curl http://localhost:3000
 
-# Metrics
-curl http://localhost:8080/api/actuator/metrics
+# HIS Mock
+curl http://localhost:8081/api/v1/health
 ```
 
-### Kubernetes Health Probes
+### Dostępne usługi:
 
-```yaml
-livenessProbe:
-  httpGet:
-    path: /api/actuator/health
-    port: 8080
-  initialDelaySeconds: 30
-  periodSeconds: 10
+| Usługa | URL | Port |
+|--------|-----|------|
+| Frontend | http://localhost:3000 | 3000 |
+| Backend API | http://localhost:8080/api/v1 | 8080 |
+| HIS Mock | http://localhost:8081 | 8081 |
+| PostgreSQL | localhost | 5432 |
+| Redis | localhost | 6379 |
 
-readinessProbe:
-  httpGet:
-    path: /api/actuator/health
-    port: 8080
-  initialDelaySeconds: 10
-  periodSeconds: 5
+---
+
+## Wdrożenie na Staging
+
+### Krok 1: Konfiguracja środowiska
+
+```bash
+# Stwórz plik .env.staging
+cp .env.example .env.staging
+
+# Edytuj zmienne dla staging
+nano .env.staging
+```
+
+### Krok 2: Deploy przez GitHub Actions
+
+Workflow `deploy-staging.yml` uruchamia się automatycznie po push do `main`.
+
+**Sprawdź status:**
+```
+https://github.com/AbdullZair/kptest-workspace/actions/workflows/deploy-staging.yml
+```
+
+### Krok 3: Manualny deploy (opcjonalnie)
+
+```bash
+# Zaloguj do klastra
+kubectl config use-context staging
+
+# Zastosuj manifesty
+kubectl apply -f devops/k8s/staging/
+
+# Sprawdź status
+kubectl get pods -n kptest-staging
+```
+
+### Krok 4: Weryfikacja
+
+```bash
+# Health check
+curl https://staging.kptest.com/api/v1/health
+
+# Frontend
+curl https://staging.kptest.com
 ```
 
 ---
 
-## Rollback
+## Wdrożenie na Production
 
-### Kubernetes Rollback
+### Krok 1: Tagowanie release
 
 ```bash
-# Rollback to previous revision
-kubectl rollout undo deployment/backend -n kptest
-
-# Rollback to specific revision
-kubectl rollout undo deployment/backend -n kptest --to-revision=2
+# Utwórz tag
+git tag v1.1.0
+git push origin v1.1.0
 ```
 
-### Docker Compose Rollback
+To uruchomi workflow `deploy-production.yml`.
+
+### Krok 2: Approval w GitHub Actions
+
+1. Wejdź na: `https://github.com/AbdullZair/kptest-workspace/actions/workflows/deploy-production.yml`
+2. Kliknij "Review deployments"
+3. Zatwierdź deployment do production
+
+### Krok 3: Monitoruj deployment
 
 ```bash
-# Pull previous version
-docker pull kptest/backend:v1.0.0
+# Połącz z klastrem production
+kubectl config use-context production
 
-# Restart with previous version
-docker compose up -d
+# Sprawdź status
+kubectl get pods -n kptest-production
+kubectl rollout status deployment/backend -n kptest-production
+kubectl rollout status deployment/frontend -n kptest-production
+```
+
+### Krok 4: Weryfikacja
+
+```bash
+# Health check production
+curl https://kptest.com/api/v1/health
+
+# Sprawdź wersję
+curl https://kptest.com/api/v1/health | jq .version
+```
+
+---
+
+## Monitoring i Logs
+
+### Prometheus Metrics
+
+```bash
+# Dostęp do Prometheus
+kubectl port-forward svc/prometheus 9090:9090 -n monitoring
+
+# Otwórz w przeglądarce
+open http://localhost:9090
+```
+
+### Grafana Dashboards
+
+```bash
+# Dostęp do Grafana
+kubectl port-forward svc/grafana 3000:80 -n monitoring
+
+# Login: admin / admin
+open http://localhost:3000
+```
+
+**Dashboardy:**
+- Backend Performance
+- Frontend Performance
+- Database Metrics
+- Redis Metrics
+- Business Metrics (compliance, active users)
+
+### Logs
+
+```bash
+# Backend logs
+kubectl logs -f deployment/backend -n kptest-production
+
+# Frontend logs
+kubectl logs -f deployment/frontend -n kptest-production
+
+# Wszystkie logs z last 1h
+kubectl logs --since=1h deployment/backend -n kptest-production
+```
+
+### Alerty
+
+Skonfigurowane alerty w `devops/monitoring/alert-rules.yml`:
+
+- BackendDown
+- HighErrorRate (>5%)
+- HighLatency (p99 >2s)
+- PostgreSQLDown
+- RedisDown
+- HighMemoryUsage (>80%)
+- HighDiskUsage (>85%)
+
+---
+
+## Backup & Recovery
+
+### Automated Backup
+
+Backup bazy danych uruchamia się codziennie o 2:00 UTC.
+
+```bash
+# Sprawdź ostatnie backupy
+kubectl get jobs -n kptest-production | grep backup
+
+# Zobacz backupy w S3
+aws s3 ls s3://kptest-backups/database/ --human-readable
+```
+
+### Manual Backup
+
+```bash
+# Uruchom backup
+kubectl create job --from=cronjob/backup-db manual-backup -n kptest-production
+
+# Monitoruj
+kubectl get job manual-backup -n kptest-production -w
+```
+
+### Point-in-Time Recovery
+
+```bash
+# Przywróć z backupu
+./scripts/restore-db.sh --backup-id 20260427-020000 --target-time "2026-04-27 10:00:00"
 ```
 
 ---
 
 ## Troubleshooting
 
-### Common Issues
+### Backend nie startuje
 
-**Pod not starting:**
 ```bash
-kubectl describe pod <pod-name> -n kptest
-kubectl logs <pod-name> -n kptest
+# Sprawdź logi
+kubectl logs deployment/backend -n kptest-production
+
+# Sprawdź configmap
+kubectl get configmap backend-config -n kptest-production -o yaml
+
+# Sprawdź secrety
+kubectl get secret backend-secrets -n kptest-production
+
+# Restart deployment
+kubectl rollout restart deployment/backend -n kptest-production
 ```
 
-**Database connection failed:**
+### Frontend zwraca 502
+
 ```bash
-kubectl exec -it <postgres-pod> -n kptest -- psql -U kptest
+# Sprawdź ingress
+kubectl get ingress -n kptest-production
+
+# Sprawdź service
+kubectl get svc frontend -n kptest-production
+
+# Sprawdź endpointy
+kubectl get endpoints frontend -n kptest-production
 ```
 
-**Service not accessible:**
+### Database connection errors
+
 ```bash
-kubectl get svc -n kptest
-kubectl get ingress -n kptest
+# Sprawdź czy PostgreSQL działa
+kubectl get pods -n kptest-production | grep postgres
+
+# Sprawdź connection string
+kubectl exec deployment/backend -n kptest-production -- env | grep DB
+
+# Test połączenia
+kubectl exec -it deployment/postgres -n kptest-production -- psql -U kptest -c "SELECT 1"
+```
+
+### High memory usage
+
+```bash
+# Sprawdź zużycie zasobów
+kubectl top pods -n kptest-production
+
+# Zwiększ limity
+kubectl edit deployment/backend -n kptest-production
+# Zmień resources.limits.memory
+
+# Restart z nowymi limitami
+kubectl rollout restart deployment/backend -n kptest-production
 ```
 
 ---
 
-**Last Updated:** 2026-04-24
+## Rollback Procedure
+
+### Automatic Rollback (jeśli health check fails)
+
+Workflow automatycznie wycofa deployment jeśli health check nie przejdzie.
+
+### Manual Rollback
+
+```bash
+# Cofnij do poprzedniej wersji
+kubectl rollout undo deployment/backend -n kptest-production
+
+# Cofnij do konkretnej wersji
+kubectl rollout undo deployment/backend -n kptest-production --to-revision=2
+
+# Sprawdź status rollback
+kubectl rollout status deployment/backend -n kptest-production
+```
+
+---
+
+## Security Checklist
+
+- [ ] Wszystkie secrety w Kubernetes Secrets (nie w kodzie)
+- [ ] Network Policies włączone (Zero Trust)
+- [ ] Pod Security Standards: Restricted
+- [ ] RBAC z least privilege
+- [ ] TLS/SSL z cert-manager
+- [ ] Image scanning (Trivy) w CI/CD
+- [ ] Regular security updates
+- [ ] Audit logging włączone
+
+---
+
+## Performance Benchmarks
+
+| Metryka | Target | Current |
+|---------|--------|---------|
+| API Response Time (p95) | <500ms | - |
+| API Response Time (p99) | <1s | - |
+| Frontend Load Time | <2s | - |
+| Database Query Time (p95) | <100ms | - |
+| Error Rate | <0.1% | - |
+| Availability | 99.5% | - |
+
+---
+
+## Support
+
+### Contact
+
+- **Technical Support:** kptest-support@kptest.com
+- **Emergency:** kptest-emergency@kptest.com
+
+### Documentation
+
+- API Docs: `/docs/api/`
+- Architecture: `/docs/architecture/`
+- Setup Guides: `/docs/setup/`
+- User Guides: `/docs/user-guides/`
+
+---
+
+**Last Updated:** 2026-04-27  
+**Version:** 1.1.0

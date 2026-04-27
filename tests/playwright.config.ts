@@ -148,10 +148,4 @@ export default defineConfig({
   ],
 
   // Web server configuration for running tests with dev server
-  webServer: {
-    command: process.env.WEBSERVER_COMMAND || undefined,
-    port: process.env.WEBSERVER_PORT ? parseInt(process.env.WEBSERVER_PORT) : undefined,
-    timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
 });

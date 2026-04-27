@@ -27,7 +27,9 @@
       "Bash(git stash)",
       "Bash(npm run *)",
       "Bash(ssh *)",
-      "Bash(sed *)"
+      "Bash(sed *)",
+      "Bash(npm install)",
+      "Bash(timeout *)"
     ]
   },
   "$version": 3
