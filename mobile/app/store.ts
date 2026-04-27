@@ -23,6 +23,7 @@ import { messageApi } from '../src/features/messages/api/messageApi';
 import { calendarApi } from '../src/features/calendar/api/calendarApi';
 import { materialApi } from '../src/features/materials/api/materialApi';
 import { notificationApi } from '../src/features/notifications/api/notificationApi';
+import { statsApi } from '../src/features/stats/api/statsApi';
 
 const persistConfig = {
   key: 'root',
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   [calendarApi.reducerPath]: calendarApi.reducer,
   [materialApi.reducerPath]: materialApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
+  [statsApi.reducerPath]: statsApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -58,7 +60,8 @@ export const store = configureStore({
       messageApi.middleware,
       calendarApi.middleware,
       materialApi.middleware,
-      notificationApi.middleware
+      notificationApi.middleware,
+      statsApi.middleware
     ),
 });
 

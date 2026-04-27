@@ -164,6 +164,63 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Force password reset for a user.
+     */
+    @PostMapping("/users/{id}/force-password-reset")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Force password reset", description = "Forces a password reset for a staff user, invalidates all sessions")
+    public ResponseEntity<ResetPasswordResponse> forcePasswordReset(
+        @Parameter(description = "User ID")
+        @PathVariable UUID id,
+
+        @Parameter(description = "Reset request with reason")
+        @Valid @RequestBody ForcePasswordResetRequest request
+    ) {
+        log.info("POST /api/v1/admin/users/{}/force-password-reset - reason: {}", id, request.reason());
+
+        ResetPasswordResponse response = adminService.forcePasswordReset(id, request.reason());
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Clear 2FA configuration for a user.
+     */
+    @PostMapping("/users/{id}/clear-2fa")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Clear 2FA configuration", description = "Clears 2FA secret and backup codes for a user")
+    public ResponseEntity<Clear2faResponse> clear2fa(
+        @Parameter(description = "User ID")
+        @PathVariable UUID id,
+
+        @Parameter(description = "Clear request with reason")
+        @RequestParam String reason
+    ) {
+        log.info("POST /api/v1/admin/users/{}/clear-2fa - reason: {}", id, request.reason());
+
+        Clear2faResponse response = adminService.clear2fa(id, reason);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Generate one-time activation code for a patient.
+     */
+    @PostMapping("/patients/{id}/generate-activation-code")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Generate activation code", description = "Generates an 8-character activation code valid for 72 hours")
+    public ResponseEntity<ActivationCodeResponse> generateActivationCode(
+        @Parameter(description = "Patient ID")
+        @PathVariable UUID id
+    ) {
+        log.info("POST /api/v1/admin/patients/{}/generate-activation-code", id);
+
+        ActivationCodeResponse response = adminService.generateActivationCode(id);
+
+        return ResponseEntity.ok(response);
+    }
+
     // ==================== AUDIT LOGS ====================
 
     /**

@@ -61,6 +61,12 @@ export type MaterialsStackParamList = {
 export type SettingsStackParamList = {
   SettingsHome: undefined;
   NotificationPreferences: undefined;
+  OfflineMode: undefined;
+  ComplianceStats: undefined;
+  EmergencyContact: undefined;
+  Security: undefined;
+  Appearance: undefined;
+  About: undefined;
 };
 
 // Bottom Tabs
@@ -91,16 +97,16 @@ const SettingsStack = createNativeStackNavigator<SettingsStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
-// Placeholder screens - to be imported from features
-const LoginScreen = () => null;
-const RegisterScreen = () => null;
-const TwoFaScreen = () => null;
-const ForgotPasswordScreen = () => null;
-const HomeScreen = () => null;
-const ProfileScreen = () => null;
-const SettingsScreen = () => null;
-
 // Import screens from features
+const LoginScreen = React.lazy(() => import('@features/auth/screens/LoginScreen'));
+const RegisterScreen = React.lazy(() => import('@features/auth/screens/RegisterScreen'));
+const TwoFaScreen = React.lazy(() => import('@features/auth/screens/TwoFaScreen'));
+const ForgotPasswordScreen = () => null; // TODO: Implement
+
+const HomeScreen = React.lazy(() => import('@features/dashboard/screens/DashboardScreen'));
+const ProfileScreen = () => null; // TODO: Implement
+const SettingsScreen = React.lazy(() => import('@features/settings/screens/SettingsHomeScreen'));
+
 const PatientsScreen = React.lazy(() => import('@features/patients/screens/PatientsScreen'));
 const PatientDetailScreen = React.lazy(() => import('@features/patients/screens/PatientDetailScreen'));
 const PatientFormScreen = React.lazy(() => import('@features/patients/screens/PatientFormScreen'));
@@ -283,6 +289,36 @@ function SettingsStackNavigator() {
         name="NotificationPreferences"
         component={NotificationPreferencesScreen}
         options={{ title: 'Powiadomienia' }}
+      />
+      <SettingsStack.Screen
+        name="OfflineMode"
+        component={React.lazy(() => import('@features/settings/screens/OfflineModeScreen'))}
+        options={{ title: 'Tryb offline' }}
+      />
+      <SettingsStack.Screen
+        name="ComplianceStats"
+        component={React.lazy(() => import('@features/stats/screens/ComplianceStatsScreen'))}
+        options={{ title: 'Statystyki' }}
+      />
+      <SettingsStack.Screen
+        name="EmergencyContact"
+        component={React.lazy(() => import('@features/patients/screens/EmergencyContactScreen'))}
+        options={{ title: 'Kontakt awaryjny' }}
+      />
+      <SettingsStack.Screen
+        name="Security"
+        component={() => null}
+        options={{ title: 'Bezpieczeństwo' }}
+      />
+      <SettingsStack.Screen
+        name="Appearance"
+        component={() => null}
+        options={{ title: 'Wygląd' }}
+      />
+      <SettingsStack.Screen
+        name="About"
+        component={() => null}
+        options={{ title: 'O aplikacji' }}
       />
     </SettingsStack.Navigator>
   );

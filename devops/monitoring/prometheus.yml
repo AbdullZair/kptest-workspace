@@ -1,23 +1,29 @@
-# Prometheus Configuration for KPTEST
-# Monitors backend, frontend, database, and Redis services
+# Prometheus Production Configuration
+# Complete monitoring stack for KPTEST
 
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    monitor: 'kptest-monitor'
-    environment: 'development'
+    monitor: 'kptest-production'
+    environment: 'production'
+    cluster: 'kptest'
+    region: 'eu-central-1'
 
-# Alertmanager configuration (optional)
-# alerting:
-#   alertmanagers:
-#     - static_configs:
-#         - targets:
-#           - alertmanager:9093
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+      scheme: http
+      timeout: 10s
+      api_version: v2
 
-# Load rules files
+# Rule files
 rule_files:
-  - "alert-rules.yml"
+  - '/etc/prometheus/rules/alert-rules.yml'
+  - '/etc/prometheus/rules/recording-rules.yml'
 
 # Scrape configurations
 scrape_configs:
@@ -25,75 +31,244 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
+        labels:
+          application: 'prometheus'
+          service: 'monitoring'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Alertmanager monitoring
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['alertmanager:9093']
+        labels:
+          application: 'alertmanager'
+          service: 'monitoring'
     metrics_path: /metrics
     scheme: http
 
   # Backend API (Spring Boot Actuator)
   - job_name: 'backend'
-    static_configs:
-      - targets: ['kptest-backend:8080']
-        labels:
-          application: 'kptest-backend'
-          service: 'api'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - kptest-production
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: kptest-backend
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_ip]
+        action: replace
+        target_label: __address__
+        regex: (.+);(.+)
+        replacement: $2:$1
+      - source_labels: [__meta_kubernetes_pod_label_version]
+        action: replace
+        target_label: version
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: namespace
     metrics_path: /actuator/prometheus
     scheme: http
     scrape_interval: 10s
     scrape_timeout: 5s
 
-  # Frontend (Node.js)
+  # Frontend (Nginx)
   - job_name: 'frontend'
-    static_configs:
-      - targets: ['kptest-frontend:3000']
-        labels:
-          application: 'kptest-frontend'
-          service: 'web'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - kptest-production
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: kptest-frontend
     metrics_path: /metrics
     scheme: http
     scrape_interval: 30s
 
   # PostgreSQL Database
   - job_name: 'postgres'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - kptest-production
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: kptest-postgres
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
     static_configs:
       - targets: ['kptest-postgres:9187']
         labels:
           application: 'kptest-postgres'
           service: 'database'
-    scrape_interval: 30s
 
   # Redis Cache
   - job_name: 'redis'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - kptest-production
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: kptest-redis
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
     static_configs:
       - targets: ['kptest-redis:9121']
         labels:
           application: 'kptest-redis'
           service: 'cache'
-    scrape_interval: 30s
 
-  # HIS Mock Service
-  - job_name: 'his-mock'
-    static_configs:
-      - targets: ['kptest-his-mock:8081']
-        labels:
-          application: 'kptest-his-mock'
-          service: 'integration'
+  # Node Exporter (Host metrics)
+  - job_name: 'node-exporter'
+    kubernetes_sd_configs:
+      - role: node
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - source_labels: [__meta_kubernetes_node_name]
+        action: replace
+        target_label: node
     metrics_path: /metrics
     scheme: http
     scrape_interval: 30s
-
-  # Node Exporter (Host metrics)
-  - job_name: 'node'
     static_configs:
       - targets: ['node-exporter:9100']
         labels:
           application: 'node-exporter'
           service: 'infrastructure'
+
+  # cAdvisor (Container metrics)
+  - job_name: 'cadvisor'
+    kubernetes_sd_configs:
+      - role: node
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          application: 'cadvisor'
+          service: 'infrastructure'
+
+  # kube-state-metrics (Kubernetes objects)
+  - job_name: 'kube-state-metrics'
+    static_configs:
+      - targets: ['kube-state-metrics:8080']
+        labels:
+          application: 'kube-state-metrics'
+          service: 'kubernetes'
+    metrics_path: /metrics
+    scheme: http
     scrape_interval: 30s
 
-  # Docker Metrics (if using docker daemon metrics)
-  - job_name: 'docker'
-    static_configs:
-      - targets: ['docker-host:9323']
-        labels:
-          application: 'docker'
-          service: 'infrastructure'
+  # Kubernetes API Server
+  - job_name: 'kubernetes-apiservers'
+    kubernetes_sd_configs:
+      - role: endpoints
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+    metrics_path: /metrics
     scrape_interval: 30s
+
+  # Kubernetes nodes (kubelet)
+  - job_name: 'kubernetes-nodes'
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    kubernetes_sd_configs:
+      - role: node
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Kubernetes pods
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Loki metrics
+  - job_name: 'loki'
+    static_configs:
+      - targets: ['loki:3100']
+        labels:
+          application: 'loki'
+          service: 'logging'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Tempo metrics
+  - job_name: 'tempo'
+    static_configs:
+      - targets: ['tempo:3100']
+        labels:
+          application: 'tempo'
+          service: 'tracing'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+# Remote write configuration (optional - for long-term storage)
+# remote_write:
+#   - url: 'https://prometheus-remote-write.example.com/api/v1/write'
+#     remote_timeout: 30s
+#     write_relabel_configs:
+#       - source_labels: [__name__]
+#         regex: 'go_.*'
+#         action: drop
+#     queue_config:
+#       max_samples_per_send: 10000
+#       batch_send_deadline: 5s
+#       capacity: 100000

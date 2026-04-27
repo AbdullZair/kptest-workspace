@@ -236,3 +236,45 @@ export interface UpdateUserStatusRequest {
 export interface ExportLogsRequest {
   format: 'CSV' | 'JSON'
 }
+
+/**
+ * Force password reset request
+ */
+export interface ForcePasswordResetRequest {
+  reason: string
+}
+
+/**
+ * Force password reset response
+ */
+export interface ForcePasswordResetResponse {
+  user_id: string
+  message: string
+  temporary_password: string
+}
+
+/**
+ * Clear 2FA request
+ */
+export interface Clear2faRequest {
+  reason: string
+}
+
+/**
+ * Clear 2FA response
+ */
+export interface Clear2faResponse {
+  user_id: string
+  message: string
+}
+
+/**
+ * Generate activation code response
+ */
+export interface ActivationCodeResponse {
+  patient_id: string
+  activation_code: string
+  expires_at: string
+  pdf_url?: string
+  message: string
+}

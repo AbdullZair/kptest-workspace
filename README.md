@@ -158,33 +158,76 @@ npm run test:e2e
 
 ## 📖 Dokumentacja
 
-### API Documentation
-- [OpenAPI Specification](docs/api/openapi.yaml)
-- [Endpoints Reference](docs/api/endpoints.md)
-- [Authentication Guide](docs/api/auth.md)
-- [Error Codes](docs/api/errors.md)
+Kompleksowa dokumentacja zawiera 57 plików w 10 kategoriach.
 
-### Architecture
-- [System Overview](docs/architecture/overview.md)
-- [Component Diagram](docs/architecture/components.md)
-- [Data Flow](docs/architecture/dataflow.md)
-- [Integration Patterns](docs/architecture/integrations.md)
+### API Documentation (13 plików)
+- [API Reference](docs/api/README.md) - Przegląd wszystkich endpointów
+- [Authentication](docs/api/authentication.md) - Autentykacja i autoryzacja
+- [Patients](docs/api/patients.md) - Zarządzanie pacjentami
+- [Projects](docs/api/projects.md) - Zarządzanie projektami
+- [Messages](docs/api/messages.md) - Komunikacja
+- [Calendar](docs/api/calendar.md) - Kalendarz i wydarzenia
+- [Materials](docs/api/materials.md) - Materiały edukacyjne
+- [Admin](docs/api/admin.md) - Endpointy administracyjne
+- [Reports](docs/api/reports.md) - Raporty i eksport
+- [Audit](docs/api/audit.md) - Logi audytowe
+- [Backup](docs/api/backup.md) - Zarządzanie backup
+- [Email](docs/api/email.md) - Powiadomienia email
+- [SMS](docs/api/sms.md) - Powiadomienia SMS
 
-### ADR (Architecture Decision Records)
-- [ADR-001: Technology Stack](docs/decisions/adr-001.md)
-- [ADR-002: Database Design](docs/decisions/adr-002.md)
-- [ADR-003: Authentication](docs/decisions/adr-003.md)
-- [ADR-004: Architecture Style](docs/decisions/adr-004.md)
+### Architecture (10 plików)
+- [System Overview](docs/architecture/system-overview.md) - Przegląd systemu
+- [System Context C4](docs/architecture/system-context.md) - C4 Level 1
+- [Container Diagram C4](docs/architecture/container.md) - C4 Level 2
+- [Component Diagram C4](docs/architecture/component.md) - C4 Level 3
+- [Data Flow DFD](docs/architecture/data-flow.md) - Diagram przepływu danych
+- [Deployment K8s](docs/architecture/deployment.md) - Architektura Kubernetes
+- [Security Architecture](docs/architecture/security-architecture.md) - Bezpieczeństwo
+- [Data Model](docs/architecture/data-model.md) - Model danych
+- [Sequence Diagrams](docs/architecture/sequence-diagrams.md) - Diagramy sekwencji
 
-### Setup Guides
-- [Development Setup](docs/setup/development.md)
-- [Production Deployment](docs/setup/production.md)
-- [Troubleshooting](docs/setup/troubleshooting.md)
+### ADR - Architecture Decision Records (9 plików)
+- [ADR-001](docs/decisions/ADR-001-authentication-strategy.md) - Strategia autentykacji
+- [ADR-002](docs/decisions/ADR-002-his-verification-workflow.md) - Workflow weryfikacji HIS
+- [ADR-003](docs/decisions/ADR-003-patient-project-assignment.md) - Przypisanie pacjentów
+- [ADR-004](docs/decisions/ADR-004-messaging-architecture.md) - Architektura komunikacji
+- [ADR-005](docs/decisions/ADR-005-database-choice.md) - Wybór bazy danych
+- [ADR-006](docs/decisions/ADR-006-authentication-strategy.md) - Strategia JWT
+- [ADR-007](docs/decisions/ADR-007-microservices-vs-monolith.md) - Mikroserwisy vs Monolit
+- [ADR-008](docs/decisions/ADR-008-frontend-architecture.md) - Architektura frontend
+- [ADR-009](docs/decisions/ADR-009-mobile-architecture.md) - Architektura mobile
 
-### Reports
-- [Final Project Report](FINAL_PROJECT_REPORT.md)
-- [E2E Test Report](E2E_COMPLETE_REPORT.md)
-- [Integration Report](INTEGRATION_FIX_REPORT.md)
+### Setup Guides (9 plików)
+- [Local Development](docs/setup/local-development.md) - Środowisko lokalne
+- [Production Deployment](docs/setup/production-deployment.md) - Deployment produkcyjny
+- [Testing Guide](docs/setup/testing-guide.md) - Przewodnik testowania
+- [HIS Integration](docs/setup/his-integration.md) - Integracja z HIS
+- [SMS Provider Setup](docs/setup/sms-provider-setup.md) - Konfiguracja SMS
+- [Email Provider Setup](docs/setup/email-provider-setup.md) - Konfiguracja email
+- [Backup Procedure](docs/setup/backup-procedure.md) - Procedury backup
+- [Disaster Recovery](docs/setup/disaster-recovery.md) - Disaster recovery
+
+### User Guides (4 pliki)
+- [Patient Guide](docs/user-guides/patient-guide.md) - Przewodnik pacjenta
+- [Coordinator Guide](docs/user-guides/coordinator-guide.md) - Przewodnik koordynatora
+- [Doctor Guide](docs/user-guides/doctor-guide.md) - Przewodnik lekarza
+- [Admin Guide](docs/user-guides/admin-guide.md) - Przewodnik administratora
+
+### Deployment (4 pliki)
+- [Staging Deployment](docs/deployment/staging-deployment.md) - Deployment na staging
+- [Production Deployment](docs/deployment/production-deployment.md) - Deployment na produkcję
+- [Rollback Procedure](docs/deployment/rollback-procedure.md) - Procedura rollback
+- [Blue-Green Deployment](docs/deployment/blue-green-deployment.md) - Blue-green deployment
+
+### Operations (5 plików)
+- [Monitoring](docs/operations/monitoring.md) - Monitoring systemu
+- [Alerting](docs/operations/alerting.md) - Konfiguracja alertów
+- [Troubleshooting](docs/operations/troubleshooting.md) - Rozwiązywanie problemów
+- [Maintenance](docs/operations/maintenance.md) - Procedury maintenance
+- [Scaling](docs/operations/scaling.md) - Skalowanie systemu
+
+### Full Documentation Index
+- [Complete Documentation](docs/README.md) - Pełny indeks wszystkich dokumentów
 
 ## 📊 Metryki Projektu
 

@@ -332,4 +332,35 @@ public class CalendarService {
 
         log.info("Marked {} events as missed", markedCount);
     }
+
+    /**
+     * Find event by ID (for use by other services).
+     * 
+     * @param id The event ID
+     * @return The therapy event
+     * @throws IllegalArgumentException if event not found
+     */
+    @Transactional(readOnly = true)
+    public TherapyEvent findEventById(UUID id) {
+        return therapyEventRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + id));
+    }
+
+    /**
+     * Reschedule an event to a new date.
+     * 
+     * @param eventId The event ID
+     * @param newDate The new scheduled date
+     * @return The updated therapy event
+     */
+    public TherapyEvent rescheduleEvent(UUID eventId, Instant newDate) {
+        log.info("Rescheduling event: {} to {}", eventId, newDate);
+
+        TherapyEvent event = findEventById(eventId);
+        event.setScheduledAt(newDate);
+        TherapyEvent updated = therapyEventRepository.save(event);
+
+        log.info("Rescheduled event: {} to {}", eventId, newDate);
+        return updated;
+    }
 }

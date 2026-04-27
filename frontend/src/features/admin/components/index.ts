@@ -18,3 +18,12 @@ export type { SystemHealthCardProps } from './SystemHealthCard'
 
 export { SystemMetricsChart } from './SystemMetricsChart'
 export type { SystemMetricsChartProps } from './SystemMetricsChart'
+
+export { ForcePasswordResetButton } from './ForcePasswordResetButton'
+export type { ForcePasswordResetButtonProps } from './ForcePasswordResetButton'
+
+export { Clear2faButton } from './Clear2faButton'
+export type { Clear2faButtonProps } from './Clear2faButton'
+
+export { GenerateActivationCodeButton } from './GenerateActivationCodeButton'
+export type { GenerateActivationCodeButtonProps } from './GenerateActivationCodeButton'

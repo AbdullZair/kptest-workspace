@@ -1,0 +1,189 @@
+# Alertmanager Configuration for KPTEST Production
+# Handles alert routing, inhibition, and notification
+
+global:
+  # SMTP configuration for email notifications
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'alertmanager@kptest.example.com'
+  smtp_auth_username: 'alertmanager@kptest.example.com'
+  smtp_auth_password: '${SMTP_PASSWORD}'
+  smtp_require_tls: true
+
+  # Slack API URL (set via environment variable)
+  slack_api_url: '${SLACK_WEBHOOK_URL}'
+
+  # PagerDuty integration
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+  # Default timeout for HTTP requests
+  http_config:
+    follow_redirects: true
+    enable_http2: true
+
+# Templates for alert messages
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Routing configuration
+route:
+  # Default receiver
+  receiver: 'slack-notifications'
+  
+  # Group alerts by these labels
+  group_by: ['alertname', 'severity', 'service']
+  
+  # Wait before sending first notification for a group
+  group_wait: 30s
+  
+  # Wait before sending notifications for new alerts in a group
+  group_interval: 5m
+  
+  # Wait before resending notification
+  repeat_interval: 4h
+  
+  # Routes for specific alerts
+  routes:
+    # Critical alerts go to PagerDuty immediately
+    - match:
+        severity: critical
+      receiver: 'pagerduty-critical'
+      group_wait: 10s
+      repeat_interval: 1h
+      continue: true
+    
+    # Database alerts go to database team
+    - match:
+        service: postgresql
+      receiver: 'database-team'
+      group_wait: 1m
+      repeat_interval: 2h
+    
+    # Backend alerts
+    - match:
+        service: backend
+      receiver: 'backend-team'
+      group_wait: 1m
+      repeat_interval: 2h
+    
+    # Frontend alerts
+    - match:
+        service: frontend
+      receiver: 'frontend-team'
+      group_wait: 1m
+      repeat_interval: 2h
+    
+    # Infrastructure alerts
+    - match:
+        service: infrastructure
+      receiver: 'infrastructure-team'
+      group_wait: 1m
+      repeat_interval: 2h
+    
+    # Warning severity alerts
+    - match:
+        severity: warning
+      receiver: 'slack-warnings'
+      group_wait: 2m
+      repeat_interval: 6h
+
+# Inhibition rules - suppress lower severity alerts
+inhibit_rules:
+  # If critical alert is firing, suppress warning for same alert
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service']
+  
+  # If service is down, suppress performance alerts
+  - source_match:
+      alertname: 'BackendDown'
+    target_match_re:
+      alertname: 'Backend.*'
+    equal: ['service']
+  
+  - source_match:
+      alertname: 'PostgreSQLDown'
+    target_match_re:
+      alertname: 'PostgreSQL.*'
+    equal: ['service']
+  
+  - source_match:
+      alertname: 'RedisDown'
+    target_match_re:
+      alertname: 'Redis.*'
+    equal: ['service']
+
+# Receivers configuration
+receivers:
+  # Default Slack notifications
+  - name: 'slack-notifications'
+    slack_configs:
+      - channel: '#alerts'
+        send_resolved: true
+        icon_emoji: ':warning:'
+        title: '{{ template "slack.title" . }}'
+        text: '{{ template "slack.text" . }}'
+        actions:
+          - type: button
+            text: 'Runbook :book:'
+            url: '{{ (index .Alerts 0).Annotations.runbook }}'
+          - type: button
+            text: 'Dashboard :chart_with_upwards_trend:'
+            url: '{{ (index .Alerts 0).Annotations.dashboard }}'
+
+  # Slack for warnings
+  - name: 'slack-warnings'
+    slack_configs:
+      - channel: '#alerts-warnings'
+        send_resolved: true
+        icon_emoji: ':warning:'
+        title: '[{{ .Status | toUpper }}] {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}*Alert:* {{ .Annotations.summary }}\n*Description:* {{ .Annotations.description }}\n{{ end }}'
+
+  # PagerDuty for critical alerts
+  - name: 'pagerduty-critical'
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_SERVICE_KEY}'
+        send_resolved: true
+        description: '{{ template "pagerduty.description" . }}'
+        details:
+          firing: '{{ template "pagerduty.details" . }}'
+
+  # Email for database team
+  - name: 'database-team'
+    email_configs:
+      - to: 'database-team@kptest.example.com'
+        send_resolved: true
+        html: '{{ template "email.html" . }}'
+        headers:
+          Subject: '[KPTEST] Database Alert: {{ .GroupLabels.alertname }}'
+
+  # Email for backend team
+  - name: 'backend-team'
+    email_configs:
+      - to: 'backend-team@kptest.example.com'
+        send_resolved: true
+        html: '{{ template "email.html" . }}'
+
+  # Email for frontend team
+  - name: 'frontend-team'
+    email_configs:
+      - to: 'frontend-team@kptest.example.com'
+        send_resolved: true
+        html: '{{ template "email.html" . }}'
+
+  # Email for infrastructure team
+  - name: 'infrastructure-team'
+    email_configs:
+      - to: 'infrastructure-team@kptest.example.com'
+        send_resolved: true
+        html: '{{ template "email.html" . }}'
+
+# Cluster configuration for HA
+cluster:
+  listen-address: ':9094'
+  peers:
+    - alertmanager-0.alertmanager:9094
+    - alertmanager-1.alertmanager:9094
+    - alertmanager-2.alertmanager:9094

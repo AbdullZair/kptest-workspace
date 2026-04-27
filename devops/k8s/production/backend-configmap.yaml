@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kptest-backend-config
+  namespace: kptest-production
+  labels:
+    app: kptest-backend
+    environment: production
+data:
+  # Spring Boot Configuration
+  SPRING_PROFILES_ACTIVE: "prod"
+  SERVER_PORT: "8080"
+  SERVER_SHUTDOWN: "graceful"
+  SERVER_GRACEFUL_SHUTDOWN_TIMEOUT: "30s"
+  
+  # Actuator Configuration
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus,metrics"
+  MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+  MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED: "true"
+  MANAGEMENT_HEALTH_READINESSSTATE_ENABLED: "true"
+  MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
+  
+  # Logging Configuration
+  LOGGING_LEVEL_ROOT: "INFO"
+  LOGGING_LEVEL_COM_KPTEST: "DEBUG"
+  LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  LOGGING_PATTERN_FILE: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  LOGGING_FILE_NAME: "/app/logs/application.log"
+  LOGGING_FILE_MAX_SIZE: "10MB"
+  LOGGING_FILE_MAX_HISTORY: "10"
+  
+  # Database Configuration (non-sensitive)
+  DB_PORT: "5432"
+  DB_NAME: "kptest"
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.postgresql.Driver"
+  SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: "10"
+  SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: "5"
+  SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: "30000"
+  SPRING_DATASOURCE_HIKARI_IDLE_TIMEOUT: "600000"
+  SPRING_DATASOURCE_HIKARI_MAX_LIFETIME: "1800000"
+  SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD: "60000"
+  
+  # JPA Configuration
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "validate"
+  SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.PostgreSQLDialect"
+  SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "false"
+  SPRING_JPA_PROPERTIES_HIBERNATE_USE_SQL_COMMENTS: "false"
+  SPRING_JPA_PROPERTIES_HIBERNATE_BATCH_SIZE: "30"
+  SPRING_JPA_PROPERTIES_HIBERNATE_ORDER_INSERTS: "true"
+  SPRING_JPA_PROPERTIES_HIBERNATE_ORDER_UPDATES: "true"
+  
+  # Redis Configuration
+  REDIS_PORT: "6379"
+  SPRING_DATA_REDIS_TIMEOUT: "2000"
+  SPRING_DATA_REDIS_LETtUCE_POOL_MAX_ACTIVE: "8"
+  SPRING_DATA_REDIS_LETtUCE_POOL_MAX_IDLE: "8"
+  SPRING_DATA_REDIS_LETtUCE_POOL_MIN_IDLE: "0"
+  
+  # JWT Configuration (non-sensitive)
+  JWT_EXPIRATION_MS: "86400000"
+  JWT_REFRESH_EXPIRATION_MS: "604800000"
+  
+  # Email Configuration
+  SPRING_MAIL_DEFAULT_ENCODING: "UTF-8"
+  
+  # Integration Configuration
+  HIS_CONNECT_TIMEOUT: "5000"
+  HIS_READ_TIMEOUT: "30000"
+  
+  # Feature Flags
+  FEATURE_HIS_INTEGRATION: "true"
+  FEATURE_EMAIL_NOTIFICATIONS: "true"
+  
+  # CORS Configuration
+  CORS_ALLOWED_ORIGINS: "https://kptest.example.com,https://portal.kptest.example.com"
+  
+  # Rate Limiting
+  RATE_LIMIT_REQUESTS_PER_MINUTE: "100"
+  RATE_LIMIT_BURST_SIZE: "20"
+  
+  # API Configuration
+  API_VERSION: "v1"
+  API_BASE_PATH: "/api/v1"

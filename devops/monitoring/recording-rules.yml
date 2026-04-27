@@ -1,0 +1,102 @@
+# Prometheus Recording Rules for KPTEST Production
+# Pre-computed metrics for better query performance
+
+groups:
+  - name: backend-recording-rules
+    interval: 15s
+    rules:
+      # Request rate metrics
+      - record: job:http_server_requests:rate5m
+        expr: sum(rate(http_server_requests_seconds_count[5m])) by (job)
+
+      - record: job:http_server_requests:error_rate5m
+        expr: |
+          sum(rate(http_server_requests_seconds_count{status=~"5.."}[5m])) by (job)
+          / sum(rate(http_server_requests_seconds_count[5m])) by (job)
+
+      # Response time percentiles
+      - record: job:http_server_requests:p95_5m
+        expr: |
+          histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket[5m])) by (job, le))
+
+      - record: job:http_server_requests:p99_5m
+        expr: |
+          histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket[5m])) by (job, le))
+
+      # JVM metrics
+      - record: job:jvm_memory_used:ratio
+        expr: |
+          sum(jvm_memory_used_bytes{area="heap"}) by (job)
+          / sum(jvm_memory_max_bytes{area="heap"}) by (job)
+
+      - record: job:jvm_gc_pause:p95_5m
+        expr: |
+          histogram_quantile(0.95, sum(rate(jvm_gc_pause_seconds_bucket[5m])) by (job, le))
+
+  - name: infrastructure-recording-rules
+    interval: 15s
+    rules:
+      # Node metrics
+      - record: instance:node_cpu_utilization:ratio
+        expr: |
+          1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) by (instance)
+
+      - record: instance:node_memory_utilization:ratio
+        expr: |
+          1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)
+
+      - record: instance:node_disk_utilization:ratio
+        expr: |
+          1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)
+
+      # Container metrics
+      - record: namespace:container_cpu_usage:sum
+        expr: |
+          sum(rate(container_cpu_usage_seconds_total[5m])) by (namespace)
+
+      - record: namespace:container_memory_usage:sum
+        expr: |
+          sum(container_memory_usage_bytes) by (namespace)
+
+  - name: kubernetes-recording-rules
+    interval: 15s
+    rules:
+      # Pod metrics
+      - record: namespace:pod_cpu_usage:sum
+        expr: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="kptest-production"}[5m])) by (pod)
+
+      - record: namespace:pod_memory_usage:sum
+        expr: |
+          sum(container_memory_usage_bytes{namespace="kptest-production"}) by (pod)
+
+      # Deployment metrics
+      - record: deployment:replicas_available:ratio
+        expr: |
+          kube_deployment_status_replicas_available
+          / kube_deployment_spec_replicas
+
+  - name: database-recording-rules
+    interval: 15s
+    rules:
+      # PostgreSQL metrics
+      - record: job:pg_connections:ratio
+        expr: |
+          sum(pg_stat_activity_count{datname="kptest"})
+          / sum(pg_settings_max_connections)
+
+      - record: job:pg_cache_hit:ratio
+        expr: |
+          sum(rate(pg_stat_database_blks_hit{datname="kptest"}[5m]))
+          / (sum(rate(pg_stat_database_blks_hit{datname="kptest"}[5m]))
+          + sum(rate(pg_stat_database_blks_read{datname="kptest"}[5m])))
+
+      # Redis metrics
+      - record: job:redis_memory:ratio
+        expr: |
+          redis_used_memory / redis_memory_max_bytes
+
+      - record: job:redis_cache_hit:ratio
+        expr: |
+          redis_keyspace_hits_total
+          / (redis_keyspace_hits_total + redis_keyspace_misses_total)

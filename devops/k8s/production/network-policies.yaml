@@ -1,0 +1,253 @@
+# Default deny all ingress traffic - Zero Trust model
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+
+---
+# Default deny all egress traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-egress
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+
+---
+# Allow ingress from Ingress Controller to Frontend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-frontend
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector:
+    matchLabels:
+      app: kptest-frontend
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow from Ingress Controller (nginx-ingress namespace)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+    # Allow from same namespace (for internal testing)
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 3000
+
+---
+# Allow ingress from Ingress Controller and Frontend to Backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-backend
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector:
+    matchLabels:
+      app: kptest-backend
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow from Ingress Controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow from Frontend pods
+    - from:
+        - podSelector:
+            matchLabels:
+              app: kptest-frontend
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow from same namespace (for internal services)
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 8080
+
+---
+# Allow egress from Backend to Database and Redis
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-backend-egress
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector:
+    matchLabels:
+      app: kptest-backend
+  policyTypes:
+    - Egress
+  egress:
+    # Allow to PostgreSQL
+    - to:
+        - podSelector:
+            matchLabels:
+              app: kptest-postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Allow to Redis
+    - to:
+        - podSelector:
+            matchLabels:
+              app: kptest-redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    # Allow DNS resolution
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Allow HTTPS outbound (for external APIs)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
+
+---
+# Allow egress from Frontend to Backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-egress
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector:
+    matchLabels:
+      app: kptest-frontend
+  policyTypes:
+    - Egress
+  egress:
+    # Allow to Backend
+    - to:
+        - podSelector:
+            matchLabels:
+              app: kptest-backend
+      ports:
+        - protocol: TCP
+          port: 8080
+    # Allow DNS resolution
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+---
+# Allow database traffic only from Backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-postgres-ingress
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector:
+    matchLabels:
+      app: kptest-postgres
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow from Backend pods only
+    - from:
+        - podSelector:
+            matchLabels:
+              app: kptest-backend
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Allow from same namespace (for backup/maintenance)
+    - from:
+        - podSelector:
+            matchLabels:
+              app: backup-job
+      ports:
+        - protocol: TCP
+          port: 5432
+
+---
+# Allow Redis traffic only from Backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-redis-ingress
+  namespace: kptest-production
+  labels:
+    app: kptest
+    environment: production
+spec:
+  podSelector:
+    matchLabels:
+      app: kptest-redis
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow from Backend pods only
+    - from:
+        - podSelector:
+            matchLabels:
+              app: kptest-backend
+      ports:
+        - protocol: TCP
+          port: 6379

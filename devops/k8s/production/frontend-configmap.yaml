@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kptest-frontend-config
+  namespace: kptest-production
+  labels:
+    app: kptest-frontend
+    environment: production
+data:
+  # Nginx Configuration
+  NGINX_WORKER_PROCESSES: "auto"
+  NGINX_WORKER_CONNECTIONS: "1024"
+  NGINX_KEEPALIVE_TIMEOUT: "65"
+  
+  # Frontend Configuration
+  VITE_API_URL: "https://api.kptest.example.com/api"
+  VITE_APP_NAME: "KPTEST Portal"
+  VITE_APP_VERSION: "1.0.0"
+  
+  # Feature Flags
+  VITE_FEATURE_HIS_INTEGRATION: "true"
+  VITE_FEATURE_NOTIFICATIONS: "true"
+  VITE_FEATURE_DARK_MODE: "true"
+  
+  # UI Configuration
+  VITE_DEFAULT_LANGUAGE: "pl"
+  VITE_SUPPORTED_LANGUAGES: "pl,en"
+  VITE_SESSION_TIMEOUT_MINUTES: "30"
+  
+  # Analytics (optional)
+  VITE_ANALYTICS_ENABLED: "false"
+  
+  # Error Reporting
+  VITE_ERROR_REPORTING_ENABLED: "true"

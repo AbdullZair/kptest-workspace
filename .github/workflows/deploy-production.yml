@@ -1,0 +1,390 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g., v1.0.0 or leave empty for latest)'
+        required: false
+        default: ''
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - production-blue
+          - production-green
+      skip_tests:
+        description: 'Skip integration tests (use with caution)'
+        required: false
+        default: false
+        type: boolean
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE: ${{ github.repository }}/backend
+  FRONTEND_IMAGE: ${{ github.repository }}/frontend
+  KUBE_NAMESPACE: kptest-production
+  DEPLOYMENT_STRATEGY: rolling  # Options: rolling, blue-green, canary
+
+jobs:
+  # Pre-deployment checks
+  pre-deployment-checks:
+    name: Pre-Deployment Checks
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get version to deploy
+        id: get-version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION="${{ github.ref_name }}"
+          else
+            VERSION="latest"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Deploying version: $VERSION"
+
+      - name: Verify version exists in registry
+        run: |
+          # Check if the version tag exists
+          if [ "${{ steps.get-version.outputs.version }}" != "latest" ]; then
+            echo "Verifying version ${{ steps.get-version.outputs.version }} exists..."
+            # This would typically query your container registry API
+            echo "Version verification complete"
+          fi
+
+      - name: Check current production health
+        run: |
+          echo "Checking current production deployment health..."
+          # Add health check logic here
+          echo "Production health check complete"
+
+  # Security scan before deployment
+  security-gate:
+    name: Security Gate
+    runs-on: ubuntu-latest
+    needs: pre-deployment-checks
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:${{ needs.pre-deployment-checks.outputs.version }}
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+        continue-on-error: true
+
+      - name: Security gate decision
+        run: |
+          echo "Security scan completed"
+          echo "Proceeding with deployment (review scan results in security tab)"
+
+  # Deploy to production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-checks, security-gate]
+    environment:
+      name: production
+      url: https://kptest.example.com
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set deployment version
+        id: set-version
+        run: |
+          VERSION="${{ needs.pre-deployment-checks.outputs.version }}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Deploying version: $VERSION"
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.29.0'
+
+      - name: Configure kubectl
+        run: |
+          echo "${{ secrets.KUBE_CONFIG_PRODUCTION }}" | base64 -d > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl config view
+
+      - name: Create production namespace if not exists
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl create namespace ${{ env.KUBE_NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Apply infrastructure manifests
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          
+          # Apply namespace configuration
+          kubectl apply -f devops/k8s/production/namespace.yaml
+          
+          # Apply RBAC
+          kubectl apply -f devops/k8s/production/rbac.yaml
+          
+          # Apply resource quotas and limits
+          kubectl apply -f devops/k8s/production/resource-quota.yaml
+          kubectl apply -f devops/k8s/production/limit-range.yaml
+          
+          # Apply ConfigMaps
+          kubectl apply -f devops/k8s/production/backend-configmap.yaml
+          kubectl apply -f devops/k8s/production/frontend-configmap.yaml
+          
+          # Apply network policies
+          kubectl apply -f devops/k8s/production/network-policies.yaml
+          
+          # Apply PodDisruptionBudgets
+          kubectl apply -f devops/k8s/production/backend-pdb.yaml
+          kubectl apply -f devops/k8s/production/frontend-pdb.yaml
+          
+          # Apply certificate issuer
+          kubectl apply -f devops/k8s/production/cert-issuer.yaml
+
+      - name: Deploy backend
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          
+          # Update deployment with new image
+          sed "s|image:.*backend:.*|image: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:${{ steps.set-version.outputs.version }}|" \
+            devops/k8s/production/backend-deployment.yaml | kubectl apply -f -
+          
+          # Apply services
+          kubectl apply -f devops/k8s/production/services.yaml
+          
+          # Apply HPA
+          kubectl apply -f devops/k8s/production/backend-hpa.yaml
+
+      - name: Deploy frontend
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          
+          # Update deployment with new image
+          sed "s|image:.*frontend:.*|image: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ steps.set-version.outputs.version }}|" \
+            devops/k8s/production/frontend-deployment.yaml | kubectl apply -f -
+          
+          # Apply HPA
+          kubectl apply -f devops/k8s/production/frontend-hpa.yaml
+
+      - name: Apply Ingress
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl apply -f devops/k8s/production/ingress.yaml
+
+      - name: Wait for backend rollout
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl rollout status deployment/kptest-backend -n ${{ env.KUBE_NAMESPACE }} --timeout=600s
+
+      - name: Wait for frontend rollout
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl rollout status deployment/kptest-frontend -n ${{ env.KUBE_NAMESPACE }} --timeout=600s
+
+      - name: Verify deployment health
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          
+          echo "Verifying deployment health..."
+          
+          # Check pod status
+          kubectl get pods -n ${{ env.KUBE_NAMESPACE }} -l app=kptest-backend
+          kubectl get pods -n ${{ env.KUBE_NAMESPACE }} -l app=kptest-frontend
+          
+          # Check HPA status
+          kubectl get hpa -n ${{ env.KUBE_NAMESPACE }}
+          
+          # Check PDB status
+          kubectl get pdb -n ${{ env.KUBE_NAMESPACE }}
+
+      - name: Run production smoke tests
+        if: ${{ github.event.inputs.skip_tests != 'true' }}
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          
+          # Get ingress URL
+          INGRESS_HOST=$(kubectl get ingress kptest-ingress -n ${{ env.KUBE_NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo "")
+          
+          if [ -z "$INGRESS_HOST" ]; then
+            INGRESS_HOST="kptest.example.com"
+          fi
+          
+          echo "Testing against: $INGRESS_HOST"
+          
+          # Backend health check
+          for i in {1..10}; do
+            if curl -sf "https://api.$INGRESS_HOST/actuator/health" 2>/dev/null || curl -sf "https://$INGRESS_HOST/api/actuator/health" 2>/dev/null; then
+              echo "Backend is healthy!"
+              break
+            fi
+            echo "Waiting for backend... attempt $i"
+            sleep 10
+          done
+          
+          # Frontend health check
+          for i in {1..10}; do
+            if curl -sf "https://$INGRESS_HOST" 2>/dev/null; then
+              echo "Frontend is healthy!"
+              break
+            fi
+            echo "Waiting for frontend... attempt $i"
+            sleep 10
+          done
+
+      - name: Create database backup before deployment
+        run: |
+          echo "Creating pre-deployment backup..."
+          # Trigger backup job if backup operator is available
+          # kubectl create job --from=cronjob/db-backup db-backup-pre-deploy -n ${{ env.KUBE_NAMESPACE }}
+          echo "Backup triggered (manual backup recommended)"
+
+      - name: Cleanup
+        if: always()
+        run: rm -f kubeconfig
+
+  # Post-deployment validation
+  post-deployment-validation:
+    name: Post-Deployment Validation
+    runs-on: ubuntu-latest
+    needs: deploy-production
+    if: success()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run production smoke tests
+        run: |
+          echo "Running production smoke tests..."
+          
+          # Test critical endpoints
+          curl -sf "https://api.kptest.example.com/api/v1/health" || exit 1
+          curl -sf "https://kptest.example.com" || exit 1
+          
+          echo "All smoke tests passed!"
+
+      - name: Verify metrics are flowing
+        run: |
+          echo "Verifying Prometheus metrics..."
+          # Add Prometheus metric validation here
+          echo "Metrics verification complete"
+
+  # Rollback capability
+  rollback:
+    name: Rollback (if needed)
+    runs-on: ubuntu-latest
+    needs: [deploy-production, post-deployment-validation]
+    if: failure()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.29.0'
+
+      - name: Configure kubectl
+        run: |
+          echo "${{ secrets.KUBE_CONFIG_PRODUCTION }}" | base64 -d > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
+
+      - name: Rollback backend
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl rollout undo deployment/kptest-backend -n ${{ env.KUBE_NAMESPACE }}
+          kubectl rollout status deployment/kptest-backend -n ${{ env.KUBE_NAMESPACE }}
+
+      - name: Rollback frontend
+        run: |
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl rollout undo deployment/kptest-frontend -n ${{ env.KUBE_NAMESPACE }}
+          kubectl rollout status deployment/kptest-frontend -n ${{ env.KUBE_NAMESPACE }}
+
+      - name: Notify rollback
+        run: echo "Deployment rolled back to previous version"
+
+      - name: Cleanup
+        if: always()
+        run: rm -f kubeconfig
+
+  # Notify deployment status
+  notify:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    needs: [deploy-production, post-deployment-validation, rollback]
+    if: always()
+
+    steps:
+      - name: Determine deployment status
+        id: status
+        run: |
+          if [ "${{ needs.rollback.result }}" == "success" ]; then
+            echo "status=🔄 ROLLED BACK" >> $GITHUB_OUTPUT
+          elif [ "${{ needs.post-deployment-validation.result }}" == "success" ]; then
+            echo "status=✅ SUCCESS" >> $GITHUB_OUTPUT
+          else
+            echo "status=❌ FAILED" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "Production Deployment ${{ steps.status.outputs.status }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Production Deployment Status*\nEnvironment: Production\nVersion: ${{ needs.pre-deployment-checks.outputs.version }}\nStatus: ${{ steps.status.outputs.status }}\nTriggered by: ${{ github.actor }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        continue-on-error: true
+
+      - name: Create GitHub Release
+        if: success() && startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

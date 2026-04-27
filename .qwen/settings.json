@@ -26,7 +26,8 @@
       "Bash(./gradlew *)",
       "Bash(git stash)",
       "Bash(npm run *)",
-      "Bash(ssh *)"
+      "Bash(ssh *)",
+      "Bash(sed *)"
     ]
   },
   "$version": 3

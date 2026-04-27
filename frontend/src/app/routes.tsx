@@ -32,6 +32,7 @@ const ProfilePage = lazy(() => import('@pages/profile/ProfilePage'))
 const ProjectsPage = lazy(() => import('@features/projects/ui/ProjectsPage'))
 const ProjectDetailPage = lazy(() => import('@features/projects/ui/ProjectDetailPage'))
 const ProjectPatientsPage = lazy(() => import('@features/projects/ui/ProjectPatientsPage'))
+const ProjectStatisticsPage = lazy(() => import('@features/projects/ui/ProjectStatisticsPage'))
 
 /**
  * Messages pages
@@ -43,6 +44,29 @@ const ConversationPage = lazy(() => import('@features/messages/ui/ConversationPa
  * Calendar pages
  */
 const CalendarPage = lazy(() => import('@features/calendar/ui/CalendarPage'))
+
+/**
+ * Materials pages
+ */
+const MaterialsPage = lazy(() => import('@features/materials/ui/MaterialsPage'))
+const MaterialDetailPage = lazy(() => import('@features/materials/ui/MaterialDetailPage'))
+const MaterialAdminPage = lazy(() => import('@features/materials/ui/MaterialAdminPage'))
+
+/**
+ * Reports pages
+ */
+const ReportsPage = lazy(() => import('@features/reports/ui/ReportsPage'))
+const ReportDetailPage = lazy(() => import('@features/reports/ui/ReportDetailPage'))
+const ComplianceDashboard = lazy(() => import('@features/reports/ui/ComplianceDashboard'))
+
+/**
+ * Admin pages
+ */
+const AdminDashboard = lazy(() => import('@features/admin/ui/AdminDashboard'))
+const AdminUsersPage = lazy(() => import('@features/admin/ui/AdminUsersPage'))
+const AdminAuditLogsPage = lazy(() => import('@features/admin/ui/AdminAuditLogsPage'))
+const AdminSystemPage = lazy(() => import('@features/admin/ui/AdminSystemPage'))
+const AdminSystemLogsPage = lazy(() => import('@features/admin/ui/AdminSystemLogsPage'))
 
 /**
  * Route configuration
@@ -205,6 +229,102 @@ export const routes: RouteObject[] = [
         element: (
           <Suspense fallback={<PageLoader />}>
             <CalendarPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'materials',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <MaterialsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'materials/:id',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <MaterialDetailPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'materials/admin',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <MaterialAdminPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'reports',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ReportsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'reports/:id',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ReportDetailPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'compliance',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ComplianceDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'projects/:id/statistics',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ProjectStatisticsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'admin',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AdminDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'admin/users',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AdminUsersPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'admin/audit-logs',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AdminAuditLogsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'admin/system',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AdminSystemPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'admin/system/logs',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AdminSystemLogsPage />
           </Suspense>
         ),
       },

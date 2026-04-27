@@ -412,3 +412,431 @@ export const testUsers = {
     },
   },
 };
+
+/**
+ * Phase 2 - Biometric Authentication Test Data
+ */
+export const testBiometric = {
+  FACE_ID: {
+    type: 'FACE_ID',
+    enabled: true,
+    biometricData: 'face_scan_data_base64_encoded',
+  },
+  TOUCH_ID: {
+    type: 'TOUCH_ID',
+    enabled: true,
+    biometricData: 'fingerprint_scan_data_base64_encoded',
+  },
+  DISABLED: {
+    type: 'NONE',
+    enabled: false,
+    biometricData: null,
+  },
+};
+
+/**
+ * Phase 2 - Priority Messages Test Data
+ */
+export const testPriorityMessages = {
+  LOW: {
+    priority: 'LOW',
+    label: 'Niski',
+    color: '#28a745',
+  },
+  NORMAL: {
+    priority: 'NORMAL',
+    label: 'Normalny',
+    color: '#007bff',
+  },
+  HIGH: {
+    priority: 'HIGH',
+    label: 'Wysoki',
+    color: '#dc3545',
+  },
+  URGENT: {
+    priority: 'URGENT',
+    label: 'Pilny',
+    color: '#ff6b00',
+  },
+  NEW_MESSAGE: {
+    subject: 'Pilna wiadomość testowa',
+    content: 'To jest testowa wiadomość z wysokim priorytetem',
+    priority: 'HIGH',
+  },
+};
+
+/**
+ * Phase 2 - Event Rescheduling Test Data
+ */
+export const testEventRescheduling = {
+  PROPOSED_CHANGE: {
+    eventId: 'event-123',
+    originalDate: '2026-05-15T10:00:00',
+    proposedDate: '2026-05-16T14:00:00',
+    reason: 'Konflikt terminarza',
+    status: 'PENDING',
+  },
+  ACCEPTED_CHANGE: {
+    eventId: 'event-123',
+    originalDate: '2026-05-15T10:00:00',
+    newDate: '2026-05-16T14:00:00',
+    status: 'ACCEPTED',
+  },
+  REJECTED_CHANGE: {
+    eventId: 'event-123',
+    originalDate: '2026-05-15T10:00:00',
+    proposedDate: '2026-05-16T14:00:00',
+    rejectionReason: 'Brak dostępnych terminów',
+    status: 'REJECTED',
+  },
+};
+
+/**
+ * Phase 2 - Central Inbox Test Data
+ */
+export const testCentralInbox = {
+  FILTERS: {
+    ALL: 'ALL',
+    UNREAD: 'UNREAD',
+    READ: 'READ',
+    FLAGGED: 'FLAGGED',
+    ARCHIVED: 'ARCHIVED',
+  },
+  DELEGATION: {
+    delegateId: 'staff-456',
+    delegateName: 'Dr Anna Nowak',
+    delegateRole: 'THERAPIST',
+  },
+  SAMPLE_MESSAGE: {
+    id: 'inbox-msg-001',
+    subject: 'Wiadomość z centralnej skrzynki',
+    sender: 'recepcja@kptest.com',
+    recipient: 'team@kptest.com',
+    status: 'UNREAD',
+    createdAt: '2026-04-24T09:00:00',
+  },
+};
+
+/**
+ * Phase 2 - Admin Features Test Data
+ */
+export const testAdminFeatures = {
+  FORCE_PASSWORD_RESET: {
+    targetUserId: 'user-789',
+    reason: 'Wymuszenie zmiany hasła przez administratora',
+    notifyUser: true,
+  },
+  CLEAR_2FA: {
+    targetUserId: 'user-789',
+    reason: 'Reset 2FA po utracie urządzenia',
+  },
+  ACTIVATION_CODE: {
+    type: 'PATIENT_ACTIVATION',
+    validityHours: 48,
+    maxUses: 1,
+  },
+  ADMIN_ACTIONS: {
+    LOCK_ACCOUNT: 'LOCK_ACCOUNT',
+    UNLOCK_ACCOUNT: 'UNLOCK_ACCOUNT',
+    SUSPEND_ACCOUNT: 'SUSPEND_ACCOUNT',
+    REACTIVATE_ACCOUNT: 'REACTIVATE_ACCOUNT',
+  },
+};
+
+/**
+ * Phase 2 - Simplified UI Test Data
+ */
+export const testSimplifiedUI = {
+  ENABLED: {
+    mode: 'SIMPLIFIED',
+    largeText: true,
+    highContrast: true,
+    reducedAnimations: true,
+  },
+  DISABLED: {
+    mode: 'STANDARD',
+    largeText: false,
+    highContrast: false,
+    reducedAnimations: false,
+  },
+};
+
+/**
+ * Phase 3 - Quizzes Test Data
+ */
+export const testQuizzes = {
+  SAMPLE_QUIZ: {
+    title: 'Quiz ze słuchu fonematycznego',
+    description: 'Sprawdź swoją umiejętność rozpoznawania dźwięków',
+    category: 'EDUCATION',
+    difficulty: 'MEDIUM',
+    passingScore: 70,
+  },
+  QUESTIONS: [
+    {
+      id: 'q1',
+      text: 'Który dźwięk słyszysz na początku słowa "kot"?',
+      type: 'MULTIPLE_CHOICE',
+      options: ['k', 't', 'p', 's'],
+      correctAnswer: 'k',
+      points: 10,
+    },
+    {
+      id: 'q2',
+      text: 'Zaznacz wszystkie słowa zaczynające się na "s"',
+      type: 'MULTIPLE_SELECT',
+      options: ['samochód', 'kot', 'słońce', 'dom'],
+      correctAnswer: ['samochód', 'słońce'],
+      points: 15,
+    },
+    {
+      id: 'q3',
+      text: 'Czy to zdanie jest poprawne? "Ala ma kota"',
+      type: 'TRUE_FALSE',
+      options: ['Prawda', 'Fałsz'],
+      correctAnswer: 'Prawda',
+      points: 5,
+    },
+  ],
+  RESULTS: {
+    PASS: {
+      score: 85,
+      passed: true,
+      feedback: 'Świetnie! Udało Ci się poprawnie odpowiedzieć na większość pytań.',
+    },
+    FAIL: {
+      score: 45,
+      passed: false,
+      feedback: 'Spróbuj jeszcze raz. Warto powtórzyć materiał przed kolejnym podejściem.',
+    },
+  },
+};
+
+/**
+ * Phase 3 - Therapy Stages Test Data
+ */
+export const testTherapyStages = {
+  STAGES: [
+    {
+      id: 'stage-1',
+      name: 'Etap 1: Diagnoza',
+      description: 'Początkowa ocena pacjenta',
+      order: 1,
+      estimatedDuration: 7,
+      requirements: [],
+    },
+    {
+      id: 'stage-2',
+      name: 'Etap 2: Terapia wstępna',
+      description: 'Podstawowe ćwiczenia terapeutyczne',
+      order: 2,
+      estimatedDuration: 14,
+      requirements: ['stage-1'],
+    },
+    {
+      id: 'stage-3',
+      name: 'Etap 3: Terapia zaawansowana',
+      description: 'Zaawansowane ćwiczenia i zadania',
+      order: 3,
+      estimatedDuration: 21,
+      requirements: ['stage-2'],
+    },
+    {
+      id: 'stage-4',
+      name: 'Etap 4: Podsumowanie',
+      description: 'Ocena postępów i zakończenie terapii',
+      order: 4,
+      estimatedDuration: 7,
+      requirements: ['stage-3'],
+    },
+  ],
+  MATERIALS: [
+    {
+      id: 'mat-1',
+      title: 'Wprowadzenie do terapii',
+      type: 'PDF',
+      stageId: 'stage-1',
+      url: '/materials/therapy-intro.pdf',
+    },
+    {
+      id: 'mat-2',
+      title: 'Ćwiczenia podstawowe',
+      type: 'VIDEO',
+      stageId: 'stage-2',
+      url: '/materials/basic-exercises.mp4',
+    },
+    {
+      id: 'mat-3',
+      title: 'Karta pracy',
+      type: 'WORKSHEET',
+      stageId: 'stage-2',
+      url: '/materials/worksheet-1.pdf',
+    },
+  ],
+  REORDER: {
+    fromIndex: 2,
+    toIndex: 0,
+    expectedOrder: ['stage-3', 'stage-1', 'stage-2', 'stage-4'],
+  },
+};
+
+/**
+ * Phase 3 - Gamification Test Data
+ */
+export const testGamification = {
+  BADGES: [
+    {
+      id: 'badge-1',
+      name: 'Pierwsze Kroki',
+      description: 'Ukończ pierwszy etap terapii',
+      icon: '🎯',
+      category: 'PROGRESS',
+      requirement: {
+        type: 'STAGE_COMPLETION',
+        count: 1,
+      },
+    },
+    {
+      id: 'badge-2',
+      name: 'Aktywny Uczeń',
+      description: 'Ukończ 5 quizów z wynikiem powyżej 80%',
+      icon: '📚',
+      category: 'ACHIEVEMENT',
+      requirement: {
+        type: 'QUIZ_COMPLETION',
+        count: 5,
+        minScore: 80,
+      },
+    },
+    {
+      id: 'badge-3',
+      name: 'Regularny Terapeuta',
+      description: 'Ćwicz przez 7 dni z rzędu',
+      icon: '🔥',
+      category: 'STREAK',
+      requirement: {
+        type: 'DAILY_STREAK',
+        count: 7,
+      },
+    },
+    {
+      id: 'badge-4',
+      name: 'Mistrz Słuchu',
+      description: 'Zdobądź 1000 punktów w ćwiczeniach ze słuchu',
+      icon: '👂',
+      category: 'POINTS',
+      requirement: {
+        type: 'POINTS_EARNED',
+        count: 1000,
+      },
+    },
+    {
+      id: 'badge-5',
+      name: 'Perfekcjonista',
+      description: 'Ukończ wszystkie etapy z wynikiem 100%',
+      icon: '⭐',
+      category: 'ACHIEVEMENT',
+      requirement: {
+        type: 'PERFECT_COMPLETION',
+        count: 1,
+      },
+    },
+  ],
+  NOTIFICATIONS: {
+    BADGE_EARNED: {
+      type: 'BADGE_EARNED',
+      title: 'Nowa odznaka!',
+      message: 'Gratulacje! Zdobyłeś odznakę: {badgeName}',
+      priority: 'HIGH',
+    },
+    STAGE_COMPLETED: {
+      type: 'STAGE_COMPLETED',
+      title: 'Etap ukończony!',
+      message: 'Ukończyłeś etap: {stageName}',
+      priority: 'NORMAL',
+    },
+    QUIZ_PASSED: {
+      type: 'QUIZ_PASSED',
+      title: 'Quiz zaliczony!',
+      message: 'Twój wynik: {score}%',
+      priority: 'NORMAL',
+    },
+  },
+  CATALOG: {
+    CATEGORIES: ['ALL', 'PROGRESS', 'ACHIEVEMENT', 'STREAK', 'POINTS'],
+    SORT_OPTIONS: ['NAME_ASC', 'NAME_DESC', 'DATE_EARNED', 'RARITY'],
+  },
+};
+
+/**
+ * Phase 3 - API Endpoints
+ */
+export const phase3ApiEndpoints = {
+  quizzes: {
+    list: 'http://localhost:8080/api/v1/quizzes',
+    byId: (id: string) => `http://localhost:8080/api/v1/quizzes/${id}`,
+    create: 'http://localhost:8080/api/v1/quizzes',
+    update: (id: string) => `http://localhost:8080/api/v1/quizzes/${id}`,
+    delete: (id: string) => `http://localhost:8080/api/v1/quizzes/${id}`,
+    take: (id: string) => `http://localhost:8080/api/v1/quizzes/${id}/take`,
+    results: (id: string) => `http://localhost:8080/api/v1/quizzes/${id}/results`,
+  },
+  stages: {
+    list: 'http://localhost:8080/api/v1/therapy-stages',
+    byId: (id: string) => `http://localhost:8080/api/v1/therapy-stages/${id}`,
+    create: 'http://localhost:8080/api/v1/therapy-stages',
+    update: (id: string) => `http://localhost:8080/api/v1/therapy-stages/${id}`,
+    delete: (id: string) => `http://localhost:8080/api/v1/therapy-stages/${id}`,
+    reorder: 'http://localhost:8080/api/v1/therapy-stages/reorder',
+    progress: (id: string) => `http://localhost:8080/api/v1/therapy-stages/${id}/progress`,
+  },
+  badges: {
+    list: 'http://localhost:8080/api/v1/badges',
+    byId: (id: string) => `http://localhost:8080/api/v1/badges/${id}`,
+    catalog: 'http://localhost:8080/api/v1/badges/catalog',
+    earned: 'http://localhost:8080/api/v1/badges/earned',
+    award: 'http://localhost:8080/api/v1/badges/award',
+  },
+  gamification: {
+    stats: 'http://localhost:8080/api/v1/gamification/stats',
+    leaderboard: 'http://localhost:8080/api/v1/gamification/leaderboard',
+    notifications: 'http://localhost:8080/api/v1/gamification/notifications',
+  },
+};
+
+/**
+ * Phase 2 - API Endpoints
+ */
+export const phase2ApiEndpoints = {
+  biometric: {
+    enable: 'http://localhost:8080/api/v1/biometric/enable',
+    disable: 'http://localhost:8080/api/v1/biometric/disable',
+    verify: 'http://localhost:8080/api/v1/biometric/verify',
+    status: 'http://localhost:8080/api/v1/biometric/status',
+  },
+  ui: {
+    preferences: 'http://localhost:8080/api/v1/ui/preferences',
+    simplified: 'http://localhost:8080/api/v1/ui/simplified',
+  },
+  messages: {
+    priority: 'http://localhost:8080/api/v1/messages/priority',
+    flag: (id: string) => `http://localhost:8080/api/v1/messages/${id}/flag`,
+  },
+  events: {
+    proposeChange: (id: string) => `http://localhost:8080/api/v1/calendar/events/${id}/propose-change`,
+    respondToChange: (id: string) => `http://localhost:8080/api/v1/calendar/events/${id}/respond-change`,
+    changeRequests: 'http://localhost:8080/api/v1/calendar/change-requests',
+  },
+  inbox: {
+    central: 'http://localhost:8080/api/v1/inbox/central',
+    filter: 'http://localhost:8080/api/v1/inbox/filter',
+    delegate: (id: string) => `http://localhost:8080/api/v1/inbox/${id}/delegate`,
+  },
+  admin: {
+    forcePasswordReset: (userId: string) => `http://localhost:8080/api/v1/admin/users/${userId}/force-password-reset`,
+    clear2FA: (userId: string) => `http://localhost:8080/api/v1/admin/users/${userId}/clear-2fa`,
+    generateActivationCode: 'http://localhost:8080/api/v1/admin/activation-codes',
+    lockAccount: (userId: string) => `http://localhost:8080/api/v1/admin/users/${userId}/lock`,
+    unlockAccount: (userId: string) => `http://localhost:8080/api/v1/admin/users/${userId}/unlock`,
+  },
+};

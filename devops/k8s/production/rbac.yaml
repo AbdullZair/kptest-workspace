@@ -1,0 +1,94 @@
+# Service Account for Backend
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kptest-backend-sa
+  namespace: kptest-production
+  labels:
+    app: kptest-backend
+    environment: production
+  annotations:
+    description: "Service account for KPTEST Backend"
+automountServiceAccountToken: false
+
+---
+# Service Account for Frontend
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kptest-frontend-sa
+  namespace: kptest-production
+  labels:
+    app: kptest-frontend
+    environment: production
+  annotations:
+    description: "Service account for KPTEST Frontend"
+automountServiceAccountToken: false
+
+---
+# Service Account for PostgreSQL
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kptest-postgres-sa
+  namespace: kptest-production
+  labels:
+    app: kptest-postgres
+    environment: production
+  annotations:
+    description: "Service account for KPTEST PostgreSQL"
+automountServiceAccountToken: false
+
+---
+# Service Account for Redis
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kptest-redis-sa
+  namespace: kptest-production
+  labels:
+    app: kptest-redis
+    environment: production
+  annotations:
+    description: "Service account for KPTEST Redis"
+automountServiceAccountToken: false
+
+---
+# Role for Backend (minimal permissions)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kptest-backend-role
+  namespace: kptest-production
+  labels:
+    app: kptest-backend
+    environment: production
+rules:
+  # Allow reading ConfigMaps (for configuration)
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+  # Allow reading Secrets (for database credentials)
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+    resourceNames: ["kptest-secrets"]
+
+---
+# RoleBinding for Backend
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kptest-backend-rolebinding
+  namespace: kptest-production
+  labels:
+    app: kptest-backend
+    environment: production
+subjects:
+  - kind: ServiceAccount
+    name: kptest-backend-sa
+    namespace: kptest-production
+roleRef:
+  kind: Role
+  name: kptest-backend-role
+  apiGroup: rbac.authorization.k8s.io

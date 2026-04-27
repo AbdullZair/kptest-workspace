@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: kptest-frontend-pdb
+  namespace: kptest-production
+  labels:
+    app: kptest-frontend
+    environment: production
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: kptest-frontend

@@ -1,0 +1,136 @@
+# Tempo Configuration for Distributed Tracing
+# OpenTelemetry-compatible tracing backend
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9095
+
+distributor:
+  receivers:
+    # OTLP gRPC receiver
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+    
+    # Jaeger receivers
+    jaeger:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:14250
+        thrift_http:
+          endpoint: 0.0.0.0:14268
+        thrift_compact:
+          endpoint: 0.0.0.0:6831
+        thrift_binary:
+          endpoint: 0.0.0.0:6832
+    
+    # Zipkin receiver
+    zipkin:
+      endpoint: 0.0.0.0:9411
+
+ingester:
+  max_block_duration: 5m
+  max_block_bytes: 1073741824  # 1GB
+  trace_idle_period: 10s
+  max_span_bytes: 104857600  # 100MB
+
+compactor:
+  compaction:
+    block_retention: 72h  # 3 days
+    compacted_block_retention: 10m
+    compaction_window: 1h
+    max_compaction_objects: 1000000
+    v2_in_buffer_bytes: 524288  # 512KB
+    v2_out_buffer_bytes: 5242880  # 5MB
+    v2_prefetch_traces_count: 3000
+
+querier:
+  max_concurrent_queries: 20
+  query_timeout: 30s
+
+query_frontend:
+  search:
+    duration_slo: 5s
+    throughput_bytes_slo: 1.073741824e+09
+  trace_by_id:
+    duration_slo: 5s
+
+storage:
+  trace:
+    backend: local
+    wal:
+      path: /tmp/tempo/wal
+      enabled: true
+    local:
+      path: /tmp/tempo/blocks
+    pool:
+      max_workers: 100
+      queue_depth: 10000
+
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [service-graphs, span-metrics]
+      generate_native_histograms: both
+    
+    # Ingestion limits
+    max_traces_per_user: 10000
+    ingestion_rate: 15000000  # 15MB/s
+    ingestion_burst_size: 20000000  # 20MB
+    
+    # Search limits
+    max_search_duration: 24h
+    max_spans_per_trace: 10000
+    
+    # Retention
+    retention: 72h
+
+# Metrics generator configuration
+metrics_generator:
+  registry:
+    external_labels:
+      source: tempo
+      cluster: kptest-production
+  storage:
+    path: /tmp/tempo/generator/wal
+    remote_write:
+      - url: http://prometheus:9090/api/v1/write
+        send_exemplars: true
+  
+  traces_storage:
+    path: /tmp/tempo/generator/traces
+  
+  processor:
+    local_blocks:
+      filter_server_spans: true
+      flush_to_storage: true
+  
+  span_metrics:
+    dimensions:
+      - service_name
+      - span_name
+      - span_kind
+      - status_code
+  
+  service_graphs:
+    dimensions:
+      - db.system
+      - http.method
+
+# Multitenancy (optional)
+multitenancy_enabled: false
+
+# Anonymous access for development
+auth_enabled: false
+
+# Logging
+logging:
+  level: info
+  format: logfmt
+
+# Tracing (self-tracing)
+tracing:
+  enabled: false

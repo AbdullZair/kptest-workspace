@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kptest-postgres
+  namespace: kptest-production
+  labels:
+    app: kptest-postgres
+    version: "15"
+    environment: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kptest-postgres
+  template:
+    metadata:
+      labels:
+        app: kptest-postgres
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9187"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999  # postgres user
+        runAsGroup: 999
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      
+      serviceAccountName: kptest-postgres-sa
+      
+      terminationGracePeriodSeconds: 120
+      
+      containers:
+        - name: kptest-postgres
+          image: postgres:15.4-alpine
+          imagePullPolicy: IfNotPresent
+          
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          
+          env:
+            - name: POSTGRES_DB
+              value: "kptest"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: kptest-secrets
+                  key: DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kptest-secrets
+                  key: DB_PASSWORD
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/pgdata"
+          
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "4Gi"
+          
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - kptest
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - kptest
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+            - name: postgres-backup
+              mountPath: /backup
+      
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: kptest-postgres-pvc
+        - name: postgres-backup
+          emptyDir:
+            sizeLimit: 10Gi

@@ -95,6 +95,43 @@ export const adminApiSlice = api.injectEndpoints({
       invalidatesTags: ['AdminUser'],
     }),
 
+    /**
+     * Force password reset
+     */
+    forcePasswordReset: builder.mutation<
+      ResetPasswordResponse,
+      { userId: string; body: ForcePasswordResetRequest }
+    >({
+      query: ({ userId, body }) => ({
+        url: `/admin/users/${userId}/force-password-reset`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['AdminUser'],
+    }),
+
+    /**
+     * Clear 2FA
+     */
+    clear2fa: builder.mutation<Clear2faResponse, { userId: string; body: Clear2faRequest }>({
+      query: ({ userId, body }) => ({
+        url: `/admin/users/${userId}/clear-2fa`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['AdminUser'],
+    }),
+
+    /**
+     * Generate activation code
+     */
+    generateActivationCode: builder.mutation<ActivationCodeResponse, string>({
+      query: (patientId) => ({
+        url: `/admin/patients/${patientId}/generate-activation-code`,
+        method: 'POST',
+      }),
+    }),
+
     // ==================== AUDIT LOGS ====================
 
     /**
@@ -220,6 +257,9 @@ export const {
   useUpdateUserStatusMutation,
   useResetUserPasswordMutation,
   useDeleteUserMutation,
+  useForcePasswordResetMutation,
+  useClear2faMutation,
+  useGenerateActivationCodeMutation,
   useGetAuditLogsQuery,
   useGetAuditLogByIdQuery,
   useExportAuditLogsMutation,

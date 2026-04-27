@@ -1,47 +1,74 @@
-# Prometheus Alert Rules for KPTEST
-# These rules define conditions that trigger alerts
+# Prometheus Alert Rules for KPTEST Production
+# Comprehensive alerting for all services
 
 groups:
-  - name: kptest-alerts
+  # =====================
+  # Backend Alerts
+  # =====================
+  - name: backend-alerts
     interval: 30s
     rules:
-      # Backend Alerts
       - alert: BackendDown
         expr: up{job="backend"} == 0
         for: 1m
         labels:
           severity: critical
           service: backend
+          team: backend
         annotations:
           summary: "Backend service is down"
           description: "The KPTEST backend service has been unreachable for more than 1 minute."
+          runbook: "https://runbooks.kptest.example.com/backend-down"
+          dashboard: "https://grafana.kptest.example.com/d/backend-dashboard"
 
       - alert: BackendHighErrorRate
-        expr: rate(http_server_requests_seconds_count{application="kptest-backend",status=~"5.."}[5m]) / rate(http_server_requests_seconds_count{application="kptest-backend"}[5m]) * 100 > 5
+        expr: |
+          sum(rate(http_server_requests_seconds_count{application="kptest-backend",status=~"5.."}[5m])) 
+          / sum(rate(http_server_requests_seconds_count{application="kptest-backend"}[5m])) * 100 > 5
         for: 5m
         labels:
           severity: warning
           service: backend
+          team: backend
         annotations:
           summary: "Backend high error rate"
           description: "Backend error rate is above 5% (current value: {{ $value }}%)"
+          runbook: "https://runbooks.kptest.example.com/backend-high-error-rate"
+
+      - alert: BackendCriticalErrorRate
+        expr: |
+          sum(rate(http_server_requests_seconds_count{application="kptest-backend",status=~"5.."}[5m])) 
+          / sum(rate(http_server_requests_seconds_count{application="kptest-backend"}[5m])) * 100 > 10
+        for: 2m
+        labels:
+          severity: critical
+          service: backend
+          team: backend
+        annotations:
+          summary: "Backend critical error rate"
+          description: "Backend error rate is above 10% (current value: {{ $value }}%)"
 
       - alert: BackendSlowResponse
-        expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{application="kptest-backend"}[5m])) > 2
+        expr: |
+          histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{application="kptest-backend"}[5m])) > 2
         for: 5m
         labels:
           severity: warning
           service: backend
+          team: backend
         annotations:
           summary: "Backend slow response time"
           description: "Backend 95th percentile response time is above 2 seconds (current value: {{ $value }}s)"
 
       - alert: BackendHighMemoryUsage
-        expr: jvm_memory_used_bytes{application="kptest-backend",area="heap"} / jvm_memory_max_bytes{application="kptest-backend",area="heap"} * 100 > 85
+        expr: |
+          jvm_memory_used_bytes{application="kptest-backend",area="heap"} 
+          / jvm_memory_max_bytes{application="kptest-backend",area="heap"} * 100 > 85
         for: 5m
         labels:
           severity: warning
           service: backend
+          team: backend
         annotations:
           summary: "Backend high memory usage"
           description: "Backend JVM heap usage is above 85% (current value: {{ $value }}%)"
@@ -52,20 +79,53 @@ groups:
         labels:
           severity: warning
           service: backend
+          team: backend
         annotations:
           summary: "Backend high CPU usage"
           description: "Backend CPU usage is above 80% (current value: {{ $value }}%)"
 
-      # PostgreSQL Alerts
+      - alert: BackendPodCrashLooping
+        expr: |
+          rate(kube_pod_container_status_restarts_total{namespace="kptest-production",container="kptest-backend"}[15m]) * 60 * 5 > 3
+        for: 5m
+        labels:
+          severity: critical
+          service: backend
+          team: backend
+        annotations:
+          summary: "Backend pod crash looping"
+          description: "Backend pod is restarting frequently ({{ $value }} restarts in 5 minutes)"
+
+      - alert: BackendHPAHighReplicas
+        expr: |
+          kube_horizontalpodautoscaler_status_current_replicas{horizontalpodautoscaler="kptest-backend-hpa",namespace="kptest-production"} 
+          / kube_horizontalpodautoscaler_spec_max_replicas{horizontalpodautoscaler="kptest-backend-hpa",namespace="kptest-production"} * 100 > 80
+        for: 10m
+        labels:
+          severity: warning
+          service: backend
+          team: backend
+        annotations:
+          summary: "Backend HPA near max replicas"
+          description: "Backend is running at {{ $value }}% of maximum replicas"
+
+  # =====================
+  # PostgreSQL Alerts
+  # =====================
+  - name: postgresql-alerts
+    interval: 30s
+    rules:
       - alert: PostgreSQLDown
         expr: up{job="postgres"} == 0
         for: 1m
         labels:
           severity: critical
           service: postgresql
+          team: database
         annotations:
           summary: "PostgreSQL is down"
           description: "PostgreSQL database has been unreachable for more than 1 minute."
+          runbook: "https://runbooks.kptest.example.com/postgresql-down"
 
       - alert: PostgreSQLHighConnections
         expr: pg_stat_activity_count{datname="kptest"} > 80
@@ -73,90 +133,156 @@ groups:
         labels:
           severity: warning
           service: postgresql
+          team: database
         annotations:
           summary: "PostgreSQL high connection count"
           description: "PostgreSQL has more than 80 active connections (current value: {{ $value }})"
 
       - alert: PostgreSQLLowDiskSpace
-        expr: pg_database_size_bytes{datname="kptest"} / pg_tablespace_size_bytes * 100 > 85
+        expr: |
+          (pg_database_size_bytes{datname="kptest"} / pg_tablespace_size_bytes) * 100 > 85
         for: 10m
         labels:
           severity: warning
           service: postgresql
+          team: database
         annotations:
           summary: "PostgreSQL low disk space"
           description: "PostgreSQL database is using more than 85% of allocated disk space."
 
-      # Redis Alerts
+      - alert: PostgreSQLReplicationLag
+        expr: |
+          pg_replication_lag_seconds > 30
+        for: 5m
+        labels:
+          severity: warning
+          service: postgresql
+          team: database
+        annotations:
+          summary: "PostgreSQL replication lag"
+          description: "PostgreSQL replication lag is above 30 seconds (current value: {{ $value }}s)"
+
+      - alert: PostgreSQLLongRunningQueries
+        expr: |
+          max(pg_stat_activity_max_duration{datname="kptest"}) > 300
+        for: 5m
+        labels:
+          severity: warning
+          service: postgresql
+          team: database
+        annotations:
+          summary: "PostgreSQL long running queries"
+          description: "PostgreSQL has queries running longer than 5 minutes"
+
+  # =====================
+  # Redis Alerts
+  # =====================
+  - name: redis-alerts
+    interval: 30s
+    rules:
       - alert: RedisDown
         expr: up{job="redis"} == 0
         for: 1m
         labels:
           severity: critical
           service: redis
+          team: backend
         annotations:
           summary: "Redis is down"
           description: "Redis cache has been unreachable for more than 1 minute."
 
       - alert: RedisHighMemoryUsage
-        expr: redis_used_memory / redis_memory_max_bytes * 100 > 85
+        expr: (redis_used_memory / redis_memory_max_bytes) * 100 > 85
         for: 5m
         labels:
           severity: warning
           service: redis
+          team: backend
         annotations:
           summary: "Redis high memory usage"
           description: "Redis memory usage is above 85% (current value: {{ $value }}%)"
 
       - alert: RedisLowHitRate
-        expr: redis_keyspace_hits_total / (redis_keyspace_hits_total + redis_keyspace_misses_total) * 100 < 80
+        expr: |
+          (redis_keyspace_hits_total / (redis_keyspace_hits_total + redis_keyspace_misses_total)) * 100 < 80
         for: 10m
         labels:
           severity: warning
           service: redis
+          team: backend
         annotations:
           summary: "Redis low cache hit rate"
           description: "Redis cache hit rate is below 80% (current value: {{ $value }}%)"
 
-      # Frontend Alerts
+      - alert: RedisEvictedKeys
+        expr: rate(redis_evicted_keys_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+          team: backend
+        annotations:
+          summary: "Redis evicted keys"
+          description: "Redis is evicting keys at a high rate ({{ $value }} keys/s)"
+
+  # =====================
+  # Frontend Alerts
+  # =====================
+  - name: frontend-alerts
+    interval: 30s
+    rules:
       - alert: FrontendDown
         expr: up{job="frontend"} == 0
         for: 1m
         labels:
           severity: critical
           service: frontend
+          team: frontend
         annotations:
           summary: "Frontend is down"
           description: "Frontend service has been unreachable for more than 1 minute."
 
-      # HIS Mock Alerts
-      - alert: HISMockDown
-        expr: up{job="his-mock"} == 0
-        for: 1m
+      - alert: FrontendHighErrorRate
+        expr: |
+          sum(rate(nginx_http_requests_total{status=~"5.."}[5m])) 
+          / sum(rate(nginx_http_requests_total[5m])) * 100 > 5
+        for: 5m
         labels:
           severity: warning
-          service: his-mock
+          service: frontend
+          team: frontend
         annotations:
-          summary: "HIS Mock is down"
-          description: "HIS Mock service has been unreachable for more than 1 minute."
+          summary: "Frontend high error rate"
+          description: "Frontend error rate is above 5% (current value: {{ $value }}%)"
 
-      # Infrastructure Alerts
+  # =====================
+  # Infrastructure Alerts
+  # =====================
+  - name: infrastructure-alerts
+    interval: 30s
+    rules:
       - alert: HighMemoryUsage
-        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        expr: |
+          (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) 
+          / node_memory_MemTotal_bytes * 100 > 85
         for: 5m
         labels:
           severity: warning
           service: infrastructure
+          team: infrastructure
         annotations:
           summary: "High system memory usage"
           description: "System memory usage is above 85% (current value: {{ $value }}%)"
 
       - alert: HighDiskUsage
-        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 85
+        expr: |
+          (node_filesystem_size_bytes - node_filesystem_avail_bytes) 
+          / node_filesystem_size_bytes * 100 > 85
         for: 10m
         labels:
           severity: warning
           service: infrastructure
+          team: infrastructure
         annotations:
           summary: "High disk usage"
           description: "System disk usage is above 85% (current value: {{ $value }}%)"
@@ -167,6 +293,103 @@ groups:
         labels:
           severity: warning
           service: infrastructure
+          team: infrastructure
         annotations:
           summary: "Container restarted frequently"
           description: "Container {{ $labels.name }} has restarted more than 2 times in 5 minutes."
+
+      - alert: PodNotReady
+        expr: |
+          kube_pod_status_ready{namespace="kptest-production",condition="true"} == 0
+        for: 5m
+        labels:
+          severity: warning
+          service: infrastructure
+          team: infrastructure
+        annotations:
+          summary: "Pod not ready"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not ready"
+
+  # =====================
+  # Kubernetes Alerts
+  # =====================
+  - name: kubernetes-alerts
+    interval: 30s
+    rules:
+      - alert: KubernetesNodeNotReady
+        expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          service: kubernetes
+          team: infrastructure
+        annotations:
+          summary: "Kubernetes node not ready"
+          description: "Node {{ $labels.node }} is not ready"
+
+      - alert: KubernetesPersistentVolumeError
+        expr: kube_persistentvolume_status_phase{phase=~"Failed|Pending"} > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: kubernetes
+          team: infrastructure
+        annotations:
+          summary: "Kubernetes PersistentVolume error"
+          description: "PersistentVolume {{ $labels.persistentvolume }} is in {{ $labels.phase }} state"
+
+      - alert: KubernetesDeploymentReplicasMismatch
+        expr: |
+          kube_deployment_spec_replicas{namespace="kptest-production"} 
+          != kube_deployment_status_replicas_available{namespace="kptest-production"}
+        for: 10m
+        labels:
+          severity: warning
+          service: kubernetes
+          team: infrastructure
+        annotations:
+          summary: "Kubernetes deployment replicas mismatch"
+          description: "Deployment {{ $labels.deployment }} has not matched the expected number of replicas"
+
+      - alert: KubernetesHPAMaxReplicas
+        expr: |
+          kube_horizontalpodautoscaler_status_current_replicas{namespace="kptest-production"} 
+          == kube_horizontalpodautoscaler_spec_max_replicas{namespace="kptest-production"}
+        for: 10m
+        labels:
+          severity: warning
+          service: kubernetes
+          team: infrastructure
+        annotations:
+          summary: "Kubernetes HPA at max replicas"
+          description: "HPA {{ $labels.horizontalpodautoscaler }} is at maximum replicas"
+
+  # =====================
+  # Business Metrics Alerts
+  # =====================
+  - name: business-alerts
+    interval: 30s
+    rules:
+      - alert: HighAPIUsage
+        expr: sum(rate(http_server_requests_seconds_count{application="kptest-backend"}[5m])) > 1000
+        for: 5m
+        labels:
+          severity: warning
+          service: backend
+          team: backend
+        annotations:
+          summary: "High API usage"
+          description: "API is handling {{ $value }} requests per second"
+
+      - alert: DatabaseConnectionPoolExhausted
+        expr: |
+          hikaricp_active_connections{application="kptest-backend"} 
+          / hikaricp_max_connections{application="kptest-backend"} * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+          service: backend
+          team: backend
+        annotations:
+          summary: "Database connection pool exhausted"
+          description: "Database connection pool is {{ $value }}% utilized"

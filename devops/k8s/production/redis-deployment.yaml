@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kptest-redis
+  namespace: kptest-production
+  labels:
+    app: kptest-redis
+    version: "7"
+    environment: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kptest-redis
+  template:
+    metadata:
+      labels:
+        app: kptest-redis
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9121"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999  # redis user
+        runAsGroup: 999
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      
+      serviceAccountName: kptest-redis-sa
+      
+      terminationGracePeriodSeconds: 60
+      
+      containers:
+        - name: kptest-redis
+          image: redis:7.2-alpine
+          imagePullPolicy: IfNotPresent
+          
+          ports:
+            - name: redis
+              containerPort: 6379
+              protocol: TCP
+          
+          command:
+            - redis-server
+            - --appendonly
+            - "yes"
+            - --maxmemory
+            - "512mb"
+            - --maxmemory-policy
+            - "allkeys-lru"
+          
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+          
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      
+      volumes:
+        - name: redis-data
+          emptyDir:
+            sizeLimit: 5Gi

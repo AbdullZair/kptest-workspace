@@ -1,0 +1,155 @@
+import React, { useState } from 'react'
+import { format } from 'date-fns'
+import { pl } from 'date-fns/locale'
+
+interface EventChangeRequestModalProps {
+  eventId: string
+  eventTitle: string
+  eventDate: string
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (request: { proposedDate: string; reason: string }) => Promise<void>
+}
+
+/**
+ * Modal for proposing an event date change
+ */
+export function EventChangeRequestModal({
+  eventId,
+  eventTitle,
+  eventDate,
+  isOpen,
+  onClose,
+  onSubmit,
+}: EventChangeRequestModalProps) {
+  const [proposedDate, setProposedDate] = useState('')
+  const [reason, setReason] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setIsSubmitting(true)
+
+    try {
+      await onSubmit({ proposedDate, reason })
+      // Reset form
+      setProposedDate('')
+      setReason('')
+      onClose()
+    } catch (err: any) {
+      setError(err.message || 'Nie udało się wysłać prośby')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleClose = () => {
+    setProposedDate('')
+    setReason('')
+    setError(null)
+    onClose()
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" role="dialog" aria-modal="true">
+      <div className="bg-white rounded-lg max-w-md w-full mx-4 p-6 shadow-xl">
+        {/* Header */}
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-neutral-900">Zmień termin wydarzenia</h2>
+          <p className="text-sm text-neutral-500 mt-1">
+            Zaproponuj nowy termin dla wydarzenia
+          </p>
+        </div>
+
+        {/* Event Info */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+          <p className="font-medium text-neutral-900">{eventTitle}</p>
+          <p className="text-sm text-neutral-600 mt-1">
+            Obecny termin: {format(new Date(eventDate), 'dd MMMM yyyy, HH:mm', { locale: pl })}
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          {/* Proposed Date */}
+          <div className="mb-4">
+            <label htmlFor="proposedDate" className="block text-sm font-medium text-neutral-700 mb-1">
+              Proponowany nowy termin *
+            </label>
+            <input
+              type="datetime-local"
+              id="proposedDate"
+              value={proposedDate}
+              onChange={(e) => setProposedDate(e.target.value)}
+              min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+              disabled={isSubmitting}
+            />
+            <p className="text-xs text-neutral-500 mt-1">
+              Minimalnie 24 godziny przed obecnym terminem
+            </p>
+          </div>
+
+          {/* Reason */}
+          <div className="mb-4">
+            <label htmlFor="reason" className="block text-sm font-medium text-neutral-700 mb-1">
+              Powód zmiany *
+            </label>
+            <textarea
+              id="reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Opisz powód prośby o zmianę terminu..."
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          {/* Info */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+            <p className="text-sm text-amber-800">
+              ℹ️ Masz maksymalnie 3 próby zmiany terminu dla tego wydarzenia.
+            </p>
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+              <p className="text-sm text-red-800" role="alert">
+                ❌ {error}
+              </p>
+            </div>
+          )}
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={handleClose}
+              disabled={isSubmitting}
+              className="flex-1 px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+            >
+              Anuluj
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+            >
+              {isSubmitting ? 'Wysyłanie...' : 'Wyślij prośbę'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default EventChangeRequestModal

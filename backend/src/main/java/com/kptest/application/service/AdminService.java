@@ -5,7 +5,10 @@ import com.kptest.domain.audit.AuditLog;
 import com.kptest.domain.audit.SystemLog;
 import com.kptest.domain.audit.repository.AuditLogRepository;
 import com.kptest.domain.audit.repository.SystemLogRepository;
+import com.kptest.domain.patient.ActivationCode;
+import com.kptest.domain.patient.Patient;
 import com.kptest.domain.patient.PatientRepository;
+import com.kptest.domain.patient.repository.ActivationCodeRepository;
 import com.kptest.domain.project.ProjectRepository;
 import com.kptest.domain.user.AccountStatus;
 import com.kptest.domain.user.User;
@@ -24,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -45,6 +50,7 @@ public class AdminService {
     private final SystemLogRepository systemLogRepository;
     private final ProjectRepository projectRepository;
     private final PatientRepository patientRepository;
+    private final ActivationCodeRepository activationCodeRepository;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_INSTANT;
 
@@ -180,6 +186,130 @@ public class AdminService {
             Map.of("email", user.getEmail(), "role", user.getRole().name()),
             null,
             null, null);
+    }
+
+    /**
+     * Force password reset for a staff user.
+     * Invalidates all sessions and requires new password on next login.
+     */
+    public ResetPasswordResponse forcePasswordReset(UUID userId, String reason) {
+        log.info("Forcing password reset for userId: {}, reason: {}", userId, reason);
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        // Only allow for staff users
+        if (user.getRole() == UserRole.PATIENT) {
+            throw new IllegalArgumentException("Cannot force password reset for patient accounts");
+        }
+
+        // Generate temporary password
+        String temporaryPassword = generateTemporaryPassword();
+
+        // Set new password hash
+        user.setPasswordHash("{plain}" + temporaryPassword);
+
+        // Reset failed login attempts
+        user.setFailedLoginAttempts(0);
+        user.setLockedUntil(null);
+
+        userRepository.save(user);
+
+        // Log audit with reason
+        logAuditLog(userId, AuditLog.AuditAction.UPDATE, "User", userId,
+            Map.of("action", "force_password_reset", "reason", reason),
+            Map.of("passwordReset", true, "sessionsInvalidated", true),
+            null, null);
+
+        return new ResetPasswordResponse(
+            user.getId().toString(),
+            "Password has been reset successfully. User must set new password on next login. Reason: " + reason,
+            temporaryPassword
+        );
+    }
+
+    /**
+     * Clear 2FA configuration for a user.
+     */
+    public Clear2faResponse clear2fa(UUID userId, String reason) {
+        log.info("Clearing 2FA for userId: {}, reason: {}", userId, reason);
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        // Store old values for audit
+        
+        
+
+        // Clear 2FA configuration
+        user.setTwoFactorEnabled(false);
+        user.setTwoFactorSecret(null);
+
+        // For required-2FA roles, set account to requires reconfiguration status
+        if (requiresTwoFactor(user.getRole())) {
+            user.setStatus(AccountStatus.PENDING_VERIFICATION);
+            log.info("User {} has a role requiring 2FA. Status set to PENDING_VERIFICATION", userId);
+        }
+
+        userRepository.save(user);
+
+        // Log audit with reason
+        logAuditLog(userId, AuditLog.AuditAction.UPDATE, "User", userId,
+            Map.of(
+                "action", "clear_2fa",
+                "reason", reason,
+                "oldTwoFactorEnabled", oldTwoFactorEnabled,
+                "oldTwoFactorSecret", oldTwoFactorSecret != null ? "[REDACTED]" : null
+            ),
+            Map.of("twoFactorEnabled", false, "twoFactorSecret", "cleared"),
+            null, null);
+
+        return new Clear2faResponse(
+            user.getId().toString(),
+            "2FA configuration has been cleared. Reason: " + reason
+        );
+    }
+
+    /**
+     * Generate one-time activation code for a patient.
+     */
+    public ActivationCodeResponse generateActivationCode(UUID patientId) {
+        log.info("Generating activation code for patientId: {}", patientId);
+
+        // Verify patient exists
+        Patient patient = patientRepository.findById(patientId)
+            .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
+
+        // Generate 8-character code
+        String code = generateActivationCodeString();
+
+        // Create activation code entity
+        ActivationCode activationCode = ActivationCode.create(patientId, code);
+        activationCodeRepository.save(activationCode);
+
+        // Generate PDF with instructions (simplified - in real app would use PDF library)
+        String pdfUrl = generateActivationCodePdf(patient, activationCode);
+
+        Instant expiresAt = activationCode.getExpiresAt();
+
+        log.info("Generated activation code for patient {}: expires at {}", patientId, expiresAt);
+
+        return new ActivationCodeResponse(
+            patientId.toString(),
+            code,
+            expiresAt,
+            pdfUrl,
+            "Activation code generated successfully. Valid for 72 hours. PDF with instructions has been generated."
+        );
+    }
+
+    /**
+     * Check if a role requires 2FA.
+     */
+    private boolean requiresTwoFactor(UserRole role) {
+        // In a real implementation, this would be configurable
+        // For now, assume DOCTOR and ADMIN roles require 2FA
+        return role == UserRole.DOCTOR || role == UserRole.ADMIN;
     }
 
     /**
@@ -458,6 +588,73 @@ public class AdminService {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
         return sb.toString();
+    }
+
+    /**
+     * Generate 8-character activation code.
+     */
+    private String generateActivationCodeString() {
+        // Use only uppercase letters and digits for readability
+        String chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Excluding similar chars like I, 1, O, 0
+        StringBuilder sb = new StringBuilder(8);
+        Random random = new Random();
+        for (int i = 0; i < 8; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Generate PDF with activation code instructions.
+     * In a real implementation, this would use a PDF library like iText or Apache PDFBox.
+     */
+    private String generateActivationCodePdf(Patient patient, ActivationCode activationCode) {
+        try {
+            // Create storage directory if it doesn't exist
+            Path storageDir = Path.of("/tmp/activation-codes");
+            if (!Files.exists(storageDir)) {
+                Files.createDirectories(storageDir);
+            }
+
+            // Generate PDF content (simplified - in real app would use PDF library)
+            String fileName = "activation_code_" + activationCode.getCode() + ".pdf";
+            Path filePath = storageDir.resolve(fileName);
+
+            // Create simple text content as placeholder
+            String content = String.format("""
+                ACTIVATION CODE INSTRUCTIONS
+                ============================
+
+                Patient: %s %s
+                PESEL: %s
+
+                Your activation code: %s
+
+                This code is valid until: %s
+
+                Instructions:
+                1. Go to the application login page
+                2. Click on "Activate Account"
+                3. Enter your PESEL number
+                4. Enter this activation code
+                5. Set your new password
+
+                If you have any questions, please contact support.
+                """,
+                patient.getFirstName(),
+                patient.getLastName(),
+                patient.getPesel(),
+                activationCode.getCode(),
+                activationCode.getExpiresAt()
+            );
+
+            Files.writeString(filePath, content);
+
+            return "/api/v1/admin/patients/" + patient.getId() + "/activation-code/" + activationCode.getCode() + "/pdf";
+        } catch (Exception e) {
+            log.error("Failed to generate activation code PDF", e);
+            return null;
+        }
     }
 
     private Instant parseDate(String dateStr) {

@@ -623,6 +623,135 @@ class MessageServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("Message Priority Tests")
+    class MessagePriorityTests {
+
+        @Test
+        @DisplayName("shouldSendMessage_WithInfoPriority")
+        void shouldSendMessage_WithInfoPriority() {
+            // Given
+            SendMessageRequest request = new SendMessageRequest("Info message", MessagePriority.INFO, null, null);
+            given(threadRepository.findById(TEST_THREAD_ID)).willReturn(Optional.of(testThread));
+            given(messageRepository.save(any(Message.class))).willReturn(testMessage);
+
+            // When
+            MessageDto result = messageService.sendMessage(TEST_THREAD_ID, request, TEST_USER_ID);
+
+            // Then
+            assertThat(result).isNotNull();
+            ArgumentCaptor<Message> captor = ArgumentCaptor.forClass(Message.class);
+            then(messageRepository).should().save(captor.capture());
+            assertThat(captor.capture().getPriority()).isEqualTo(MessagePriority.INFO);
+        }
+
+        @Test
+        @DisplayName("shouldSendMessage_WithQuestionPriority")
+        void shouldSendMessage_WithQuestionPriority() {
+            // Given
+            SendMessageRequest request = new SendMessageRequest("Question message", MessagePriority.QUESTION, null, null);
+            given(threadRepository.findById(TEST_THREAD_ID)).willReturn(Optional.of(testThread));
+            given(messageRepository.save(any(Message.class))).willReturn(testMessage);
+
+            // When
+            MessageDto result = messageService.sendMessage(TEST_THREAD_ID, request, TEST_USER_ID);
+
+            // Then
+            assertThat(result).isNotNull();
+            ArgumentCaptor<Message> captor = ArgumentCaptor.forClass(Message.class);
+            then(messageRepository).should().save(captor.capture());
+            assertThat(captor.capture().getPriority()).isEqualTo(MessagePriority.QUESTION);
+        }
+
+        @Test
+        @DisplayName("shouldSendMessage_WithUrgentPriority")
+        void shouldSendMessage_WithUrgentPriority() {
+            // Given
+            SendMessageRequest request = new SendMessageRequest("Urgent message", MessagePriority.URGENT, null, null);
+            given(threadRepository.findById(TEST_THREAD_ID)).willReturn(Optional.of(testThread));
+            given(messageRepository.save(any(Message.class))).willReturn(testMessage);
+
+            // When
+            MessageDto result = messageService.sendMessage(TEST_THREAD_ID, request, TEST_USER_ID);
+
+            // Then
+            assertThat(result).isNotNull();
+            ArgumentCaptor<Message> captor = ArgumentCaptor.forClass(Message.class);
+            then(messageRepository).should().save(captor.capture());
+            assertThat(captor.capture().getPriority()).isEqualTo(MessagePriority.URGENT);
+        }
+
+        @Test
+        @DisplayName("shouldCreateMessage_WithCorrectPriority")
+        void shouldCreateMessage_WithCorrectPriority() {
+            // Given
+            Message infoMessage = Message.create(testThread, TEST_USER_ID, "Info", MessagePriority.INFO);
+            Message questionMessage = Message.create(testThread, TEST_USER_ID, "Question", MessagePriority.QUESTION);
+            Message urgentMessage = Message.create(testThread, TEST_USER_ID, "Urgent", MessagePriority.URGENT);
+
+            // When & Then
+            assertThat(infoMessage.getPriority()).isEqualTo(MessagePriority.INFO);
+            assertThat(questionMessage.getPriority()).isEqualTo(MessagePriority.QUESTION);
+            assertThat(urgentMessage.getPriority()).isEqualTo(MessagePriority.URGENT);
+        }
+
+        @Test
+        @DisplayName("shouldMessageToString_IncludePriority")
+        void shouldMessageToString_IncludePriority() {
+            // Given
+            Message message = Message.create(testThread, TEST_USER_ID, "Test", MessagePriority.URGENT);
+
+            // When
+            String result = message.toString();
+
+            // Then
+            assertThat(result).contains("URGENT");
+        }
+
+        @Test
+        @DisplayName("shouldMessageEquals_ConsiderPriority")
+        void shouldMessageEquals_ConsiderPriority() {
+            // Given
+            Message message1 = Message.create(testThread, TEST_USER_ID, "Test", MessagePriority.INFO);
+            Message message2 = Message.create(testThread, TEST_USER_ID, "Test", MessagePriority.INFO);
+            Message message3 = Message.create(testThread, TEST_USER_ID, "Test", MessagePriority.URGENT);
+
+            // When & Then
+            assertThat(message1.getPriority()).isEqualTo(message2.getPriority());
+            assertThat(message1.getPriority()).isNotEqualTo(message3.getPriority());
+        }
+    }
+
+    @Nested
+    @DisplayName("MessagePriority Enum Tests")
+    class MessagePriorityEnumTests {
+
+        @Test
+        @DisplayName("shouldHaveAllPriorityValues")
+        void shouldHaveAllPriorityValues() {
+            // When & Then
+            assertThat(MessagePriority.values()).containsExactly(MessagePriority.INFO, MessagePriority.QUESTION, MessagePriority.URGENT);
+        }
+
+        @Test
+        @DisplayName("shouldValueOf_WithValidValues")
+        void shouldValueOf_WithValidValues() {
+            // When & Then
+            assertThat(MessagePriority.valueOf("INFO")).isEqualTo(MessagePriority.INFO);
+            assertThat(MessagePriority.valueOf("QUESTION")).isEqualTo(MessagePriority.QUESTION);
+            assertThat(MessagePriority.valueOf("URGENT")).isEqualTo(MessagePriority.URGENT);
+        }
+
+        @Test
+        @DisplayName("shouldOrdinal_HaveCorrectOrder")
+        void shouldOrdinal_HaveCorrectOrder() {
+            // When & Then
+            assertThat(MessagePriority.INFO.ordinal()).isEqualTo(0);
+            assertThat(MessagePriority.QUESTION.ordinal()).isEqualTo(1);
+            assertThat(MessagePriority.URGENT.ordinal()).isEqualTo(2);
+        }
+    }
+
     private MessageAttachment createTestAttachment() {
         MessageAttachment attachment = MessageAttachment.create(
             testMessage,
