@@ -1,5 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
+import { setupNotificationNavigationListener } from '../../src/features/notifications/services/pushRegistration';
 
 // Configure notification behavior
 Notifications.setNotificationHandler({
@@ -42,8 +43,8 @@ export async function setupNotifications(): Promise<void> {
       // TODO: Send token to backend
     }
 
-    // Setup notification listener
-    setupNotificationListeners();
+    // Setup notification listener for navigation
+    setupNotificationNavigationListener();
   } catch (error) {
     console.error('Error setting up notifications:', error);
   }

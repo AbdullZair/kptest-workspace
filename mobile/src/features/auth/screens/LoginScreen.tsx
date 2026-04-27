@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useLoginMutation, useSend2FAMutation } from '@features/auth/api/authApi';
 import { setCredentials } from '@features/auth/slices/authSlice';
 import { useAppDispatch } from '@app/store';
+import { registerForPushAsync } from '@features/notifications/services/pushRegistration';
 import { colors, spacing, typography, borderRadius, shadows } from '@app/theme';
 import { ACCESSIBILITY_LABELS } from '@shared/utils/accessibility';
 import { AccessibleButton } from '@shared/components/AccessibleButton';
@@ -53,6 +54,8 @@ export function LoginScreen(): JSX.Element {
             refreshToken: result.refreshToken,
           })
         );
+        // Register for push notifications after successful login
+        await registerForPushAsync();
       }
     } catch (error: any) {
       Alert.alert(
