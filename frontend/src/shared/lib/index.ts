@@ -7,6 +7,7 @@ export {
   isPast,
   isFuture,
   getAge,
+  isWithin30Days,
   DATE_FORMATS,
 } from './date'
 export {

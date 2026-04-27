@@ -27,3 +27,13 @@ export type { Clear2faButtonProps } from './Clear2faButton'
 
 export { GenerateActivationCodeButton } from './GenerateActivationCodeButton'
 export type { GenerateActivationCodeButtonProps } from './GenerateActivationCodeButton'
+
+// RODO components
+export { AnonymizePatientDialog } from './AnonymizePatientDialog'
+export type { AnonymizePatientDialogProps } from './AnonymizePatientDialog'
+
+export { ExportPatientDataButton } from './ExportPatientDataButton'
+export type { ExportPatientDataButtonProps } from './ExportPatientDataButton'
+
+export { ErasePatientDialog } from './ErasePatientDialog'
+export type { ErasePatientDialogProps } from './ErasePatientDialog'

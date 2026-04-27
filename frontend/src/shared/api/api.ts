@@ -303,6 +303,8 @@ export const api = createApi({
     'SystemLog',
     'SystemHealth',
     'SystemMetrics',
+    'PatientData',
+    'DataProcessingActivity',
   ],
   endpoints: () => ({}),
 })

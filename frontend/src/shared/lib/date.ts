@@ -218,6 +218,30 @@ export const getAge = (birthDate: Date | string | number): number => {
   }
 }
 
+/**
+ * Check if a date is within the last 30 days
+ *
+ * @param date - Date to check (ISO string or Date object)
+ * @returns Whether the date is within the last 30 days
+ *
+ * @example
+ * ```tsx
+ * isWithin30Days('2024-04-01') // true if within 30 days
+ * ```
+ */
+export const isWithin30Days = (date: Date | string | number): boolean => {
+  try {
+    const parsedDate = typeof date === 'string' ? parseISO(date) : new Date(date)
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+    return parsedDate >= thirtyDaysAgo
+  } catch (error) {
+    console.error('[isWithin30Days] Error checking date:', error)
+    return false
+  }
+}
+
 export default {
   formatDate,
   formatRelativeTime,
@@ -226,5 +250,6 @@ export default {
   isPast,
   isFuture,
   getAge,
+  isWithin30Days,
   DATE_FORMATS,
 }

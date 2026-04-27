@@ -67,6 +67,8 @@ const AdminUsersPage = lazy(() => import('@features/admin/ui/AdminUsersPage'))
 const AdminAuditLogsPage = lazy(() => import('@features/admin/ui/AdminAuditLogsPage'))
 const AdminSystemPage = lazy(() => import('@features/admin/ui/AdminSystemPage'))
 const AdminSystemLogsPage = lazy(() => import('@features/admin/ui/AdminSystemLogsPage'))
+const PatientDataAdminPage = lazy(() => import('@features/admin/ui/PatientDataAdminPage'))
+const DataProcessingActivitiesPage = lazy(() => import('@features/admin/ui/DataProcessingActivitiesPage'))
 
 /**
  * Route configuration
@@ -325,6 +327,22 @@ export const routes: RouteObject[] = [
         element: (
           <Suspense fallback={<PageLoader />}>
             <AdminSystemLogsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'admin/patients/:id/data',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PatientDataAdminPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'admin/data-processing-activities',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <DataProcessingActivitiesPage />
           </Suspense>
         ),
       },

@@ -14,6 +14,15 @@ import type {
   UpdateUserRoleRequest,
   UpdateUserStatusRequest,
   ExportLogsRequest,
+  PatientDataAdmin,
+  AnonymizePatientRequest,
+  AnonymizationResponse,
+  ExportFormat,
+  ErasePatientRequest,
+  ErasureResponse,
+  DataProcessingActivity,
+  DataProcessingActivityFilters,
+  DataProcessingActivityInput,
 } from '../types'
 
 /**
@@ -243,6 +252,113 @@ export const adminApiSlice = api.injectEndpoints({
         method: 'POST',
       }),
     }),
+
+    // ==================== RODO / PATIENT DATA ====================
+
+    /**
+     * Get patient data for admin view
+     */
+    getPatientData: builder.query<PatientDataAdmin, string>({
+      query: (patientId) => `/admin/patients/${patientId}/data`,
+      providesTags: ['PatientData'],
+    }),
+
+    /**
+     * Anonymize patient data
+     */
+    anonymizePatient: builder.mutation<AnonymizationResponse, { patientId: string; body: AnonymizePatientRequest }>({
+      query: ({ patientId, body }) => ({
+        url: `/admin/patients/${patientId}/anonymize`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['PatientData', 'AdminUser', 'AuditLog'],
+    }),
+
+    /**
+     * Export patient data (RODO Art. 20)
+     */
+    exportPatientData: builder.mutation<Blob, { patientId: string; format: ExportFormat }>({
+      query: ({ patientId, format }) => ({
+        url: `/admin/patients/${patientId}/export-data?format=${format}`,
+        method: 'GET',
+        responseHandler: (response: Response) => response.blob(),
+      }),
+    }),
+
+    /**
+     * Erase patient data (RODO Art. 17)
+     */
+    erasePatient: builder.mutation<ErasureResponse, { patientId: string; body: ErasePatientRequest }>({
+      query: ({ patientId, body }) => ({
+        url: `/admin/patients/${patientId}/erase`,
+        method: 'DELETE',
+        body,
+      }),
+      invalidatesTags: ['PatientData', 'AdminUser', 'AuditLog'],
+    }),
+
+    // ==================== DATA PROCESSING ACTIVITIES ====================
+
+    /**
+     * Get all data processing activities
+     */
+    getDataProcessingActivities: builder.query<PageResponse<DataProcessingActivity>, DataProcessingActivityFilters>({
+      query: (filters) => {
+        const params = new URLSearchParams()
+        if (filters.legal_basis) params.append('legalBasis', filters.legal_basis)
+        if (filters.date_from) params.append('dateFrom', filters.date_from)
+        if (filters.date_to) params.append('dateTo', filters.date_to)
+        if (filters.page !== undefined) params.append('page', filters.page.toString())
+        if (filters.size !== undefined) params.append('size', filters.size.toString())
+
+        return `/admin/data-processing-activities?${params.toString()}`
+      },
+      providesTags: ['DataProcessingActivity'],
+    }),
+
+    /**
+     * Get data processing activity by ID
+     */
+    getDataProcessingActivityById: builder.query<DataProcessingActivity, string>({
+      query: (id) => `/admin/data-processing-activities/${id}`,
+      providesTags: ['DataProcessingActivity'],
+    }),
+
+    /**
+     * Create data processing activity
+     */
+    createDataProcessingActivity: builder.mutation<DataProcessingActivity, DataProcessingActivityInput>({
+      query: (body) => ({
+        url: '/admin/data-processing-activities',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['DataProcessingActivity'],
+    }),
+
+    /**
+     * Update data processing activity
+     */
+    updateDataProcessingActivity: builder.mutation<DataProcessingActivity, { id: string; body: DataProcessingActivityInput }>({
+      query: ({ id, body }) => ({
+        url: `/admin/data-processing-activities/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['DataProcessingActivity'],
+    }),
+
+    /**
+     * Delete data processing activity
+     */
+    deleteDataProcessingActivity: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/admin/data-processing-activities/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['DataProcessingActivity'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -269,6 +385,17 @@ export const {
   useGetSystemMetricsQuery,
   useClearCacheMutation,
   useCreateBackupMutation,
+  // RODO / Patient Data
+  useGetPatientDataQuery,
+  useAnonymizePatientMutation,
+  useExportPatientDataMutation,
+  useErasePatientMutation,
+  // Data Processing Activities
+  useGetDataProcessingActivitiesQuery,
+  useGetDataProcessingActivityByIdQuery,
+  useCreateDataProcessingActivityMutation,
+  useUpdateDataProcessingActivityMutation,
+  useDeleteDataProcessingActivityMutation,
 } = adminApiSlice
 
 export default adminApiSlice

@@ -278,3 +278,207 @@ export interface ActivationCodeResponse {
   pdf_url?: string
   message: string
 }
+
+// ==================== RODO / PATIENT DATA ====================
+
+/**
+ * Patient data for admin view
+ */
+export interface PatientDataAdmin {
+  patient_id: string
+  user_id?: string
+  pesel: string
+  first_name: string
+  last_name: string
+  email: string
+  phone?: string
+  date_of_birth: string
+  address_street?: string
+  address_city?: string
+  address_postal_code?: string
+  created_at: string
+  updated_at: string
+  deleted_at?: string
+  anonymized_at?: string
+  projects: PatientProjectData[]
+}
+
+/**
+ * Patient project association
+ */
+export interface PatientProjectData {
+  project_id: string
+  project_name: string
+  role: 'PATIENT' | 'GUARDIAN'
+  enrolled_at: string
+  active: boolean
+}
+
+/**
+ * Anonymization reason enum
+ */
+export type AnonymizationReason = 'treatment' | 'patient_request' | 'other'
+
+/**
+ * Anonymization request
+ */
+export interface AnonymizePatientRequest {
+  reason: AnonymizationReason
+  additional_notes?: string
+}
+
+/**
+ * Anonymization response
+ */
+export interface AnonymizationResponse {
+  patient_id: string
+  anonymized_at: string
+  audit_log_id: string
+  message: string
+}
+
+/**
+ * Export format enum
+ */
+export type ExportFormat = 'json' | 'pdf'
+
+/**
+ * Patient data export DTO
+ */
+export interface PatientDataExport {
+  patient: PatientDataAdmin
+  projects: PatientProjectData[]
+  messages: ExportedMessage[]
+  materials: ExportedMaterialProgress[]
+  events: ExportedCalendarEvent[]
+  quiz_attempts: ExportedQuizAttempt[]
+  badges: ExportedPatientBadge[]
+  audit_logs: AuditLog[]
+}
+
+/**
+ * Exported message for data export
+ */
+export interface ExportedMessage {
+  message_id: string
+  thread_id: string
+  sender_id?: string
+  content: string
+  created_at: string
+}
+
+/**
+ * Exported material progress
+ */
+export interface ExportedMaterialProgress {
+  progress_id: string
+  material_id: string
+  material_name: string
+  completed: boolean
+  completed_at?: string
+}
+
+/**
+ * Exported calendar event
+ */
+export interface ExportedCalendarEvent {
+  event_id: string
+  title: string
+  description?: string
+  start_time: string
+  end_time: string
+  location?: string
+}
+
+/**
+ * Exported quiz attempt
+ */
+export interface ExportedQuizAttempt {
+  attempt_id: string
+  quiz_id: string
+  quiz_name: string
+  score: number
+  completed_at: string
+}
+
+/**
+ * Exported patient badge
+ */
+export interface ExportedPatientBadge {
+  badge_id: string
+  badge_name: string
+  badge_description: string
+  earned_at: string
+}
+
+/**
+ * Erasure request
+ */
+export interface ErasePatientRequest {
+  reason: string
+  confirm: boolean
+  force?: boolean
+}
+
+/**
+ * Erasure response
+ */
+export interface ErasureResponse {
+  patient_id: string
+  erased_at: string
+  records_deleted: number
+  audit_log_id: string
+  message: string
+}
+
+// ==================== DATA PROCESSING ACTIVITIES ====================
+
+/**
+ * Legal basis for data processing
+ */
+export type LegalBasis = 'CONSENT' | 'CONTRACT' | 'LEGAL_OBLIGATION' | 'VITAL_INTEREST' | 'PUBLIC_TASK' | 'LEGITIMATE_INTEREST'
+
+/**
+ * Data Processing Activity DTO
+ */
+export interface DataProcessingActivity {
+  id: string
+  name: string
+  purpose: string
+  legal_basis: LegalBasis
+  categories: string[]
+  recipients: string[]
+  retention_period: string
+  security_measures: string
+  data_controller: string
+  data_processor?: string
+  created_by: string
+  created_at: string
+  updated_at: string
+}
+
+/**
+ * Data Processing Activity filters
+ */
+export interface DataProcessingActivityFilters {
+  legal_basis?: LegalBasis
+  date_from?: string
+  date_to?: string
+  page?: number
+  size?: number
+}
+
+/**
+ * Create/Update Data Processing Activity
+ */
+export interface DataProcessingActivityInput {
+  name: string
+  purpose: string
+  legal_basis: LegalBasis
+  categories: string[]
+  recipients: string[]
+  retention_period: string
+  security_measures: string
+  data_controller: string
+  data_processor?: string
+}
