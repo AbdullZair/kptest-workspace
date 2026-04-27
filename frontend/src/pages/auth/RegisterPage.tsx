@@ -2,6 +2,7 @@ import { type FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
 import { useAuth, registerSchema, type RegisterFormData } from '@features/auth'
 import { Button, Input, Card } from '@shared/components'
 
@@ -11,6 +12,7 @@ import { Button, Input, Card } from '@shared/components'
  * Authentication page for user registration
  */
 export const RegisterPage = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { register: registerUser, error, clearAuthError } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -73,8 +75,8 @@ export const RegisterPage = () => {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-neutral-900">Utwórz konto</h1>
-          <p className="text-neutral-600 mt-2">Dołącz do KPTEST Portal</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('auth.register.title')}</h1>
+          <p className="text-neutral-600 mt-2">{t('auth.register.subtitle')}</p>
         </div>
 
         {/* Error message */}
@@ -88,16 +90,16 @@ export const RegisterPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Imię"
-              placeholder="Jan"
+              label={t('auth.register.firstName')}
+              placeholder={t('auth.register.firstNamePlaceholder')}
               error={errors.firstName?.message}
               fullWidth
               {...register('firstName')}
             />
 
             <Input
-              label="Nazwisko"
-              placeholder="Kowalski"
+              label={t('auth.register.lastName')}
+              placeholder={t('auth.register.lastNamePlaceholder')}
               error={errors.lastName?.message}
               fullWidth
               {...register('lastName')}
@@ -105,37 +107,37 @@ export const RegisterPage = () => {
           </div>
 
           <Input
-            label="Email"
+            label={t('auth.register.email')}
             type="email"
-            placeholder="wpisz@email.pl"
+            placeholder={t('auth.register.emailPlaceholder')}
             error={errors.email?.message}
             fullWidth
             {...register('email')}
           />
 
           <Input
-            label="Telefon"
+            label={t('auth.register.phone')}
             type="tel"
-            placeholder="+48 123 456 789"
+            placeholder={t('auth.register.phonePlaceholder')}
             error={errors.phone?.message}
             fullWidth
             {...register('phone')}
           />
 
           <Input
-            label="Hasło"
+            label={t('auth.register.password')}
             type="password"
-            placeholder="••••••••"
+            placeholder={t('auth.register.passwordPlaceholder')}
             error={errors.password?.message}
-            helperText="Min. 8 znaków, wielka i mała litera, cyfra"
+            helperText={t('auth.register.passwordHint')}
             fullWidth
             {...register('password')}
           />
 
           <Input
-            label="Potwierdź hasło"
+            label={t('auth.register.confirmPassword')}
             type="password"
-            placeholder="••••••••"
+            placeholder={t('auth.register.confirmPasswordPlaceholder')}
             error={errors.confirmPassword?.message}
             fullWidth
             {...register('confirmPassword')}
@@ -149,13 +151,13 @@ export const RegisterPage = () => {
               {...register('acceptTerms')}
             />
             <label htmlFor="acceptTerms" className="ml-2 text-sm text-neutral-700">
-              Akceptuję{' '}
+              {t('auth.register.acceptTerms')}{' '}
               <a href="/regulamin" className="text-primary-600 hover:underline" target="_blank">
-                regulamin
+                {t('auth.register.terms')}
               </a>{' '}
-              i{' '}
+              {t('auth.register.and')}{' '}
               <a href="/polityka" className="text-primary-600 hover:underline" target="_blank">
-                politykę prywatności
+                {t('auth.register.privacyPolicy')}
               </a>
             </label>
           </div>
@@ -170,15 +172,15 @@ export const RegisterPage = () => {
             fullWidth
             loading={isSubmitting}
           >
-            Utwórz konto
+            {t('auth.register.submit')}
           </Button>
         </form>
 
         {/* Login link */}
         <p className="mt-8 text-center text-sm text-neutral-600">
-          Masz już konto?{' '}
+          {t('auth.register.hasAccount')}{' '}
           <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
-            Zaloguj się
+            {t('auth.register.login')}
           </Link>
         </p>
       </Card>

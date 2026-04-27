@@ -2,6 +2,7 @@ import { type FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
 import { useAuth, loginSchema, type LoginFormData } from '@features/auth'
 import { Button, Input, Card } from '@shared/components'
 import { cn } from '@shared/lib'
@@ -12,6 +13,7 @@ import { cn } from '@shared/lib'
  * Authentication page for user login
  */
 export const LoginPage = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { login, error, clearAuthError } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -80,8 +82,8 @@ export const LoginPage = () => {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-neutral-900">KPTEST Portal</h1>
-          <p className="text-neutral-600 mt-2">Zaloguj się do systemu medycznego</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('auth.login.title')}</h1>
+          <p className="text-neutral-600 mt-2">{t('auth.login.subtitle')}</p>
         </div>
 
         {/* Error message */}
@@ -103,9 +105,9 @@ export const LoginPage = () => {
         {/* Login form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <Input
-            label="Email"
+            label={t('auth.login.email')}
             type="email"
-            placeholder="wpisz@email.pl"
+            placeholder={t('auth.login.emailPlaceholder')}
             autoComplete="email"
             error={errors.email?.message}
             fullWidth
@@ -114,9 +116,9 @@ export const LoginPage = () => {
 
           <div>
             <Input
-              label="Hasło"
+              label={t('auth.login.password')}
               type="password"
-              placeholder="••••••••"
+              placeholder={t('auth.login.passwordPlaceholder')}
               autoComplete="current-password"
               error={errors.password?.message}
               fullWidth
@@ -127,7 +129,7 @@ export const LoginPage = () => {
                 to="/forgot-password"
                 className="text-sm text-primary-600 hover:text-primary-700"
               >
-                Zapomniałeś hasła?
+                {t('auth.login.forgotPassword')}
               </Link>
             </div>
           </div>
@@ -140,7 +142,7 @@ export const LoginPage = () => {
               {...register('rememberMe')}
             />
             <label htmlFor="rememberMe" className="ml-2 text-sm text-neutral-700">
-              Zapamiętaj mnie
+              {t('auth.login.rememberMe')}
             </label>
           </div>
 
@@ -151,7 +153,7 @@ export const LoginPage = () => {
             fullWidth
             loading={isSubmitting}
           >
-            Zaloguj się
+            {t('auth.login.submit')}
           </Button>
         </form>
 
@@ -165,15 +167,15 @@ export const LoginPage = () => {
             onClick={handleDemoLogin}
             disabled={isSubmitting}
           >
-            Zaloguj jako demo
+            {t('auth.login.demoLogin')}
           </Button>
         </div>
 
         {/* Register link */}
         <p className="mt-8 text-center text-sm text-neutral-600">
-          Nie masz konta?{' '}
+          {t('auth.login.noAccount')}{' '}
           <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
-            Zarejestruj się
+            {t('auth.login.register')}
           </Link>
         </p>
       </Card>
