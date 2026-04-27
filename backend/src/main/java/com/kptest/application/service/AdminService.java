@@ -5,11 +5,30 @@ import com.kptest.domain.audit.AuditLog;
 import com.kptest.domain.audit.SystemLog;
 import com.kptest.domain.audit.repository.AuditLogRepository;
 import com.kptest.domain.audit.repository.SystemLogRepository;
+import com.kptest.domain.gamification.Badge;
+import com.kptest.domain.gamification.PatientBadge;
+import com.kptest.domain.gamification.repository.BadgeRepository;
+import com.kptest.domain.gamification.repository.PatientBadgeRepository;
+import com.kptest.domain.material.EducationalMaterial;
+import com.kptest.domain.material.MaterialProgress;
+import com.kptest.domain.material.repository.EducationalMaterialRepository;
+import com.kptest.domain.material.repository.MaterialProgressRepository;
+import com.kptest.domain.message.Message;
+import com.kptest.domain.message.repository.MessageRepository;
 import com.kptest.domain.patient.ActivationCode;
 import com.kptest.domain.patient.Patient;
 import com.kptest.domain.patient.PatientRepository;
 import com.kptest.domain.patient.repository.ActivationCodeRepository;
+import com.kptest.domain.project.PatientProject;
+import com.kptest.domain.project.PatientProjectRepository;
+import com.kptest.domain.project.Project;
 import com.kptest.domain.project.ProjectRepository;
+import com.kptest.domain.quiz.Quiz;
+import com.kptest.domain.quiz.QuizAttempt;
+import com.kptest.domain.quiz.repository.QuizAttemptRepository;
+import com.kptest.domain.quiz.repository.QuizRepository;
+import com.kptest.domain.schedule.TherapyEvent;
+import com.kptest.domain.schedule.repository.TherapyEventRepository;
 import com.kptest.domain.user.AccountStatus;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRepository;
@@ -22,11 +41,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.annotation.PostConstruct;
+
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -35,6 +58,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
  * Admin service for user management, audit logs, and system operations.
@@ -51,8 +78,25 @@ public class AdminService {
     private final ProjectRepository projectRepository;
     private final PatientRepository patientRepository;
     private final ActivationCodeRepository activationCodeRepository;
+    private final PatientProjectRepository patientProjectRepository;
+    private final MessageRepository messageRepository;
+    private final MaterialProgressRepository materialProgressRepository;
+    private final EducationalMaterialRepository educationalMaterialRepository;
+    private final TherapyEventRepository therapyEventRepository;
+    private final QuizAttemptRepository quizAttemptRepository;
+    private final QuizRepository quizRepository;
+    private final PatientBadgeRepository patientBadgeRepository;
+    private final BadgeRepository badgeRepository;
+    private ObjectMapper objectMapper;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_INSTANT;
+
+    @PostConstruct
+    private void init() {
+        this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new JavaTimeModule());
+        this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     /**
      * Get all users with filters.
@@ -782,5 +826,266 @@ public class AdminService {
             log.error("Failed to export system logs to JSON", e);
         }
         return new ByteArrayResource(outputStream.toByteArray());
+    }
+
+    // ==================== RODO: PATIENT ANONYMIZATION (US-A-10) ====================
+
+    /**
+     * Anonymize patient data (RODO Art. 17 - right to erasure via anonymization).
+     * Replaces personal data with anonymized values while preserving:
+     * - Patient ID (UUID)
+     * - PatientProject relationships
+     * - AuditLog entries
+     */
+    public AnonymizationResponse anonymizePatient(UUID patientId, UUID currentUserId) {
+        log.info("Anonymizing patient with ID: {}", patientId);
+
+        Patient patient = patientRepository.findById(patientId)
+            .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
+
+        // Store old values for audit
+        Map<String, Object> oldValues = new HashMap<>();
+        oldValues.put("pesel", patient.getPesel());
+        oldValues.put("firstName", patient.getFirstName());
+        oldValues.put("lastName", patient.getLastName());
+        oldValues.put("dateOfBirth", patient.getDateOfBirth());
+        oldValues.put("addressStreet", patient.getAddressStreet());
+        oldValues.put("addressCity", patient.getAddressCity());
+        oldValues.put("addressPostalCode", patient.getAddressPostalCode());
+
+        if (patient.getUser() != null) {
+            oldValues.put("email", patient.getUser().getEmail());
+            oldValues.put("phone", patient.getUser().getPhone());
+        }
+
+        // Generate anonymized values
+        String anonymizedPesel = "XXXXXXXXXXX-" + generatePeselHash(patient);
+        String anonymizedLastName = "ANON-" + generateSequenceSuffix(patientId);
+        String anonymizedEmail = "anon-" + patientId + "@deleted.local";
+
+        // Apply anonymization to Patient
+        patient.setPesel(anonymizedPesel);
+        patient.setFirstName("ANON");
+        patient.setLastName(anonymizedLastName);
+        patient.setDateOfBirth(null);
+        patient.setAddressStreet(null);
+        patient.setAddressCity(null);
+        patient.setAddressPostalCode(null);
+
+        // Apply anonymization to associated User
+        if (patient.getUser() != null) {
+            User user = patient.getUser();
+            user.setEmail(anonymizedEmail);
+            user.setPhone(null);
+            userRepository.save(user);
+        }
+
+        patientRepository.save(patient);
+
+        // Create audit log with ANONYMIZE action
+        AuditLog auditLog = AuditLog.create(
+            currentUserId,
+            AuditLog.AuditAction.UPDATE,
+            "Patient",
+            patientId
+        );
+        auditLog.setOldValue(convertToJson(oldValues));
+        Map<String, Object> newValues = new HashMap<>();
+        newValues.put("pesel", anonymizedPesel);
+        newValues.put("firstName", "ANON");
+        newValues.put("lastName", anonymizedLastName);
+        newValues.put("email", anonymizedEmail);
+        newValues.put("phone", null);
+        newValues.put("dateOfBirth", null);
+        newValues.put("addressStreet", null);
+        newValues.put("addressCity", null);
+        newValues.put("addressPostalCode", null);
+        auditLog.setNewValue(convertToJson(newValues));
+        auditLogRepository.save(auditLog);
+
+        log.info("Patient {} anonymized successfully. Audit log ID: {}", patientId, auditLog.getId());
+
+        return AnonymizationResponse.of(patientId, Instant.now(), auditLog.getId());
+    }
+
+    /**
+     * Generate hash for PESEL anonymization.
+     */
+    private String generatePeselHash(Patient patient) {
+        String input = patient.getId() + "_" + patient.getPesel() + "_" + System.currentTimeMillis();
+        return Integer.toHexString(input.hashCode()).toUpperCase();
+    }
+
+    /**
+     * Generate sequence suffix for anonymized last name.
+     */
+    private String generateSequenceSuffix(UUID patientId) {
+        return patientId.toString().substring(0, 8).toUpperCase();
+    }
+
+    // ==================== RODO: PATIENT DATA EXPORT (US-A-11) ====================
+
+    /**
+     * Export patient data (RODO Art. 20 - right to data portability).
+     * Exports all personal data and related entities in JSON or PDF format.
+     */
+    @Transactional(readOnly = true)
+    public Object exportPatientData(UUID patientId, String format) {
+        log.info("Exporting patient data for ID: {}, format: {}", patientId, format);
+
+        Patient patient = patientRepository.findById(patientId)
+            .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
+
+        Instant exportGeneratedAt = Instant.now();
+
+        // Build patient personal data
+        PatientDataExportDto.PatientPersonalData patientData =
+            PatientDataExportDto.PatientPersonalData.fromPatient(patient, patient.getUser());
+
+        // Build therapeutic projects
+        List<PatientDataExportDto.PatientProjectData> therapeuticProjects =
+            patientProjectRepository.findByPatientId(patientId).stream()
+                .map(PatientDataExportDto.PatientProjectData::fromPatientProject)
+                .toList();
+
+        // Build messages - find threads for this patient via patient_projects
+        List<PatientDataExportDto.MessageData> messages = new ArrayList<>();
+        // Messages are linked via threads - simplified: get all messages where sender is patient's user
+        if (patient.getUser() != null) {
+            messages = messageRepository.findBySenderId(patient.getUser().getId()).stream()
+                .map(PatientDataExportDto.MessageData::fromMessage)
+                .toList();
+        }
+
+        // Build material progress
+        List<PatientDataExportDto.MaterialProgressData> materialProgress =
+            materialProgressRepository.findByPatientId(patientId).stream()
+                .map(progress -> {
+                    EducationalMaterial material = educationalMaterialRepository.findById(progress.getMaterialId()).orElse(null);
+                    String materialTitle = material != null ? material.getTitle() : null;
+                    return PatientDataExportDto.MaterialProgressData.fromMaterialProgress(progress, materialTitle);
+                })
+                .toList();
+
+        // Build therapy events
+        List<PatientDataExportDto.TherapyEventData> therapyEvents =
+            therapyEventRepository.findByPatientId(patientId).stream()
+                .map(PatientDataExportDto.TherapyEventData::fromTherapyEvent)
+                .toList();
+
+        // Build quiz attempts
+        List<PatientDataExportDto.QuizAttemptData> quizAttempts =
+            quizAttemptRepository.findByPatientId(patientId).stream()
+                .map(attempt -> {
+                    Quiz quiz = quizRepository.findById(attempt.getQuiz().getId()).orElse(null);
+                    return new PatientDataExportDto.QuizAttemptData(
+                        attempt.getId(),
+                        attempt.getQuiz() != null ? attempt.getQuiz().getId() : null,
+                        attempt.getQuiz() != null ? attempt.getQuiz().getTitle() : null,
+                        attempt.getScore(),
+                        attempt.getCompletedAt()
+                    );
+                })
+                .toList();
+
+        // Build badges
+        List<PatientDataExportDto.PatientBadgeData> badges =
+            patientBadgeRepository.findByPatientIdOrderByEarnedAtDesc(patientId).stream()
+                .map(patientBadge -> {
+                    Badge badge = patientBadge.getBadge();
+                    return new PatientDataExportDto.PatientBadgeData(
+                        badge != null ? badge.getId() : null,
+                        badge != null ? badge.getName() : null,
+                        badge != null ? badge.getDescription() : null,
+                        patientBadge.getEarnedAt()
+                    );
+                })
+                .toList();
+
+        // Build audit logs for this patient
+        List<PatientDataExportDto.AuditLogData> auditLogs =
+            auditLogRepository.findByEntityTypeAndEntityId("Patient", patientId).stream()
+                .map(PatientDataExportDto.AuditLogData::fromAuditLog)
+                .toList();
+
+        PatientDataExportDto exportDto = PatientDataExportDto.of(
+            exportGeneratedAt,
+            patientId,
+            patientData,
+            therapeuticProjects,
+            messages,
+            materialProgress,
+            therapyEvents,
+            quizAttempts,
+            badges,
+            auditLogs
+        );
+
+        if ("PDF".equalsIgnoreCase(format)) {
+            return exportPatientDataAsPdf(exportDto);
+        } else {
+            // Default to JSON
+            return exportPatientDataAsJson(exportDto);
+        }
+    }
+
+    /**
+     * Export patient data as JSON.
+     */
+    private ResponseEntity<byte[]> exportPatientDataAsJson(PatientDataExportDto exportDto) {
+        try {
+            byte[] jsonBytes = objectMapper.writeValueAsBytes(exportDto);
+
+            return ResponseEntity.ok()
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=\"patient_data_" + exportDto.patientId() + ".json\"")
+                .body(jsonBytes);
+        } catch (Exception e) {
+            log.error("Failed to export patient data as JSON", e);
+            throw new RuntimeException("Failed to export patient data as JSON", e);
+        }
+    }
+
+    /**
+     * Export patient data as PDF (simplified - returns plain text in prod would use PDF library).
+     */
+    private ResponseEntity<byte[]> exportPatientDataAsPdf(PatientDataExportDto exportDto) {
+        try {
+            StringBuilder pdf = new StringBuilder();
+            pdf.append("PATIENT DATA EXPORT (RODO Art. 20)\n");
+            pdf.append("=================================\n\n");
+            pdf.append("Export Generated: ").append(exportDto.exportGeneratedAt()).append("\n");
+            pdf.append("Patient ID: ").append(exportDto.patientId()).append("\n\n");
+
+            pdf.append("PERSONAL DATA\n");
+            pdf.append("-------------\n");
+            pdf.append("PESEL: ").append(exportDto.patientData().pesel()).append("\n");
+            pdf.append("Name: ").append(exportDto.patientData().firstName())
+                .append(" ").append(exportDto.patientData().lastName()).append("\n");
+            pdf.append("Email: ").append(exportDto.patientData().email()).append("\n");
+            pdf.append("Phone: ").append(exportDto.patientData().phone()).append("\n");
+            pdf.append("Date of Birth: ").append(exportDto.patientData().dateOfBirth()).append("\n");
+            pdf.append("Address: ").append(exportDto.patientData().addressStreet())
+                .append(", ").append(exportDto.patientData().addressCity())
+                .append(" ").append(exportDto.patientData().addressPostalCode()).append("\n\n");
+
+            pdf.append("THERAPEUTIC PROJECTS: ").append(exportDto.therapeuticProjects().size()).append("\n");
+            pdf.append("MESSAGES: ").append(exportDto.messages().size()).append("\n");
+            pdf.append("MATERIAL PROGRESS: ").append(exportDto.materialProgress().size()).append("\n");
+            pdf.append("THERAPY EVENTS: ").append(exportDto.therapyEvents().size()).append("\n");
+            pdf.append("QUIZ ATTEMPTS: ").append(exportDto.quizAttempts().size()).append("\n");
+            pdf.append("BADGES: ").append(exportDto.badges().size()).append("\n");
+            pdf.append("AUDIT LOGS: ").append(exportDto.auditLogs().size()).append("\n");
+
+            return ResponseEntity.ok()
+                .contentType(org.springframework.http.MediaType.parseMediaType("application/pdf"))
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=\"patient_data_" + exportDto.patientId() + ".pdf\"")
+                .body(pdf.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            log.error("Failed to export patient data as PDF", e);
+            throw new RuntimeException("Failed to export patient data as PDF", e);
+        }
     }
 }

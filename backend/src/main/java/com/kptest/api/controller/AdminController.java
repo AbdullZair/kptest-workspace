@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -447,6 +448,65 @@ public class AdminController {
         } catch (Exception e) {
             log.error("Failed to create backup", e);
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // ==================== RODO: PATIENT DATA MANAGEMENT ====================
+
+    /**
+     * Anonymize patient data (US-A-10).
+     * Replaces personal data with anonymized values while preserving ID and relationships.
+     */
+    @PostMapping("/patients/{id}/anonymize")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Anonymize patient data", description = "US-A-10: Anonymizes patient personal data (RODO Art. 17). Replaces PESEL, name, email, phone, date of birth, and address with anonymized values.")
+    public ResponseEntity<AnonymizationResponse> anonymizePatient(
+        @Parameter(description = "Patient ID")
+        @PathVariable UUID id
+    ) {
+        log.info("POST /api/v1/admin/patients/{}/anonymize", id);
+
+        UUID currentUserId = getCurrentUserId();
+        AnonymizationResponse response = adminService.anonymizePatient(id, currentUserId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Export patient data (US-A-11).
+     * Exports all personal data and related entities in JSON or PDF format.
+     */
+    @GetMapping("/patients/{id}/export-data")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Export patient data", description = "US-A-11: Exports all patient data (RODO Art. 20 - right to data portability). Includes personal data, projects, messages, materials, events, quiz attempts, badges, and audit logs.")
+    public ResponseEntity<byte[]> exportPatientData(
+        @Parameter(description = "Patient ID")
+        @PathVariable UUID id,
+
+        @Parameter(description = "Export format: json or pdf")
+        @RequestParam(defaultValue = "json") String format
+    ) {
+        log.info("GET /api/v1/admin/patients/{}/export-data?format={}", id, format);
+
+        Object result = adminService.exportPatientData(id, format);
+
+        if (result instanceof ResponseEntity) {
+            return (ResponseEntity<byte[]>) result;
+        }
+
+        return ResponseEntity.internalServerError().build();
+    }
+
+    /**
+     * Get current user ID from security context.
+     */
+    private UUID getCurrentUserId() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            return UUID.fromString(userId);
+        } catch (Exception e) {
+            log.warn("Failed to parse user ID from security context: {}", userId);
+            return null;
         }
     }
 

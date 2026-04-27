@@ -120,4 +120,10 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
      * Count unread messages.
      */
     long countByIsReadFalse();
+
+    /**
+     * Find messages by sender ID.
+     */
+    @Query("SELECT m FROM Message m WHERE m.senderId = :senderId ORDER BY m.sentAt DESC")
+    List<Message> findBySenderId(@Param("senderId") UUID senderId);
 }
