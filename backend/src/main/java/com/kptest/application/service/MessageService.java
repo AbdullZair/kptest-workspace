@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -37,6 +38,7 @@ public class MessageService {
     private final MessageThreadRepository threadRepository;
     private final MessageRepository messageRepository;
     private final MessageAttachmentRepository attachmentRepository;
+    private final NotificationService notificationService;
 
     private static final String ATTACHMENT_STORAGE_PATH = "/tmp/message-attachments";
 
@@ -173,9 +175,29 @@ public class MessageService {
         thread.updateLastMessageAt();
         threadRepository.save(thread);
 
+        // Send push notification to thread creator (recipient)
+        if (!thread.getCreatedBy().equals(senderId)) {
+            notificationService.sendPushNotification(
+                thread.getCreatedBy(),
+                new PushPayload(
+                    "Nowa wiadomość",
+                    truncateContent(request.content()),
+                    Map.of("threadId", threadId.toString(), "messageId", savedMessage.getId().toString()),
+                    PushPayload.PushType.MESSAGE
+                )
+            );
+        }
+
         log.info("Sent message with ID: {}", savedMessage.getId());
 
         return MessageDto.fromEntity(savedMessage);
+    }
+
+    private String truncateContent(String content) {
+        if (content == null) {
+            return "";
+        }
+        return content.length() > 100 ? content.substring(0, 100) + "..." : content;
     }
 
     /**

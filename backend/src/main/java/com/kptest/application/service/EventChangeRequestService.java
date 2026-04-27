@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -28,6 +29,7 @@ public class EventChangeRequestService {
 
     private final EventChangeRequestRepository changeRequestRepository;
     private final CalendarService calendarService;
+    private final NotificationService notificationService;
 
     private static final int MAX_ATTEMPTS = 3;
     private static final Duration MIN_HOURS_BEFORE_EVENT = Duration.ofHours(24);
@@ -115,6 +117,17 @@ public class EventChangeRequestService {
         // Update the event date (this would typically trigger a notification)
         calendarService.rescheduleEvent(changeRequest.getEventId(), changeRequest.getProposedDate());
 
+        // Send push notification to patient about accepted change
+        notificationService.sendPushNotification(
+            changeRequest.getPatientId(),
+            new PushPayload(
+                "Zmiana wydarzenia zaakceptowana",
+                "Twoja prośba o zmianę terminu wydarzenia została zaakceptowana",
+                Map.of("changeRequestId", savedRequest.getId().toString(), "eventId", changeRequest.getEventId().toString()),
+                PushPayload.PushType.EVENT_CHANGE
+            )
+        );
+
         log.info("Accepted event change request: {}", requestId);
 
         return EventChangeRequestDto.fromEntity(savedRequest);
@@ -144,6 +157,17 @@ public class EventChangeRequestService {
 
         changeRequest.reject(staffId, request.reason());
         EventChangeRequest savedRequest = changeRequestRepository.save(changeRequest);
+
+        // Send push notification to patient about rejected change
+        notificationService.sendPushNotification(
+            changeRequest.getPatientId(),
+            new PushPayload(
+                "Zmiana wydarzenia odrzucona",
+                "Twoja prośba o zmianę terminu wydarzenia została odrzucona",
+                Map.of("changeRequestId", savedRequest.getId().toString(), "eventId", changeRequest.getEventId().toString()),
+                PushPayload.PushType.EVENT_CHANGE
+            )
+        );
 
         log.info("Rejected event change request: {}", requestId);
 

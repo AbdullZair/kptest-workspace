@@ -1,6 +1,7 @@
 package com.kptest.application.service;
 
 import com.kptest.api.dto.CreateTherapyEventRequest;
+import com.kptest.api.dto.PushPayload;
 import com.kptest.api.dto.TherapyEventDto;
 import com.kptest.api.dto.UpdateTherapyEventRequest;
 import com.kptest.domain.schedule.EventStatus;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class CalendarService {
 
     private final TherapyEventRepository therapyEventRepository;
+    private final NotificationService notificationService;
 
     /**
      * Get all events with optional filters.
@@ -89,6 +92,19 @@ public class CalendarService {
 
         TherapyEvent event = request.toTherapyEvent();
         TherapyEvent saved = therapyEventRepository.save(event);
+
+        // Send push notification to patient
+        if (saved.getPatientId() != null) {
+            notificationService.sendPushNotification(
+                saved.getPatientId(),
+                new PushPayload(
+                    "Nowe wydarzenie",
+                    request.title(),
+                    Map.of("eventId", saved.getId().toString(), "type", request.type().name()),
+                    PushPayload.PushType.EVENT
+                )
+            );
+        }
 
         log.info("Created therapy event with ID: {}", saved.getId());
         return TherapyEventDto.fromTherapyEvent(saved);

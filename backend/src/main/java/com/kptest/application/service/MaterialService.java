@@ -3,6 +3,7 @@ package com.kptest.application.service;
 import com.kptest.api.dto.EducationalMaterialDto;
 import com.kptest.api.dto.MaterialFilters;
 import com.kptest.api.dto.MaterialProgressDto;
+import com.kptest.api.dto.PushPayload;
 import com.kptest.domain.material.EducationalMaterial;
 import com.kptest.domain.material.EducationalMaterial.DifficultyLevel;
 import com.kptest.domain.material.EducationalMaterial.MaterialType;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ public class MaterialService {
     private final EducationalMaterialRepository materialRepository;
     private final MaterialProgressRepository progressRepository;
     private final PatientRepository patientRepository;
+    private final NotificationService notificationService;
 
     /**
      * Get materials with filters.
@@ -126,6 +129,21 @@ public class MaterialService {
 
         EducationalMaterial savedMaterial = materialRepository.save(material);
         log.info("Created material with ID: {}", savedMaterial.getId());
+
+        // Send push notification to assigned patients
+        if (materialDto.assignedToPatients() != null && !materialDto.assignedToPatients().isEmpty()) {
+            for (UUID patientId : materialDto.assignedToPatients()) {
+                notificationService.sendPushNotification(
+                    patientId,
+                    new PushPayload(
+                        "Nowy materiał",
+                        materialDto.title(),
+                        Map.of("materialId", savedMaterial.getId().toString()),
+                        PushPayload.PushType.MATERIAL
+                    )
+                );
+            }
+        }
 
         return EducationalMaterialDto.fromMaterial(savedMaterial);
     }
