@@ -41,6 +41,19 @@ Authorization: Bearer <JWT_TOKEN>
 - [PUT /projects/{id}](./projects.md#put-projectsid) - Aktualizuj projekt
 - [POST /projects/{id}/patients](./projects.md#post-projectsidpatients) - Przypisz pacjentów
 
+### RODO (Data Protection)
+- [POST /admin/patients/{id}/anonymize](./rodo.md#post-apiv1adminpatientsidanonymize) - Anonimizacja pacjenta (US-A-10)
+- [GET /admin/patients/{id}/export-data](./rodo.md#get-apiv1adminpatientsidexport-data) - Eksport danych pacjenta (US-A-11)
+- [DELETE /admin/patients/{id}/erase](./rodo.md#delete-apiv1adminpatientsiderase) - Trwałe usunięcie pacjenta (US-A-12)
+- [GET /admin/data-processing-activities](./rodo.md#get-apiv1admindata-processing-activities) - Lista czynności przetwarzania (US-A-13)
+- [POST /admin/data-processing-activities](./rodo.md#post-apiv1admindata-processing-activities) - Dodaj czynność przetwarzania (US-A-13)
+- [PUT /admin/data-processing-activities/{id}](./rodo.md#put-apiv1admindata-processing-activitiesid) - Aktualizuj czynność (US-A-13)
+- [DELETE /admin/data-processing-activities/{id}](./rodo.md#delete-apiv1admindata-processing-activitiesid) - Usuń czynność (US-A-13)
+
+### Security
+- [POST /auth/change-password](./security.md#post-apiv1authchange-password) - Zmiana hasła (US-P-09)
+- [POST /notifications/devices/register](./security.md#post-apiv1notificationsdevicesregister) - Rejestracja urządzenia push (US-P-21)
+
 ## 📝 Format Odpowiedzi
 
 ### Sukces (200 OK)
@@ -66,3 +79,7 @@ Authorization: Bearer <JWT_TOKEN>
 ## 🔄 Versioning
 
 API jest wersjonowane w URL: `/api/v1/`, `/api/v2/` (przyszłość)
+
+---
+
+**Ostatnia aktualizacja:** 2026-04-27
