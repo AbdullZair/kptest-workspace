@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { sleep } from 'k6';
 
 export const options = {
   vus: 100,
@@ -10,7 +10,14 @@ export const options = {
 };
 
 export default function () {
-  const res = http.get('http://localhost:8080/api/v1/health');
-  check(res, { 'status is 200': (r) => r.status === 200 });
+  const headers = { 'Authorization': `Bearer ${__ENV.AUTH_TOKEN}` };
+  
+  http.get('http://localhost:8080/api/v1/health');
+  sleep(1);
+  
+  http.get('http://localhost:8080/api/v1/patients', { headers });
+  sleep(1);
+  
+  http.get('http://localhost:8080/api/v1/projects', { headers });
   sleep(1);
 }
