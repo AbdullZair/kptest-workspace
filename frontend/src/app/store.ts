@@ -7,6 +7,7 @@ import { api } from '@shared/api'
 
 // Feature slices
 import { authReducer } from '@features/auth/slices/authSlice'
+import { patientReducer } from '@features/patients/slices/patientSlice'
 
 /**
  * Root reducer - combines all reducers
@@ -14,6 +15,7 @@ import { authReducer } from '@features/auth/slices/authSlice'
 const rootReducer = {
   [api.reducerPath]: api.reducer,
   auth: authReducer,
+  patient: patientReducer,
 }
 
 /**
