@@ -4,6 +4,7 @@ import { clsx } from 'clsx'
 import { useAuth } from '@features/auth'
 import { useTheme } from '@app/providers'
 import type { UserRole } from '@shared/components'
+import { HelpDialog } from '@widgets/help'
 
 /**
  * Header props
@@ -128,7 +129,20 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user, logout } = useAuth()
   const { setTheme, resolvedTheme } = useTheme()
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [isHelpOpen, setIsHelpOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.key !== '?' || e.metaKey || e.ctrlKey || e.altKey) return
+      const t = e.target as HTMLElement | null
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      e.preventDefault()
+      setIsHelpOpen((v) => !v)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
 
   const userRole = user?.role as UserRole | undefined
   const navigation = getNavigationByRole(userRole)
@@ -263,6 +277,30 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             )}
           </button>
 
+          {/* Contextual help (US-S-20) */}
+          <button
+            type="button"
+            onClick={() => setIsHelpOpen(true)}
+            className="rounded-lg p-2 transition-colors hover:bg-neutral-100"
+            aria-label="Pomoc kontekstowa"
+            title="Pomoc kontekstowa (?)"
+            data-testid="help-button"
+          >
+            <svg
+              className="h-5 w-5 text-neutral-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
+
           {/* Notifications */}
           <button
             type="button"
@@ -377,6 +415,8 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           </div>
         </div>
       </div>
+
+      <HelpDialog isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </header>
   )
 }
