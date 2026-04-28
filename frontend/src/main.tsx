@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { I18nProvider } from './app/providers'
+import { I18nProvider, ThemeProvider } from './app/providers'
 
 // Styles
 import './index.css'
@@ -24,7 +24,9 @@ createRoot(rootElement).render(
   <StrictMode>
     <Provider store={store}>
       <I18nProvider>
-        <RouterProvider router={router} />
+        <ThemeProvider>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </I18nProvider>
     </Provider>
   </StrictMode>
