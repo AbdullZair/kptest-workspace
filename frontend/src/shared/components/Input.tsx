@@ -196,6 +196,7 @@ export const Input = memo(
               id={errorId}
               className="mt-1 flex items-center gap-1 text-sm text-error-600"
               role="alert"
+              data-testid="validation-error"
             >
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path

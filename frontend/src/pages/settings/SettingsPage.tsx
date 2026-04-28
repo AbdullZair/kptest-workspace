@@ -14,9 +14,11 @@ export const SettingsPage = () => {
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="settings-page">
       <div>
-        <h1 className="text-2xl font-bold text-neutral-900">{t('settings.title')}</h1>
+        <h1 className="text-2xl font-bold text-neutral-900" data-testid="settings-title">
+          {t('settings.title')}
+        </h1>
         <p className="mt-1 text-neutral-600">{t('settings.subtitle')}</p>
       </div>
 
