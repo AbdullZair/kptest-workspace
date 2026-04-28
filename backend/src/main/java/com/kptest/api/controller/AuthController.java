@@ -5,6 +5,7 @@ import com.kptest.application.service.AuthenticationService;
 import com.kptest.application.service.RegistrationService;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRepository;
+import com.kptest.exception.ResourceNotFoundException;
 import com.kptest.infrastructure.config.CustomUserDetailsService;
 import com.kptest.infrastructure.security.JwtService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -241,7 +242,8 @@ public class AuthController {
             @AuthenticationPrincipal String userIdStr) {
         
         UUID userId = UUID.fromString(userIdStr);
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User", userId.toString()));
         UserProfileResponse response = UserProfileResponse.fromUser(user, user.getPatient());
         
         return ResponseEntity.ok(response);

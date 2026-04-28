@@ -4,9 +4,11 @@ spring:
       on-profile: dev
   
   flyway:
-    clean-disabled: false
+    enabled: false
   
   jpa:
+    hibernate:
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -19,11 +21,14 @@ logging:
     org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springdoc: DEBUG
+    org.springframework.web: DEBUG
+    com.kptest.api.controller: DEBUG
 
 kptest:
   jwt:
     secret: dev-secret-key-for-development-only-not-for-production-use
-  
+
   his:
     base-url: http://localhost:8081
     api-key: dev-api-key

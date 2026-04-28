@@ -50,177 +50,207 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(
-            ConstraintViolationException ex) {
-        
-        List<ErrorResponse.FieldError> fieldErrors = ex.getConstraintViolations()
-            .stream()
-            .map(violation -> new ErrorResponse.FieldError(
-                violation.getPropertyPath().toString(),
-                violation.getMessage(),
-                violation.getInvalidValue()
-            ))
-            .toList();
-        
+            ConstraintViolationException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
+        var violations = ex.getConstraintViolations();
+        List<ErrorResponse.FieldError> fieldErrors = violations == null
+            ? Collections.emptyList()
+            : violations.stream()
+                .map(violation -> new ErrorResponse.FieldError(
+                    violation.getPropertyPath().toString(),
+                    violation.getMessage(),
+                    violation.getInvalidValue()
+                ))
+                .toList();
+
         ErrorResponse response = ErrorResponse.validationError(
             fieldErrors,
-            "constraint-violation"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Constraint violation: {} errors", fieldErrors.size());
-        
+
         return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(
-            ResourceNotFoundException ex) {
-        
+            ResourceNotFoundException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.notFound(
             ex.getMessage(),
-            "resource-not-found"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Resource not found: {}", ex.getMessage());
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateResource(
-            DuplicateResourceException ex) {
-        
+            DuplicateResourceException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.of(
             ex.getErrorCode(),
             ex.getMessage(),
             HttpStatus.CONFLICT,
-            "duplicate-resource"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Duplicate resource: {}", ex.getMessage());
-        
+
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(BusinessRuleException.class)
     public ResponseEntity<ErrorResponse> handleBusinessRuleViolation(
-            BusinessRuleException ex) {
-        
+            BusinessRuleException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.of(
             ex.getErrorCode(),
             ex.getMessage(),
             HttpStatus.BAD_REQUEST,
-            "business-rule-violation"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Business rule violation: {}", ex.getMessage());
-        
+
         return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentials(
-            InvalidCredentialsException ex) {
-        
+            InvalidCredentialsException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.unauthorized(
             ex.getMessage(),
-            "invalid-credentials"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Invalid credentials attempt");
-        
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentials(
-            BadCredentialsException ex) {
-        
+            BadCredentialsException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.unauthorized(
             "Invalid email/phone or password",
-            "bad-credentials"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.debug("Bad credentials: {}", ex.getMessage());
-        
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<ErrorResponse> handleLockedAccount(
-            LockedException ex) {
-        
+            LockedException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.of(
             "ACCOUNT_LOCKED",
             "Account is temporarily locked. Please try again later.",
             HttpStatus.LOCKED,
-            "account-locked"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Locked account access attempt");
-        
+
         return ResponseEntity.status(HttpStatus.LOCKED).body(response);
     }
 
     @ExceptionHandler(AccountLockedException.class)
     public ResponseEntity<ErrorResponse> handleAccountLocked(
-            AccountLockedException ex) {
-        
+            AccountLockedException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.of(
             ex.getErrorCode(),
             ex.getMessage(),
             HttpStatus.LOCKED,
-            "account-locked"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Locked account: {}", ex.getMessage());
-        
+
         return ResponseEntity.status(HttpStatus.LOCKED).body(response);
     }
 
     @ExceptionHandler(Invalid2faException.class)
     public ResponseEntity<ErrorResponse> handleInvalid2fa(
-            Invalid2faException ex) {
-        
+            Invalid2faException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.unauthorized(
             ex.getMessage(),
-            "invalid-2fa"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Invalid 2FA code");
-        
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(
-            AccessDeniedException ex) {
-        
+            AccessDeniedException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.of(
             "ACCESS_DENIED",
             "You don't have permission to access this resource",
             HttpStatus.FORBIDDEN,
-            "access-denied"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.warn("Access denied: {}", ex.getMessage());
-        
+
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     @ExceptionHandler(HisIntegrationException.class)
     public ResponseEntity<ErrorResponse> handleHisIntegrationError(
-            HisIntegrationException ex) {
-        
+            HisIntegrationException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
         ErrorResponse response = ErrorResponse.of(
             ex.getErrorCode(),
             ex.getMessage(),
             HttpStatus.SERVICE_UNAVAILABLE,
-            "his-integration-error"
+            request.getDescription(false).replace("uri=", "")
         );
-        
+
         log.error("HIS integration error: {}", ex.getMessage(), ex);
-        
+
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
+    }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleMessageNotReadable(
+            org.springframework.http.converter.HttpMessageNotReadableException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
+        ErrorResponse response = ErrorResponse.of(
+            "VALIDATION_ERROR",
+            "Malformed request body: " + ex.getMostSpecificCause().getMessage(),
+            HttpStatus.BAD_REQUEST,
+            request.getDescription(false).replace("uri=", "")
+        );
+
+        log.warn("Malformed request body: {}", ex.getMessage());
+
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -241,14 +271,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex) {
-        
+
         ErrorResponse response = ErrorResponse.internalError(
             "An unexpected error occurred",
             "internal-error"
         );
-        
+
         log.error("Unexpected error", ex);
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

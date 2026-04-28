@@ -1,6 +1,7 @@
 package com.kptest.api.controller;
 
 import com.kptest.api.dto.*;
+import com.kptest.application.service.HisService;
 import com.kptest.application.service.PatientService;
 import com.kptest.domain.user.VerificationStatus;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ import java.util.UUID;
 public class PatientController {
 
     private final PatientService patientService;
+    private final HisService hisService;
 
     /**
      * Get all patients with filtering and pagination.
@@ -185,6 +187,34 @@ public class PatientController {
 
         HttpStatus status = response.verified() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
+    }
+
+    /**
+     * Verify patient identity directly against the HIS (Hospital Information System).
+     *
+     * <p>Staff-driven endpoint (US-P-02 / US-S-04, Must-Have, refined by US-NH-01):
+     * a coordinator, doctor or admin queries the HIS with a patient's PESEL +
+     * cart number and the HIS returns demographics on a match. The PESEL is
+     * masked in the response - only the last 4 digits are returned.</p>
+     */
+    @PostMapping("/verify-his")
+    @PreAuthorize("hasAnyRole('COORDINATOR','DOCTOR','ADMIN')")
+    @Operation(
+        summary = "Verify patient identity via HIS",
+        description = "Calls the HIS to confirm the patient's identity from PESEL + cart number"
+    )
+    public ResponseEntity<HisVerificationResult> verifyPatientWithHis(
+        @Parameter(description = "HIS verification request")
+        @Valid @RequestBody PatientVerifyRequest request
+    ) {
+        log.info("POST /api/v1/patients/verify-his - cartNumber={}", request.cartNumber());
+
+        HisVerificationResult result = hisService.verifyPatient(
+            request.pesel(),
+            request.cartNumber()
+        );
+
+        return ResponseEntity.ok(result);
     }
 
     /**

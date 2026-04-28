@@ -14,7 +14,7 @@ export const LanguageSwitcher = () => {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2" data-testid="language-switcher">
       <button
         onClick={() => changeLanguage('pl')}
         className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
@@ -22,6 +22,7 @@ export const LanguageSwitcher = () => {
             ? 'bg-primary-600 text-white'
             : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
         }`}
+        data-testid="language-pl"
       >
         PL
       </button>
@@ -32,6 +33,7 @@ export const LanguageSwitcher = () => {
             ? 'bg-primary-600 text-white'
             : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
         }`}
+        data-testid="language-en"
       >
         EN
       </button>

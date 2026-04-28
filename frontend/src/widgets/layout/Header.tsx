@@ -187,6 +187,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             className="rounded-lg p-2 transition-colors hover:bg-neutral-100 lg:hidden"
             onClick={onMenuClick}
             aria-label="Open menu"
+            data-testid="hamburger-menu"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path

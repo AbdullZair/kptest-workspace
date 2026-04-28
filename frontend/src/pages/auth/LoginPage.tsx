@@ -82,13 +82,13 @@ export const LoginPage = () => {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-neutral-900">{t('auth.login.title')}</h1>
+          <h1 className="text-2xl font-bold text-neutral-900" data-testid="login-title">{t('auth.login.title')}</h1>
           <p className="mt-2 text-neutral-600">{t('auth.login.subtitle')}</p>
         </div>
 
         {/* Error message */}
         {error ? (
-          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4">
+          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4" data-testid="error-message">
             <div className="flex items-center gap-2">
               <svg className="h-5 w-5 text-error-600" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -103,7 +103,7 @@ export const LoginPage = () => {
         ) : null}
 
         {/* Login form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" data-testid="login-form">
           <Input
             label={t('auth.login.email')}
             type="email"
@@ -111,6 +111,7 @@ export const LoginPage = () => {
             autoComplete="email"
             error={errors.email?.message}
             fullWidth
+            data-testid="email-input"
             {...register('email')}
           />
 
@@ -122,12 +123,14 @@ export const LoginPage = () => {
               autoComplete="current-password"
               error={errors.password?.message}
               fullWidth
+              data-testid="password-input"
               {...register('password')}
             />
             <div className="mt-1 flex justify-end">
               <Link
                 to="/forgot-password"
                 className="text-sm text-primary-600 hover:text-primary-700"
+                data-testid="forgot-password-link"
               >
                 {t('auth.login.forgotPassword')}
               </Link>
@@ -139,6 +142,7 @@ export const LoginPage = () => {
               type="checkbox"
               id="rememberMe"
               className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+              data-testid="remember-me-checkbox"
               {...register('rememberMe')}
             />
             <label htmlFor="rememberMe" className="ml-2 text-sm text-neutral-700">
@@ -146,7 +150,14 @@ export const LoginPage = () => {
             </label>
           </div>
 
-          <Button type="submit" variant="primary" size="lg" fullWidth loading={isSubmitting}>
+          <Button 
+            type="submit" 
+            variant="primary" 
+            size="lg" 
+            fullWidth 
+            loading={isSubmitting}
+            data-testid="submit-button"
+          >
             {t('auth.login.submit')}
           </Button>
         </form>
@@ -160,6 +171,7 @@ export const LoginPage = () => {
             fullWidth
             onClick={handleDemoLogin}
             disabled={isSubmitting}
+            data-testid="demo-login-button"
           >
             {t('auth.login.demoLogin')}
           </Button>
@@ -168,7 +180,7 @@ export const LoginPage = () => {
         {/* Register link */}
         <p className="mt-8 text-center text-sm text-neutral-600">
           {t('auth.login.noAccount')}{' '}
-          <Link to="/register" className="font-medium text-primary-600 hover:text-primary-700">
+          <Link to="/register" className="font-medium text-primary-600 hover:text-primary-700" data-testid="register-link">
             {t('auth.login.register')}
           </Link>
         </p>

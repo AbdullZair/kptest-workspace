@@ -91,6 +91,22 @@ kptest:
     enabled: true
     log-path: ${AUDIT_LOG_PATH:./logs/audit}
 
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+  packages-to-scan: com.kptest.api.controller
+  paths-to-match: /api/v1/**
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
 # Actuator endpoints
 management:
   endpoints:

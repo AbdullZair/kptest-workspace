@@ -321,8 +321,19 @@ export interface PatientProjectData {
 
 /**
  * Anonymization reason enum
+ *
+ * Lowercase values are kept for backwards compatibility with the legacy
+ * `components/AnonymizePatientDialog`. Uppercase values are the canonical
+ * RODO codes used by `ui/AnonymizePatientDialog` (US-A-10).
  */
-export type AnonymizationReason = 'treatment' | 'patient_request' | 'other'
+export type AnonymizationReason =
+  | 'treatment'
+  | 'patient_request'
+  | 'other'
+  | 'RODO_REQUEST'
+  | 'PATIENT_REQUEST'
+  | 'STATISTICAL_REPORT'
+  | 'OTHER'
 
 /**
  * Anonymization request

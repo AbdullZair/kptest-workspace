@@ -94,10 +94,9 @@ sourceSets {
             // Old package layouts — duplicates exist under com/kptest/application/service/
             // and com/kptest/api/controller/.
             exclude 'com/kptest/service/**'
-            // @WebMvcTest in this package can't isolate from @ComponentScan in
-            // KptestApplication, so the test context tries to wire AdminService
-            // (20 JPA repos) and fails. Until rewritten, these are excluded.
-            exclude 'com/kptest/controller/**'
+            // Controller and exception tests now use WebMvcTestConfig +
+            // WebMvcMockBeansConfig under com/kptest/support/ to isolate from
+            // KptestApplication's broad @ComponentScan.
             // Pre-refactor copies in the new layout that still
             // instantiate protected entity constructors directly.
             exclude 'com/kptest/application/service/TherapyStageServiceTest.java'
@@ -106,9 +105,6 @@ sourceSets {
             exclude 'com/kptest/application/service/InboxServiceTest.java'
             exclude 'com/kptest/application/service/QuizServiceTest.java'
             exclude 'com/kptest/api/controller/AdminControllerRodoTest.java'
-            // Same Spring context isolation problem as com/kptest/controller/.
-            exclude 'com/kptest/api/controller/DataProcessingControllerTest.java'
-            exclude 'com/kptest/exception/GlobalExceptionHandlerTest.java'
             // Uses @DataJpaTest with an embedded H2 that isn't on the classpath
             // (production runs Postgres via Testcontainers).
             exclude 'com/kptest/domain/audit/repository/DataProcessingActivityRepositoryTest.java'

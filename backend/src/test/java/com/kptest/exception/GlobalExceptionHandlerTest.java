@@ -119,12 +119,26 @@ class GlobalExceptionHandlerTest {
         public String triggerDomainException() {
             throw new DomainException("DOMAIN_ERROR", "Domain error occurred") {};
         }
+
+        @GetMapping("/test/no-resource")
+        public String triggerNoResourceFoundException() throws NoResourceFoundException {
+            throw new NoResourceFoundException(
+                org.springframework.http.HttpMethod.GET,
+                "/missing");
+        }
     }
 
     private static BindingResult createMockBindingResult() {
         BindingResult mockBindingResult = mock(BindingResult.class);
         given(mockBindingResult.getFieldErrors()).willReturn(List.of(
-            new org.springframework.validation.FieldError("object", "field", "Default message")
+            new org.springframework.validation.FieldError(
+                "object",
+                "field",
+                "rejectedValue",
+                false,
+                null,
+                null,
+                "Default message")
         ));
         given(mockBindingResult.hasErrors()).willReturn(true);
         return mockBindingResult;
@@ -178,8 +192,9 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("shouldReturn404_WhenNoResourceFoundException")
         void shouldReturn404_WhenNoResourceFoundException() throws Exception {
-            mockMvc.perform(get("/non-existent-path"))
-                .andExpect(status().isNotFound());
+            mockMvc.perform(get("/test/no-resource"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error_code").value("RESOURCE_NOT_FOUND"));
         }
     }
 
@@ -297,7 +312,7 @@ class GlobalExceptionHandlerTest {
         void shouldReturn503_WhenHisIntegrationException() throws Exception {
             mockMvc.perform(get("/test/his-integration"))
                 .andExpect(status().isServiceUnavailable())
-                .andExpect(jsonPath("$.error_code").value("HIS_UNAVAILABLE"))
+                .andExpect(jsonPath("$.error_code").value("HIS_INTEGRATION_ERROR"))
                 .andExpect(jsonPath("$.message").value("HIS system unavailable"))
                 .andExpect(jsonPath("$.status").value("SERVICE_UNAVAILABLE"));
         }

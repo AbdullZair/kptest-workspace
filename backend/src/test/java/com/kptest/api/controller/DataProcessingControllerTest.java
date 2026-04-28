@@ -6,12 +6,17 @@ import com.kptest.api.dto.DataProcessingActivityDto;
 import com.kptest.api.dto.UpdateDataProcessingActivityRequest;
 import com.kptest.domain.audit.DataProcessingActivity;
 import com.kptest.domain.audit.repository.DataProcessingActivityRepository;
+import com.kptest.support.WebMvcMockBeansConfig;
+import com.kptest.support.WebMvcTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Controller tests for DataProcessingController.
  */
 @WebMvcTest(DataProcessingController.class)
+@ContextConfiguration(classes = WebMvcTestConfig.class)
+@Import(WebMvcMockBeansConfig.class)
+@org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc(addFilters = false)
 @DisplayName("DataProcessingController")
 class DataProcessingControllerTest {
 
@@ -155,7 +163,7 @@ class DataProcessingControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.name").value("Test Processing Activity"));
+            .andExpect(jsonPath("$.name").value("Updated Name"));
     }
 
     @Test

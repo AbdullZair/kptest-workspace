@@ -239,6 +239,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           className="animate-in fade-in fixed inset-0 z-40 bg-neutral-900/50 duration-200 lg:hidden"
           onClick={onClose}
           aria-hidden="true"
+          data-testid="mobile-backdrop"
         />
       ) : null}
 
@@ -249,6 +250,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           'lg:static lg:z-0 lg:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
+        data-testid="main-sidebar"
       >
         {/* Logo */}
         <div className="flex h-16 items-center gap-3 border-b border-neutral-200 px-6">
@@ -282,6 +284,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <Link
                   key={item.name}
                   to={item.href}
+                  data-testid={`menu-${item.name.toLowerCase().replace(' ', '-')}`}
                   className={clsx(
                     'flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150',
                     active
