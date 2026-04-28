@@ -97,7 +97,7 @@ export const LoginPage = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <p className="text-sm text-error-800">{error}</p>
+              <p className="text-sm text-error-800">Błąd: {error}</p>
             </div>
           </div>
         ) : null}
