@@ -1,6 +1,5 @@
 package com.kptest.domain.schedule;
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -9,7 +8,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Therapy event entity representing scheduled activities for patients.
@@ -68,8 +71,10 @@ public class TherapyEvent {
     @Column(name = "patient_notes", columnDefinition = "TEXT")
     private String patientNotes;
 
-    @Type(JsonType.class)
-    @Column(name = "reminders", columnDefinition = "jsonb")
+    @Column(name = "reminders", columnDefinition = "text")
+    private String remindersJson;
+    
+    @Transient
     private Reminders reminders;
 
     @CreatedDate
@@ -137,8 +142,40 @@ public class TherapyEvent {
         event.status = EventStatus.SCHEDULED;
         event.isCyclic = isCyclic != null ? isCyclic : false;
         event.recurrenceRule = recurrenceRule;
-        event.reminders = reminders != null ? reminders : Reminders.defaults();
+        event.setReminders(reminders != null ? reminders : Reminders.defaults());
         return event;
+    }
+
+    /**
+     * Get the reminders configuration. Reads from the persisted CSV column
+     * ({@code reminders}); the listed flag names are active.
+     */
+    public Reminders getReminders() {
+        if (this.remindersJson == null || this.remindersJson.isEmpty()) {
+            return new Reminders(false, false, false);
+        }
+        List<String> flags = Arrays.asList(this.remindersJson.split(","));
+        return new Reminders(
+            flags.contains("reminder24h"),
+            flags.contains("reminder2h"),
+            flags.contains("reminder30min")
+        );
+    }
+
+    /**
+     * Replace reminders config and persist as a CSV of active flag names.
+     */
+    public void setReminders(Reminders reminders) {
+        this.reminders = reminders;
+        if (reminders == null) {
+            this.remindersJson = "";
+            return;
+        }
+        List<String> flags = new ArrayList<>();
+        if (Boolean.TRUE.equals(reminders.getReminder24h())) flags.add("reminder24h");
+        if (Boolean.TRUE.equals(reminders.getReminder2h())) flags.add("reminder2h");
+        if (Boolean.TRUE.equals(reminders.getReminder30min())) flags.add("reminder30min");
+        this.remindersJson = flags.stream().collect(Collectors.joining(","));
     }
 
     /**

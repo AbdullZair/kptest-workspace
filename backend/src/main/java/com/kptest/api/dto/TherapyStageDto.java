@@ -55,8 +55,8 @@ public record TherapyStageDto(
 ) {
 
     public static TherapyStageDto fromStage(TherapyStageEntity stage) {
-        UUID requiredQuizId = stage.getRequiredQuiz() != null ? stage.getRequiredQuiz().getQuizId() : null;
-        String requiredQuizTitle = stage.getRequiredQuiz() != null ? stage.getRequiredQuiz().getQuizTitle() : null;
+        UUID requiredQuizId = stage.getRequiredQuiz() != null ? stage.getRequiredQuiz().getId() : null;
+        String requiredQuizTitle = stage.getRequiredQuiz() != null ? stage.getRequiredQuiz().getTitle() : null;
 
         return new TherapyStageDto(
             stage.getId(),

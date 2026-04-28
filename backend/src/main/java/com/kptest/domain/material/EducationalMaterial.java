@@ -7,8 +7,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Educational material entity representing learning resources for patients.
@@ -52,10 +55,16 @@ public class EducationalMaterial {
     @Column(nullable = false)
     private DifficultyLevel difficulty;
 
-    @Column(name = "assigned_to_patients", columnDefinition = "jsonb")
-    private List<UUID> assignedToPatients;
+    @Column(name = "assigned_to_patients", columnDefinition = "text")
+    private String assignedToPatientsJson;
 
-    @Column(name = "assigned_to_stages", columnDefinition = "jsonb")
+    @Column(name = "assigned_to_stages", columnDefinition = "text")
+    private String assignedToStagesJson;
+    
+    @Transient
+    private List<UUID> assignedToPatients;
+    
+    @Transient
     private List<UUID> assignedToStages;
 
     @Column(name = "view_count", nullable = false)
@@ -143,17 +152,63 @@ public class EducationalMaterial {
     }
 
     /**
-     * Set patient assignments.
+     * Get patient assignments. Returns the transient list directly (mutable
+     * by callers); see {@link #syncAssignmentsToJson} for save-time sync.
      */
-    public void setAssignedToPatients(List<UUID> patientIds) {
-        this.assignedToPatients = patientIds;
+    public List<UUID> getAssignedToPatients() {
+        return this.assignedToPatients;
     }
 
     /**
-     * Set stage assignments.
+     * Set patient assignments. {@code null} clears both the transient list
+     * and the persisted CSV column.
+     */
+    public void setAssignedToPatients(List<UUID> patientIds) {
+        this.assignedToPatients = patientIds;
+        this.assignedToPatientsJson = serializeUuids(patientIds);
+    }
+
+    /**
+     * Get stage assignments. See {@link #getAssignedToPatients}.
+     */
+    public List<UUID> getAssignedToStages() {
+        return this.assignedToStages;
+    }
+
+    /**
+     * Set stage assignments. {@code null} clears both the transient list
+     * and the persisted CSV column.
      */
     public void setAssignedToStages(List<UUID> stageIds) {
         this.assignedToStages = stageIds;
+        this.assignedToStagesJson = serializeUuids(stageIds);
+    }
+
+    @PostLoad
+    private void hydrateAssignmentsFromJson() {
+        this.assignedToPatients = parseUuids(this.assignedToPatientsJson);
+        this.assignedToStages = parseUuids(this.assignedToStagesJson);
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void syncAssignmentsToJson() {
+        this.assignedToPatientsJson = serializeUuids(this.assignedToPatients);
+        this.assignedToStagesJson = serializeUuids(this.assignedToStages);
+    }
+
+    private static List<UUID> parseUuids(String csv) {
+        if (csv == null) return null;
+        if (csv.isEmpty()) return new ArrayList<>();
+        return Arrays.stream(csv.split(","))
+            .map(UUID::fromString)
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private static String serializeUuids(List<UUID> ids) {
+        if (ids == null) return null;
+        if (ids.isEmpty()) return "";
+        return ids.stream().map(UUID::toString).collect(Collectors.joining(","));
     }
 
     /**

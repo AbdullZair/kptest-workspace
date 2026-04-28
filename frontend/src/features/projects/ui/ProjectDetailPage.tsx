@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { Card, Button, PageLoader } from '@shared/components'
-import { ProjectStatus, ProjectStatistics, ProjectFormModal, PatientAssignmentModal } from './ui'
+import { ProjectStatus, ProjectStatistics, ProjectFormModal, PatientAssignmentModal } from '.'
 import {
   useGetProjectByIdQuery,
   useGetProjectStatisticsQuery,

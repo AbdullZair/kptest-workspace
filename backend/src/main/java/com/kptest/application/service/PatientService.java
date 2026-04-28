@@ -47,7 +47,6 @@ public class PatientService {
             filters.hisPatientId(),
             filters.status(),
             filters.verificationStatus(),
-            filters.project(),
             pageable
         );
 
@@ -56,8 +55,7 @@ public class PatientService {
             filters.name(),
             filters.hisPatientId(),
             filters.status(),
-            filters.verificationStatus(),
-            filters.project()
+            filters.verificationStatus()
         );
 
         List<PatientDto> patientDtos = patients.stream()

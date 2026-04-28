@@ -113,7 +113,7 @@ public interface TherapyEventRepository extends JpaRepository<TherapyEvent, UUID
      * Find events that need 24h reminders.
      */
     @Query("SELECT e FROM TherapyEvent e WHERE e.status = 'SCHEDULED' " +
-           "AND e.reminders.reminder24h = true " +
+           "AND e.remindersJson LIKE '%reminder24h%' " +
            "AND e.scheduledAt BETWEEN :start AND :end " +
            "ORDER BY e.scheduledAt ASC")
     List<TherapyEvent> findEventsNeeding24hReminders(
@@ -125,7 +125,7 @@ public interface TherapyEventRepository extends JpaRepository<TherapyEvent, UUID
      * Find events that need 2h reminders.
      */
     @Query("SELECT e FROM TherapyEvent e WHERE e.status = 'SCHEDULED' " +
-           "AND e.reminders.reminder2h = true " +
+           "AND e.remindersJson LIKE '%reminder2h%' " +
            "AND e.scheduledAt BETWEEN :start AND :end " +
            "ORDER BY e.scheduledAt ASC")
     List<TherapyEvent> findEventsNeeding2hReminders(
@@ -137,7 +137,7 @@ public interface TherapyEventRepository extends JpaRepository<TherapyEvent, UUID
      * Find events that need 30min reminders.
      */
     @Query("SELECT e FROM TherapyEvent e WHERE e.status = 'SCHEDULED' " +
-           "AND e.reminders.reminder30min = true " +
+           "AND e.remindersJson LIKE '%reminder30min%' " +
            "AND e.scheduledAt BETWEEN :start AND :end " +
            "ORDER BY e.scheduledAt ASC")
     List<TherapyEvent> findEventsNeeding30minReminders(

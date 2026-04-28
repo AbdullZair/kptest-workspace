@@ -48,7 +48,7 @@ public interface TherapyStageRepository extends JpaRepository<TherapyStageEntity
     Integer findMaxOrderIndexByProjectId(@Param("projectId") UUID projectId);
 
     /**
-     * Find all stages by required quiz ID.
+     * Find all stages whose unlock requires the given quiz.
      */
-    List<TherapyStageEntity> findByRequiredQuizQuizId(UUID quizId);
+    List<TherapyStageEntity> findByRequiredQuiz_Id(UUID quizId);
 }

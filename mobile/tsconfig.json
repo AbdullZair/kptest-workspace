@@ -29,11 +29,11 @@
     "useUnknownInCatchVariables": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["app/*"],
-      "@features/*": ["features/*", "src/features/*"],
-      "@entities/*": ["entities/*"],
-      "@shared/*": ["shared/*"],
-      "@screens/*": ["screens/*"],
+      "@app/*": ["src/app/*", "app/*"],
+      "@features/*": ["src/features/*", "features/*"],
+      "@entities/*": ["src/entities/*", "entities/*"],
+      "@shared/*": ["src/shared/*", "shared/*"],
+      "@screens/*": ["src/screens/*", "screens/*"],
       "@src/*": ["src/*"]
     }
   },

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Card, Button, PageLoader } from '@shared/components'
-import { ProjectCard, ProjectFormModal } from './ui'
+import { ProjectCard, ProjectFormModal } from '.'
 import {
   useGetProjectsQuery,
   useCreateProjectMutation,

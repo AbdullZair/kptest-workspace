@@ -9,7 +9,7 @@ import type {
   EventType,
   Reminders,
 } from '@entities/event'
-import { ReminderConfig } from './components'
+import { ReminderConfig } from '../components'
 
 interface EventFormModalProps {
   isOpen: boolean

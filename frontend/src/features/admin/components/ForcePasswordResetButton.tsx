@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useForcePasswordResetMutation } from '../../api/adminApi'
+import { useForcePasswordResetMutation } from '../api/adminApi'
 
 interface ForcePasswordResetButtonProps {
   userId: string

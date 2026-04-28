@@ -90,7 +90,7 @@ public class TherapyStageService {
         if (stageDto.unlockMode() == TherapyStageEntity.UnlockMode.AUTO_QUIZ && stageDto.requiredQuizId() != null) {
             Quiz quiz = quizRepository.findById(stageDto.requiredQuizId())
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz not found with id: " + stageDto.requiredQuizId()));
-            stage.setRequiredQuiz(quiz.getId(), quiz.getTitle());
+            stage.setRequiredQuiz(quiz);
         }
 
         TherapyStageEntity savedStage = therapyStageRepository.save(stage);
@@ -129,9 +129,9 @@ public class TherapyStageService {
         if (stageDto.unlockMode() == TherapyStageEntity.UnlockMode.AUTO_QUIZ && stageDto.requiredQuizId() != null) {
             Quiz quiz = quizRepository.findById(stageDto.requiredQuizId())
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz not found with id: " + stageDto.requiredQuizId()));
-            stage.setRequiredQuiz(quiz.getId(), quiz.getTitle());
+            stage.setRequiredQuiz(quiz);
         } else {
-            stage.setRequiredQuiz(null, null);
+            stage.setRequiredQuiz(null);
         }
 
         TherapyStageEntity updatedStage = therapyStageRepository.save(stage);
@@ -284,7 +284,7 @@ public class TherapyStageService {
         log.info("Processing quiz pass for patient project {}, quiz {}", patientProjectId, quizId);
 
         // Find stages that require this quiz
-        List<TherapyStageEntity> stages = therapyStageRepository.findByRequiredQuizQuizId(quizId);
+        List<TherapyStageEntity> stages = therapyStageRepository.findByRequiredQuiz_Id(quizId);
 
         for (TherapyStageEntity stage : stages) {
             PatientStageProgress progress = patientStageProgressRepository

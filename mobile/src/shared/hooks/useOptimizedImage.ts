@@ -88,30 +88,4 @@ export function useOptimizedImage(
   };
 }
 
-/**
- * Komponent Image z optymalizacją
- */
-export function OptimizedImage({
-  uri,
-  style,
-  placeholderColor = '#E5E7EB',
-  ...props
-}: any) {
-  const { width, height, isLoaded, onLoad, onError } = useOptimizedImage(uri);
-
-  return (
-    <Image
-      source={{ uri }}
-      style={[
-        style,
-        !isLoaded && { backgroundColor: placeholderColor },
-      ]}
-      onLoad={onLoad}
-      onError={onError}
-      resizeMode="cover"
-      {...props}
-    />
-  );
-}
-
 export default useOptimizedImage;

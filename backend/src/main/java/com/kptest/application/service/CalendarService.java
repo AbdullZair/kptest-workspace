@@ -331,9 +331,8 @@ public class CalendarService {
         log.debug("Running scheduled task to mark missed events");
 
         Instant now = Instant.now();
-        Instant yesterday = now.minus(1, ChronoUnit.DAYS);
 
-        List<TherapyEvent> overdueEvents = therapyEventRepository.findByDateRange(Instant.MIN, now);
+        List<TherapyEvent> overdueEvents = therapyEventRepository.findByDateRange(Instant.EPOCH, now);
 
         int markedCount = 0;
         for (TherapyEvent event : overdueEvents) {

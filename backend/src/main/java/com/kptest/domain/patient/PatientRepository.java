@@ -69,7 +69,6 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
         @Param("hisPatientId") String hisPatientId,
         @Param("status") Set<String> status,
         @Param("verificationStatus") Set<VerificationStatus> verificationStatus,
-        @Param("project") String project,
         Pageable pageable
     );
 
@@ -91,8 +90,7 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
         @Param("name") String name,
         @Param("hisPatientId") String hisPatientId,
         @Param("status") Set<String> status,
-        @Param("verificationStatus") Set<VerificationStatus> verificationStatus,
-        @Param("project") String project
+        @Param("verificationStatus") Set<VerificationStatus> verificationStatus
     );
 
     /**

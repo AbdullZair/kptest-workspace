@@ -330,7 +330,7 @@ public class MaterialService {
 
         // Get patient's project
         var patientProjects = patientRepository.findAllWithFilters(
-            null, null, null, null, null, null, Pageable.unpaged()
+            null, null, null, null, null, Pageable.unpaged()
         );
 
         // For now, get all published materials (in real app, filter by patient's project)

@@ -5,7 +5,7 @@ import {
   PatientSearch,
   PatientFormModal,
   VerificationStatus,
-} from '../ui'
+} from '@features/patients/ui'
 import {
   useGetPatientsQuery,
   useCreatePatientMutation,
@@ -19,10 +19,10 @@ import {
   selectEditingPatientId,
   selectFilters,
   updateFilter,
-} from '../../index'
+} from '@features/patients'
 import { useDispatch, useSelector } from 'react-redux'
-import type { Patient, PatientFormData, PatientSearchRequest, VerificationStatusType } from '../../types'
-import type { SortField, SortOrder } from '../ui/PatientTable'
+import type { Patient, PatientFormData, PatientSearchRequest, VerificationStatusType } from '@features/patients/types'
+import type { SortField, SortOrder } from '@features/patients/ui/PatientTable'
 import { useNavigate } from 'react-router-dom'
 
 /**

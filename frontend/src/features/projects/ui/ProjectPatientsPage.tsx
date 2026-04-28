@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { Card, Button, PageLoader } from '@shared/components'
-import { PatientAssignmentModal } from './ui'
+import { PatientAssignmentModal } from '.'
 import {
   useGetProjectByIdQuery,
   useGetProjectPatientsQuery,

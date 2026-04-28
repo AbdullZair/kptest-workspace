@@ -116,6 +116,9 @@ management:
   endpoint:
     health:
       show-details: when_authorized
+  health:
+    mail:
+      enabled: false
   info:
     git:
       mode: full

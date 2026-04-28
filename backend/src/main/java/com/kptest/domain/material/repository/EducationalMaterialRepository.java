@@ -77,29 +77,23 @@ public interface EducationalMaterialRepository extends JpaRepository<Educational
         SELECT m FROM EducationalMaterial m
         WHERE m.projectId = :projectId
           AND m.published = true
-          AND (m.assignedToPatients IS NULL
-               OR m.assignedToPatients IS EMPTY
-               OR :patientId MEMBER OF m.assignedToPatients)
         """)
     List<EducationalMaterial> findByProjectIdAndAssignedToPatient(
-        @Param("projectId") UUID projectId,
-        @Param("patientId") UUID patientId
+        @Param("projectId") UUID projectId
     );
 
     /**
-     * Find materials assigned to stage.
+     * Find published materials by project. Per-stage filtering is applied in
+     * the service layer because stage assignments are persisted as a CSV
+     * column ({@code assigned_to_stages}) and not queryable via JPQL.
      */
     @Query("""
         SELECT m FROM EducationalMaterial m
         WHERE m.projectId = :projectId
           AND m.published = true
-          AND (m.assignedToStages IS NULL
-               OR m.assignedToStages IS EMPTY
-               OR :stageId MEMBER OF m.assignedToStages)
         """)
     List<EducationalMaterial> findByProjectIdAndAssignedToStage(
-        @Param("projectId") UUID projectId,
-        @Param("stageId") UUID stageId
+        @Param("projectId") UUID projectId
     );
 
     /**

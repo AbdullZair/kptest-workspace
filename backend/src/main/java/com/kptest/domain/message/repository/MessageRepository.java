@@ -39,7 +39,8 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     long countByThreadId(@Param("threadId") UUID threadId);
 
     /**
-     * Find unread messages for a user.
+     * Find unread messages for a user. {@code read_by} is a CSV text column,
+     * so membership is matched with LIKE rather than {@code MEMBER OF}.
      */
     @Query("""
         SELECT m FROM Message m
@@ -47,7 +48,9 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
             SELECT t.id FROM MessageThread t WHERE t.projectId = :projectId
         )
         AND m.senderId != :userId
-        AND (m.readBy IS NULL OR :userId NOT IN elements(m.readBy))
+        AND (m.readByJson IS NULL
+             OR m.readByJson = ''
+             OR m.readByJson NOT LIKE CONCAT('%', CAST(:userId AS string), '%'))
         ORDER BY m.sentAt DESC
         """)
     List<Message> findUnreadMessages(
@@ -57,7 +60,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     );
 
     /**
-     * Count unread messages for a user.
+     * Count unread messages for a user. See {@link #findUnreadMessages}.
      */
     @Query("""
         SELECT COUNT(m) FROM Message m
@@ -65,7 +68,9 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
             SELECT t.id FROM MessageThread t WHERE t.projectId = :projectId
         )
         AND m.senderId != :userId
-        AND (m.readBy IS NULL OR :userId NOT IN elements(m.readBy))
+        AND (m.readByJson IS NULL
+             OR m.readByJson = ''
+             OR m.readByJson NOT LIKE CONCAT('%', CAST(:userId AS string), '%'))
         """)
     long countUnreadMessages(@Param("userId") UUID userId, @Param("projectId") UUID projectId);
 
@@ -105,20 +110,33 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     List<Message> findReplies(@Param("parentId") UUID parentId);
 
     /**
-     * Count messages by patient ID (sent).
+     * Count messages sent by a patient.
      */
-    @Query("SELECT COUNT(m) FROM Message m JOIN m.thread t WHERE t.patientId = :patientId")
+    @Query("SELECT COUNT(m) FROM Message m WHERE m.senderId = :patientId")
     int countByPatientId(@Param("patientId") UUID patientId);
 
     /**
-     * Count messages received by patient (as recipient).
+     * Count messages received by a patient — i.e. messages in threads for
+     * projects the patient is enrolled in, sent by someone else.
+     * {@link com.kptest.domain.message.MessageThread} has no direct patient
+     * link, so we route through {@link com.kptest.domain.project.PatientProject}.
      */
-    @Query("SELECT COUNT(m) FROM Message m JOIN m.thread t WHERE t.patientId = :patientId AND m.senderId != :patientId")
+    @Query("""
+        SELECT COUNT(m) FROM Message m
+        WHERE m.senderId != :patientId
+          AND m.thread.projectId IN (
+              SELECT pp.project.id FROM PatientProject pp
+              WHERE pp.patient.id = :patientId
+          )
+        """)
     int countByRecipientPatientId(@Param("patientId") UUID patientId);
 
     /**
-     * Count unread messages.
+     * Count unread messages — proxied through {@code readAt IS NULL} since
+     * {@link Message} has no {@code isRead} flag (read state lives in
+     * {@code readAt} + {@code readBy}).
      */
+    @Query("SELECT COUNT(m) FROM Message m WHERE m.readAt IS NULL")
     long countByIsReadFalse();
 
     /**

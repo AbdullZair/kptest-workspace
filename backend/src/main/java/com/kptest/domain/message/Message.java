@@ -1,6 +1,5 @@
 package com.kptest.domain.message;
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -9,8 +8,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Message entity representing a single message in a conversation thread.
@@ -49,8 +50,10 @@ public class Message {
     @Column(name = "read_at")
     private Instant readAt;
 
-    @Type(JsonType.class)
-    @Column(name = "read_by", columnDefinition = "jsonb")
+    @Column(name = "read_by", columnDefinition = "text")
+    private String readByJson;
+    
+    @Transient
     private List<UUID> readBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -82,16 +85,34 @@ public class Message {
     }
 
     /**
-     * Mark message as read by a user.
+     * Get the list of user IDs that have read this message. Returns the
+     * transient list directly (mutable by callers); the persisted CSV column
+     * is rebuilt at save time via {@link #syncReadByToJson}.
      */
-    public void markAsRead(UUID userId) {
+    public List<UUID> getReadBy() {
         if (this.readBy == null) {
             this.readBy = new ArrayList<>();
         }
-        if (!this.readBy.contains(userId)) {
-            this.readBy.add(userId);
+        return this.readBy;
+    }
+
+    /**
+     * Replace the readBy list. {@code null} clears the persisted CSV column.
+     */
+    public void setReadBy(List<UUID> userIds) {
+        this.readBy = userIds;
+        this.readByJson = serializeUuids(userIds);
+    }
+
+    /**
+     * Mark message as read by a user.
+     */
+    public void markAsRead(UUID userId) {
+        List<UUID> current = getReadBy();
+        if (!current.contains(userId)) {
+            current.add(userId);
         }
-        if (this.readBy.size() == 1) {
+        if (current.size() == 1) {
             this.readAt = Instant.now();
         }
     }
@@ -101,6 +122,31 @@ public class Message {
      */
     public boolean isReadBy(UUID userId) {
         return this.readBy != null && this.readBy.contains(userId);
+    }
+
+    @PostLoad
+    private void hydrateReadByFromJson() {
+        this.readBy = parseUuids(this.readByJson);
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void syncReadByToJson() {
+        this.readByJson = serializeUuids(this.readBy);
+    }
+
+    private static List<UUID> parseUuids(String csv) {
+        if (csv == null) return null;
+        if (csv.isEmpty()) return new ArrayList<>();
+        return Arrays.stream(csv.split(","))
+            .map(UUID::fromString)
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private static String serializeUuids(List<UUID> ids) {
+        if (ids == null) return null;
+        if (ids.isEmpty()) return "";
+        return ids.stream().map(UUID::toString).collect(Collectors.joining(","));
     }
 
     /**

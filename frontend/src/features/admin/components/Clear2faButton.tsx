@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useClear2faMutation } from '../../api/adminApi'
+import { useClear2faMutation } from '../api/adminApi'
 
 interface Clear2faButtonProps {
   userId: string

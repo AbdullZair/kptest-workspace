@@ -1,5 +1,6 @@
 package com.kptest.domain.project;
 
+import com.kptest.domain.quiz.Quiz;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -45,7 +46,7 @@ public class TherapyStageEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "required_quiz_id")
-    private QuizReference requiredQuiz;
+    private Quiz requiredQuiz;
 
     @Column(name = "is_active", nullable = false)
     private Boolean active;
@@ -67,26 +68,6 @@ public class TherapyStageEntity {
     public enum UnlockMode {
         MANUAL,      // Staff must manually unlock
         AUTO_QUIZ    // Automatically unlocked after passing required quiz
-    }
-
-    /**
-     * Quiz reference for storing quiz ID without circular dependency.
-     */
-    @Embeddable
-    @Getter
-    @Setter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class QuizReference {
-        @Column(name = "quiz_id")
-        private UUID quizId;
-
-        @Column(name = "quiz_title")
-        private String quizTitle;
-
-        public QuizReference(UUID quizId, String quizTitle) {
-            this.quizId = quizId;
-            this.quizTitle = quizTitle;
-        }
     }
 
     /**
@@ -114,9 +95,9 @@ public class TherapyStageEntity {
     /**
      * Set the required quiz for AUTO_QUIZ unlock mode.
      */
-    public void setRequiredQuiz(UUID quizId, String quizTitle) {
+    public void setRequiredQuiz(Quiz quiz) {
         if (this.unlockMode == UnlockMode.AUTO_QUIZ) {
-            this.requiredQuiz = new QuizReference(quizId, quizTitle);
+            this.requiredQuiz = quiz;
         }
     }
 
