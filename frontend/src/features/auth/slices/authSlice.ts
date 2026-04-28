@@ -1,6 +1,34 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { AuthTokens, AuthUser } from '../lib/auth.types'
+import { AUTH_STORAGE_KEYS } from '../lib/auth.types'
 import { authApiSlice } from '../api/authApi'
+
+/**
+ * Read tokens from localStorage on store init so a hard reload
+ * (page.goto, address-bar navigation) doesn't drop the session.
+ */
+const hydrateFromStorage = (): { tokens: AuthTokens | null; isAuthenticated: boolean } => {
+  if (typeof window === 'undefined') return { tokens: null, isAuthenticated: false }
+  try {
+    const accessToken = localStorage.getItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN)
+    const refreshToken = localStorage.getItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN)
+    const expiry = localStorage.getItem(AUTH_STORAGE_KEYS.TOKEN_EXPIRY)
+    if (!accessToken || !refreshToken) return { tokens: null, isAuthenticated: false }
+    const expiresAt = expiry ? Number(expiry) : 0
+    if (expiresAt && Date.now() >= expiresAt) return { tokens: null, isAuthenticated: false }
+    return {
+      tokens: {
+        accessToken,
+        refreshToken,
+        tokenType: 'Bearer',
+        expiresIn: Math.max(0, Math.floor((expiresAt - Date.now()) / 1000)),
+      },
+      isAuthenticated: true,
+    }
+  } catch {
+    return { tokens: null, isAuthenticated: false }
+  }
+}
 
 /**
  * Auth state interface
@@ -17,12 +45,13 @@ export interface AuthState {
 }
 
 /**
- * Initial auth state
+ * Initial auth state — hydrate session from localStorage if present.
  */
+const hydrated = hydrateFromStorage()
 const initialState: AuthState = {
   user: null,
-  tokens: null,
-  isAuthenticated: false,
+  tokens: hydrated.tokens,
+  isAuthenticated: hydrated.isAuthenticated,
   isLoading: false,
   isRefreshing: false,
   error: null,
