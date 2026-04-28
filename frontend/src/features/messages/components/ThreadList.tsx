@@ -42,7 +42,7 @@ const formatRelativeTime = (dateString: string): string => {
 const getTypeIcon = (type: string) => {
   if (type === 'GROUP') {
     return (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -53,7 +53,7 @@ const getTypeIcon = (type: string) => {
     )
   }
   return (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -78,127 +78,143 @@ const getTypeIcon = (type: string) => {
  * />
  * ```
  */
-export const ThreadList = memo(function ThreadList({
-  threads,
-  selectedThreadId,
-  onSelectThread,
-  onCreateThread,
-  isLoading = false,
-}: ThreadListProps) {
-  const sortedThreads = useMemo(() => {
-    return [...threads].sort((a, b) => {
-      const dateA = new Date(a.last_message_at).getTime()
-      const dateB = new Date(b.last_message_at).getTime()
-      return dateB - dateA
-    })
-  }, [threads])
+export const ThreadList = memo(
+  ({
+    threads,
+    selectedThreadId,
+    onSelectThread,
+    onCreateThread,
+    isLoading = false,
+  }: ThreadListProps) => {
+    const sortedThreads = useMemo(() => {
+      return [...threads].sort((a, b) => {
+        const dateA = new Date(a.last_message_at).getTime()
+        const dateB = new Date(b.last_message_at).getTime()
+        return dateB - dateA
+      })
+    }, [threads])
 
-  if (isLoading) {
-    return (
-      <Card variant="default" size="md" className="p-6">
-        <div className="flex items-center justify-center h-32">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
-        </div>
-      </Card>
-    )
-  }
+    if (isLoading) {
+      return (
+        <Card variant="default" size="md" className="p-6">
+          <div className="flex h-32 items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500" />
+          </div>
+        </Card>
+      )
+    }
 
-  if (threads.length === 0) {
-    return (
-      <Card variant="default" size="md" className="p-6">
-        <div className="flex flex-col items-center justify-center h-32 text-center">
-          <svg className="w-12 h-12 text-neutral-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-            />
-          </svg>
-          <p className="text-neutral-600 font-medium">Brak wątków</p>
-          <p className="text-sm text-neutral-500 mt-1">Rozpocznij nową konwersację</p>
-          {onCreateThread && (
-            <Button variant="primary" size="sm" onClick={onCreateThread} className="mt-4">
-              Nowy wątek
-            </Button>
-          )}
-        </div>
-      </Card>
-    )
-  }
-
-  return (
-    <div className="flex flex-col gap-2">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2">
-        <h2 className="text-lg font-semibold text-neutral-900">Wątki</h2>
-        {onCreateThread && (
-          <Button variant="outline" size="sm" onClick={onCreateThread}>
-            <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Nowy
-          </Button>
-        )}
-      </div>
-
-      {/* Thread list */}
-      <div className="flex flex-col gap-1">
-        {sortedThreads.map((thread) => {
-          const isSelected = selectedThreadId === thread.id
-          const isGroup = thread.type === 'GROUP'
-
-          return (
-            <button
-              key={thread.id}
-              onClick={() => onSelectThread(thread)}
-              className={`w-full text-left p-4 rounded-lg transition-colors ${
-                isSelected
-                  ? 'bg-blue-50 border-2 border-blue-300'
-                  : 'bg-white border-2 border-transparent hover:bg-neutral-50'
-              }`}
+    if (threads.length === 0) {
+      return (
+        <Card variant="default" size="md" className="p-6">
+          <div className="flex h-32 flex-col items-center justify-center text-center">
+            <svg
+              className="mb-4 h-12 w-12 text-neutral-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <div className="flex items-start gap-3">
-                {/* Thread type icon */}
-                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
-                  isSelected ? 'bg-blue-100 text-blue-600' : 'bg-neutral-100 text-neutral-600'
-                }`}>
-                  {getTypeIcon(thread.type)}
-                </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+            <p className="font-medium text-neutral-600">Brak wątków</p>
+            <p className="mt-1 text-sm text-neutral-500">Rozpocznij nową konwersację</p>
+            {onCreateThread ? (
+              <Button variant="primary" size="sm" onClick={onCreateThread} className="mt-4">
+                Nowy wątek
+              </Button>
+            ) : null}
+          </div>
+        </Card>
+      )
+    }
 
-                {/* Thread info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <h3 className={`font-medium truncate ${isSelected ? 'text-blue-900' : 'text-neutral-900'}`}>
-                      {thread.title}
-                    </h3>
-                    <span className="text-xs text-neutral-500 flex-shrink-0">
-                      {formatRelativeTime(thread.last_message_at)}
-                    </span>
+    return (
+      <div className="flex flex-col gap-2">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-2">
+          <h2 className="text-lg font-semibold text-neutral-900">Wątki</h2>
+          {onCreateThread ? (
+            <Button variant="outline" size="sm" onClick={onCreateThread}>
+              <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Nowy
+            </Button>
+          ) : null}
+        </div>
+
+        {/* Thread list */}
+        <div className="flex flex-col gap-1">
+          {sortedThreads.map((thread) => {
+            const isSelected = selectedThreadId === thread.id
+            const isGroup = thread.type === 'GROUP'
+
+            return (
+              <button
+                key={thread.id}
+                onClick={() => onSelectThread(thread)}
+                className={`w-full rounded-lg p-4 text-left transition-colors ${
+                  isSelected
+                    ? 'border-2 border-blue-300 bg-blue-50'
+                    : 'border-2 border-transparent bg-white hover:bg-neutral-50'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  {/* Thread type icon */}
+                  <div
+                    className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${
+                      isSelected ? 'bg-blue-100 text-blue-600' : 'bg-neutral-100 text-neutral-600'
+                    }`}
+                  >
+                    {getTypeIcon(thread.type)}
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      isGroup
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'bg-green-100 text-green-700'
-                    }`}>
-                      {isGroup ? 'Grupowy' : 'Indywidualny'}
-                    </span>
-                    {thread.unread_count !== undefined && thread.unread_count > 0 && (
-                      <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-medium">
-                        {thread.unread_count} nieprzeczytanych
+                  {/* Thread info */}
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-1 flex items-center justify-between gap-2">
+                      <h3
+                        className={`truncate font-medium ${isSelected ? 'text-blue-900' : 'text-neutral-900'}`}
+                      >
+                        {thread.title}
+                      </h3>
+                      <span className="flex-shrink-0 text-xs text-neutral-500">
+                        {formatRelativeTime(thread.last_message_at)}
                       </span>
-                    )}
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm">
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                          isGroup ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700'
+                        }`}
+                      >
+                        {isGroup ? 'Grupowy' : 'Indywidualny'}
+                      </span>
+                      {thread.unread_count !== undefined && thread.unread_count > 0 && (
+                        <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
+                          {thread.unread_count} nieprzeczytanych
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </button>
-          )
-        })}
+              </button>
+            )
+          })}
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
 
 export default ThreadList

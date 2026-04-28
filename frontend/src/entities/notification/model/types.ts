@@ -6,12 +6,7 @@
 /**
  * Notification type enumeration
  */
-export type NotificationType =
-  | 'MESSAGE'
-  | 'EVENT'
-  | 'MATERIAL'
-  | 'SCHEDULE_CHANGE'
-  | 'REMINDER'
+export type NotificationType = 'MESSAGE' | 'EVENT' | 'MATERIAL' | 'SCHEDULE_CHANGE' | 'REMINDER'
 
 /**
  * Notification entity

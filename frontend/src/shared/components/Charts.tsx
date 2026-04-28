@@ -64,29 +64,34 @@ export function BarChart({
 
   return (
     <div className={clsx('w-full', className)} style={{ height }}>
-      <svg viewBox={`0 0 ${chartWidth + gap} ${height}`} className="w-full h-full" preserveAspectRatio="none">
+      <svg
+        viewBox={`0 0 ${chartWidth + gap} ${height}`}
+        className="h-full w-full"
+        preserveAspectRatio="none"
+      >
         {/* Grid lines */}
-        {showGrid &&
-          [0, 25, 50, 75, 100].map((y) => (
-            <g key={y}>
-              <line
-                x1="0"
-                y1={height - (y / 100) * height - 20}
-                x2={chartWidth + gap}
-                y2={height - (y / 100) * height - 20}
-                stroke="#e5e7eb"
-                strokeWidth="1"
-              />
-              <text
-                x="-5"
-                y={height - (y / 100) * height - 16}
-                textAnchor="end"
-                className="text-xs fill-neutral-500"
-              >
-                {y}%
-              </text>
-            </g>
-          ))}
+        {showGrid
+          ? [0, 25, 50, 75, 100].map((y) => (
+              <g key={y}>
+                <line
+                  x1="0"
+                  y1={height - (y / 100) * height - 20}
+                  x2={chartWidth + gap}
+                  y2={height - (y / 100) * height - 20}
+                  stroke="#e5e7eb"
+                  strokeWidth="1"
+                />
+                <text
+                  x="-5"
+                  y={height - (y / 100) * height - 16}
+                  textAnchor="end"
+                  className="fill-neutral-500 text-xs"
+                >
+                  {y}%
+                </text>
+              </g>
+            ))
+          : null}
 
         {/* Bars */}
         {data.map((d, i) => {
@@ -106,21 +111,21 @@ export function BarChart({
                 rx="4"
                 className="transition-all duration-300 hover:opacity-80"
               />
-              {showValues && (
+              {showValues ? (
                 <text
                   x={x + barWidth / 2}
                   y={y - 5}
                   textAnchor="middle"
-                  className="text-xs fill-neutral-700 font-medium"
+                  className="fill-neutral-700 text-xs font-medium"
                 >
                   {d.value}
                 </text>
-              )}
+              ) : null}
               <text
                 x={x + barWidth / 2}
                 y={height - 5}
                 textAnchor="middle"
-                className="text-xs fill-neutral-600"
+                className="fill-neutral-600 text-xs"
               >
                 {d.label}
               </text>
@@ -185,9 +190,7 @@ export function LineChart({
 
   // Generate path for line
   const points = data.map((d, i) => `${getX(i)},${getY(d.value)}`)
-  const linePath = smooth
-    ? `M ${points.join(' Q ')}`
-    : `M ${points.join(' L ')}`
+  const linePath = smooth ? `M ${points.join(' Q ')}` : `M ${points.join(' L ')}`
 
   // Generate area path
   const areaPath = `
@@ -200,29 +203,34 @@ export function LineChart({
 
   return (
     <div className={clsx('w-full', className)} style={{ height }}>
-      <svg viewBox={`0 0 ${chartWidth + pointGap} ${height}`} className="w-full h-full" preserveAspectRatio="none">
+      <svg
+        viewBox={`0 0 ${chartWidth + pointGap} ${height}`}
+        className="h-full w-full"
+        preserveAspectRatio="none"
+      >
         {/* Grid lines */}
-        {showGrid &&
-          [0, 25, 50, 75, 100].map((y) => (
-            <g key={y}>
-              <line
-                x1="0"
-                y1={height - (y / 100) * height - 20}
-                x2={chartWidth + pointGap}
-                y2={height - (y / 100) * height - 20}
-                stroke="#e5e7eb"
-                strokeWidth="1"
-              />
-              <text
-                x="-5"
-                y={height - (y / 100) * height - 16}
-                textAnchor="end"
-                className="text-xs fill-neutral-500"
-              >
-                {y}%
-              </text>
-            </g>
-          ))}
+        {showGrid
+          ? [0, 25, 50, 75, 100].map((y) => (
+              <g key={y}>
+                <line
+                  x1="0"
+                  y1={height - (y / 100) * height - 20}
+                  x2={chartWidth + pointGap}
+                  y2={height - (y / 100) * height - 20}
+                  stroke="#e5e7eb"
+                  strokeWidth="1"
+                />
+                <text
+                  x="-5"
+                  y={height - (y / 100) * height - 16}
+                  textAnchor="end"
+                  className="fill-neutral-500 text-xs"
+                >
+                  {y}%
+                </text>
+              </g>
+            ))
+          : null}
 
         {/* Area fill */}
         <path d={areaPath} fill={fillColor} />
@@ -238,20 +246,27 @@ export function LineChart({
         />
 
         {/* Points */}
-        {showPoints &&
-          data.map((d, i) => (
-            <g key={d.label}>
-              <circle cx={getX(i)} cy={getY(d.value)} r="4" fill={lineColor} className="hover:r-6 transition-all" />
-              <text
-                x={getX(i)}
-                y={height - 5}
-                textAnchor="middle"
-                className="text-xs fill-neutral-600"
-              >
-                {d.label}
-              </text>
-            </g>
-          ))}
+        {showPoints
+          ? data.map((d, i) => (
+              <g key={d.label}>
+                <circle
+                  cx={getX(i)}
+                  cy={getY(d.value)}
+                  r="4"
+                  fill={lineColor}
+                  className="hover:r-6 transition-all"
+                />
+                <text
+                  x={getX(i)}
+                  y={height - 5}
+                  textAnchor="middle"
+                  className="fill-neutral-600 text-xs"
+                >
+                  {d.label}
+                </text>
+              </g>
+            ))
+          : null}
       </svg>
     </div>
   )
@@ -319,14 +334,15 @@ export function PieChart({
 
     const largeArc = sliceAngle > Math.PI ? 1 : 0
 
-    const pathData = innerRadius > 0
-      ? `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4} Z`
-      : `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`
+    const pathData =
+      innerRadius > 0
+        ? `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4} Z`
+        : `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`
 
     // Label position
     const labelAngle = startAngle + sliceAngle / 2
-    const labelX = center + (radius * 0.7) * Math.cos(labelAngle)
-    const labelY = center + (radius * 0.7) * Math.sin(labelAngle)
+    const labelX = center + radius * 0.7 * Math.cos(labelAngle)
+    const labelY = center + radius * 0.7 * Math.sin(labelAngle)
 
     currentAngle = endAngle
 
@@ -346,33 +362,37 @@ export function PieChart({
       <svg width={size} height={size} className="shrink-0">
         {slices.map((slice, i) => (
           <g key={i}>
-            <path d={slice.path} fill={slice.color} className="transition-opacity hover:opacity-80" />
-            {showLabels && slice.percentage !== '0.0' && (
+            <path
+              d={slice.path}
+              fill={slice.color}
+              className="transition-opacity hover:opacity-80"
+            />
+            {showLabels && slice.percentage !== '0.0' ? (
               <text
                 x={slice.labelX}
                 y={slice.labelY}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="text-xs fill-white font-medium"
+                className="fill-white text-xs font-medium"
               >
                 {slice.percentage}%
               </text>
-            )}
+            ) : null}
           </g>
         ))}
       </svg>
 
-      {showLegend && (
+      {showLegend ? (
         <div className="space-y-2">
           {slices.map((slice, i) => (
             <div key={i} className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: slice.color }} />
+              <div className="h-3 w-3 rounded-sm" style={{ backgroundColor: slice.color }} />
               <span className="text-sm text-neutral-700">{slice.label}</span>
               <span className="text-sm font-medium text-neutral-900">{slice.value}</span>
             </div>
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

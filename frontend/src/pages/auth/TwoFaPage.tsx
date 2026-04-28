@@ -17,7 +17,7 @@ export const TwoFaPage = () => {
   const { verifyTwoFa, error, clearAuthError } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
-  
+
   const email = (location.state as { email?: string })?.email || ''
 
   const {
@@ -76,13 +76,13 @@ export const TwoFaPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
       <Card className="w-full max-w-md" variant="elevated">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center mb-4">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600">
             <svg
-              className="w-7 h-7 text-white"
+              className="h-7 w-7 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -97,16 +97,16 @@ export const TwoFaPage = () => {
           </div>
 
           <h1 className="text-2xl font-bold text-neutral-900">Weryfikacja dwuetapowa</h1>
-          <p className="text-neutral-600 mt-2">
+          <p className="mt-2 text-neutral-600">
             Wpisz 6-cyfrowy kod wysłany na {email || 'Twój email'}
           </p>
         </div>
 
         {/* Error message */}
-        {error && (
-          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg">
+        {error ? (
+          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4">
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-error-600" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="h-5 w-5 text-error-600" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -116,7 +116,7 @@ export const TwoFaPage = () => {
               <p className="text-sm text-error-800">{error}</p>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* 2FA form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -130,8 +130,8 @@ export const TwoFaPage = () => {
               placeholder="000000"
               className={cn(
                 'w-48 text-center text-3xl font-bold tracking-widest',
-                'px-4 py-3 border-2 border-neutral-300 rounded-lg',
-                'focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20',
+                'rounded-lg border-2 border-neutral-300 px-4 py-3',
+                'focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20',
                 'transition-colors duration-200',
                 errors.code && 'border-error-500 focus:border-error-500 focus:ring-error-500/20'
               )}
@@ -145,9 +145,13 @@ export const TwoFaPage = () => {
             />
           </div>
 
-          {errors.code && (
-            <p id="code-error" className="text-sm text-error-600 text-center flex items-center justify-center gap-1" role="alert">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          {errors.code ? (
+            <p
+              id="code-error"
+              className="flex items-center justify-center gap-1 text-center text-sm text-error-600"
+              role="alert"
+            >
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -156,12 +160,12 @@ export const TwoFaPage = () => {
               </svg>
               {errors.code.message}
             </p>
-          )}
+          ) : null}
 
           {/* Loading indicator */}
-          {isSubmitting && (
+          {isSubmitting ? (
             <div className="flex items-center justify-center gap-2 text-neutral-600">
-              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle
                   className="opacity-25"
                   cx="12"
@@ -178,7 +182,7 @@ export const TwoFaPage = () => {
               </svg>
               <span className="text-sm">Weryfikacja...</span>
             </div>
-          )}
+          ) : null}
 
           <Button
             type="submit"
@@ -203,20 +207,18 @@ export const TwoFaPage = () => {
               className={cn(
                 'font-medium',
                 resendCooldown > 0
-                  ? 'text-neutral-400 cursor-not-allowed'
+                  ? 'cursor-not-allowed text-neutral-400'
                   : 'text-primary-600 hover:text-primary-700'
               )}
             >
-              {resendCooldown > 0
-                ? `Wyślij ponownie za ${resendCooldown}s`
-                : 'Wyślij kod ponownie'}
+              {resendCooldown > 0 ? `Wyślij ponownie za ${resendCooldown}s` : 'Wyślij kod ponownie'}
             </button>
           </p>
         </div>
 
         {/* Back to login */}
         <p className="mt-8 text-center text-sm text-neutral-600">
-          <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700">
             Wróć do logowania
           </Link>
         </p>

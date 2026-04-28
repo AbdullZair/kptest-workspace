@@ -49,7 +49,7 @@ const getStatusIcon = (status: MaterialStatus): JSX.Element => {
   switch (status) {
     case 'PENDING':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -60,7 +60,7 @@ const getStatusIcon = (status: MaterialStatus): JSX.Element => {
       )
     case 'IN_PROGRESS':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -71,7 +71,7 @@ const getStatusIcon = (status: MaterialStatus): JSX.Element => {
       )
     case 'COMPLETED':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -102,7 +102,9 @@ const formatTimeSpent = (seconds: number): string => {
 /**
  * Get size classes
  */
-const getSizeClasses = (size: 'sm' | 'md' | 'lg'): { container: string; icon: string; text: string } => {
+const getSizeClasses = (
+  size: 'sm' | 'md' | 'lg'
+): { container: string; icon: string; text: string } => {
   switch (size) {
     case 'sm':
       return { container: 'px-2 py-1', icon: 'w-3.5 h-3.5', text: 'text-xs' }
@@ -124,57 +126,59 @@ const getSizeClasses = (size: 'sm' | 'md' | 'lg'): { container: string; icon: st
  * <ProgressTracker status="IN_PROGRESS" size="lg" showLabel />
  * ```
  */
-export const ProgressTracker = memo(function ProgressTracker({
-  status,
-  completedAt,
-  timeSpentSeconds,
-  quizScore,
-  size = 'md',
-  className,
-  showLabel = true,
-}: ProgressTrackerProps) {
-  const sizeClasses = getSizeClasses(size)
-  const colorClasses = getStatusColor(status)
+export const ProgressTracker = memo(
+  ({
+    status,
+    completedAt,
+    timeSpentSeconds,
+    quizScore,
+    size = 'md',
+    className,
+    showLabel = true,
+  }: ProgressTrackerProps) => {
+    const sizeClasses = getSizeClasses(size)
+    const colorClasses = getStatusColor(status)
 
-  return (
-    <div
-      className={twMerge(
-        'inline-flex items-center gap-2 rounded-full font-medium',
-        colorClasses,
-        sizeClasses.container,
-        className
-      )}
-    >
-      <div className={sizeClasses.icon}>{getStatusIcon(status)}</div>
-      {showLabel && <span className={sizeClasses.text}>{getStatusLabel(status)}</span>}
+    return (
+      <div
+        className={twMerge(
+          'inline-flex items-center gap-2 rounded-full font-medium',
+          colorClasses,
+          sizeClasses.container,
+          className
+        )}
+      >
+        <div className={sizeClasses.icon}>{getStatusIcon(status)}</div>
+        {showLabel ? <span className={sizeClasses.text}>{getStatusLabel(status)}</span> : null}
 
-      {/* Additional info */}
-      {status === 'COMPLETED' && (
-        <div className="flex items-center gap-2 ml-2">
-          {timeSpentSeconds !== undefined && timeSpentSeconds > 0 && (
-            <span className={twMerge('text-neutral-500', sizeClasses.text)}>
-              Czas: {formatTimeSpent(timeSpentSeconds)}
-            </span>
-          )}
-          {quizScore !== undefined && quizScore !== null && (
-            <span
-              className={twMerge(
-                'px-2 py-0.5 rounded text-xs font-semibold',
-                quizScore >= 80
-                  ? 'bg-green-200 text-green-800'
-                  : quizScore >= 50
-                  ? 'bg-yellow-200 text-yellow-800'
-                  : 'bg-red-200 text-red-800'
-              )}
-            >
-              Wynik: {quizScore}%
-            </span>
-          )}
-        </div>
-      )}
-    </div>
-  )
-})
+        {/* Additional info */}
+        {status === 'COMPLETED' && (
+          <div className="ml-2 flex items-center gap-2">
+            {timeSpentSeconds !== undefined && timeSpentSeconds > 0 && (
+              <span className={twMerge('text-neutral-500', sizeClasses.text)}>
+                Czas: {formatTimeSpent(timeSpentSeconds)}
+              </span>
+            )}
+            {quizScore !== undefined && quizScore !== null && (
+              <span
+                className={twMerge(
+                  'rounded px-2 py-0.5 text-xs font-semibold',
+                  quizScore >= 80
+                    ? 'bg-green-200 text-green-800'
+                    : quizScore >= 50
+                      ? 'bg-yellow-200 text-yellow-800'
+                      : 'bg-red-200 text-red-800'
+                )}
+              >
+                Wynik: {quizScore}%
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
+)
 
 /**
  * ProgressList Component
@@ -189,47 +193,43 @@ export interface ProgressListProps {
   className?: string
 }
 
-export const ProgressList = memo(function ProgressList({
-  total,
-  completed,
-  inProgress,
-  pending,
-  className,
-}: ProgressListProps) {
-  const completionPercentage = total > 0 ? Math.round((completed / total) * 100) : 0
+export const ProgressList = memo(
+  ({ total, completed, inProgress, pending, className }: ProgressListProps) => {
+    const completionPercentage = total > 0 ? Math.round((completed / total) * 100) : 0
 
-  return (
-    <div className={twMerge('space-y-3', className)}>
-      {/* Progress bar */}
-      <div className="w-full bg-neutral-200 rounded-full h-2.5">
-        <div
-          className="bg-green-500 h-2.5 rounded-full transition-all duration-300"
-          style={{ width: `${completionPercentage}%` }}
-        />
-      </div>
+    return (
+      <div className={twMerge('space-y-3', className)}>
+        {/* Progress bar */}
+        <div className="h-2.5 w-full rounded-full bg-neutral-200">
+          <div
+            className="h-2.5 rounded-full bg-green-500 transition-all duration-300"
+            style={{ width: `${completionPercentage}%` }}
+          />
+        </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 text-sm">
-        <div className="text-center">
-          <div className="text-2xl font-bold text-green-600">{completed}</div>
-          <div className="text-neutral-500">Ukończone</div>
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 text-sm">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-green-600">{completed}</div>
+            <div className="text-neutral-500">Ukończone</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-blue-600">{inProgress}</div>
+            <div className="text-neutral-500">W trakcie</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-neutral-600">{pending}</div>
+            <div className="text-neutral-500">Do przeczytania</div>
+          </div>
         </div>
-        <div className="text-center">
-          <div className="text-2xl font-bold text-blue-600">{inProgress}</div>
-          <div className="text-neutral-500">W trakcie</div>
-        </div>
-        <div className="text-center">
-          <div className="text-2xl font-bold text-neutral-600">{pending}</div>
-          <div className="text-neutral-500">Do przeczytania</div>
-        </div>
-      </div>
 
-      {/* Percentage */}
-      <div className="text-center text-sm text-neutral-600">
-        Postęp: {completionPercentage}% ({completed} z {total})
+        {/* Percentage */}
+        <div className="text-center text-sm text-neutral-600">
+          Postęp: {completionPercentage}% ({completed} z {total})
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
 
 export default ProgressTracker

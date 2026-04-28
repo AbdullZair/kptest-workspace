@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card } from '@shared/components'
-import type { Badge, PatientBadge } from '../../types/badge.types'
+import type { Badge, PatientBadge } from '../types/badge.types'
 
 /**
  * BadgeCard component props
@@ -54,18 +54,12 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
         <img
           src={badge.badge_icon_url}
           alt={badge.badge_name}
-          className="w-16 h-16 object-contain"
+          className="h-16 w-16 object-contain"
         />
       )
     }
     if ('icon_url' in badge && badge.icon_url) {
-      return (
-        <img
-          src={badge.icon_url}
-          alt={badge.name}
-          className="w-16 h-16 object-contain"
-        />
-      )
+      return <img src={badge.icon_url} alt={badge.name} className="h-16 w-16 object-contain" />
     }
 
     // Default icons by category
@@ -77,7 +71,7 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
       STREAK: '🔥',
     }
     return (
-      <div className="w-16 h-16 flex items-center justify-center text-4xl">
+      <div className="flex h-16 w-16 items-center justify-center text-4xl">
         {icons[category] || '🏅'}
       </div>
     )
@@ -86,7 +80,7 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
   if (compact) {
     return (
       <Card
-        className={`p-4 text-center cursor-pointer transition-transform hover:scale-105 ${
+        className={`cursor-pointer p-4 text-center transition-transform hover:scale-105 ${
           !isEarned ? 'opacity-50 grayscale' : ''
         }`}
         onClick={onClick}
@@ -95,73 +89,73 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
         <div className="text-sm font-semibold text-gray-900">
           {'badge_name' in badge ? badge.badge_name : badge.name}
         </div>
-        {isEarned && earnedAt && (
-          <div className="text-xs text-gray-500 mt-1">
+        {isEarned && earnedAt ? (
+          <div className="mt-1 text-xs text-gray-500">
             {new Date(earnedAt).toLocaleDateString('pl-PL')}
           </div>
-        )}
+        ) : null}
       </Card>
     )
   }
 
   return (
     <Card
-      className={`p-6 cursor-pointer transition-transform hover:scale-105 ${
+      className={`cursor-pointer p-6 transition-transform hover:scale-105 ${
         !isEarned ? 'opacity-50 grayscale' : ''
       }`}
       onClick={onClick}
     >
       <div className="flex items-start gap-4">
         <div
-          className="w-20 h-20 flex items-center justify-center rounded-lg"
+          className="flex h-20 w-20 items-center justify-center rounded-lg"
           style={{
-            backgroundColor: ('badge_color' in badge ? badge.badge_color : badge.color) || '#f3f4f6',
+            backgroundColor:
+              ('badge_color' in badge ? badge.badge_color : badge.color) || '#f3f4f6',
           }}
         >
           {getBadgeIcon()}
         </div>
 
         <div className="flex-1">
-          <div className="flex items-center justify-between mb-2">
+          <div className="mb-2 flex items-center justify-between">
             <h3 className="text-lg font-bold text-gray-900">
               {'badge_name' in badge ? badge.badge_name : badge.name}
             </h3>
-            {isEarned && (
-              <span className="text-green-600 text-xl">✓</span>
-            )}
+            {isEarned ? <span className="text-xl text-green-600">✓</span> : null}
           </div>
 
-          <p className="text-gray-600 text-sm mb-3">
+          <p className="mb-3 text-sm text-gray-600">
             {'badge_description' in badge ? badge.badge_description : badge.description}
           </p>
 
-          <div className="flex items-center gap-2 mb-2">
-            <span className={`text-xs px-2 py-1 rounded-full ${getCategoryColor()}`}>
+          <div className="mb-2 flex items-center gap-2">
+            <span className={`rounded-full px-2 py-1 text-xs ${getCategoryColor()}`}>
               {getCategoryLabel()}
             </span>
-            {!isEarned && isBadge && 'rules' in badge && badge.rules && badge.rules.length > 0 && (
+            {!isEarned && isBadge && 'rules' in badge && badge.rules && badge.rules.length > 0 ? (
               <span className="text-xs text-gray-500">
                 {badge.rules[0].threshold}{' '}
                 {badge.rules[0].rule_type === 'EVENTS_COMPLETED'
                   ? 'wydarzeń'
                   : badge.rules[0].rule_type === 'QUIZ_PASSED'
-                  ? 'quizów'
-                  : badge.rules[0].rule_type === 'MATERIALS_READ'
-                  ? 'materiałów'
-                  : ''}
+                    ? 'quizów'
+                    : badge.rules[0].rule_type === 'MATERIALS_READ'
+                      ? 'materiałów'
+                      : ''}
               </span>
-            )}
+            ) : null}
           </div>
 
-          {isEarned && earnedAt && (
+          {isEarned && earnedAt ? (
             <div className="text-xs text-gray-500">
-              Zdobyto: {new Date(earnedAt).toLocaleDateString('pl-PL', {
+              Zdobyto:{' '}
+              {new Date(earnedAt).toLocaleDateString('pl-PL', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </Card>

@@ -29,7 +29,12 @@ export const PatientDataAdminPage: React.FC = () => {
   const [showAnonymizeDialog, setShowAnonymizeDialog] = useState(false)
   const [showEraseDialog, setShowEraseDialog] = useState(false)
 
-  const { data: patient, isLoading, error, refetch } = useGetPatientDataQuery(patientId!, {
+  const {
+    data: patient,
+    isLoading,
+    error,
+    refetch,
+  } = useGetPatientDataQuery(patientId!, {
     skip: !patientId,
   })
 
@@ -47,8 +52,8 @@ export const PatientDataAdminPage: React.FC = () => {
 
   if (error || !patient) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px]">
-        <p className="text-red-600 text-lg mb-4">Wystąpił błąd podczas ładowania danych pacjenta</p>
+      <div className="flex min-h-[400px] flex-col items-center justify-center">
+        <p className="mb-4 text-lg text-red-600">Wystąpił błąd podczas ładowania danych pacjenta</p>
         <Button variant="primary" onClick={() => navigate('/admin/users')}>
           Powrót do listy użytkowników
         </Button>
@@ -62,12 +67,12 @@ export const PatientDataAdminPage: React.FC = () => {
         return (
           <div className="space-y-6">
             {/* Patient Info */}
-            <div className="bg-white border border-neutral-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">Dane osobowe</h3>
-              <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="rounded-lg border border-neutral-200 bg-white p-6">
+              <h3 className="mb-4 text-lg font-semibold text-neutral-900">Dane osobowe</h3>
+              <dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <dt className="text-sm font-medium text-neutral-500">PESEL</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 font-mono">{patient.pesel}</dd>
+                  <dd className="mt-1 font-mono text-sm text-neutral-900">{patient.pesel}</dd>
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-neutral-500">Imię i nazwisko</dt>
@@ -79,19 +84,19 @@ export const PatientDataAdminPage: React.FC = () => {
                   <dt className="text-sm font-medium text-neutral-500">Email</dt>
                   <dd className="mt-1 text-sm text-neutral-900">{patient.email}</dd>
                 </div>
-                {patient.phone && (
+                {patient.phone ? (
                   <div>
                     <dt className="text-sm font-medium text-neutral-500">Telefon</dt>
                     <dd className="mt-1 text-sm text-neutral-900">{patient.phone}</dd>
                   </div>
-                )}
+                ) : null}
                 <div>
                   <dt className="text-sm font-medium text-neutral-500">Data urodzenia</dt>
                   <dd className="mt-1 text-sm text-neutral-900">
                     {new Date(patient.date_of_birth).toLocaleDateString('pl-PL')}
                   </dd>
                 </div>
-                {(patient.address_street || patient.address_city || patient.address_postal_code) && (
+                {patient.address_street || patient.address_city || patient.address_postal_code ? (
                   <div>
                     <dt className="text-sm font-medium text-neutral-500">Adres</dt>
                     <dd className="mt-1 text-sm text-neutral-900">
@@ -100,51 +105,53 @@ export const PatientDataAdminPage: React.FC = () => {
                         .join(', ')}
                     </dd>
                   </div>
-                )}
+                ) : null}
                 <div>
                   <dt className="text-sm font-medium text-neutral-500">Utworzono</dt>
                   <dd className="mt-1 text-sm text-neutral-900">
                     {new Date(patient.created_at).toLocaleDateString('pl-PL')}
                   </dd>
                 </div>
-                {patient.deleted_at && (
+                {patient.deleted_at ? (
                   <div>
                     <dt className="text-sm font-medium text-neutral-500">Usunięto</dt>
                     <dd className="mt-1 text-sm text-red-600">
                       {new Date(patient.deleted_at).toLocaleDateString('pl-PL')}
                     </dd>
                   </div>
-                )}
-                {patient.anonymized_at && (
+                ) : null}
+                {patient.anonymized_at ? (
                   <div>
                     <dt className="text-sm font-medium text-neutral-500">Anonimizowano</dt>
                     <dd className="mt-1 text-sm text-amber-600">
                       {new Date(patient.anonymized_at).toLocaleDateString('pl-PL')}
                     </dd>
                   </div>
-                )}
+                ) : null}
               </dl>
             </div>
 
             {/* Projects */}
             {patient.projects.length > 0 && (
-              <div className="bg-white border border-neutral-200 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-4">Projekty</h3>
+              <div className="rounded-lg border border-neutral-200 bg-white p-6">
+                <h3 className="mb-4 text-lg font-semibold text-neutral-900">Projekty</h3>
                 <div className="space-y-2">
                   {patient.projects.map((project) => (
                     <div
                       key={project.project_id}
-                      className="flex items-center justify-between p-3 bg-neutral-50 rounded-md"
+                      className="flex items-center justify-between rounded-md bg-neutral-50 p-3"
                     >
                       <div>
-                        <p className="text-sm font-medium text-neutral-900">{project.project_name}</p>
+                        <p className="text-sm font-medium text-neutral-900">
+                          {project.project_name}
+                        </p>
                         <p className="text-xs text-neutral-500">
                           Rola: {project.role} • Dołączono:{' '}
                           {new Date(project.enrolled_at).toLocaleDateString('pl-PL')}
                         </p>
                       </div>
                       <span
-                        className={`px-2 py-1 text-xs rounded-full ${
+                        className={`rounded-full px-2 py-1 text-xs ${
                           project.active
                             ? 'bg-green-100 text-green-700'
                             : 'bg-neutral-100 text-neutral-700'
@@ -163,16 +170,17 @@ export const PatientDataAdminPage: React.FC = () => {
       case 'anonymize':
         return (
           <div className="space-y-4">
-            <div className="bg-white border border-neutral-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Anonimizacja danych</h3>
-              <p className="text-sm text-neutral-600 mb-4">
-                Anonimizacja zastępuje dane osobowe pacjenta danymi anonimizowanymi. Operacja jest nieodwracalna.
+            <div className="rounded-lg border border-neutral-200 bg-white p-6">
+              <h3 className="mb-2 text-lg font-semibold text-neutral-900">Anonimizacja danych</h3>
+              <p className="mb-4 text-sm text-neutral-600">
+                Anonimizacja zastępuje dane osobowe pacjenta danymi anonimizowanymi. Operacja jest
+                nieodwracalna.
               </p>
-              <div className="p-4 bg-amber-50 border border-amber-200 rounded-md mb-4">
+              <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm text-amber-800">
                   <strong>Zakres anonimizacji:</strong>
                 </p>
-                <ul className="text-sm text-amber-700 mt-2 list-disc list-inside space-y-1">
+                <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-amber-700">
                   <li>PESEL → XXXXXXXXXXX-{patient.patient_id.slice(0, 4)}</li>
                   <li>Imię → ANON</li>
                   <li>Nazwisko → ANON-{patient.patient_id.slice(0, 4)}</li>
@@ -192,13 +200,19 @@ export const PatientDataAdminPage: React.FC = () => {
       case 'export':
         return (
           <div className="space-y-4">
-            <div className="bg-white border border-neutral-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Eksport danych (RODO Art. 20)</h3>
-              <p className="text-sm text-neutral-600 mb-4">
-                Eksportuj kompletne dane pacjenta w formacie JSON lub PDF. Eksport zawiera: dane osobowe, projekty,
-                wiadomości, materiały, zdarzenia, quizy, badge i audit log.
+            <div className="rounded-lg border border-neutral-200 bg-white p-6">
+              <h3 className="mb-2 text-lg font-semibold text-neutral-900">
+                Eksport danych (RODO Art. 20)
+              </h3>
+              <p className="mb-4 text-sm text-neutral-600">
+                Eksportuj kompletne dane pacjenta w formacie JSON lub PDF. Eksport zawiera: dane
+                osobowe, projekty, wiadomości, materiały, zdarzenia, quizy, badge i audit log.
               </p>
-              <ExportPatientDataButton patientId={patient.patient_id} patientName={`${patient.first_name}_${patient.last_name}`} onSuccess={refetch} />
+              <ExportPatientDataButton
+                patientId={patient.patient_id}
+                patientName={`${patient.first_name}_${patient.last_name}`}
+                onSuccess={refetch}
+              />
             </div>
           </div>
         )
@@ -206,16 +220,18 @@ export const PatientDataAdminPage: React.FC = () => {
       case 'erase':
         return (
           <div className="space-y-4">
-            <div className="bg-white border border-neutral-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Trwałe usunięcie (RODO Art. 17)</h3>
-              <p className="text-sm text-neutral-600 mb-4">
-                Trwałe usunięcie wszystkich danych pacjenta z systemu. Operacja wymaga upływu 30-dniowego okresu
-                karencji od momentu usunięcia pacjenta.
+            <div className="rounded-lg border border-neutral-200 bg-white p-6">
+              <h3 className="mb-2 text-lg font-semibold text-neutral-900">
+                Trwałe usunięcie (RODO Art. 17)
+              </h3>
+              <p className="mb-4 text-sm text-neutral-600">
+                Trwałe usunięcie wszystkich danych pacjenta z systemu. Operacja wymaga upływu
+                30-dniowego okresu karencji od momentu usunięcia pacjenta.
               </p>
-              <div className="p-4 bg-red-50 border border-red-200 rounded-md mb-4">
+              <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-4">
                 <p className="text-sm text-red-800">
-                  <strong>Uwaga:</strong> Ta operacja jest nieodwracalna. Wszystkie dane pacjenta zostaną trwale
-                  usunięte.
+                  <strong>Uwaga:</strong> Ta operacja jest nieodwracalna. Wszystkie dane pacjenta
+                  zostaną trwale usunięte.
                 </p>
               </div>
               {patient.deleted_at ? (
@@ -233,11 +249,14 @@ export const PatientDataAdminPage: React.FC = () => {
                 onClick={() => setShowEraseDialog(true)}
                 disabled={!patient.deleted_at}
               >
-                {patient.deleted_at ? 'Rozpocznij trwałe usunięcie' : 'Brak możliwości usunięcia (pacjent nie został usunięty)'}
+                {patient.deleted_at
+                  ? 'Rozpocznij trwałe usunięcie'
+                  : 'Brak możliwości usunięcia (pacjent nie został usunięty)'}
               </Button>
               {!patient.deleted_at && (
-                <p className="text-sm text-neutral-500 mt-2">
-                  Aby móc trwale usunąć dane, pacjent musi najpierw zostać usunięty (miękkie usunięcie).
+                <p className="mt-2 text-sm text-neutral-500">
+                  Aby móc trwale usunąć dane, pacjent musi najpierw zostać usunięty (miękkie
+                  usunięcie).
                 </p>
               )}
             </div>
@@ -247,11 +266,11 @@ export const PatientDataAdminPage: React.FC = () => {
       case 'audit':
         return (
           <div className="space-y-4">
-            <div className="bg-white border border-neutral-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">Audit Trail</h3>
-              <p className="text-sm text-neutral-600 mb-4">
-                Historia operacji na danych pacjenta. Audit log zawiera wszystkie operacje CREATE, UPDATE, DELETE, VIEW
-                oraz specjalne operacje RODO (ANONYMIZE, ERASURE).
+            <div className="rounded-lg border border-neutral-200 bg-white p-6">
+              <h3 className="mb-4 text-lg font-semibold text-neutral-900">Audit Trail</h3>
+              <p className="mb-4 text-sm text-neutral-600">
+                Historia operacji na danych pacjenta. Audit log zawiera wszystkie operacje CREATE,
+                UPDATE, DELETE, VIEW oraz specjalne operacje RODO (ANONYMIZE, ERASURE).
               </p>
               <div className="text-sm text-neutral-500">
                 <p>Audit log jest dostępny w panelu administracyjnym:</p>
@@ -295,14 +314,11 @@ export const PatientDataAdminPage: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`
-                flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm
-                ${
-                  activeTab === tab.id
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
-                }
-              `}
+              className={`flex items-center gap-2 border-b-2 px-1 py-4 text-sm font-medium ${
+                activeTab === tab.id
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700'
+              } `}
             >
               <span>{tab.icon}</span>
               <span>{tab.label}</span>

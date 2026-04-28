@@ -1,5 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useGetComplianceReportQuery, useGetPatientStatsQuery, useGetProjectStatsQuery, useGetMaterialStatsQuery } from '../api'
+import {
+  useGetComplianceReportQuery,
+  useGetPatientStatsQuery,
+  useGetProjectStatsQuery,
+  useGetMaterialStatsQuery,
+} from '../api'
 import { ComplianceChart, PatientStatsCard, ProjectStatsCard, ExportButton } from '../components'
 import type { ComplianceTrendEntry } from '../types'
 
@@ -13,22 +18,28 @@ export const ReportDetailPage = () => {
   const navigate = useNavigate()
 
   const { data: complianceReport, isLoading: complianceLoading } = useGetComplianceReportQuery(
-    type === 'compliance' && id ? { projectId: id, dateFrom: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], dateTo: new Date().toISOString().split('T')[0] } : undefined as any,
+    type === 'compliance' && id
+      ? {
+          projectId: id,
+          dateFrom: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          dateTo: new Date().toISOString().split('T')[0],
+        }
+      : (undefined as any),
     { skip: type !== 'compliance' || !id }
   )
 
   const { data: patientStats, isLoading: patientLoading } = useGetPatientStatsQuery(
-    type === 'patient' && id ? { patientId: id } : undefined as any,
+    type === 'patient' && id ? { patientId: id } : (undefined as any),
     { skip: type !== 'patient' || !id }
   )
 
   const { data: projectStats, isLoading: projectLoading } = useGetProjectStatsQuery(
-    type === 'project' && id ? { projectId: id } : undefined as any,
+    type === 'project' && id ? { projectId: id } : (undefined as any),
     { skip: type !== 'project' || !id }
   )
 
   const { data: materialStats, isLoading: materialLoading } = useGetMaterialStatsQuery(
-    type === 'material' && id ? { projectId: id } : undefined as any,
+    type === 'material' && id ? { projectId: id } : (undefined as any),
     { skip: type !== 'material' || !id }
   )
 
@@ -37,7 +48,7 @@ export const ReportDetailPage = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary-600" />
       </div>
     )
   }
@@ -66,48 +77,44 @@ export const ReportDetailPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">Raport Compliance</h1>
-            <p className="text-neutral-600 mt-1">{complianceReport.project_name}</p>
+            <p className="mt-1 text-neutral-600">{complianceReport.project_name}</p>
           </div>
-          <ExportButton
-            reportType="COMPLIANCE"
-            projectId={id}
-            label="Eksportuj PDF"
-          />
+          <ExportButton reportType="COMPLIANCE" projectId={id} label="Eksportuj PDF" />
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow p-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">Overall Compliance</p>
-            <p className={`text-3xl font-bold mt-2 ${complianceReport.is_compliant ? 'text-emerald-600' : 'text-red-600'}`}>
+            <p
+              className={`mt-2 text-3xl font-bold ${complianceReport.is_compliant ? 'text-emerald-600' : 'text-red-600'}`}
+            >
               {complianceReport.overall_compliance.toFixed(1)}%
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">Zadania</p>
-            <p className="text-3xl font-bold text-neutral-900 mt-2">
+            <p className="mt-2 text-3xl font-bold text-neutral-900">
               {complianceReport.completed_tasks}/{complianceReport.total_tasks}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">Zaległe</p>
-            <p className="text-3xl font-bold text-red-600 mt-2">
-              {complianceReport.overdue_tasks}
-            </p>
+            <p className="mt-2 text-3xl font-bold text-red-600">{complianceReport.overdue_tasks}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">Threshold</p>
-            <p className="text-3xl font-bold text-neutral-900 mt-2">
+            <p className="mt-2 text-3xl font-bold text-neutral-900">
               {complianceReport.compliance_threshold}%
             </p>
           </div>
         </div>
 
         {/* Chart */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Trend Compliance</h2>
+        <div className="rounded-lg bg-white p-6 shadow">
+          <h2 className="mb-4 text-lg font-semibold">Trend Compliance</h2>
           <ComplianceChart
-            data={complianceReport.compliance_trend as unknown as ComplianceTrendEntry[]}
+            data={complianceReport.compliance_trend}
             overallCompliance={complianceReport.overall_compliance}
             threshold={complianceReport.compliance_threshold}
             height={300}
@@ -116,13 +123,13 @@ export const ReportDetailPage = () => {
 
         {/* Non-compliant Items */}
         {complianceReport.non_compliant_items.length > 0 && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">Elementy Niezgodne</h2>
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h2 className="mb-4 text-lg font-semibold">Elementy Niezgodne</h2>
             <div className="space-y-3">
               {complianceReport.non_compliant_items.map((item, index) => (
-                <div key={index} className="border border-red-200 rounded-lg p-4 bg-red-50">
+                <div key={index} className="rounded-lg border border-red-200 bg-red-50 p-4">
                   <p className="font-medium text-red-900">{item.description}</p>
-                  <p className="text-sm text-red-700 mt-1">
+                  <p className="mt-1 text-sm text-red-700">
                     Termin: {item.due_date} | Przypisany do: {item.assigned_to}
                   </p>
                 </div>
@@ -142,28 +149,24 @@ export const ReportDetailPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">Statystyki Pacjenta</h1>
-            <p className="text-neutral-600 mt-1">{patientStats.patient_name}</p>
+            <p className="mt-1 text-neutral-600">{patientStats.patient_name}</p>
           </div>
-          <ExportButton
-            reportType="PATIENT_STATS"
-            patientId={id}
-            label="Eksportuj PDF"
-          />
+          <ExportButton reportType="PATIENT_STATS" patientId={id} label="Eksportuj PDF" />
         </div>
 
         <PatientStatsCard stats={patientStats} />
 
         {/* Project Stats */}
         {patientStats.project_stats.length > 0 && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">Projekty</h2>
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h2 className="mb-4 text-lg font-semibold">Projekty</h2>
             <div className="space-y-3">
               {patientStats.project_stats.map((proj, index) => (
-                <div key={index} className="border border-neutral-200 rounded-lg p-4">
+                <div key={index} className="rounded-lg border border-neutral-200 p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium text-neutral-900">{proj.project_name}</p>
-                      <p className="text-sm text-neutral-600 mt-1">Etap: {proj.current_stage}</p>
+                      <p className="mt-1 text-sm text-neutral-600">Etap: {proj.current_stage}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-lg font-bold text-neutral-900">
@@ -189,13 +192,9 @@ export const ReportDetailPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">Statystyki Projektu</h1>
-            <p className="text-neutral-600 mt-1">{projectStats.project_name}</p>
+            <p className="mt-1 text-neutral-600">{projectStats.project_name}</p>
           </div>
-          <ExportButton
-            reportType="PROJECT_STATS"
-            projectId={id}
-            label="Eksportuj PDF"
-          />
+          <ExportButton reportType="PROJECT_STATS" projectId={id} label="Eksportuj PDF" />
         </div>
 
         <ProjectStatsCard stats={projectStats} />
@@ -211,55 +210,49 @@ export const ReportDetailPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">Statystyki Materiałów</h1>
-            <p className="text-neutral-600 mt-1">{materialStats.project_name}</p>
+            <p className="mt-1 text-neutral-600">{materialStats.project_name}</p>
           </div>
-          <ExportButton
-            reportType="MATERIAL_STATS"
-            projectId={id}
-            label="Eksportuj PDF"
-          />
+          <ExportButton reportType="MATERIAL_STATS" projectId={id} label="Eksportuj PDF" />
         </div>
 
         {/* Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow p-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">Materiały</p>
-            <p className="text-3xl font-bold text-neutral-900 mt-2">
+            <p className="mt-2 text-3xl font-bold text-neutral-900">
               {materialStats.materials_assigned}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">Ukończone</p>
-            <p className="text-3xl font-bold text-emerald-600 mt-2">
+            <p className="mt-2 text-3xl font-bold text-emerald-600">
               {materialStats.materials_completed}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">W toku</p>
-            <p className="text-3xl font-bold text-amber-600 mt-2">
+            <p className="mt-2 text-3xl font-bold text-amber-600">
               {materialStats.materials_in_progress}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="rounded-lg bg-white p-6 shadow">
             <p className="text-sm text-neutral-600">Completion Rate</p>
-            <p className="text-3xl font-bold text-neutral-900 mt-2">
+            <p className="mt-2 text-3xl font-bold text-neutral-900">
               {materialStats.completion_rate.toFixed(1)}%
             </p>
           </div>
         </div>
 
         {/* Materials List */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Materiały</h2>
+        <div className="rounded-lg bg-white p-6 shadow">
+          <h2 className="mb-4 text-lg font-semibold">Materiały</h2>
           <div className="space-y-3">
             {materialStats.materials_list.map((material, index) => (
-              <div key={index} className="border border-neutral-200 rounded-lg p-4">
+              <div key={index} className="rounded-lg border border-neutral-200 p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-neutral-900">{material.title}</p>
-                    <p className="text-sm text-neutral-600 mt-1">
-                      Kategoria: {material.category}
-                    </p>
+                    <p className="mt-1 text-sm text-neutral-600">Kategoria: {material.category}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-neutral-900">
@@ -285,7 +278,7 @@ export const ReportDetailPage = () => {
         onClick={() => navigate(-1)}
         className="flex items-center text-primary-600 hover:text-primary-700"
       >
-        <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
         Powrót

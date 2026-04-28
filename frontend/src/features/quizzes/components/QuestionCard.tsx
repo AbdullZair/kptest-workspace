@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Card, Checkbox, Radio } from '@shared/components'
-import type { QuizQuestion, QuizAnswer } from '../../types/quiz.types'
+import type { QuizQuestion, QuizAnswer } from '../types/quiz.types'
 
 /**
  * QuestionCard component props
@@ -78,16 +78,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   }
 
   return (
-    <Card className="p-6 mb-4">
+    <Card className="mb-4 p-6">
       <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
+        <div className="mb-2 flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-900">
             Pytanie {question.order_index + 1}
           </h3>
           <span className="text-sm text-gray-500">{question.points} pkt</span>
         </div>
-        <p className="text-gray-700 mb-2">{question.question}</p>
-        <p className="text-sm text-blue-600 italic">{getQuestionTypeLabel()}</p>
+        <p className="mb-2 text-gray-700">{question.question}</p>
+        <p className="text-sm italic text-blue-600">{getQuestionTypeLabel()}</p>
       </div>
 
       <div className="space-y-3">
@@ -99,14 +99,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           return (
             <div
               key={answer.id}
-              className={`
-                border rounded-lg p-4 transition-colors
-                ${getAnswerStyle(answer)}
-                ${!showResult && isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}
-                ${!disabled ? 'cursor-pointer hover:border-gray-300' : ''}
-              `}
+              className={`rounded-lg border p-4 transition-colors ${getAnswerStyle(answer)} ${!showResult && isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'} ${!disabled ? 'cursor-pointer hover:border-gray-300' : ''} `}
             >
-              <label className="flex items-start gap-3 cursor-pointer">
+              <label className="flex cursor-pointer items-start gap-3">
                 {question.type === 'SINGLE_CHOICE' || question.type === 'TRUE_FALSE' ? (
                   <Radio
                     checked={isSelected}
@@ -124,15 +119,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 )}
                 <div className="flex-1">
                   <span className="text-gray-900">{answer.answer}</span>
-                  {showResult && isCorrect && (
-                    <span className="ml-2 text-green-600 text-sm">✓ Poprawna</span>
-                  )}
-                  {showResult && isWrong && (
-                    <span className="ml-2 text-red-600 text-sm">✗ Niepoprawna</span>
-                  )}
-                  {showResult && answer.explanation && (
-                    <p className="mt-2 text-sm text-gray-600 italic">{answer.explanation}</p>
-                  )}
+                  {showResult && isCorrect ? (
+                    <span className="ml-2 text-sm text-green-600">✓ Poprawna</span>
+                  ) : null}
+                  {showResult && isWrong ? (
+                    <span className="ml-2 text-sm text-red-600">✗ Niepoprawna</span>
+                  ) : null}
+                  {showResult && answer.explanation ? (
+                    <p className="mt-2 text-sm italic text-gray-600">{answer.explanation}</p>
+                  ) : null}
                 </div>
               </label>
             </div>

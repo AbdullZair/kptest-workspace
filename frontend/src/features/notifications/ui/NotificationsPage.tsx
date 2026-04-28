@@ -1,5 +1,10 @@
 import { useState, useMemo } from 'react'
-import { useGetNotificationsQuery, useMarkAsReadMutation, useDeleteNotificationMutation, useMarkAllAsReadMutation } from '../api/notificationApi'
+import {
+  useGetNotificationsQuery,
+  useMarkAsReadMutation,
+  useDeleteNotificationMutation,
+  useMarkAllAsReadMutation,
+} from '../api/notificationApi'
 import { NotificationItem } from '../components'
 import type { NotificationType, NotificationFilters } from '@entities/notification'
 import { Button } from '@shared/components/Button'
@@ -72,13 +77,13 @@ export const NotificationsPage = function NotificationsPage() {
   return (
     <div className="min-h-screen bg-neutral-100">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
               <h1 className="text-2xl font-bold text-neutral-900">Powiadomienia</h1>
               {unreadCount > 0 && (
-                <span className="px-2.5 py-0.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
+                <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-sm font-medium text-primary-700">
                   {unreadCount} nieprzeczytanych
                 </span>
               )}
@@ -94,12 +99,14 @@ export const NotificationsPage = function NotificationsPage() {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-2 pb-4">
             {/* Type filter */}
-            <div className="flex gap-1 bg-neutral-100 rounded-lg p-1">
-              {(['ALL', 'MESSAGE', 'EVENT', 'MATERIAL', 'SCHEDULE_CHANGE', 'REMINDER'] as const).map((type) => (
+            <div className="flex gap-1 rounded-lg bg-neutral-100 p-1">
+              {(
+                ['ALL', 'MESSAGE', 'EVENT', 'MATERIAL', 'SCHEDULE_CHANGE', 'REMINDER'] as const
+              ).map((type) => (
                 <button
                   key={type}
                   onClick={() => setSelectedType(type)}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                     selectedType === type
                       ? 'bg-white text-neutral-900 shadow-sm'
                       : 'text-neutral-600 hover:text-neutral-900'
@@ -111,10 +118,10 @@ export const NotificationsPage = function NotificationsPage() {
             </div>
 
             {/* Read filter */}
-            <div className="flex gap-1 bg-neutral-100 rounded-lg p-1 ml-auto">
+            <div className="ml-auto flex gap-1 rounded-lg bg-neutral-100 p-1">
               <button
                 onClick={() => setShowRead(false)}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   !showRead
                     ? 'bg-white text-neutral-900 shadow-sm'
                     : 'text-neutral-600 hover:text-neutral-900'
@@ -124,7 +131,7 @@ export const NotificationsPage = function NotificationsPage() {
               </button>
               <button
                 onClick={() => setShowRead(true)}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   showRead
                     ? 'bg-white text-neutral-900 shadow-sm'
                     : 'text-neutral-600 hover:text-neutral-900'
@@ -138,11 +145,11 @@ export const NotificationsPage = function NotificationsPage() {
       </header>
 
       {/* Content */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
         {isLoadingNotifications ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-600 border-t-transparent" />
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
               <p className="mt-4 text-sm text-neutral-500">Ładowanie powiadomień...</p>
             </div>
           </div>
@@ -158,7 +165,7 @@ export const NotificationsPage = function NotificationsPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
+          <div className="py-12 text-center">
             <svg
               className="mx-auto h-16 w-16 text-neutral-400"
               fill="none"
@@ -174,9 +181,7 @@ export const NotificationsPage = function NotificationsPage() {
             </svg>
             <h3 className="mt-4 text-lg font-medium text-neutral-900">Brak powiadomień</h3>
             <p className="mt-2 text-sm text-neutral-500">
-              {showRead
-                ? 'Nie masz żadnych powiadomień'
-                : 'Wszystkie powiadomienia są przeczytane'}
+              {showRead ? 'Nie masz żadnych powiadomień' : 'Wszystkie powiadomienia są przeczytane'}
             </p>
           </div>
         )}

@@ -53,7 +53,15 @@ export function AdminAuditLogsPage() {
     }
   }
 
-  const actions: (AuditAction | 'ALL')[] = ['ALL', 'CREATE', 'UPDATE', 'DELETE', 'VIEW', 'LOGIN', 'LOGOUT']
+  const actions: (AuditAction | 'ALL')[] = [
+    'ALL',
+    'CREATE',
+    'UPDATE',
+    'DELETE',
+    'VIEW',
+    'LOGIN',
+    'LOGOUT',
+  ]
 
   return (
     <div className="space-y-6">
@@ -68,13 +76,13 @@ export function AdminAuditLogsPage() {
         <div className="flex gap-2">
           <button
             onClick={() => handleExport('CSV')}
-            className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
+            className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
           >
             Eksport CSV
           </button>
           <button
             onClick={() => handleExport('JSON')}
-            className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
+            className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
           >
             Eksport JSON
           </button>
@@ -91,7 +99,7 @@ export function AdminAuditLogsPage() {
                 key={action}
                 onClick={() => handleActionFilter(action)}
                 className={clsx(
-                  'px-3 py-1 text-sm rounded-full transition-colors',
+                  'rounded-full px-3 py-1 text-sm transition-colors',
                   filters.action === action || (action === 'ALL' && !filters.action)
                     ? 'bg-primary-600 text-white'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
@@ -106,11 +114,11 @@ export function AdminAuditLogsPage() {
 
       {/* Audit Log Table */}
       {error ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-red-600">Wystąpił błąd podczas ładowania logów audytu</p>
           <button
             onClick={() => refetch()}
-            className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
+            className="mt-4 font-medium text-primary-600 hover:text-primary-700"
           >
             Spróbuj ponownie
           </button>
@@ -128,40 +136,42 @@ export function AdminAuditLogsPage() {
           />
 
           {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 bg-white border border-neutral-200 rounded-lg">
+          {data && data.totalPages > 1 ? (
+            <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-4 py-3">
               <div className="text-sm text-neutral-700">
                 Strona {data.pageNumber + 1} z {data.totalPages} ({data.totalElements} logów)
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page! - 1) }))}
+                  onClick={() =>
+                    setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page! - 1) }))
+                  }
                   disabled={data.isFirst}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Poprzednia
                 </button>
                 <button
                   onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
                   disabled={data.isLast}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Następna
                 </button>
               </div>
             </div>
-          )}
+          ) : null}
         </>
       )}
 
       {/* Log Viewer Modal */}
-      {showLogViewer && selectedLog && (
+      {showLogViewer && selectedLog ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="max-w-4xl w-full max-h-[90vh] overflow-auto">
+          <div className="max-h-[90vh] w-full max-w-4xl overflow-auto">
             <LogViewer log={selectedLog} onClose={() => setShowLogViewer(false)} />
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Card, Button, Alert } from '@shared/components'
-import type { TherapyStage } from '../../types/stage.types'
+import type { TherapyStage } from '../types/stage.types'
 
 /**
  * StageList component props
@@ -94,24 +94,14 @@ export const StageList: React.FC<StageListProps> = ({
             onDragOver={(e) => handleDragOver(e, index)}
             onDragLeave={handleDragLeave}
             onDrop={(e) => handleDrop(e, index)}
-            className={`
-              relative transition-all duration-200
-              ${isDragging ? 'opacity-50 scale-95' : ''}
-              ${isDragOver ? 'border-2 border-blue-500' : ''}
-              ${canDrag ? 'cursor-grab active:cursor-grabbing' : ''}
-            `}
+            className={`relative transition-all duration-200 ${isDragging ? 'scale-95 opacity-50' : ''} ${isDragOver ? 'border-2 border-blue-500' : ''} ${canDrag ? 'cursor-grab active:cursor-grabbing' : ''} `}
           >
             <Card className="p-4">
               <div className="flex items-center gap-4">
                 {/* Drag Handle */}
-                {canDrag && (
-                  <div className="flex-shrink-0 text-gray-400 cursor-grab">
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                {canDrag ? (
+                  <div className="flex-shrink-0 cursor-grab text-gray-400">
+                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -120,59 +110,45 @@ export const StageList: React.FC<StageListProps> = ({
                       />
                     </svg>
                   </div>
-                )}
+                ) : null}
 
                 {/* Order Index */}
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center font-semibold">
+                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
                   {index + 1}
                 </div>
 
                 {/* Stage Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-semibold text-gray-900 truncate">
-                      {stage.name}
-                    </h3>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex items-center gap-2">
+                    <h3 className="truncate text-lg font-semibold text-gray-900">{stage.name}</h3>
                     {!stage.is_active && (
-                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded">
+                      <span className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600">
                         Nieaktywny
                       </span>
                     )}
                   </div>
-                  {stage.description && (
-                    <p className="text-sm text-gray-600 truncate">
-                      {stage.description}
-                    </p>
-                  )}
-                  <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                  {stage.description ? (
+                    <p className="truncate text-sm text-gray-600">{stage.description}</p>
+                  ) : null}
+                  <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
                     <span>{getUnlockModeLabel(stage.unlock_mode)}</span>
-                    {stage.unlock_mode === 'AUTO_QUIZ' && stage.required_quiz_title && (
-                      <span className="text-blue-600">
-                        Quiz: {stage.required_quiz_title}
-                      </span>
-                    )}
+                    {stage.unlock_mode === 'AUTO_QUIZ' && stage.required_quiz_title ? (
+                      <span className="text-blue-600">Quiz: {stage.required_quiz_title}</span>
+                    ) : null}
                   </div>
                 </div>
 
                 {/* Actions */}
-                {isStaff && (
-                  <div className="flex-shrink-0 flex gap-2">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => onEdit?.(stage)}
-                    >
+                {isStaff ? (
+                  <div className="flex flex-shrink-0 gap-2">
+                    <Button variant="secondary" size="sm" onClick={() => onEdit?.(stage)}>
                       Edytuj
                     </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => onDelete?.(stage)}
-                    >
+                    <Button variant="danger" size="sm" onClick={() => onDelete?.(stage)}>
                       Usuń
                     </Button>
                   </div>
-                )}
+                ) : null}
               </div>
             </Card>
           </div>

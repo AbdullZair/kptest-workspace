@@ -55,150 +55,154 @@ const DIFFICULTY_OPTIONS: { value: DifficultyLevel; label: string }[] = [
  * />
  * ```
  */
-export const MaterialFilters = memo(function MaterialFilters({
-  categories = [],
-  selectedCategory,
-  selectedDifficulty,
-  selectedType,
-  searchQuery,
-  onCategoryChange,
-  onDifficultyChange,
-  onTypeChange,
-  onSearchChange,
-  onClearFilters,
-  compact = false,
-}: MaterialFiltersProps) {
-  const hasActiveFilters = useMemo(() => {
-    return !!(selectedCategory || selectedDifficulty || selectedType || searchQuery)
-  }, [selectedCategory, selectedDifficulty, selectedType, searchQuery])
+export const MaterialFilters = memo(
+  ({
+    categories = [],
+    selectedCategory,
+    selectedDifficulty,
+    selectedType,
+    searchQuery,
+    onCategoryChange,
+    onDifficultyChange,
+    onTypeChange,
+    onSearchChange,
+    onClearFilters,
+    compact = false,
+  }: MaterialFiltersProps) => {
+    const hasActiveFilters = useMemo(() => {
+      return !!(selectedCategory || selectedDifficulty || selectedType || searchQuery)
+    }, [selectedCategory, selectedDifficulty, selectedType, searchQuery])
 
-  const handleClearFilters = () => {
-    onClearFilters?.()
-  }
+    const handleClearFilters = () => {
+      onClearFilters?.()
+    }
 
-  return (
-    <div className="space-y-4">
-      {/* Search */}
-      <div>
-        <Input
-          type="text"
-          placeholder="Szukaj materiałów..."
-          value={searchQuery || ''}
-          onChange={(e) => onSearchChange?.(e.target.value)}
-          leftIcon={
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          }
-          fullWidth
-        />
-      </div>
+    return (
+      <div className="space-y-4">
+        {/* Search */}
+        <div>
+          <Input
+            type="text"
+            placeholder="Szukaj materiałów..."
+            value={searchQuery || ''}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            leftIcon={
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            }
+            fullWidth
+          />
+        </div>
 
-      {/* Filters */}
-      <div className={compact ? 'flex flex-wrap gap-2' : 'grid grid-cols-1 sm:grid-cols-3 gap-4'}>
-        {/* Category filter */}
-        {categories.length > 0 && (
+        {/* Filters */}
+        <div className={compact ? 'flex flex-wrap gap-2' : 'grid grid-cols-1 gap-4 sm:grid-cols-3'}>
+          {/* Category filter */}
+          {categories.length > 0 && (
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700">Kategoria</label>
+              <select
+                value={selectedCategory || ''}
+                onChange={(e) => onCategoryChange?.(e.target.value || undefined)}
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              >
+                <option value="">Wszystkie</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Difficulty filter */}
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Kategoria</label>
-            <select
-              value={selectedCategory || ''}
-              onChange={(e) => onCategoryChange?.(e.target.value || undefined)}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-            >
-              <option value="">Wszystkie</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+            <label className="mb-1 block text-sm font-medium text-neutral-700">
+              Poziom trudności
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => onDifficultyChange?.(undefined)}
+                className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+                  !selectedDifficulty
+                    ? 'border-primary-200 bg-primary-50 text-primary-700'
+                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
+                }`}
+              >
+                Wszystkie
+              </button>
+              {DIFFICULTY_OPTIONS.map(({ value, label }) => (
+                <button
+                  key={value}
+                  onClick={() => onDifficultyChange?.(value)}
+                  className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+                    selectedDifficulty === value
+                      ? 'border-primary-200 bg-primary-50 text-primary-700'
+                      : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
+                  }`}
+                >
+                  {label}
+                </button>
               ))}
-            </select>
+            </div>
           </div>
-        )}
 
-        {/* Difficulty filter */}
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Poziom trudności</label>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => onDifficultyChange?.(undefined)}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                !selectedDifficulty
-                  ? 'bg-primary-50 border-primary-200 text-primary-700'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
-              }`}
-            >
-              Wszystkie
-            </button>
-            {DIFFICULTY_OPTIONS.map(({ value, label }) => (
+          {/* Type filter */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-neutral-700">Typ materiału</label>
+            <div className="flex flex-wrap gap-2">
               <button
-                key={value}
-                onClick={() => onDifficultyChange?.(value)}
-                className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                  selectedDifficulty === value
-                    ? 'bg-primary-50 border-primary-200 text-primary-700'
-                    : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
+                onClick={() => onTypeChange?.(undefined)}
+                className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+                  !selectedType
+                    ? 'border-primary-200 bg-primary-50 text-primary-700'
+                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                 }`}
               >
-                {label}
+                Wszystkie
               </button>
-            ))}
+              {MATERIAL_TYPE_OPTIONS.map(({ value, label }) => (
+                <button
+                  key={value}
+                  onClick={() => onTypeChange?.(value)}
+                  className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+                    selectedType === value
+                      ? 'border-primary-200 bg-primary-50 text-primary-700'
+                      : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Type filter */}
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Typ materiału</label>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => onTypeChange?.(undefined)}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                !selectedType
-                  ? 'bg-primary-50 border-primary-200 text-primary-700'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
-              }`}
-            >
-              Wszystkie
-            </button>
-            {MATERIAL_TYPE_OPTIONS.map(({ value, label }) => (
-              <button
-                key={value}
-                onClick={() => onTypeChange?.(value)}
-                className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                  selectedType === value
-                    ? 'bg-primary-50 border-primary-200 text-primary-700'
-                    : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+        {/* Clear filters */}
+        {hasActiveFilters ? (
+          <div className="flex justify-end">
+            <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+              <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Wyczyść filtry
+            </Button>
           </div>
-        </div>
+        ) : null}
       </div>
-
-      {/* Clear filters */}
-      {hasActiveFilters && (
-        <div className="flex justify-end">
-          <Button variant="ghost" size="sm" onClick={handleClearFilters}>
-            <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-            Wyczyść filtry
-          </Button>
-        </div>
-      )}
-    </div>
-  )
-})
+    )
+  }
+)
 
 export default MaterialFilters

@@ -61,13 +61,13 @@ const ProgressBar = ({
 
   return (
     <div className="space-y-1">
-      {label && (
+      {label ? (
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-neutral-700">{label}</span>
           <span className="text-neutral-500">{percentage.toFixed(1)}%</span>
         </div>
-      )}
-      <div className="h-2.5 bg-neutral-200 rounded-full overflow-hidden">
+      ) : null}
+      <div className="h-2.5 overflow-hidden rounded-full bg-neutral-200">
         <div
           className={clsx('h-full transition-all duration-500', colorClasses[finalColor])}
           style={{ width: `${percentage}%` }}
@@ -93,13 +93,13 @@ const MetricCard = ({
   value: string | number
   subtitle?: string
 }) => (
-  <div className="p-4 bg-neutral-50 rounded-lg">
+  <div className="rounded-lg bg-neutral-50 p-4">
     <div className="flex items-center gap-3">
-      <div className={clsx('p-2 rounded-lg', iconColor)}>{icon}</div>
+      <div className={clsx('rounded-lg p-2', iconColor)}>{icon}</div>
       <div>
         <dt className="text-sm font-medium text-neutral-500">{title}</dt>
         <dd className="text-lg font-semibold text-neutral-900">{value}</dd>
-        {subtitle && <dd className="text-xs text-neutral-500">{subtitle}</dd>}
+        {subtitle ? <dd className="text-xs text-neutral-500">{subtitle}</dd> : null}
       </div>
     </div>
   </div>
@@ -115,28 +115,27 @@ const MetricCard = ({
  * <SystemMetricsChart metrics={metrics} />
  * ```
  */
-export const SystemMetricsChart = memo(function SystemMetricsChart({
-  metrics,
-  className = '',
-}: SystemMetricsChartProps) {
+export const SystemMetricsChart = memo(({ metrics, className = '' }: SystemMetricsChartProps) => {
   const { memory_usage, cpu_usage, database_metrics, cache_metrics, user_metrics } = metrics
 
   return (
-    <div className={clsx('bg-white rounded-lg border border-neutral-200 overflow-hidden', className)}>
+    <div
+      className={clsx('overflow-hidden rounded-lg border border-neutral-200 bg-white', className)}
+    >
       {/* Header */}
-      <div className="px-6 py-4 border-b border-neutral-200 bg-neutral-50">
+      <div className="border-b border-neutral-200 bg-neutral-50 px-6 py-4">
         <h3 className="text-lg font-semibold text-neutral-900">Metryki systemu</h3>
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-6">
+      <div className="space-y-6 p-6">
         {/* Memory Usage */}
         <div>
-          <h4 className="text-sm font-semibold text-neutral-700 mb-3">Użycie pamięci</h4>
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <h4 className="mb-3 text-sm font-semibold text-neutral-700">Użycie pamięci</h4>
+          <div className="mb-4 grid grid-cols-3 gap-4">
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -151,7 +150,7 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
             />
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -166,7 +165,7 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
             />
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -180,20 +179,16 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
               value={formatBytes(memory_usage.used_mb)}
             />
           </div>
-          <ProgressBar
-            value={memory_usage.usage_percent}
-            max={100}
-            label="Wykorzystanie pamięci"
-          />
+          <ProgressBar value={memory_usage.usage_percent} max={100} label="Wykorzystanie pamięci" />
         </div>
 
         {/* CPU Usage */}
         <div>
-          <h4 className="text-sm font-semibold text-neutral-700 mb-3">Procesor</h4>
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <h4 className="mb-3 text-sm font-semibold text-neutral-700">Procesor</h4>
+          <div className="mb-4 grid grid-cols-2 gap-4">
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -209,7 +204,7 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
             />
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -228,11 +223,11 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
 
         {/* Database Metrics */}
         <div>
-          <h4 className="text-sm font-semibold text-neutral-700 mb-3">Baza danych</h4>
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <h4 className="mb-3 text-sm font-semibold text-neutral-700">Baza danych</h4>
+          <div className="mb-4 grid grid-cols-2 gap-4">
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -248,7 +243,7 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
             />
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -267,11 +262,11 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
 
         {/* User Metrics */}
         <div>
-          <h4 className="text-sm font-semibold text-neutral-700 mb-3">Użytkownicy</h4>
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <h4 className="mb-3 text-sm font-semibold text-neutral-700">Użytkownicy</h4>
+          <div className="mb-4 grid grid-cols-3 gap-4">
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -286,7 +281,7 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
             />
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -301,7 +296,7 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
             />
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -325,11 +320,11 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
 
         {/* Cache Metrics */}
         <div>
-          <h4 className="text-sm font-semibold text-neutral-700 mb-3">Cache</h4>
+          <h4 className="mb-3 text-sm font-semibold text-neutral-700">Cache</h4>
           <div className="grid grid-cols-2 gap-4">
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -338,13 +333,15 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
                   />
                 </svg>
               }
-              iconColor={cache_metrics.connected ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}
+              iconColor={
+                cache_metrics.connected ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+              }
               title="Status"
               value={cache_metrics.connected ? 'Połączony' : 'Rozłączony'}
             />
             <MetricCard
               icon={
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -362,10 +359,9 @@ export const SystemMetricsChart = memo(function SystemMetricsChart({
         </div>
 
         {/* Timestamp */}
-        <div className="pt-4 border-t border-neutral-200">
-          <p className="text-xs text-neutral-500 text-center">
-            Ostatnia aktualizacja:{' '}
-            {new Date(metrics.timestamp).toLocaleString('pl-PL')}
+        <div className="border-t border-neutral-200 pt-4">
+          <p className="text-center text-xs text-neutral-500">
+            Ostatnia aktualizacja: {new Date(metrics.timestamp).toLocaleString('pl-PL')}
           </p>
         </div>
       </div>

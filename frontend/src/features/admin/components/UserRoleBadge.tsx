@@ -62,17 +62,13 @@ const getSizeClasses = (size: 'sm' | 'md' | 'lg'): string => {
  * <UserRoleBadge role="ADMIN" size="md" />
  * ```
  */
-export const UserRoleBadge = memo(function UserRoleBadge({
-  role,
-  size = 'md',
-  className = '',
-}: UserRoleBadgeProps) {
+export const UserRoleBadge = memo(({ role, size = 'md', className = '' }: UserRoleBadgeProps) => {
   const colorClass = getRoleColor(role)
   const sizeClass = getSizeClasses(size)
 
   return (
     <span
-      className={`inline-flex items-center font-medium rounded-full border ${colorClass} ${sizeClass} ${className}`}
+      className={`inline-flex items-center rounded-full border font-medium ${colorClass} ${sizeClass} ${className}`}
     >
       {getRoleLabel(role)}
     </span>

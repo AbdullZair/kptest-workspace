@@ -17,10 +17,16 @@ export const AnonymizePatientDialog = ({
 }: AnonymizePatientDialogProps) => {
   if (!isOpen) return null
   return (
-    <div role="dialog" aria-modal="true" className="fixed inset-0 bg-black/40 flex items-center justify-center">
-      <div className="bg-white p-6 rounded shadow max-w-md">
-        <h2 className="font-semibold mb-2">Anonimizacja pacjenta</h2>
-        <p className="mb-4">Anonimizacja danych pacjenta {patientName} — funkcja w przygotowaniu.</p>
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 flex items-center justify-center bg-black/40"
+    >
+      <div className="max-w-md rounded bg-white p-6 shadow">
+        <h2 className="mb-2 font-semibold">Anonimizacja pacjenta</h2>
+        <p className="mb-4">
+          Anonimizacja danych pacjenta {patientName} — funkcja w przygotowaniu.
+        </p>
         <Button onClick={onClose}>Zamknij</Button>
       </div>
     </div>

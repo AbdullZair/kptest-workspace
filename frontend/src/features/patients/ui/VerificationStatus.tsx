@@ -20,7 +20,10 @@ export interface VerificationStatusProps {
 /**
  * Status styles mapping
  */
-const statusStyles: Record<VerificationStatusType, { bg: string; text: string; border: string; dot: string }> = {
+const statusStyles: Record<
+  VerificationStatusType,
+  { bg: string; text: string; border: string; dot: string }
+> = {
   PENDING: {
     bg: 'bg-amber-50',
     text: 'text-amber-800',
@@ -74,31 +77,28 @@ const getStatusLabel = (status: VerificationStatusType): string => {
  * <VerificationStatus status="REJECTED" size="lg" />
  * ```
  */
-export const VerificationStatus = memo(function VerificationStatus({
-  status,
-  size = 'md',
-  showLabel = true,
-  className,
-}: VerificationStatusProps) {
-  const styles = statusStyles[status]
-  const sizeStyle = sizeStyles[size]
+export const VerificationStatus = memo(
+  ({ status, size = 'md', showLabel = true, className }: VerificationStatusProps) => {
+    const styles = statusStyles[status]
+    const sizeStyle = sizeStyles[size]
 
-  const baseStyles = clsx(
-    'inline-flex items-center gap-1.5',
-    'rounded-full border',
-    styles.bg,
-    styles.text,
-    styles.border,
-    sizeStyle,
-    className
-  )
+    const baseStyles = clsx(
+      'inline-flex items-center gap-1.5',
+      'rounded-full border',
+      styles.bg,
+      styles.text,
+      styles.border,
+      sizeStyle,
+      className
+    )
 
-  return (
-    <span className={twMerge(baseStyles)}>
-      <span className={clsx('w-2 h-2 rounded-full', styles.dot)} aria-hidden="true" />
-      {showLabel && <span className="font-medium">{getStatusLabel(status)}</span>}
-    </span>
-  )
-})
+    return (
+      <span className={twMerge(baseStyles)}>
+        <span className={clsx('h-2 w-2 rounded-full', styles.dot)} aria-hidden="true" />
+        {showLabel ? <span className="font-medium">{getStatusLabel(status)}</span> : null}
+      </span>
+    )
+  }
+)
 
 export default VerificationStatus

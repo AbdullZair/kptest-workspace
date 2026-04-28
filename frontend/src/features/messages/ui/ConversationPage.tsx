@@ -35,10 +35,11 @@ export const ConversationPage = function ConversationPage() {
   } = useGetThreadByIdQuery(threadId)
 
   // Fetch messages
-  const {
-    data: messages = [],
-    isLoading: isLoadingMessages,
-  } = useGetThreadMessagesQuery({ threadId, page: 0, size: 100 })
+  const { data: messages = [], isLoading: isLoadingMessages } = useGetThreadMessagesQuery({
+    threadId,
+    page: 0,
+    size: 100,
+  })
 
   // Send message mutation
   const [sendMessage, { isLoading: isSending }] = useSendMessageMutation()
@@ -89,9 +90,9 @@ export const ConversationPage = function ConversationPage() {
   // Loading state
   if (isLoadingThread || isLoadingMessages) {
     return (
-      <div className="min-h-screen bg-neutral-100 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-100">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-blue-500" />
           <p className="text-neutral-600">Ładowanie konwersacji...</p>
         </div>
       </div>
@@ -101,15 +102,15 @@ export const ConversationPage = function ConversationPage() {
   // Error state
   if (threadError || !thread) {
     return (
-      <div className="min-h-screen bg-neutral-100 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-100">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-neutral-900 mb-2">Wątek nie znaleziony</h1>
-          <p className="text-neutral-600 mb-4">
+          <h1 className="mb-2 text-2xl font-bold text-neutral-900">Wątek nie znaleziony</h1>
+          <p className="mb-4 text-neutral-600">
             Konwersacja, której szukasz, nie istnieje lub została usunięta.
           </p>
           <button
             onClick={() => navigate('/messages')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
           >
             Wróć do wiadomości
           </button>
@@ -119,19 +120,24 @@ export const ConversationPage = function ConversationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-100 flex flex-col">
+    <div className="flex min-h-screen flex-col bg-neutral-100">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <header className="border-b border-neutral-200 bg-white">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={handleBack}
-                className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+                className="rounded-lg p-2 transition-colors hover:bg-neutral-100"
                 aria-label="Wróć"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
               <div>
@@ -145,7 +151,7 @@ export const ConversationPage = function ConversationPage() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => navigate('/messages')}
-                className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors text-sm font-medium"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100"
               >
                 Wszystkie wiadomości
               </button>
@@ -155,8 +161,8 @@ export const ConversationPage = function ConversationPage() {
       </header>
 
       {/* Content */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
-        {user && (
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
+        {user ? (
           <ConversationView
             thread={thread}
             messages={messages}
@@ -167,7 +173,7 @@ export const ConversationPage = function ConversationPage() {
             onMarkAsRead={handleMarkAsRead}
             onBack={handleBack}
           />
-        )}
+        ) : null}
       </main>
     </div>
   )

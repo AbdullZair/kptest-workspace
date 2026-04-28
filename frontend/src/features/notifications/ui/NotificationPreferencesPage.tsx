@@ -76,9 +76,9 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
 
   if (isLoadingPreferences) {
     return (
-      <div className="min-h-screen bg-neutral-100 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-100">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-600 border-t-transparent" />
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
           <p className="mt-4 text-sm text-neutral-500">Ładowanie preferencji...</p>
         </div>
       </div>
@@ -93,30 +93,30 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
   return (
     <div className="min-h-screen bg-neutral-100">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <header className="border-b border-neutral-200 bg-white">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
             <h1 className="text-2xl font-bold text-neutral-900">Ustawienia powiadomień</h1>
             <div className="flex items-center gap-3">
-              {saveSuccess && (
-                <span className="text-sm text-green-600 font-medium">Zapisano!</span>
-              )}
-              {hasChanges && (
+              {saveSuccess ? (
+                <span className="text-sm font-medium text-green-600">Zapisano!</span>
+              ) : null}
+              {hasChanges ? (
                 <Button variant="primary" size="sm" onClick={handleSave} loading={isSaving}>
                   Zapisz zmiany
                 </Button>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {/* Notification Types */}
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-neutral-200">
+          <div className="rounded-lg bg-white shadow">
+            <div className="border-b border-neutral-200 px-6 py-4">
               <h2 className="text-lg font-semibold text-neutral-900">Typy powiadomień</h2>
               <p className="mt-1 text-sm text-neutral-500">
                 Wybierz, które typy powiadomień chcesz otrzymywać
@@ -151,8 +151,8 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
           </div>
 
           {/* Delivery Channels */}
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-neutral-200">
+          <div className="rounded-lg bg-white shadow">
+            <div className="border-b border-neutral-200 px-6 py-4">
               <h2 className="text-lg font-semibold text-neutral-900">Kanały powiadomień</h2>
               <p className="mt-1 text-sm text-neutral-500">
                 Wybierz, w jaki sposób chcesz otrzymywać powiadomienia
@@ -181,8 +181,8 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
           </div>
 
           {/* Quiet Hours */}
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-neutral-200">
+          <div className="rounded-lg bg-white shadow">
+            <div className="border-b border-neutral-200 px-6 py-4">
               <h2 className="text-lg font-semibold text-neutral-900">Godziny ciszy</h2>
               <p className="mt-1 text-sm text-neutral-500">
                 Ustaw godziny, w których nie chcesz otrzymywać powiadomień

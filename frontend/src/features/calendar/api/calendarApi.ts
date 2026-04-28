@@ -35,7 +35,10 @@ export const calendarApiSlice = api.injectEndpoints({
       },
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'CalendarEvent' as const, id })), { type: 'CalendarEvent', id: 'LIST' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'CalendarEvent' as const, id })),
+              { type: 'CalendarEvent', id: 'LIST' },
+            ]
           : [{ type: 'CalendarEvent', id: 'LIST' }],
     }),
 
@@ -123,7 +126,10 @@ export const calendarApiSlice = api.injectEndpoints({
       }),
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'CalendarEvent' as const, id })), { type: 'CalendarEvent', id: 'UPCOMING' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'CalendarEvent' as const, id })),
+              { type: 'CalendarEvent', id: 'UPCOMING' },
+            ]
           : [{ type: 'CalendarEvent', id: 'UPCOMING' }],
     }),
 
@@ -134,12 +140,15 @@ export const calendarApiSlice = api.injectEndpoints({
     exportEvent: builder.mutation<{ blob: Blob; filename: string }, string>({
       queryFn: async (id) => {
         try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL || '/api/v1'}/calendar/events/${id}/ics`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL || '/api/v1'}/calendar/events/${id}/ics`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
 
           if (!response.ok) {
             throw new Error('Export failed')

@@ -62,13 +62,13 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
       <Card className="w-full max-w-md" variant="elevated">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center mb-4">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600">
             <svg
-              className="w-7 h-7 text-white"
+              className="h-7 w-7 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -83,14 +83,14 @@ export const LoginPage = () => {
           </div>
 
           <h1 className="text-2xl font-bold text-neutral-900">{t('auth.login.title')}</h1>
-          <p className="text-neutral-600 mt-2">{t('auth.login.subtitle')}</p>
+          <p className="mt-2 text-neutral-600">{t('auth.login.subtitle')}</p>
         </div>
 
         {/* Error message */}
-        {error && (
-          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg">
+        {error ? (
+          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4">
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-error-600" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="h-5 w-5 text-error-600" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -100,7 +100,7 @@ export const LoginPage = () => {
               <p className="text-sm text-error-800">{error}</p>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Login form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -124,7 +124,7 @@ export const LoginPage = () => {
               fullWidth
               {...register('password')}
             />
-            <div className="flex justify-end mt-1">
+            <div className="mt-1 flex justify-end">
               <Link
                 to="/forgot-password"
                 className="text-sm text-primary-600 hover:text-primary-700"
@@ -138,7 +138,7 @@ export const LoginPage = () => {
             <input
               type="checkbox"
               id="rememberMe"
-              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+              className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
               {...register('rememberMe')}
             />
             <label htmlFor="rememberMe" className="ml-2 text-sm text-neutral-700">
@@ -146,13 +146,7 @@ export const LoginPage = () => {
             </label>
           </div>
 
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={isSubmitting}
-          >
+          <Button type="submit" variant="primary" size="lg" fullWidth loading={isSubmitting}>
             {t('auth.login.submit')}
           </Button>
         </form>
@@ -174,7 +168,7 @@ export const LoginPage = () => {
         {/* Register link */}
         <p className="mt-8 text-center text-sm text-neutral-600">
           {t('auth.login.noAccount')}{' '}
-          <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
+          <Link to="/register" className="font-medium text-primary-600 hover:text-primary-700">
             {t('auth.login.register')}
           </Link>
         </p>

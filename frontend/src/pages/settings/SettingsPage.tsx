@@ -17,10 +17,10 @@ export const SettingsPage = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-neutral-900">{t('settings.title')}</h1>
-        <p className="text-neutral-600 mt-1">{t('settings.subtitle')}</p>
+        <p className="mt-1 text-neutral-600">{t('settings.subtitle')}</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* General settings */}
         <Card variant="elevated">
           <Card.Header>
@@ -28,19 +28,21 @@ export const SettingsPage = () => {
           </Card.Header>
           <Card.Body>
             <div className="space-y-4">
-              <div className="flex items-center justify-between py-3 border-b border-neutral-100">
+              <div className="flex items-center justify-between border-b border-neutral-100 py-3">
                 <div>
                   <p className="font-medium text-neutral-900">{t('settings.language')}</p>
                   <LanguageSwitcher />
                 </div>
               </div>
 
-              <div className="flex items-center justify-between py-3 border-b border-neutral-100">
+              <div className="flex items-center justify-between border-b border-neutral-100 py-3">
                 <div>
                   <p className="font-medium text-neutral-900">{t('settings.timezone')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.timezoneValue')}</p>
                 </div>
-                <Button variant="outline" size="sm">{t('settings.change')}</Button>
+                <Button variant="outline" size="sm">
+                  {t('settings.change')}
+                </Button>
               </div>
 
               <div className="flex items-center justify-between py-3">
@@ -48,7 +50,9 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.theme')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.themeValue')}</p>
                 </div>
-                <Button variant="outline" size="sm">{t('settings.change')}</Button>
+                <Button variant="outline" size="sm">
+                  {t('settings.change')}
+                </Button>
               </div>
             </div>
           </Card.Body>
@@ -61,16 +65,12 @@ export const SettingsPage = () => {
           </Card.Header>
           <Card.Body>
             <div className="space-y-4">
-              <div className="flex items-center justify-between py-3 border-b border-neutral-100">
+              <div className="flex items-center justify-between border-b border-neutral-100 py-3">
                 <div>
                   <p className="font-medium text-neutral-900">{t('settings.password')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.passwordDesc')}</p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsChangePasswordOpen(true)}
-                >
+                <Button variant="outline" size="sm" onClick={() => setIsChangePasswordOpen(true)}>
                   {t('settings.change')}
                 </Button>
               </div>
@@ -80,7 +80,9 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.twoFactor')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.twoFactorDesc')}</p>
                 </div>
-                <Button variant="outline" size="sm">{t('settings.enable')}</Button>
+                <Button variant="outline" size="sm">
+                  {t('settings.enable')}
+                </Button>
               </div>
             </div>
           </Card.Body>
@@ -89,24 +91,30 @@ export const SettingsPage = () => {
         {/* Notifications */}
         <Card variant="elevated">
           <Card.Header>
-            <h2 className="text-lg font-semibold text-neutral-900">{t('settings.notifications')}</h2>
+            <h2 className="text-lg font-semibold text-neutral-900">
+              {t('settings.notifications')}
+            </h2>
           </Card.Header>
           <Card.Body>
             <div className="space-y-4">
-              <div className="flex items-center justify-between py-3 border-b border-neutral-100">
+              <div className="flex items-center justify-between border-b border-neutral-100 py-3">
                 <div>
                   <p className="font-medium text-neutral-900">{t('settings.email')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.emailDesc')}</p>
                 </div>
-                <input type="checkbox" className="w-5 h-5 text-primary-600 rounded" defaultChecked />
+                <input
+                  type="checkbox"
+                  className="h-5 w-5 rounded text-primary-600"
+                  defaultChecked
+                />
               </div>
 
-              <div className="flex items-center justify-between py-3 border-b border-neutral-100">
+              <div className="flex items-center justify-between border-b border-neutral-100 py-3">
                 <div>
                   <p className="font-medium text-neutral-900">{t('settings.push')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.pushDesc')}</p>
                 </div>
-                <input type="checkbox" className="w-5 h-5 text-primary-600 rounded" />
+                <input type="checkbox" className="h-5 w-5 rounded text-primary-600" />
               </div>
 
               <div className="flex items-center justify-between py-3">
@@ -114,7 +122,7 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.sms')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.smsDesc')}</p>
                 </div>
-                <input type="checkbox" className="w-5 h-5 text-primary-600 rounded" />
+                <input type="checkbox" className="h-5 w-5 rounded text-primary-600" />
               </div>
             </div>
           </Card.Body>

@@ -100,169 +100,115 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // ==================== LOGIN ====================
-      .addMatcher(
-        authApiSlice.endpoints.login.matchPending,
-        (state) => {
-          state.isLoading = true
-          state.error = null
-          state.requires2FA = false
-          state.loginSessionId = null
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.login.matchFulfilled,
-        (state, action) => {
-          state.isLoading = false
-          state.isAuthenticated = true
-          state.user = action.payload.user
-          state.tokens = action.payload.tokens
-          state.error = null
-          state.requires2FA = action.payload.requires2FA ?? false
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.login.matchRejected,
-        (state, action) => {
-          state.isLoading = false
-          state.error = action.error.message || 'Login failed'
-        }
-      )
+      .addMatcher(authApiSlice.endpoints.login.matchPending, (state) => {
+        state.isLoading = true
+        state.error = null
+        state.requires2FA = false
+        state.loginSessionId = null
+      })
+      .addMatcher(authApiSlice.endpoints.login.matchFulfilled, (state, action) => {
+        state.isLoading = false
+        state.isAuthenticated = true
+        state.user = action.payload.user
+        state.tokens = action.payload.tokens
+        state.error = null
+        state.requires2FA = action.payload.requires2FA ?? false
+      })
+      .addMatcher(authApiSlice.endpoints.login.matchRejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.error.message || 'Login failed'
+      })
 
       // ==================== REGISTER ====================
-      .addMatcher(
-        authApiSlice.endpoints.register.matchPending,
-        (state) => {
-          state.isLoading = true
-          state.error = null
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.register.matchFulfilled,
-        (state, action) => {
-          state.isLoading = false
-          state.isAuthenticated = true
-          state.user = action.payload.user
-          state.tokens = action.payload.tokens
-          state.error = null
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.register.matchRejected,
-        (state, action) => {
-          state.isLoading = false
-          state.error = action.error.message || 'Registration failed'
-        }
-      )
+      .addMatcher(authApiSlice.endpoints.register.matchPending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addMatcher(authApiSlice.endpoints.register.matchFulfilled, (state, action) => {
+        state.isLoading = false
+        state.isAuthenticated = true
+        state.user = action.payload.user
+        state.tokens = action.payload.tokens
+        state.error = null
+      })
+      .addMatcher(authApiSlice.endpoints.register.matchRejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.error.message || 'Registration failed'
+      })
 
       // ==================== VERIFY 2FA ====================
-      .addMatcher(
-        authApiSlice.endpoints.verify2fa.matchPending,
-        (state) => {
-          state.isLoading = true
-          state.error = null
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.verify2fa.matchFulfilled,
-        (state, action) => {
-          state.isLoading = false
-          state.isAuthenticated = true
-          state.user = action.payload.user
-          state.tokens = action.payload.tokens
-          state.requires2FA = false
-          state.loginSessionId = null
-          state.error = null
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.verify2fa.matchRejected,
-        (state, action) => {
-          state.isLoading = false
-          state.error = action.error.message || 'Invalid 2FA code'
-        }
-      )
+      .addMatcher(authApiSlice.endpoints.verify2fa.matchPending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addMatcher(authApiSlice.endpoints.verify2fa.matchFulfilled, (state, action) => {
+        state.isLoading = false
+        state.isAuthenticated = true
+        state.user = action.payload.user
+        state.tokens = action.payload.tokens
+        state.requires2FA = false
+        state.loginSessionId = null
+        state.error = null
+      })
+      .addMatcher(authApiSlice.endpoints.verify2fa.matchRejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.error.message || 'Invalid 2FA code'
+      })
 
       // ==================== LOGOUT ====================
-      .addMatcher(
-        authApiSlice.endpoints.logout.matchFulfilled,
-        (state) => {
-          state.user = null
-          state.tokens = null
-          state.isAuthenticated = false
-          state.error = null
-          state.requires2FA = false
-          state.loginSessionId = null
-        }
-      )
+      .addMatcher(authApiSlice.endpoints.logout.matchFulfilled, (state) => {
+        state.user = null
+        state.tokens = null
+        state.isAuthenticated = false
+        state.error = null
+        state.requires2FA = false
+        state.loginSessionId = null
+      })
 
       // ==================== GET CURRENT USER ====================
-      .addMatcher(
-        authApiSlice.endpoints.getCurrentUser.matchPending,
-        (state) => {
-          state.isLoading = true
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.getCurrentUser.matchFulfilled,
-        (state, action) => {
-          state.isLoading = false
-          state.user = action.payload as AuthUser
-          state.isAuthenticated = true
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.getCurrentUser.matchRejected,
-        (state) => {
-          state.isLoading = false
-          state.isAuthenticated = false
-          state.user = null
-          state.tokens = null
-        }
-      )
+      .addMatcher(authApiSlice.endpoints.getCurrentUser.matchPending, (state) => {
+        state.isLoading = true
+      })
+      .addMatcher(authApiSlice.endpoints.getCurrentUser.matchFulfilled, (state, action) => {
+        state.isLoading = false
+        state.user = action.payload as AuthUser
+        state.isAuthenticated = true
+      })
+      .addMatcher(authApiSlice.endpoints.getCurrentUser.matchRejected, (state) => {
+        state.isLoading = false
+        state.isAuthenticated = false
+        state.user = null
+        state.tokens = null
+      })
 
       // ==================== REFRESH TOKEN ====================
-      .addMatcher(
-        authApiSlice.endpoints.refreshToken.matchPending,
-        (state) => {
-          state.isRefreshing = true
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.refreshToken.matchFulfilled,
-        (state, action) => {
-          state.isRefreshing = false
-          state.tokens = action.payload
-        }
-      )
-      .addMatcher(
-        authApiSlice.endpoints.refreshToken.matchRejected,
-        (state) => {
-          state.isRefreshing = false
-          state.isAuthenticated = false
-          state.user = null
-          state.tokens = null
-        }
-      )
+      .addMatcher(authApiSlice.endpoints.refreshToken.matchPending, (state) => {
+        state.isRefreshing = true
+      })
+      .addMatcher(authApiSlice.endpoints.refreshToken.matchFulfilled, (state, action) => {
+        state.isRefreshing = false
+        state.tokens = action.payload
+      })
+      .addMatcher(authApiSlice.endpoints.refreshToken.matchRejected, (state) => {
+        state.isRefreshing = false
+        state.isAuthenticated = false
+        state.user = null
+        state.tokens = null
+      })
 
       // ==================== ENABLE 2FA ====================
-      .addMatcher(
-        authApiSlice.endpoints.enable2fa.matchFulfilled,
-        (state) => {
-          if (state.user) {
-            state.user.is2FAEnabled = true
-          }
+      .addMatcher(authApiSlice.endpoints.enable2fa.matchFulfilled, (state) => {
+        if (state.user) {
+          state.user.is2FAEnabled = true
         }
-      )
+      })
 
       // ==================== DISABLE 2FA ====================
-      .addMatcher(
-        authApiSlice.endpoints.disable2fa.matchFulfilled,
-        (state) => {
-          if (state.user) {
-            state.user.is2FAEnabled = false
-          }
+      .addMatcher(authApiSlice.endpoints.disable2fa.matchFulfilled, (state) => {
+        if (state.user) {
+          state.user.is2FAEnabled = false
         }
-      )
+      })
   },
 })
 
@@ -290,7 +236,8 @@ export const selectIsRefreshing = (state: { auth: AuthState }) => state.auth.isR
 export const selectAuthError = (state: { auth: AuthState }) => state.auth.error
 export const selectRequires2FA = (state: { auth: AuthState }) => state.auth.requires2FA
 export const selectLoginSessionId = (state: { auth: AuthState }) => state.auth.loginSessionId
-export const selectIs2FAEnabled = (state: { auth: AuthState }) => state.auth.user?.is2FAEnabled ?? false
+export const selectIs2FAEnabled = (state: { auth: AuthState }) =>
+  state.auth.user?.is2FAEnabled ?? false
 
 /**
  * Reducer

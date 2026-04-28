@@ -55,13 +55,13 @@ export const RegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
       <Card className="w-full max-w-lg" variant="elevated">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center mb-4">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600">
             <svg
-              className="w-7 h-7 text-white"
+              className="h-7 w-7 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -76,15 +76,15 @@ export const RegisterPage = () => {
           </div>
 
           <h1 className="text-2xl font-bold text-neutral-900">{t('auth.register.title')}</h1>
-          <p className="text-neutral-600 mt-2">{t('auth.register.subtitle')}</p>
+          <p className="mt-2 text-neutral-600">{t('auth.register.subtitle')}</p>
         </div>
 
         {/* Error message */}
-        {error && (
-          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg">
+        {error ? (
+          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4">
             <p className="text-sm text-error-800">{error}</p>
           </div>
-        )}
+        ) : null}
 
         {/* Register form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -147,7 +147,7 @@ export const RegisterPage = () => {
             <input
               type="checkbox"
               id="acceptTerms"
-              className="w-4 h-4 text-primary-600 border-neutral-300 rounded mt-1 focus:ring-primary-500"
+              className="mt-1 h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
               {...register('acceptTerms')}
             />
             <label htmlFor="acceptTerms" className="ml-2 text-sm text-neutral-700">
@@ -161,17 +161,11 @@ export const RegisterPage = () => {
               </a>
             </label>
           </div>
-          {errors.acceptTerms && (
+          {errors.acceptTerms ? (
             <p className="text-sm text-error-600">{errors.acceptTerms.message}</p>
-          )}
+          ) : null}
 
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={isSubmitting}
-          >
+          <Button type="submit" variant="primary" size="lg" fullWidth loading={isSubmitting}>
             {t('auth.register.submit')}
           </Button>
         </form>
@@ -179,7 +173,7 @@ export const RegisterPage = () => {
         {/* Login link */}
         <p className="mt-8 text-center text-sm text-neutral-600">
           {t('auth.register.hasAccount')}{' '}
-          <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700">
             {t('auth.register.login')}
           </Link>
         </p>

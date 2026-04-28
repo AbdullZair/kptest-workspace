@@ -96,7 +96,10 @@ export const notificationApiSlice = api.injectEndpoints({
         url: '/notifications/read-all',
         method: 'PUT',
       }),
-      invalidatesTags: [{ type: 'Notification', id: 'LIST' }, { type: 'Notification', id: 'UNREAD' }],
+      invalidatesTags: [
+        { type: 'Notification', id: 'LIST' },
+        { type: 'Notification', id: 'UNREAD' },
+      ],
     }),
 
     /**
@@ -150,7 +153,10 @@ export const notificationApiSlice = api.injectEndpoints({
         method: 'POST',
         body: notification,
       }),
-      invalidatesTags: [{ type: 'Notification', id: 'LIST' }, { type: 'Notification', id: 'UNREAD' }],
+      invalidatesTags: [
+        { type: 'Notification', id: 'LIST' },
+        { type: 'Notification', id: 'UNREAD' },
+      ],
     }),
   }),
   overrideExisting: false,

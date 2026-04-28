@@ -273,10 +273,7 @@ class HttpClient {
   /**
    * Download file
    */
-  public async download(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<Blob> {
+  public async download(url: string, config?: AxiosRequestConfig): Promise<Blob> {
     const response = await this.instance.get(url, {
       ...config,
       responseType: 'blob',
@@ -292,11 +289,14 @@ class HttpClient {
     file: File | FormData,
     onProgress?: (progress: number) => void
   ): Promise<AxiosResponse<ApiResponse<T>>> {
-    const formData = file instanceof FormData ? file : (() => {
-      const fd = new FormData()
-      fd.append('file', file)
-      return fd
-    })()
+    const formData =
+      file instanceof FormData
+        ? file
+        : (() => {
+            const fd = new FormData()
+            fd.append('file', file)
+            return fd
+          })()
 
     return this.instance.post<ApiResponse<T>>(url, formData, {
       headers: {
@@ -326,7 +326,7 @@ const httpClient = new HttpClient({
   baseURL: import.meta.env.VITE_API_URL || '/api/v1',
   timeout: 30000,
   headers: {
-    'Accept': 'application/json',
+    Accept: 'application/json',
   },
 })
 

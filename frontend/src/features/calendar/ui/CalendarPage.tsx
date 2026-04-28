@@ -1,5 +1,14 @@
 import React, { useState, useMemo } from 'react'
-import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday } from 'date-fns'
+import {
+  format,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameDay,
+  isToday,
+} from 'date-fns'
 import { pl } from 'date-fns/locale'
 import { useGetCalendarEventsQuery, useCompleteEventMutation } from '../api/calendarApi'
 import { EventCard, EventStatusBadge } from '../components'
@@ -22,7 +31,11 @@ export const CalendarPage: React.FC = () => {
   // Get current user's patient ID from context (placeholder)
   const patientId = 'placeholder-patient-id' // TODO: Get from auth context
 
-  const { data: events = [], isLoading, refetch } = useGetCalendarEventsQuery({
+  const {
+    data: events = [],
+    isLoading,
+    refetch,
+  } = useGetCalendarEventsQuery({
     patientId,
     type: selectedEventType,
     status: selectedEventStatus,
@@ -36,7 +49,10 @@ export const CalendarPage: React.FC = () => {
       case 'day':
         return { start: currentDate, end: currentDate }
       case 'week':
-        return { start: startOfWeek(currentDate, { locale: pl }), end: endOfWeek(currentDate, { locale: pl }) }
+        return {
+          start: startOfWeek(currentDate, { locale: pl }),
+          end: endOfWeek(currentDate, { locale: pl }),
+        }
       case 'month':
         return { start: startOfMonth(currentDate), end: endOfMonth(currentDate) }
     }
@@ -124,12 +140,12 @@ export const CalendarPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="border-b border-gray-200 bg-white px-6 py-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">Kalendarz wydarzeń</h1>
           <button
             onClick={() => setIsFormOpen(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             + Dodaj wydarzenie
           </button>
@@ -139,7 +155,7 @@ export const CalendarPage: React.FC = () => {
         <div className="mt-4 flex flex-wrap gap-4">
           <select
             value={selectedEventType || ''}
-            onChange={(e) => setSelectedEventType(e.target.value as EventType || undefined)}
+            onChange={(e) => setSelectedEventType((e.target.value as EventType) || undefined)}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="">Wszystkie typy</option>
@@ -153,7 +169,7 @@ export const CalendarPage: React.FC = () => {
 
           <select
             value={selectedEventStatus || ''}
-            onChange={(e) => setSelectedEventStatus(e.target.value as EventStatus || undefined)}
+            onChange={(e) => setSelectedEventStatus((e.target.value as EventStatus) || undefined)}
             className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="">Wszystkie statusy</option>
@@ -166,38 +182,46 @@ export const CalendarPage: React.FC = () => {
       </div>
 
       {/* Calendar Controls */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3">
+      <div className="border-b border-gray-200 bg-white px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={goToToday}
-              className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Dzisiaj
             </button>
             <div className="flex items-center gap-1">
               <button
                 onClick={goToPrevious}
-                className="p-1.5 text-gray-600 hover:bg-gray-100 rounded"
+                className="rounded p-1.5 text-gray-600 hover:bg-gray-100"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
-              <button
-                onClick={goToNext}
-                className="p-1.5 text-gray-600 hover:bg-gray-100 rounded"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <button onClick={goToNext} className="rounded p-1.5 text-gray-600 hover:bg-gray-100">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 min-w-[200px]">
+            <h2 className="min-w-[200px] text-lg font-semibold text-gray-900">
               {view === 'day' && format(currentDate, 'dd MMMM yyyy', { locale: pl })}
               {view === 'week' && (
                 <>
-                  {format(dateRange.start, 'dd MMM')} - {format(dateRange.end, 'dd MMMM yyyy', { locale: pl })}
+                  {format(dateRange.start, 'dd MMM')} -{' '}
+                  {format(dateRange.end, 'dd MMMM yyyy', { locale: pl })}
                 </>
               )}
               {view === 'month' && format(currentDate, 'MMMM yyyy', { locale: pl })}
@@ -205,27 +229,33 @@ export const CalendarPage: React.FC = () => {
           </div>
 
           {/* View Switcher */}
-          <div className="flex items-center gap-1 bg-gray-100 rounded-md p-1">
+          <div className="flex items-center gap-1 rounded-md bg-gray-100 p-1">
             <button
               onClick={() => setView('day')}
-              className={`px-3 py-1.5 text-sm font-medium rounded ${
-                view === 'day' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
+              className={`rounded px-3 py-1.5 text-sm font-medium ${
+                view === 'day'
+                  ? 'bg-white text-gray-900 shadow'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Dzień
             </button>
             <button
               onClick={() => setView('week')}
-              className={`px-3 py-1.5 text-sm font-medium rounded ${
-                view === 'week' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
+              className={`rounded px-3 py-1.5 text-sm font-medium ${
+                view === 'week'
+                  ? 'bg-white text-gray-900 shadow'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Tydzień
             </button>
             <button
               onClick={() => setView('month')}
-              className={`px-3 py-1.5 text-sm font-medium rounded ${
-                view === 'month' ? 'bg-white text-gray-900 shadow' : 'text-gray-600 hover:text-gray-900'
+              className={`rounded px-3 py-1.5 text-sm font-medium ${
+                view === 'month'
+                  ? 'bg-white text-gray-900 shadow'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Miesiąc
@@ -238,22 +268,45 @@ export const CalendarPage: React.FC = () => {
       <div className="p-6">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <svg className="animate-spin h-8 w-8 text-blue-600" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            <svg className="h-8 w-8 animate-spin text-blue-600" viewBox="0 0 24 24">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+                fill="none"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
             </svg>
           </div>
         ) : view === 'month' ? (
-          <MonthView days={days} currentDate={currentDate} getEventsForDay={getEventsForDay} onEventClick={setSelectedEvent} />
+          <MonthView
+            days={days}
+            currentDate={currentDate}
+            getEventsForDay={getEventsForDay}
+            onEventClick={setSelectedEvent}
+          />
         ) : view === 'week' ? (
           <WeekView days={days} getEventsForDay={getEventsForDay} onEventClick={setSelectedEvent} />
         ) : (
-          <DayView day={currentDate} events={getEventsForDay(currentDate)} onEventClick={setSelectedEvent} onEventComplete={handleCompleteEvent} onEventExport={handleExportEvent} />
+          <DayView
+            day={currentDate}
+            events={getEventsForDay(currentDate)}
+            onEventClick={setSelectedEvent}
+            onEventComplete={handleCompleteEvent}
+            onEventExport={handleExportEvent}
+          />
         )}
       </div>
 
       {/* Event Detail Modal */}
-      {selectedEvent && (
+      {selectedEvent ? (
         <EventDetailModal
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
@@ -263,7 +316,7 @@ export const CalendarPage: React.FC = () => {
           onComplete={handleCompleteEvent}
           onExport={handleExportEvent}
         />
-      )}
+      ) : null}
 
       {/* Event Form Modal */}
       <EventFormModal
@@ -307,8 +360,8 @@ const MonthView: React.FC<{
   })
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="grid grid-cols-7 bg-gray-50 border-b">
+    <div className="overflow-hidden rounded-lg bg-white shadow">
+      <div className="grid grid-cols-7 border-b bg-gray-50">
         {['Ndz', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob'].map((day) => (
           <div key={day} className="py-2 text-center text-sm font-medium text-gray-600">
             {day}
@@ -318,7 +371,7 @@ const MonthView: React.FC<{
       <div className="grid grid-cols-7">
         {weeks.map((week, weekIndex) =>
           week.map((day, dayIndex) => {
-            const isCurrentMonth = day && day.getMonth() === currentDate.getMonth()
+            const isCurrentMonth = day?.getMonth() === currentDate.getMonth()
             const events = day ? getEventsForDay(day) : []
 
             return (
@@ -328,11 +381,17 @@ const MonthView: React.FC<{
                   !isCurrentMonth ? 'bg-gray-50' : ''
                 } ${isToday(day) ? 'bg-blue-50' : ''}`}
               >
-                {day && (
+                {day ? (
                   <>
-                    <div className={`text-sm font-medium mb-1 ${
-                      isToday(day) ? 'text-blue-600' : isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
-                    }`}>
+                    <div
+                      className={`mb-1 text-sm font-medium ${
+                        isToday(day)
+                          ? 'text-blue-600'
+                          : isCurrentMonth
+                            ? 'text-gray-900'
+                            : 'text-gray-400'
+                      }`}
+                    >
                       {format(day, 'd')}
                     </div>
                     <div className="space-y-1">
@@ -340,19 +399,17 @@ const MonthView: React.FC<{
                         <div
                           key={event.id}
                           onClick={() => onEventClick(event)}
-                          className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-800 cursor-pointer hover:bg-blue-200 truncate"
+                          className="cursor-pointer truncate rounded bg-blue-100 px-2 py-1 text-xs text-blue-800 hover:bg-blue-200"
                         >
                           {event.title}
                         </div>
                       ))}
                       {events.length > 3 && (
-                        <div className="text-xs text-gray-500">
-                          +{events.length - 3} więcej
-                        </div>
+                        <div className="text-xs text-gray-500">+{events.length - 3} więcej</div>
                       )}
                     </div>
                   </>
-                )}
+                ) : null}
               </div>
             )
           })
@@ -371,11 +428,14 @@ const WeekView: React.FC<{
   const hours = Array.from({ length: 24 }, (_, i) => i)
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="grid grid-cols-8 bg-gray-50 border-b">
-        <div className="py-2 text-center text-sm font-medium text-gray-600 border-r">Godz</div>
+    <div className="overflow-hidden rounded-lg bg-white shadow">
+      <div className="grid grid-cols-8 border-b bg-gray-50">
+        <div className="border-r py-2 text-center text-sm font-medium text-gray-600">Godz</div>
         {days.map((day, index) => (
-          <div key={index} className={`py-2 text-center text-sm font-medium border-r ${isToday(day) ? 'bg-blue-50' : ''}`}>
+          <div
+            key={index}
+            className={`border-r py-2 text-center text-sm font-medium ${isToday(day) ? 'bg-blue-50' : ''}`}
+          >
             <div>{format(day, 'EEE', { locale: pl })}</div>
             <div className={`text-lg ${isToday(day) ? 'text-blue-600' : 'text-gray-900'}`}>
               {format(day, 'd')}
@@ -383,10 +443,10 @@ const WeekView: React.FC<{
           </div>
         ))}
       </div>
-      <div className="overflow-y-auto max-h-[600px]">
+      <div className="max-h-[600px] overflow-y-auto">
         {hours.map((hour) => (
           <div key={hour} className="grid grid-cols-8 border-b">
-            <div className="py-2 text-xs text-gray-500 border-r text-center">
+            <div className="border-r py-2 text-center text-xs text-gray-500">
               {hour.toString().padStart(2, '0')}:00
             </div>
             {days.map((day, dayIndex) => {
@@ -400,7 +460,7 @@ const WeekView: React.FC<{
                     <div
                       key={event.id}
                       onClick={() => onEventClick(event)}
-                      className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-800 cursor-pointer hover:bg-blue-200 mb-1"
+                      className="mb-1 cursor-pointer rounded bg-blue-100 px-2 py-1 text-xs text-blue-800 hover:bg-blue-200"
                     >
                       {event.title}
                     </div>
@@ -424,20 +484,18 @@ const DayView: React.FC<{
   onEventExport: (event: TherapyEvent) => void
 }> = ({ day, events, onEventClick, onEventComplete, onEventExport }) => {
   return (
-    <div className="bg-white rounded-lg shadow">
-      <div className="p-4 border-b">
+    <div className="rounded-lg bg-white shadow">
+      <div className="border-b p-4">
         <h3 className="text-lg font-semibold">
           {format(day, 'EEEE, dd MMMM yyyy', { locale: pl })}
         </h3>
         <p className="text-sm text-gray-500">{events.length} wydarzeń</p>
       </div>
-      <div className="p-4 space-y-3">
+      <div className="space-y-3 p-4">
         {events.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">Brak wydarzeń w tym dniu</p>
+          <p className="py-8 text-center text-gray-500">Brak wydarzeń w tym dniu</p>
         ) : (
-          events.map((event) => (
-            <EventCard key={event.id} event={event} onClick={onEventClick} />
-          ))
+          events.map((event) => <EventCard key={event.id} event={event} onClick={onEventClick} />)
         )}
       </div>
     </div>
@@ -454,15 +512,20 @@ const EventDetailModal: React.FC<{
 }> = ({ event, onClose, onEdit, onComplete, onExport }) => {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={onClose} />
 
-        <div className="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
+          <div className="mb-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">Szczegóły wydarzenia</h3>
             <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -476,58 +539,57 @@ const EventDetailModal: React.FC<{
               <EventStatusBadge status={event.status} />
             </div>
 
-            {event.description && (
-              <p className="text-gray-700">{event.description}</p>
-            )}
+            {event.description ? <p className="text-gray-700">{event.description}</p> : null}
 
             <div className="space-y-2 text-sm text-gray-600">
               <div>
-                <strong>Data:</strong> {format(new Date(event.scheduled_at), 'dd MMMM yyyy, HH:mm', { locale: pl })}
+                <strong>Data:</strong>{' '}
+                {format(new Date(event.scheduled_at), 'dd MMMM yyyy, HH:mm', { locale: pl })}
               </div>
-              {event.ends_at && (
+              {event.ends_at ? (
                 <div>
                   <strong>Koniec:</strong> {format(new Date(event.ends_at), 'HH:mm')}
                 </div>
-              )}
-              {event.location && (
+              ) : null}
+              {event.location ? (
                 <div>
                   <strong>Lokalizacja:</strong> {event.location}
                 </div>
-              )}
+              ) : null}
             </div>
 
-            {event.patient_notes && (
-              <div className="p-3 bg-green-50 rounded">
+            {event.patient_notes ? (
+              <div className="rounded bg-green-50 p-3">
                 <strong className="text-green-800">Notatka pacjenta:</strong>
-                <p className="text-green-700 mt-1">{event.patient_notes}</p>
+                <p className="mt-1 text-green-700">{event.patient_notes}</p>
               </div>
-            )}
+            ) : null}
           </div>
 
-          <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
+          <div className="mt-6 flex justify-end gap-3 border-t pt-4">
             {event.status === 'SCHEDULED' && (
               <button
                 onClick={() => onComplete(event)}
-                className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+                className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
               >
                 Oznacz jako wykonane
               </button>
             )}
             <button
               onClick={() => onExport(event)}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Eksportuj do iCal
             </button>
             <button
               onClick={onEdit}
-              className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+              className="rounded-md bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100"
             >
               Edytuj
             </button>
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Zamknij
             </button>

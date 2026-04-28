@@ -233,9 +233,7 @@ describe('GenerateActivationCodeButton', () => {
     fireEvent.click(screen.getByText(/pobierz pdf/i))
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        expect.stringContaining('Pobieranie PDF')
-      )
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('Pobieranie PDF'))
     })
 
     window.alert = originalAlert

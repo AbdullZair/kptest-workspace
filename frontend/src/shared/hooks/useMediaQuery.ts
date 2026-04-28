@@ -17,12 +17,15 @@ import { useState, useEffect, useCallback } from 'react'
  * ```
  */
 export const useMediaQuery = (query: string, defaultValue: boolean = false): boolean => {
-  const getMatches = useCallback((mediaQuery: string): boolean => {
-    if (typeof window === 'undefined') {
-      return defaultValue
-    }
-    return window.matchMedia(mediaQuery).matches
-  }, [defaultValue])
+  const getMatches = useCallback(
+    (mediaQuery: string): boolean => {
+      if (typeof window === 'undefined') {
+        return defaultValue
+      }
+      return window.matchMedia(mediaQuery).matches
+    },
+    [defaultValue]
+  )
 
   const [matches, setMatches] = useState<boolean>(getMatches(query))
 

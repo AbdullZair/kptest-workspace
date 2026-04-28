@@ -86,13 +86,13 @@ export function AdminSystemLogsPage() {
         <div className="flex gap-2">
           <button
             onClick={() => handleExport('CSV')}
-            className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
+            className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
           >
             Eksport CSV
           </button>
           <button
             onClick={() => handleExport('JSON')}
-            className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
+            className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
           >
             Eksport JSON
           </button>
@@ -100,7 +100,7 @@ export function AdminSystemLogsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 items-center">
+      <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-neutral-700">Poziom:</span>
           <div className="flex flex-wrap gap-1">
@@ -109,7 +109,7 @@ export function AdminSystemLogsPage() {
                 key={level}
                 onClick={() => handleLevelFilter(level)}
                 className={clsx(
-                  'px-3 py-1 text-sm rounded-full transition-colors',
+                  'rounded-full px-3 py-1 text-sm transition-colors',
                   filters.level === level || (level === 'ALL' && !filters.level)
                     ? 'bg-primary-600 text-white'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
@@ -121,17 +121,17 @@ export function AdminSystemLogsPage() {
           </div>
         </div>
 
-        <div className="flex-1 min-w-64">
+        <div className="min-w-64 flex-1">
           <div className="relative">
             <input
               type="text"
               value={filters.search || ''}
               onChange={handleSearchChange}
               placeholder="Szukaj w wiadomościach..."
-              className="w-full px-4 py-2 pl-10 text-sm border border-neutral-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full rounded-md border border-neutral-300 px-4 py-2 pl-10 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
             />
             <svg
-              className="absolute left-3 top-2.5 w-4 h-4 text-neutral-400"
+              className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -149,11 +149,11 @@ export function AdminSystemLogsPage() {
 
       {/* System Log Table */}
       {error ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-red-600">Wystąpił błąd podczas ładowania logów systemowych</p>
           <button
             onClick={() => refetch()}
-            className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
+            className="mt-4 font-medium text-primary-600 hover:text-primary-700"
           >
             Spróbuj ponownie
           </button>
@@ -165,49 +165,49 @@ export function AdminSystemLogsPage() {
               <table className="min-w-full divide-y divide-neutral-200">
                 <thead className="bg-neutral-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                       Poziom
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                       Wiadomość
                     </th>
-                    <th className="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                    <th className="hidden px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600 md:table-cell">
                       Źródło
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                       Data i czas
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-neutral-600">
                       Akcje
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-100 bg-white">
                   {isLoading ? (
                     [...Array(5)].map((_, i) => (
                       <tr key={i} className="animate-pulse">
                         <td className="px-4 py-3">
-                          <div className="h-6 bg-neutral-200 rounded w-20" />
+                          <div className="h-6 w-20 rounded bg-neutral-200" />
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-64" />
+                          <div className="h-4 w-64 rounded bg-neutral-200" />
                         </td>
-                        <td className="hidden md:table-cell px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-32" />
+                        <td className="hidden px-4 py-3 md:table-cell">
+                          <div className="h-4 w-32 rounded bg-neutral-200" />
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-32" />
+                          <div className="h-4 w-32 rounded bg-neutral-200" />
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <div className="h-6 bg-neutral-200 rounded w-16 ml-auto" />
+                          <div className="ml-auto h-6 w-16 rounded bg-neutral-200" />
                         </td>
                       </tr>
                     ))
                   ) : data?.content.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-12">
+                      <td colSpan={5} className="py-12 text-center">
                         <svg
-                          className="w-16 h-16 mx-auto mb-4 text-neutral-300"
+                          className="mx-auto mb-4 h-16 w-16 text-neutral-300"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -226,13 +226,13 @@ export function AdminSystemLogsPage() {
                     data?.content.map((log) => (
                       <tr
                         key={log.log_id}
-                        className="hover:bg-neutral-50 transition-colors cursor-pointer"
+                        className="cursor-pointer transition-colors hover:bg-neutral-50"
                         onClick={() => setSelectedLog(log)}
                       >
-                        <td className="px-4 py-3 whitespace-nowrap">
+                        <td className="whitespace-nowrap px-4 py-3">
                           <span
                             className={clsx(
-                              'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+                              'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
                               getLevelColor(log.level)
                             )}
                           >
@@ -240,25 +240,25 @@ export function AdminSystemLogsPage() {
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="text-sm text-neutral-900 truncate max-w-md">
+                          <div className="max-w-md truncate text-sm text-neutral-900">
                             {log.message}
                           </div>
                         </td>
-                        <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
-                          <code className="text-xs text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
+                        <td className="hidden whitespace-nowrap px-4 py-3 md:table-cell">
+                          <code className="rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">
                             {log.source_class || '-'}
                           </code>
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm text-neutral-600">
+                        <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-600">
                           {new Date(log.created_at).toLocaleString('pl-PL')}
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-right">
+                        <td className="whitespace-nowrap px-4 py-3 text-right">
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
                               handleViewDetails(log)
                             }}
-                            className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                            className="text-sm font-medium text-primary-600 hover:text-primary-700"
                           >
                             Szczegóły
                           </button>
@@ -272,40 +272,42 @@ export function AdminSystemLogsPage() {
           </div>
 
           {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 bg-white border border-neutral-200 rounded-lg">
+          {data && data.totalPages > 1 ? (
+            <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-4 py-3">
               <div className="text-sm text-neutral-700">
                 Strona {data.pageNumber + 1} z {data.totalPages} ({data.totalElements} logów)
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page! - 1) }))}
+                  onClick={() =>
+                    setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page! - 1) }))
+                  }
                   disabled={data.isFirst}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Poprzednia
                 </button>
                 <button
                   onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
                   disabled={data.isLast}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Następna
                 </button>
               </div>
             </div>
-          )}
+          ) : null}
         </>
       )}
 
       {/* Log Viewer Modal */}
-      {showLogViewer && selectedLog && (
+      {showLogViewer && selectedLog ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="max-w-4xl w-full max-h-[90vh] overflow-auto">
+          <div className="max-h-[90vh] w-full max-w-4xl overflow-auto">
             <LogViewer log={selectedLog} onClose={() => setShowLogViewer(false)} />
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

@@ -14,10 +14,7 @@ import { clsx } from 'clsx'
  * <ProjectStatistics statistics={statistics} />
  * ```
  */
-export const ProjectStatistics = memo(function ProjectStatistics({
-  statistics,
-  className,
-}: ProjectStatisticsProps) {
+export const ProjectStatistics = memo(({ statistics, className }: ProjectStatisticsProps) => {
   const {
     project_name,
     status,
@@ -40,7 +37,7 @@ export const ProjectStatistics = memo(function ProjectStatistics({
       </div>
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard
           title="Łączna liczba pacjentów"
           value={total_patients}
@@ -71,12 +68,7 @@ export const ProjectStatistics = memo(function ProjectStatistics({
           title="Zakończone terapie"
           value={completed_patients}
           icon={
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           }
           color="violet"
         />
@@ -102,11 +94,11 @@ export const ProjectStatistics = memo(function ProjectStatistics({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-medium text-neutral-600">Średni wynik compliance</h3>
-                <p className="text-3xl font-bold text-emerald-600 mt-2">
+                <p className="mt-2 text-3xl font-bold text-emerald-600">
                   {Math.round(average_compliance_score)}%
                 </p>
               </div>
-              <div className="w-32 h-32 relative">
+              <div className="relative h-32 w-32">
                 <ComplianceGauge value={average_compliance_score} />
               </div>
             </div>
@@ -115,31 +107,32 @@ export const ProjectStatistics = memo(function ProjectStatistics({
       )}
 
       {/* Distribution Grid */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Stage Distribution */}
         <Card variant="outlined">
           <Card.Body>
-            <h3 className="text-sm font-medium text-neutral-600 mb-4">Etapy terapii</h3>
+            <h3 className="mb-4 text-sm font-medium text-neutral-600">Etapy terapii</h3>
             <div className="space-y-3">
-              {stage_distribution &&
-                Object.entries(stage_distribution).map(([stage, count]) => (
-                  <div key={stage} className="flex items-center justify-between">
-                    <span className="text-sm text-neutral-700">{getStageLabel(stage)}</span>
-                    <div className="flex items-center gap-3">
-                      <div className="w-32 bg-neutral-100 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full ${getStageColor(stage)}`}
-                          style={{
-                            width: `${total_patients > 0 ? (count / total_patients) * 100 : 0}%`,
-                          }}
-                        />
+              {stage_distribution
+                ? Object.entries(stage_distribution).map(([stage, count]) => (
+                    <div key={stage} className="flex items-center justify-between">
+                      <span className="text-sm text-neutral-700">{getStageLabel(stage)}</span>
+                      <div className="flex items-center gap-3">
+                        <div className="h-2 w-32 rounded-full bg-neutral-100">
+                          <div
+                            className={`h-2 rounded-full ${getStageColor(stage)}`}
+                            style={{
+                              width: `${total_patients > 0 ? (count / total_patients) * 100 : 0}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="w-8 text-right text-sm font-medium text-neutral-900">
+                          {count}
+                        </span>
                       </div>
-                      <span className="text-sm font-medium text-neutral-900 w-8 text-right">
-                        {count}
-                      </span>
                     </div>
-                  </div>
-                ))}
+                  ))
+                : null}
             </div>
           </Card.Body>
         </Card>
@@ -147,27 +140,28 @@ export const ProjectStatistics = memo(function ProjectStatistics({
         {/* Compliance Distribution */}
         <Card variant="outlined">
           <Card.Body>
-            <h3 className="text-sm font-medium text-neutral-600 mb-4">Rozkład compliance</h3>
+            <h3 className="mb-4 text-sm font-medium text-neutral-600">Rozkład compliance</h3>
             <div className="space-y-3">
-              {compliance_distribution &&
-                Object.entries(compliance_distribution).map(([range, count]) => (
-                  <div key={range} className="flex items-center justify-between">
-                    <span className="text-sm text-neutral-700">{range}</span>
-                    <div className="flex items-center gap-3">
-                      <div className="w-32 bg-neutral-100 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full ${getComplianceColor(range)}`}
-                          style={{
-                            width: `${active_patients > 0 ? (count / active_patients) * 100 : 0}%`,
-                          }}
-                        />
+              {compliance_distribution
+                ? Object.entries(compliance_distribution).map(([range, count]) => (
+                    <div key={range} className="flex items-center justify-between">
+                      <span className="text-sm text-neutral-700">{range}</span>
+                      <div className="flex items-center gap-3">
+                        <div className="h-2 w-32 rounded-full bg-neutral-100">
+                          <div
+                            className={`h-2 rounded-full ${getComplianceColor(range)}`}
+                            style={{
+                              width: `${active_patients > 0 ? (count / active_patients) * 100 : 0}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="w-8 text-right text-sm font-medium text-neutral-900">
+                          {count}
+                        </span>
                       </div>
-                      <span className="text-sm font-medium text-neutral-900 w-8 text-right">
-                        {count}
-                      </span>
                     </div>
-                  </div>
-                ))}
+                  ))
+                : null}
             </div>
           </Card.Body>
         </Card>
@@ -178,7 +172,7 @@ export const ProjectStatistics = memo(function ProjectStatistics({
         <Card variant="outlined">
           <Card.Body>
             <div className="flex items-center gap-2 text-rose-600">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -221,8 +215,8 @@ const StatCard = ({
   return (
     <Card variant="outlined" className="p-4">
       <div className="flex items-center gap-3">
-        <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className={`rounded-lg p-3 ${colorClasses[color]}`}>
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {icon}
           </svg>
         </div>
@@ -245,7 +239,7 @@ const ComplianceGauge = ({ value }: { value: number }) => {
   const color = value >= 80 ? 'text-emerald-500' : value >= 50 ? 'text-amber-500' : 'text-rose-500'
 
   return (
-    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+    <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 120 120">
       <circle
         className="text-neutral-200"
         strokeWidth="12"

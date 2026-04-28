@@ -21,7 +21,11 @@ export const MaterialDetailPage = () => {
   const patientId = '00000000-0000-0000-0000-000000000000'
 
   // RTK Query hooks
-  const { data: material, isLoading, error } = useGetMaterialByIdQuery(id!, {
+  const {
+    data: material,
+    isLoading,
+    error,
+  } = useGetMaterialByIdQuery(id!, {
     skip: !id,
   })
   const [recordView] = useRecordViewMutation()
@@ -66,7 +70,7 @@ export const MaterialDetailPage = () => {
 
   if (!id) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-neutral-600">Brak ID materiału</p>
         <Button variant="primary" onClick={handleBack} className="mt-4">
           Powrót do materiałów
@@ -81,8 +85,13 @@ export const MaterialDetailPage = () => {
 
   if (error || !material) {
     return (
-      <div className="text-center py-12">
-        <svg className="w-16 h-16 mx-auto text-error-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="py-12 text-center">
+        <svg
+          className="mx-auto mb-4 h-16 w-16 text-error-300"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -91,7 +100,7 @@ export const MaterialDetailPage = () => {
           />
         </svg>
         <h3 className="text-lg font-semibold text-error-900">Błąd ładowania materiału</h3>
-        <p className="text-error-600 mt-2">Materiał nie został znaleziony lub wystąpił błąd</p>
+        <p className="mt-2 text-error-600">Materiał nie został znaleziony lub wystąpił błąd</p>
         <Button variant="primary" onClick={handleBack} className="mt-4">
           Powrót do materiałów
         </Button>
@@ -104,26 +113,31 @@ export const MaterialDetailPage = () => {
       {/* Header with back button */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={handleBack}>
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </Button>
         <div className="flex-1">
-          <div className="flex items-center gap-3 mb-1">
+          <div className="mb-1 flex items-center gap-3">
             <MaterialTypeIcon type={material.type} size="sm" showLabel />
-            {material.category && (
-              <span className="text-sm text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded">
+            {material.category ? (
+              <span className="rounded bg-neutral-100 px-2 py-0.5 text-sm text-neutral-500">
                 {material.category}
               </span>
-            )}
-            {isCompleted && (
+            ) : null}
+            {isCompleted ? (
               <ProgressTracker status="COMPLETED" size="sm" showLabel={false} />
-            )}
+            ) : null}
           </div>
           <h1 className="text-2xl font-bold text-neutral-900">{material.title}</h1>
         </div>
         <Button variant="outline" size="sm" onClick={handleEdit}>
-          <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -150,7 +164,7 @@ export const MaterialDetailPage = () => {
       {/* Material Info */}
       <Card variant="outlined">
         <Card.Body>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
             <div>
               <span className="text-neutral-500">Poziom trudności:</span>
               <div className="mt-1">

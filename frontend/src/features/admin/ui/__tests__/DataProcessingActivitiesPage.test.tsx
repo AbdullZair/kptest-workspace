@@ -56,8 +56,7 @@ const createMockStore = () =>
     reducer: {
       [api.reducerPath]: api.reducer,
     },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
   })
 
 describe('DataProcessingActivitiesPage', () => {
@@ -76,7 +75,9 @@ describe('DataProcessingActivitiesPage', () => {
     )
 
     expect(screen.getByText('Rejestr czynności przetwarzania')).toBeInTheDocument()
-    expect(screen.getByText('Zarządzaj rejestrem czynności przetwarzania danych osobowych')).toBeInTheDocument()
+    expect(
+      screen.getByText('Zarządzaj rejestrem czynności przetwarzania danych osobowych')
+    ).toBeInTheDocument()
   })
 
   it('has "Dodaj czynność" button', () => {

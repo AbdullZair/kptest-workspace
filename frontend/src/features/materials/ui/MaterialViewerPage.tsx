@@ -20,7 +20,11 @@ export const MaterialViewerPage = () => {
   const patientId = '00000000-0000-0000-0000-000000000000'
 
   // RTK Query hooks
-  const { data: material, isLoading, error } = useGetMaterialByIdQuery(id!, {
+  const {
+    data: material,
+    isLoading,
+    error,
+  } = useGetMaterialByIdQuery(id!, {
     skip: !id,
   })
   const [recordView] = useRecordViewMutation()
@@ -45,7 +49,7 @@ export const MaterialViewerPage = () => {
 
   if (!id) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <p className="text-neutral-600">Brak ID materiału</p>
       </div>
     )
@@ -53,7 +57,7 @@ export const MaterialViewerPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <PageLoader size="lg" text="Ładowanie materiału..." />
       </div>
     )
@@ -61,13 +65,10 @@ export const MaterialViewerPage = () => {
 
   if (error || !material) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="text-error-600">Materiał nie został znaleziony</p>
-          <button
-            onClick={handleClose}
-            className="mt-4 text-primary-600 hover:text-primary-700"
-          >
+          <button onClick={handleClose} className="mt-4 text-primary-600 hover:text-primary-700">
             Powrót do materiałów
           </button>
         </div>
@@ -77,12 +78,8 @@ export const MaterialViewerPage = () => {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-4xl mx-auto p-6">
-        <MaterialViewer
-          material={material}
-          onClose={handleClose}
-          onComplete={handleComplete}
-        />
+      <div className="mx-auto max-w-4xl p-6">
+        <MaterialViewer material={material} onClose={handleClose} onComplete={handleComplete} />
       </div>
     </div>
   )

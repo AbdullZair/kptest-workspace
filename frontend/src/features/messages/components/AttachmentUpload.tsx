@@ -20,7 +20,7 @@ const formatFileSize = (bytes: number): string => {
   const k = 1024
   const sizes = ['B', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i]
+  return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`
 }
 
 /**
@@ -116,10 +116,8 @@ export const AttachmentUpload = function AttachmentUpload({
   return (
     <Card variant="default" size="sm" className="p-4">
       <div
-        className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-          dragActive
-            ? 'border-blue-500 bg-blue-50'
-            : 'border-neutral-300 hover:border-neutral-400'
+        className={`relative rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
+          dragActive ? 'border-blue-500 bg-blue-50' : 'border-neutral-300 hover:border-neutral-400'
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -137,15 +135,15 @@ export const AttachmentUpload = function AttachmentUpload({
 
         {/* Upload progress */}
         {uploadProgress !== null && (
-          <div className="absolute inset-0 bg-white/90 rounded-lg flex items-center justify-center z-10">
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-white/90">
             <div className="w-full max-w-xs">
-              <div className="h-2 bg-neutral-200 rounded-full overflow-hidden">
+              <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
                 <div
                   className="h-full bg-blue-500 transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
-              <p className="text-sm text-neutral-600 mt-2">
+              <p className="mt-2 text-sm text-neutral-600">
                 {uploadProgress === 100 ? 'Przesłano!' : `Przesyłanie... ${uploadProgress}%`}
               </p>
             </div>
@@ -154,8 +152,13 @@ export const AttachmentUpload = function AttachmentUpload({
 
         {/* Icon */}
         <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center">
-            <svg className="w-6 h-6 text-neutral-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100">
+            <svg
+              className="h-6 w-6 text-neutral-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -171,7 +174,7 @@ export const AttachmentUpload = function AttachmentUpload({
             </p>
             <p className="text-xs text-neutral-500">
               Maksymalny rozmiar: {maxSizeMB}MB
-              {acceptedTypes && ` • Typy: ${acceptedTypes}`}
+              {acceptedTypes ? ` • Typy: ${acceptedTypes}` : null}
             </p>
           </div>
 

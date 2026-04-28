@@ -1,4 +1,9 @@
-import { createApi, fetchBaseQuery, type BaseQueryFn, type FetchArgs } from '@reduxjs/toolkit/query/react'
+import {
+  createApi,
+  fetchBaseQuery,
+  type BaseQueryFn,
+  type FetchArgs,
+} from '@reduxjs/toolkit/query/react'
 import type { ApiError } from './httpClient'
 import { AUTH_STORAGE_KEYS } from '@features/auth/lib/auth.types'
 
@@ -181,7 +186,7 @@ export const customBaseQuery = async (
     // Handle 401 - unauthorized (token might be expired)
     if ((result as { error?: { status?: number } }).error?.status === 401) {
       // Skip refresh for auth endpoints to prevent infinite loops
-      const url = typeof args === 'string' ? args : (args as FetchArgs).url
+      const url = typeof args === 'string' ? args : args.url
       const isAuthEndpoint = url.includes('/auth/')
 
       if (!isAuthEndpoint && !isRefreshing) {
@@ -195,11 +200,14 @@ export const customBaseQuery = async (
             if (typeof args === 'string') {
               result = await baseQuery(args, api, extraOptions)
             } else {
-              const fetchArgs = args as FetchArgs
+              const fetchArgs = args
               result = await baseQuery(
                 {
                   ...fetchArgs,
-                  headers: new Headers(fetchArgs.headers).set('authorization', `Bearer ${newToken}`),
+                  headers: new Headers(fetchArgs.headers).set(
+                    'authorization',
+                    `Bearer ${newToken}`
+                  ),
                 },
                 api,
                 extraOptions
@@ -312,9 +320,7 @@ export const api = createApi({
 /**
  * Inject new endpoints into the API
  */
-export const injectApiEndpoints = <T extends Record<string, unknown>>(
-  endpoints: T
-): void => {
+export const injectApiEndpoints = <T extends Record<string, unknown>>(endpoints: T): void => {
   api.injectEndpoints({
     endpoints: () => endpoints,
     overrideExisting: false,

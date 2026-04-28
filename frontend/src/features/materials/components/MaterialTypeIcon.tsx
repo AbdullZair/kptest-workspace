@@ -20,7 +20,7 @@ const getTypeIcon = (type: MaterialType): JSX.Element => {
   switch (type) {
     case 'ARTICLE':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -31,7 +31,7 @@ const getTypeIcon = (type: MaterialType): JSX.Element => {
       )
     case 'PDF':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -42,7 +42,7 @@ const getTypeIcon = (type: MaterialType): JSX.Element => {
       )
     case 'IMAGE':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -53,7 +53,7 @@ const getTypeIcon = (type: MaterialType): JSX.Element => {
       )
     case 'VIDEO':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -70,7 +70,7 @@ const getTypeIcon = (type: MaterialType): JSX.Element => {
       )
     case 'LINK':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -81,7 +81,7 @@ const getTypeIcon = (type: MaterialType): JSX.Element => {
       )
     case 'AUDIO':
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -92,7 +92,7 @@ const getTypeIcon = (type: MaterialType): JSX.Element => {
       )
     default:
       return (
-        <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -166,27 +166,26 @@ const getSizeClasses = (size: 'sm' | 'md' | 'lg'): { icon: string; label: string
  * <MaterialTypeIcon type="PDF" size="sm" showLabel />
  * ```
  */
-export const MaterialTypeIcon = memo(function MaterialTypeIcon({
-  type,
-  size = 'md',
-  className,
-  showLabel = false,
-}: MaterialTypeIconProps) {
-  const sizeClasses = getSizeClasses(size)
-  const colorClasses = getTypeColor(type)
+export const MaterialTypeIcon = memo(
+  ({ type, size = 'md', className, showLabel = false }: MaterialTypeIconProps) => {
+    const sizeClasses = getSizeClasses(size)
+    const colorClasses = getTypeColor(type)
 
-  return (
-    <div
-      className={twMerge(
-        'inline-flex items-center gap-1.5 rounded-md px-2 py-1',
-        colorClasses,
-        className
-      )}
-    >
-      <div className={sizeClasses.icon}>{getTypeIcon(type)}</div>
-      {showLabel && <span className={twMerge('font-medium', sizeClasses.label)}>{getTypeLabel(type)}</span>}
-    </div>
-  )
-})
+    return (
+      <div
+        className={twMerge(
+          'inline-flex items-center gap-1.5 rounded-md px-2 py-1',
+          colorClasses,
+          className
+        )}
+      >
+        <div className={sizeClasses.icon}>{getTypeIcon(type)}</div>
+        {showLabel ? (
+          <span className={twMerge('font-medium', sizeClasses.label)}>{getTypeLabel(type)}</span>
+        ) : null}
+      </div>
+    )
+  }
+)
 
 export default MaterialTypeIcon

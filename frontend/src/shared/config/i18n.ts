@@ -11,11 +11,11 @@ i18n
   .init({
     resources: {
       pl: { translation: pl },
-      en: { translation: en }
+      en: { translation: en },
     },
     fallbackLng: 'pl',
     defaultNS: 'common',
-    interpolation: { escapeValue: false }
+    interpolation: { escapeValue: false },
   })
 
 export default i18n

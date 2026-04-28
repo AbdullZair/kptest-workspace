@@ -22,8 +22,18 @@ export function AdminSystemPage() {
     fileSizeMb: number
   } | null>(null)
 
-  const { data: health, isLoading: healthLoading, error: healthError, refetch: refetchHealth } = useGetSystemHealthQuery()
-  const { data: metrics, isLoading: metricsLoading, error: metricsError, refetch: refetchMetrics } = useGetSystemMetricsQuery()
+  const {
+    data: health,
+    isLoading: healthLoading,
+    error: healthError,
+    refetch: refetchHealth,
+  } = useGetSystemHealthQuery()
+  const {
+    data: metrics,
+    isLoading: metricsLoading,
+    error: metricsError,
+    refetch: refetchMetrics,
+  } = useGetSystemMetricsQuery()
   const [clearCache, { isLoading: isClearingCache }] = useClearCacheMutation()
   const [createBackup, { isLoading: isCreatingBackup }] = useCreateBackupMutation()
 
@@ -68,21 +78,21 @@ export function AdminSystemPage() {
         <div className="flex gap-2">
           <button
             onClick={handleRefresh}
-            className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
+            className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
           >
             Odśwież
           </button>
           <button
             onClick={() => setShowClearCacheConfirm(true)}
             disabled={isClearingCache}
-            className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700 disabled:opacity-50"
+            className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
           >
             {isClearingCache ? 'Czyszczenie...' : 'Wyczyść cache'}
           </button>
           <button
             onClick={() => setShowBackupConfirm(true)}
             disabled={isCreatingBackup}
-            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700 disabled:opacity-50"
+            className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
           >
             {isCreatingBackup ? 'Tworzenie...' : 'Utwórz backup'}
           </button>
@@ -90,26 +100,26 @@ export function AdminSystemPage() {
       </div>
 
       {/* Health and Metrics Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* System Health */}
         <div>
           {healthLoading ? (
-            <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
+            <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
               <div className="animate-pulse">
-                <div className="h-16 bg-neutral-50 border-b border-neutral-200" />
-                <div className="p-6 space-y-4">
+                <div className="h-16 border-b border-neutral-200 bg-neutral-50" />
+                <div className="space-y-4 p-6">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-12 bg-neutral-100 rounded" />
+                    <div key={i} className="h-12 rounded bg-neutral-100" />
                   ))}
                 </div>
               </div>
             </div>
           ) : healthError ? (
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 text-center">
+            <div className="rounded-lg border border-neutral-200 bg-white p-6 text-center">
               <p className="text-red-600">Wystąpił błąd podczas ładowania statusu systemu</p>
               <button
                 onClick={refetchHealth}
-                className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
+                className="mt-4 font-medium text-primary-600 hover:text-primary-700"
               >
                 Spróbuj ponownie
               </button>
@@ -122,22 +132,22 @@ export function AdminSystemPage() {
         {/* Quick Stats */}
         <div className="space-y-4">
           {metricsLoading ? (
-            <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
+            <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
               <div className="animate-pulse">
-                <div className="h-16 bg-neutral-50 border-b border-neutral-200" />
-                <div className="p-6 space-y-4">
+                <div className="h-16 border-b border-neutral-200 bg-neutral-50" />
+                <div className="space-y-4 p-6">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-12 bg-neutral-100 rounded" />
+                    <div key={i} className="h-12 rounded bg-neutral-100" />
                   ))}
                 </div>
               </div>
             </div>
           ) : metricsError ? (
-            <div className="bg-white rounded-lg border border-neutral-200 p-6 text-center">
+            <div className="rounded-lg border border-neutral-200 bg-white p-6 text-center">
               <p className="text-red-600">Wystąpił błąd podczas ładowania metryk</p>
               <button
                 onClick={refetchMetrics}
-                className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
+                className="mt-4 font-medium text-primary-600 hover:text-primary-700"
               >
                 Spróbuj ponownie
               </button>
@@ -149,17 +159,22 @@ export function AdminSystemPage() {
       </div>
 
       {/* System Actions */}
-      <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-neutral-200 bg-neutral-50">
+      <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
+        <div className="border-b border-neutral-200 bg-neutral-50 px-6 py-4">
           <h3 className="text-lg font-semibold text-neutral-900">Operacje systemowe</h3>
         </div>
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {/* Clear Cache Card */}
-            <div className="border border-neutral-200 rounded-lg p-4 hover:border-amber-300 transition-colors">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-amber-100 rounded-lg">
-                  <svg className="w-6 h-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="rounded-lg border border-neutral-200 p-4 transition-colors hover:border-amber-300">
+              <div className="mb-3 flex items-center gap-3">
+                <div className="rounded-lg bg-amber-100 p-2">
+                  <svg
+                    className="h-6 w-6 text-amber-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -170,22 +185,27 @@ export function AdminSystemPage() {
                 </div>
                 <h4 className="font-semibold text-neutral-900">Wyczyść cache</h4>
               </div>
-              <p className="text-sm text-neutral-600 mb-4">
+              <p className="mb-4 text-sm text-neutral-600">
                 Czyści pamięć podręczną aplikacji. Może być przydatne po aktualizacjach.
               </p>
               <button
                 onClick={() => setShowClearCacheConfirm(true)}
-                className="w-full px-4 py-2 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-md hover:bg-amber-100"
+                className="w-full rounded-md border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-100"
               >
                 Wyczyść cache
               </button>
             </div>
 
             {/* Create Backup Card */}
-            <div className="border border-neutral-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-primary-100 rounded-lg">
-                  <svg className="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="rounded-lg border border-neutral-200 p-4 transition-colors hover:border-primary-300">
+              <div className="mb-3 flex items-center gap-3">
+                <div className="rounded-lg bg-primary-100 p-2">
+                  <svg
+                    className="h-6 w-6 text-primary-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -196,22 +216,27 @@ export function AdminSystemPage() {
                 </div>
                 <h4 className="font-semibold text-neutral-900">Utwórz backup</h4>
               </div>
-              <p className="text-sm text-neutral-600 mb-4">
+              <p className="mb-4 text-sm text-neutral-600">
                 Tworzy kopię zapasową bazy danych. Przydatne przed większymi zmianami.
               </p>
               <button
                 onClick={() => setShowBackupConfirm(true)}
-                className="w-full px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 border border-primary-200 rounded-md hover:bg-primary-100"
+                className="w-full rounded-md border border-primary-200 bg-primary-50 px-4 py-2 text-sm font-medium text-primary-700 hover:bg-primary-100"
               >
                 Utwórz backup
               </button>
             </div>
 
             {/* System Info Card */}
-            <div className="border border-neutral-200 rounded-lg p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="rounded-lg border border-neutral-200 p-4">
+              <div className="mb-3 flex items-center gap-3">
+                <div className="rounded-lg bg-blue-100 p-2">
+                  <svg
+                    className="h-6 w-6 text-blue-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -242,30 +267,31 @@ export function AdminSystemPage() {
       </div>
 
       {/* Clear Cache Confirmation Modal */}
-      {showClearCacheConfirm && (
+      {showClearCacheConfirm ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div className="mx-4 w-full max-w-md rounded-lg bg-white shadow-xl">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+              <h3 className="mb-4 text-lg font-semibold text-neutral-900">
                 Wyczyść pamięć podręczną
               </h3>
-              <p className="text-sm text-neutral-600 mb-4">
+              <p className="mb-4 text-sm text-neutral-600">
                 Czy na pewno chcesz wyczyścić pamięć podręczną systemu?
               </p>
-              <p className="text-sm text-amber-600 bg-amber-50 p-3 rounded mb-4">
-                Ta operacja może tymczasowo spowolnić działanie aplikacji do czasu ponownego wypełnienia cache.
+              <p className="mb-4 rounded bg-amber-50 p-3 text-sm text-amber-600">
+                Ta operacja może tymczasowo spowolnić działanie aplikacji do czasu ponownego
+                wypełnienia cache.
               </p>
-              <div className="flex gap-3 justify-end">
+              <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setShowClearCacheConfirm(false)}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                 >
                   Anuluj
                 </button>
                 <button
                   onClick={handleClearCache}
                   disabled={isClearingCache}
-                  className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700 disabled:opacity-50"
+                  className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
                 >
                   {isClearingCache ? 'Czyszczenie...' : 'Wyczyść'}
                 </button>
@@ -273,33 +299,31 @@ export function AdminSystemPage() {
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Create Backup Confirmation Modal */}
-      {showBackupConfirm && (
+      {showBackupConfirm ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div className="mx-4 w-full max-w-md rounded-lg bg-white shadow-xl">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">
-                Utwórz kopię zapasową
-              </h3>
-              <p className="text-sm text-neutral-600 mb-4">
+              <h3 className="mb-4 text-lg font-semibold text-neutral-900">Utwórz kopię zapasową</h3>
+              <p className="mb-4 text-sm text-neutral-600">
                 Czy na pewno chcesz utworzyć kopię zapasową bazy danych?
               </p>
-              <p className="text-sm text-blue-600 bg-blue-50 p-3 rounded mb-4">
+              <p className="mb-4 rounded bg-blue-50 p-3 text-sm text-blue-600">
                 Operacja może potrwać kilka minut w zależności od rozmiaru bazy danych.
               </p>
-              <div className="flex gap-3 justify-end">
+              <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setShowBackupConfirm(false)}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                 >
                   Anuluj
                 </button>
                 <button
                   onClick={handleCreateBackup}
                   disabled={isCreatingBackup}
-                  className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700 disabled:opacity-50"
+                  className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
                 >
                   {isCreatingBackup ? 'Tworzenie...' : 'Utwórz backup'}
                 </button>
@@ -307,47 +331,59 @@ export function AdminSystemPage() {
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Backup Result Modal */}
-      {backupResult && (
+      {backupResult ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div className="mx-4 w-full max-w-md rounded-lg bg-white shadow-xl">
             <div className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="mb-4 flex items-center gap-3">
+                <div className="rounded-full bg-green-100 p-2">
+                  <svg
+                    className="h-6 w-6 text-green-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-neutral-900">
                   Backup utworzony pomyślnie
                 </h3>
               </div>
-              <dl className="space-y-3 mb-4">
+              <dl className="mb-4 space-y-3">
                 <div className="flex justify-between">
                   <dt className="text-sm text-neutral-500">ID backupu:</dt>
-                  <dd className="text-sm font-mono text-neutral-900">{backupResult.backupId}</dd>
+                  <dd className="font-mono text-sm text-neutral-900">{backupResult.backupId}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-sm text-neutral-500">Nazwa pliku:</dt>
-                  <dd className="text-sm font-mono text-neutral-900">{backupResult.fileName}</dd>
+                  <dd className="font-mono text-sm text-neutral-900">{backupResult.fileName}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-sm text-neutral-500">Rozmiar:</dt>
-                  <dd className="text-sm font-medium text-neutral-900">{backupResult.fileSizeMb.toFixed(2)} MB</dd>
+                  <dd className="text-sm font-medium text-neutral-900">
+                    {backupResult.fileSizeMb.toFixed(2)} MB
+                  </dd>
                 </div>
               </dl>
               <button
                 onClick={() => setBackupResult(null)}
-                className="w-full px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700"
+                className="w-full rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
               >
                 Zamknij
               </button>
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

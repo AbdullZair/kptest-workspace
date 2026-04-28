@@ -73,26 +73,28 @@ export const messageApiSlice = api.injectEndpoints({
      * Get messages in a thread
      * @query
      */
-    getThreadMessages: builder.query<Message[], { threadId: string; page?: number; size?: number }>({
-      query: ({ threadId, page = 0, size = 50 }) => {
-        const params = new URLSearchParams()
-        if (page !== undefined) params.append('page', page.toString())
-        if (size !== undefined) params.append('size', size.toString())
+    getThreadMessages: builder.query<Message[], { threadId: string; page?: number; size?: number }>(
+      {
+        query: ({ threadId, page = 0, size = 50 }) => {
+          const params = new URLSearchParams()
+          if (page !== undefined) params.append('page', page.toString())
+          if (size !== undefined) params.append('size', size.toString())
 
-        return {
-          url: `/messages/threads/${threadId}/messages`,
-          method: 'GET',
-          params,
-        }
-      },
-      providesTags: (result, _error, { threadId }) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Message' as const, id })),
-              { type: 'Message', id: `THREAD_${threadId}` },
-            ]
-          : [{ type: 'Message', id: `THREAD_${threadId}` }],
-    }),
+          return {
+            url: `/messages/threads/${threadId}/messages`,
+            method: 'GET',
+            params,
+          }
+        },
+        providesTags: (result, _error, { threadId }) =>
+          result
+            ? [
+                ...result.map(({ id }) => ({ type: 'Message' as const, id })),
+                { type: 'Message', id: `THREAD_${threadId}` },
+              ]
+            : [{ type: 'Message', id: `THREAD_${threadId}` }],
+      }
+    ),
 
     /**
      * Send a message
@@ -154,7 +156,10 @@ export const messageApiSlice = api.injectEndpoints({
      * Get unread messages
      * @query
      */
-    getUnreadMessages: builder.query<UnreadMessagesResponse, { project_id?: string; page?: number; size?: number }>({
+    getUnreadMessages: builder.query<
+      UnreadMessagesResponse,
+      { project_id?: string; page?: number; size?: number }
+    >({
       query: ({ project_id, page = 0, size = 20 }) => {
         const params = new URLSearchParams()
         if (project_id) params.append('projectId', project_id)

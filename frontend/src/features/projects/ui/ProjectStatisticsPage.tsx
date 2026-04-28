@@ -48,7 +48,7 @@ export const ProjectStatisticsPage = () => {
 
   if (!id) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-error-600">Nie znaleziono identyfikatora projektu</p>
         <Button variant="primary" onClick={() => navigate('/projects')} className="mt-4">
           Powrót do projektów
@@ -63,21 +63,31 @@ export const ProjectStatisticsPage = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={handleBack}>
-            <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg className="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Powrót
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">Statystyki projektu</h1>
-            <p className="text-neutral-600 mt-1">Szczegółowe statystyki i metryki projektu</p>
+            <p className="mt-1 text-neutral-600">Szczegółowe statystyki i metryki projektu</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <Button variant="outline" onClick={handleExport}>
-            <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
             </svg>
             Eksportuj
           </Button>
@@ -92,10 +102,10 @@ export const ProjectStatisticsPage = () => {
       </Card>
 
       {/* Additional Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* Activity Timeline */}
         <Card variant="elevated">
-          <div className="flex items-center justify-between p-6 border-b border-neutral-200">
+          <div className="flex items-center justify-between border-b border-neutral-200 p-6">
             <h2 className="text-lg font-semibold text-neutral-900">Ostatnia aktywność</h2>
           </div>
           <div className="p-6">
@@ -103,15 +113,25 @@ export const ProjectStatisticsPage = () => {
               {[
                 { action: 'Nowy pacjent dołączony', time: '2h temu', user: 'Dr Anna Kowalska' },
                 { action: 'Materiał dodany', time: '4h temu', user: 'Terapeuta Jan Nowak' },
-                { action: 'Wiadomość wysłana', time: '6h temu', user: 'Koordynator Maria Wiśniewska' },
-                { action: 'Wydarzenie zakończone', time: '1d temu', user: 'Pacjent Piotr Wiśniewski' },
+                {
+                  action: 'Wiadomość wysłana',
+                  time: '6h temu',
+                  user: 'Koordynator Maria Wiśniewska',
+                },
+                {
+                  action: 'Wydarzenie zakończone',
+                  time: '1d temu',
+                  user: 'Pacjent Piotr Wiśniewski',
+                },
                 { action: 'Raport wygenerowany', time: '2d temu', user: 'Dr Anna Kowalska' },
               ].map((activity, index) => (
                 <div key={index} className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary-500 mt-2" />
+                  <div className="mt-2 h-2 w-2 rounded-full bg-primary-500" />
                   <div className="flex-1">
                     <p className="text-sm font-medium text-neutral-900">{activity.action}</p>
-                    <p className="text-xs text-neutral-500">{activity.user} • {activity.time}</p>
+                    <p className="text-xs text-neutral-500">
+                      {activity.user} • {activity.time}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -121,7 +141,7 @@ export const ProjectStatisticsPage = () => {
 
         {/* Team Overview */}
         <Card variant="elevated">
-          <div className="flex items-center justify-between p-6 border-b border-neutral-200">
+          <div className="flex items-center justify-between border-b border-neutral-200 p-6">
             <h2 className="text-lg font-semibold text-neutral-900">Zespół projektu</h2>
           </div>
           <div className="p-6">
@@ -149,9 +169,9 @@ interface TeamMemberRowProps {
 
 const TeamMemberRow: React.FC<TeamMemberRowProps> = ({ role, count, color }) => {
   return (
-    <div className="flex items-center justify-between py-2 border-b border-neutral-100 last:border-0">
+    <div className="flex items-center justify-between border-b border-neutral-100 py-2 last:border-0">
       <div className="flex items-center gap-3">
-        <div className={clsx('w-3 h-3 rounded-full', color)} />
+        <div className={clsx('h-3 w-3 rounded-full', color)} />
         <span className="text-sm text-neutral-700">{role}</span>
       </div>
       <span className="text-sm font-medium text-neutral-900">{count}</span>

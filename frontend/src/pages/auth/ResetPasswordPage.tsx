@@ -48,12 +48,12 @@ export const ResetPasswordPage = () => {
 
   if (isReset) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
         <Card className="w-full max-w-md" variant="elevated">
           <div className="text-center">
-            <div className="mx-auto w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mb-4">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success-100">
               <svg
-                className="w-8 h-8 text-success-600"
+                className="h-8 w-8 text-success-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -67,8 +67,8 @@ export const ResetPasswordPage = () => {
               </svg>
             </div>
 
-            <h1 className="text-2xl font-bold text-neutral-900 mb-2">Hasło zmienione</h1>
-            <p className="text-neutral-600 mb-6">
+            <h1 className="mb-2 text-2xl font-bold text-neutral-900">Hasło zmienione</h1>
+            <p className="mb-6 text-neutral-600">
               Twoje hasło zostało pomyślnie zresetowane. Możesz się teraz zalogować.
             </p>
 
@@ -84,13 +84,13 @@ export const ResetPasswordPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4 py-12">
       <Card className="w-full max-w-md" variant="elevated">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center mb-4">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600">
             <svg
-              className="w-7 h-7 text-white"
+              className="h-7 w-7 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -105,15 +105,15 @@ export const ResetPasswordPage = () => {
           </div>
 
           <h1 className="text-2xl font-bold text-neutral-900">Ustaw nowe hasło</h1>
-          <p className="text-neutral-600 mt-2">Wpisz swoje nowe hasło</p>
+          <p className="mt-2 text-neutral-600">Wpisz swoje nowe hasło</p>
         </div>
 
         {/* Error message */}
-        {error && (
-          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg">
+        {error ? (
+          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4">
             <p className="text-sm text-error-800">{error}</p>
           </div>
-        )}
+        ) : null}
 
         {/* Reset form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -136,20 +136,14 @@ export const ResetPasswordPage = () => {
             {...register('confirmPassword')}
           />
 
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={isSubmitting}
-          >
+          <Button type="submit" variant="primary" size="lg" fullWidth loading={isSubmitting}>
             Zmień hasło
           </Button>
         </form>
 
         {/* Back to login */}
         <p className="mt-8 text-center text-sm text-neutral-600">
-          <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700">
             Wróć do logowania
           </Link>
         </p>

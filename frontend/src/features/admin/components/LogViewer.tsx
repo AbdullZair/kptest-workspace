@@ -70,18 +70,21 @@ const isAuditLog = (log: AuditLog | SystemLog): log is AuditLog => {
  * <LogViewer log={log} onClose={handleClose} />
  * ```
  */
-export const LogViewer = memo(function LogViewer({ log, onClose, className }: LogViewerProps) {
+export const LogViewer = memo(({ log, onClose, className }: LogViewerProps) => {
   const [showOldValue, setShowOldValue] = useState(false)
   const [showNewValue, setShowNewValue] = useState(false)
 
-  const baseStyles = clsx('bg-white rounded-lg border border-neutral-200 overflow-hidden', className)
+  const baseStyles = clsx(
+    'bg-white rounded-lg border border-neutral-200 overflow-hidden',
+    className
+  )
 
   const isAudit = isAuditLog(log)
 
   return (
     <div className={baseStyles}>
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-neutral-50">
+      <div className="flex items-center justify-between border-b border-neutral-200 bg-neutral-50 px-6 py-4">
         <div className="flex items-center gap-3">
           <h3 className="text-lg font-semibold text-neutral-900">
             {isAudit ? 'Szczegóły logu audytu' : 'Szczegóły logu systemowego'}
@@ -89,7 +92,7 @@ export const LogViewer = memo(function LogViewer({ log, onClose, className }: Lo
           {isAudit ? (
             <span
               className={clsx(
-                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border',
+                'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium',
                 getActionColor(log.action)
               )}
             >
@@ -98,32 +101,37 @@ export const LogViewer = memo(function LogViewer({ log, onClose, className }: Lo
           ) : (
             <span
               className={clsx(
-                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border',
-                getLevelColor((log as SystemLog).level)
+                'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium',
+                getLevelColor(log.level)
               )}
             >
-              {(log as SystemLog).level}
+              {log.level}
             </span>
           )}
         </div>
         <button
           onClick={onClose}
-          className="text-neutral-400 hover:text-neutral-600 transition-colors"
+          className="text-neutral-400 transition-colors hover:text-neutral-600"
           aria-label="Zamknij"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-4">
+      <div className="space-y-4 p-6">
         {/* Common fields */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <dt className="text-sm font-medium text-neutral-500">ID logu</dt>
-            <dd className="mt-1 text-sm text-neutral-900 font-mono bg-neutral-100 px-2 py-1 rounded">
+            <dd className="mt-1 rounded bg-neutral-100 px-2 py-1 font-mono text-sm text-neutral-900">
               {log.log_id}
             </dd>
           </div>
@@ -139,44 +147,42 @@ export const LogViewer = memo(function LogViewer({ log, onClose, className }: Lo
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-sm font-medium text-neutral-500">ID użytkownika</dt>
-                <dd className="mt-1 text-sm text-neutral-900 font-mono bg-neutral-100 px-2 py-1 rounded">
-                  {(log as AuditLog).user_id}
+                <dd className="mt-1 rounded bg-neutral-100 px-2 py-1 font-mono text-sm text-neutral-900">
+                  {log.user_id}
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-neutral-500">Adres IP</dt>
-                <dd className="mt-1 text-sm text-neutral-900">
-                  {(log as AuditLog).ip_address || '-'}
-                </dd>
+                <dd className="mt-1 text-sm text-neutral-900">{log.ip_address || '-'}</dd>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <dt className="text-sm font-medium text-neutral-500">Typ encji</dt>
-                <dd className="mt-1 text-sm text-neutral-900 font-mono bg-neutral-100 px-2 py-1 rounded">
-                  {(log as AuditLog).entity_type}
+                <dd className="mt-1 rounded bg-neutral-100 px-2 py-1 font-mono text-sm text-neutral-900">
+                  {log.entity_type}
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-neutral-500">ID encji</dt>
-                <dd className="mt-1 text-sm text-neutral-900 font-mono bg-neutral-100 px-2 py-1 rounded">
-                  {(log as AuditLog).entity_id || '-'}
+                <dd className="mt-1 rounded bg-neutral-100 px-2 py-1 font-mono text-sm text-neutral-900">
+                  {log.entity_id || '-'}
                 </dd>
               </div>
             </div>
 
-            {(log as AuditLog).user_agent && (
+            {log.user_agent ? (
               <div>
                 <dt className="text-sm font-medium text-neutral-500">User Agent</dt>
-                <dd className="mt-1 text-sm text-neutral-900 font-mono bg-neutral-100 px-2 py-1 rounded break-all">
-                  {(log as AuditLog).user_agent}
+                <dd className="mt-1 break-all rounded bg-neutral-100 px-2 py-1 font-mono text-sm text-neutral-900">
+                  {log.user_agent}
                 </dd>
               </div>
-            )}
+            ) : null}
 
             {/* Old Value */}
-            {(log as AuditLog).old_value && (
+            {log.old_value ? (
               <div>
                 <button
                   onClick={() => setShowOldValue(!showOldValue)}
@@ -184,24 +190,32 @@ export const LogViewer = memo(function LogViewer({ log, onClose, className }: Lo
                 >
                   <span>Stara wartość</span>
                   <svg
-                    className={clsx('w-4 h-4 ml-1 transition-transform', showOldValue && 'rotate-180')}
+                    className={clsx(
+                      'ml-1 h-4 w-4 transition-transform',
+                      showOldValue && 'rotate-180'
+                    )}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                {showOldValue && (
-                  <pre className="mt-2 text-xs text-neutral-700 bg-neutral-100 p-3 rounded overflow-auto max-h-48">
-                    {(log as AuditLog).old_value}
+                {showOldValue ? (
+                  <pre className="mt-2 max-h-48 overflow-auto rounded bg-neutral-100 p-3 text-xs text-neutral-700">
+                    {log.old_value}
                   </pre>
-                )}
+                ) : null}
               </div>
-            )}
+            ) : null}
 
             {/* New Value */}
-            {(log as AuditLog).new_value && (
+            {log.new_value ? (
               <div>
                 <button
                   onClick={() => setShowNewValue(!showNewValue)}
@@ -209,57 +223,63 @@ export const LogViewer = memo(function LogViewer({ log, onClose, className }: Lo
                 >
                   <span>Nowa wartość</span>
                   <svg
-                    className={clsx('w-4 h-4 ml-1 transition-transform', showNewValue && 'rotate-180')}
+                    className={clsx(
+                      'ml-1 h-4 w-4 transition-transform',
+                      showNewValue && 'rotate-180'
+                    )}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                {showNewValue && (
-                  <pre className="mt-2 text-xs text-neutral-700 bg-neutral-100 p-3 rounded overflow-auto max-h-48">
-                    {(log as AuditLog).new_value}
+                {showNewValue ? (
+                  <pre className="mt-2 max-h-48 overflow-auto rounded bg-neutral-100 p-3 text-xs text-neutral-700">
+                    {log.new_value}
                   </pre>
-                )}
+                ) : null}
               </div>
-            )}
+            ) : null}
           </>
         ) : (
           /* System log specific fields */
           <>
             <div>
               <dt className="text-sm font-medium text-neutral-500">Wiadomość</dt>
-              <dd className="mt-1 text-sm text-neutral-900 whitespace-pre-wrap">
-                {(log as SystemLog).message}
-              </dd>
+              <dd className="mt-1 whitespace-pre-wrap text-sm text-neutral-900">{log.message}</dd>
             </div>
 
-            {(log as SystemLog).source_class && (
+            {log.source_class ? (
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <dt className="text-sm font-medium text-neutral-500">Klasa źródłowa</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 font-mono bg-neutral-100 px-2 py-1 rounded">
-                    {(log as SystemLog).source_class}
+                  <dd className="mt-1 rounded bg-neutral-100 px-2 py-1 font-mono text-sm text-neutral-900">
+                    {log.source_class}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-neutral-500">Metoda źródłowa</dt>
-                  <dd className="mt-1 text-sm text-neutral-900 font-mono bg-neutral-100 px-2 py-1 rounded">
-                    {(log as SystemLog).source_method || '-'}
+                  <dd className="mt-1 rounded bg-neutral-100 px-2 py-1 font-mono text-sm text-neutral-900">
+                    {log.source_method || '-'}
                   </dd>
                 </div>
               </div>
-            )}
+            ) : null}
 
-            {(log as SystemLog).stack_trace && (
+            {log.stack_trace ? (
               <div>
                 <dt className="text-sm font-medium text-neutral-500">Stack Trace</dt>
-                <pre className="mt-2 text-xs text-red-700 bg-red-50 p-3 rounded overflow-auto max-h-64 border border-red-200">
-                  {(log as SystemLog).stack_trace}
+                <pre className="mt-2 max-h-64 overflow-auto rounded border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+                  {log.stack_trace}
                 </pre>
               </div>
-            )}
+            ) : null}
           </>
         )}
       </div>

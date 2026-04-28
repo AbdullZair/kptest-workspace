@@ -8,7 +8,11 @@ import {
   useUpdateDataProcessingActivityMutation,
   useDeleteDataProcessingActivityMutation,
 } from '../api/adminApi'
-import { dataProcessingActivitySchema, type DataProcessingActivityFormData, legalBasisValues } from '../lib/schemas'
+import {
+  dataProcessingActivitySchema,
+  type DataProcessingActivityFormData,
+  legalBasisValues,
+} from '../lib/schemas'
 import { Button } from '@shared/components'
 import { Input } from '@shared/components'
 import type { DataProcessingActivity, LegalBasis } from '../types'
@@ -171,8 +175,9 @@ export const DataProcessingActivitiesPage: React.FC = () => {
             <button
               key={option.value}
               onClick={() => handleLegalBasisFilter(option.value)}
-              className={`px-3 py-1 text-sm rounded-full transition-colors ${
-                filters.legal_basis === option.value || (option.value === 'ALL' && !filters.legal_basis)
+              className={`rounded-full px-3 py-1 text-sm transition-colors ${
+                filters.legal_basis === option.value ||
+                (option.value === 'ALL' && !filters.legal_basis)
                   ? 'bg-primary-600 text-white'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
@@ -185,40 +190,43 @@ export const DataProcessingActivitiesPage: React.FC = () => {
 
       {/* Error state */}
       {error ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-red-600">Wystąpił błąd podczas ładowania rejestru</p>
-          <button onClick={() => refetch()} className="mt-4 text-primary-600 hover:text-primary-700 font-medium">
+          <button
+            onClick={() => refetch()}
+            className="mt-4 font-medium text-primary-600 hover:text-primary-700"
+          >
             Spróbuj ponownie
           </button>
         </div>
       ) : (
         <>
           {/* Table */}
-          <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+          <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
             <table className="min-w-full divide-y divide-neutral-200">
               <thead className="bg-neutral-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                     Nazwa
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                     Cel
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                     Podstawa prawna
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                     Administrator
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                     Okres przechowywania
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-neutral-500">
                     Akcje
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-neutral-200">
+              <tbody className="divide-y divide-neutral-200 bg-white">
                 {isLoading ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-8 text-center text-neutral-500">
@@ -234,25 +242,30 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                 ) : (
                   data?.content.map((activity) => (
                     <tr key={activity.id} className="hover:bg-neutral-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-neutral-900">
                         {activity.name}
                       </td>
-                      <td className="px-6 py-4 text-sm text-neutral-600 max-w-xs truncate">
+                      <td className="max-w-xs truncate px-6 py-4 text-sm text-neutral-600">
                         {activity.purpose}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 text-xs rounded-full bg-primary-100 text-primary-700">
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <span className="rounded-full bg-primary-100 px-2 py-1 text-xs text-primary-700">
                           {getLegalBasisLabel(activity.legal_basis)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-600">
                         {activity.data_controller}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-600">
                         {activity.retention_period}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Button variant="outline" size="sm" onClick={() => handleOpenEdit(activity)} className="mr-2">
+                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleOpenEdit(activity)}
+                          className="mr-2"
+                        >
                           Edytuj
                         </Button>
                         <Button
@@ -274,48 +287,56 @@ export const DataProcessingActivitiesPage: React.FC = () => {
           </div>
 
           {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 bg-white border border-neutral-200 rounded-lg">
+          {data && data.totalPages > 1 ? (
+            <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-4 py-3">
               <div className="text-sm text-neutral-700">
                 Strona {data.pageNumber + 1} z {data.totalPages} ({data.totalElements} czynności)
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page - 1) }))}
+                  onClick={() =>
+                    setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page - 1) }))
+                  }
                   disabled={data.isFirst}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Poprzednia
                 </button>
                 <button
                   onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
                   disabled={data.isLast}
-                  className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Następna
                 </button>
               </div>
             </div>
-          )}
+          ) : null}
         </>
       )}
 
       {/* Form Dialog */}
-      <Dialog open={showFormDialog} onClose={() => setShowFormDialog(false)} className="relative z-50">
+      <Dialog
+        open={showFormDialog}
+        onClose={() => setShowFormDialog(false)}
+        className="relative z-50"
+      >
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <Dialog.Panel className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl">
             <form onSubmit={handleSubmit(handleFormSubmit)}>
-              <div className="px-6 py-4 border-b border-neutral-200">
+              <div className="border-b border-neutral-200 px-6 py-4">
                 <Dialog.Title className="text-lg font-semibold text-neutral-900">
-                  {editingActivity ? 'Edytuj czynność przetwarzania' : 'Dodaj czynność przetwarzania'}
+                  {editingActivity
+                    ? 'Edytuj czynność przetwarzania'
+                    : 'Dodaj czynność przetwarzania'}
                 </Dialog.Title>
               </div>
 
-              <div className="px-6 py-4 space-y-4">
+              <div className="space-y-4 px-6 py-4">
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label htmlFor="name" className="mb-1 block text-sm font-medium text-neutral-700">
                     Nazwa *
                   </label>
                   <Input
@@ -329,27 +350,35 @@ export const DataProcessingActivitiesPage: React.FC = () => {
 
                 {/* Purpose */}
                 <div>
-                  <label htmlFor="purpose" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label
+                    htmlFor="purpose"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
+                  >
                     Cel przetwarzania *
                   </label>
                   <textarea
                     id="purpose"
                     {...register('purpose')}
                     rows={3}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
-                  {errors.purpose && <p className="mt-1 text-sm text-red-600">{errors.purpose.message}</p>}
+                  {errors.purpose ? (
+                    <p className="mt-1 text-sm text-red-600">{errors.purpose.message}</p>
+                  ) : null}
                 </div>
 
                 {/* Legal Basis */}
                 <div>
-                  <label htmlFor="legal_basis" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label
+                    htmlFor="legal_basis"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
+                  >
                     Podstawa prawna *
                   </label>
                   <select
                     id="legal_basis"
                     {...register('legal_basis')}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
                     {legalBasisValues.map((basis) => (
                       <option key={basis} value={basis}>
@@ -357,12 +386,17 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                       </option>
                     ))}
                   </select>
-                  {errors.legal_basis && <p className="mt-1 text-sm text-red-600">{errors.legal_basis.message}</p>}
+                  {errors.legal_basis ? (
+                    <p className="mt-1 text-sm text-red-600">{errors.legal_basis.message}</p>
+                  ) : null}
                 </div>
 
                 {/* Categories */}
                 <div>
-                  <label htmlFor="categories" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label
+                    htmlFor="categories"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
+                  >
                     Kategorie danych *
                   </label>
                   <Input
@@ -377,13 +411,18 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                       }
                     }}
                   />
-                  <p className="text-xs text-neutral-500 mt-1">Kategorie oddzielone przecinkami</p>
-                  {errors.categories && <p className="mt-1 text-sm text-red-600">{errors.categories.message}</p>}
+                  <p className="mt-1 text-xs text-neutral-500">Kategorie oddzielone przecinkami</p>
+                  {errors.categories ? (
+                    <p className="mt-1 text-sm text-red-600">{errors.categories.message}</p>
+                  ) : null}
                 </div>
 
                 {/* Retention Period */}
                 <div>
-                  <label htmlFor="retention_period" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label
+                    htmlFor="retention_period"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
+                  >
                     Okres przechowywania *
                   </label>
                   <Input
@@ -392,59 +431,60 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                     placeholder="np. 5 lat od zakończenia leczenia"
                     fullWidth
                   />
-                  {errors.retention_period && (
+                  {errors.retention_period ? (
                     <p className="mt-1 text-sm text-red-600">{errors.retention_period.message}</p>
-                  )}
+                  ) : null}
                 </div>
 
                 {/* Security Measures */}
                 <div>
-                  <label htmlFor="security_measures" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label
+                    htmlFor="security_measures"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
+                  >
                     Środki bezpieczeństwa *
                   </label>
                   <textarea
                     id="security_measures"
                     {...register('security_measures')}
                     rows={3}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
-                  {errors.security_measures && (
+                  {errors.security_measures ? (
                     <p className="mt-1 text-sm text-red-600">{errors.security_measures.message}</p>
-                  )}
+                  ) : null}
                 </div>
 
                 {/* Data Controller */}
                 <div>
-                  <label htmlFor="data_controller" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label
+                    htmlFor="data_controller"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
+                  >
                     Administrator danych *
                   </label>
-                  <Input
-                    id="data_controller"
-                    {...register('data_controller')}
-                    fullWidth
-                  />
-                  {errors.data_controller && (
+                  <Input id="data_controller" {...register('data_controller')} fullWidth />
+                  {errors.data_controller ? (
                     <p className="mt-1 text-sm text-red-600">{errors.data_controller.message}</p>
-                  )}
+                  ) : null}
                 </div>
 
                 {/* Data Processor */}
                 <div>
-                  <label htmlFor="data_processor" className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label
+                    htmlFor="data_processor"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
+                  >
                     Procesor danych
                   </label>
-                  <Input
-                    id="data_processor"
-                    {...register('data_processor')}
-                    fullWidth
-                  />
-                  {errors.data_processor && (
+                  <Input id="data_processor" {...register('data_processor')} fullWidth />
+                  {errors.data_processor ? (
                     <p className="mt-1 text-sm text-red-600">{errors.data_processor.message}</p>
-                  )}
+                  ) : null}
                 </div>
               </div>
 
-              <div className="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex justify-end gap-3 rounded-b-lg">
+              <div className="flex justify-end gap-3 rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-6 py-4">
                 <Button type="button" variant="outline" onClick={() => setShowFormDialog(false)}>
                   Anuluj
                 </Button>
@@ -458,25 +498,27 @@ export const DataProcessingActivitiesPage: React.FC = () => {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} className="relative z-50">
+      <Dialog
+        open={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        className="relative z-50"
+      >
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-md w-full">
+          <Dialog.Panel className="w-full max-w-md rounded-lg bg-white shadow-xl">
             <div className="px-6 py-4">
-              <Dialog.Title className="text-lg font-semibold text-neutral-900 mb-2">
+              <Dialog.Title className="mb-2 text-lg font-semibold text-neutral-900">
                 Usuwanie czynności przetwarzania
               </Dialog.Title>
-              <p className="text-sm text-neutral-600 mb-4">
-                Czy na pewno chcesz usunąć tę czynność przetwarzania? Ta operacja jest nieodwracalna.
+              <p className="mb-4 text-sm text-neutral-600">
+                Czy na pewno chcesz usunąć tę czynność przetwarzania? Ta operacja jest
+                nieodwracalna.
               </p>
               <div className="flex justify-end gap-3">
                 <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
                   Anuluj
                 </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => deletingId && handleDelete(deletingId)}
-                >
+                <Button variant="danger" onClick={() => deletingId && handleDelete(deletingId)}>
                   Usuń
                 </Button>
               </div>

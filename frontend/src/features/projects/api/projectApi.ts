@@ -35,7 +35,10 @@ export const projectApiSlice = api.injectEndpoints({
       },
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'Project' as const, id })), { type: 'Project', id: 'LIST' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'Project' as const, id })),
+              { type: 'Project', id: 'LIST' },
+            ]
           : [{ type: 'Project', id: 'LIST' }],
     }),
 
@@ -149,7 +152,10 @@ export const projectApiSlice = api.injectEndpoints({
      * Get patients in a project
      * @query
      */
-    getProjectPatients: builder.query<PatientProject[], { projectId: string; activeOnly?: boolean }>({
+    getProjectPatients: builder.query<
+      PatientProject[],
+      { projectId: string; activeOnly?: boolean }
+    >({
       query: ({ projectId, activeOnly = true }) => ({
         url: `/projects/${projectId}/patients`,
         method: 'GET',
@@ -181,7 +187,10 @@ export const projectApiSlice = api.injectEndpoints({
       }),
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'Project', id })), { type: 'Project', id: 'MY_ACTIVE' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'Project', id })),
+              { type: 'Project', id: 'MY_ACTIVE' },
+            ]
           : [{ type: 'Project', id: 'MY_ACTIVE' }],
     }),
   }),

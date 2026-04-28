@@ -60,33 +60,37 @@ const formatUptime = (seconds: number): string => {
  * <SystemHealthCard health={health} />
  * ```
  */
-export const SystemHealthCard = memo(function SystemHealthCard({
-  health,
-  className = '',
-}: SystemHealthCardProps) {
+export const SystemHealthCard = memo(({ health, className = '' }: SystemHealthCardProps) => {
   const statusColor = getStatusColor(health.status)
   const statusLabel = getStatusLabel(health.status)
 
   return (
-    <div className={clsx('bg-white rounded-lg border border-neutral-200 overflow-hidden', className)}>
+    <div
+      className={clsx('overflow-hidden rounded-lg border border-neutral-200 bg-white', className)}
+    >
       {/* Header */}
-      <div className="px-6 py-4 border-b border-neutral-200 bg-neutral-50">
+      <div className="border-b border-neutral-200 bg-neutral-50 px-6 py-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-neutral-900">Status systemu</h3>
           <div className="flex items-center gap-2">
-            <span className={clsx('w-3 h-3 rounded-full animate-pulse', statusColor)} />
+            <span className={clsx('h-3 w-3 animate-pulse rounded-full', statusColor)} />
             <span className="text-sm font-medium text-neutral-700">{statusLabel}</span>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-4">
+      <div className="space-y-4 p-6">
         {/* Uptime */}
-        <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
+        <div className="flex items-center justify-between rounded-lg bg-neutral-50 p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="rounded-lg bg-blue-100 p-2">
+              <svg
+                className="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -97,12 +101,14 @@ export const SystemHealthCard = memo(function SystemHealthCard({
             </div>
             <div>
               <dt className="text-sm font-medium text-neutral-500">Czas działania</dt>
-              <dd className="text-lg font-semibold text-neutral-900">{formatUptime(health.uptime_seconds)}</dd>
+              <dd className="text-lg font-semibold text-neutral-900">
+                {formatUptime(health.uptime_seconds)}
+              </dd>
             </div>
           </div>
           <div className="text-right">
             <dt className="text-sm font-medium text-neutral-500">Wersja</dt>
-            <dd className="text-sm font-mono text-neutral-700">{health.version}</dd>
+            <dd className="font-mono text-sm text-neutral-700">{health.version}</dd>
           </div>
         </div>
 
@@ -111,33 +117,26 @@ export const SystemHealthCard = memo(function SystemHealthCard({
           {Object.entries(health.details).map(([component, detail]) => (
             <div
               key={component}
-              className="flex items-center justify-between p-3 border border-neutral-200 rounded-lg"
+              className="flex items-center justify-between rounded-lg border border-neutral-200 p-3"
             >
               <div className="flex items-center gap-3">
-                <span
-                  className={clsx(
-                    'w-2.5 h-2.5 rounded-full',
-                    getStatusColor(detail.status)
-                  )}
-                />
-                <span className="text-sm font-medium text-neutral-700 capitalize">
+                <span className={clsx('h-2.5 w-2.5 rounded-full', getStatusColor(detail.status))} />
+                <span className="text-sm font-medium capitalize text-neutral-700">
                   {component === 'database' ? 'Baza danych' : component}
                 </span>
               </div>
               <div className="flex items-center gap-4">
-                {detail.response_time_ms && (
-                  <span className="text-sm text-neutral-500">
-                    {detail.response_time_ms}ms
-                  </span>
-                )}
+                {detail.response_time_ms ? (
+                  <span className="text-sm text-neutral-500">{detail.response_time_ms}ms</span>
+                ) : null}
                 <span
                   className={clsx(
-                    'text-xs font-medium px-2 py-1 rounded-full',
+                    'rounded-full px-2 py-1 text-xs font-medium',
                     detail.status === 'UP'
                       ? 'bg-green-100 text-green-800'
                       : detail.status === 'DOWN'
-                      ? 'bg-red-100 text-red-800'
-                      : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-yellow-100 text-yellow-800'
                   )}
                 >
                   {getStatusLabel(detail.status)}
@@ -148,10 +147,9 @@ export const SystemHealthCard = memo(function SystemHealthCard({
         </div>
 
         {/* Timestamp */}
-        <div className="pt-4 border-t border-neutral-200">
-          <p className="text-xs text-neutral-500 text-center">
-            Ostatnia aktualizacja:{' '}
-            {new Date(health.timestamp).toLocaleString('pl-PL')}
+        <div className="border-t border-neutral-200 pt-4">
+          <p className="text-center text-xs text-neutral-500">
+            Ostatnia aktualizacja: {new Date(health.timestamp).toLocaleString('pl-PL')}
           </p>
         </div>
       </div>

@@ -1,6 +1,11 @@
 import { memo, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { useGetUnreadNotificationsQuery, useMarkAsReadMutation, useDeleteNotificationMutation, useMarkAllAsReadMutation } from '../api/notificationApi'
+import {
+  useGetUnreadNotificationsQuery,
+  useMarkAsReadMutation,
+  useDeleteNotificationMutation,
+  useMarkAllAsReadMutation,
+} from '../api/notificationApi'
 import { NotificationItem } from './NotificationItem'
 import { Button } from '@shared/components/Button'
 import type { Notification } from '@entities/notification'
@@ -23,12 +28,13 @@ export interface NotificationDropdownProps {
  * <NotificationDropdown isOpen={isOpen} onClose={handleClose} />
  * ```
  */
-export const NotificationDropdown = memo(function NotificationDropdown({
-  isOpen,
-  onClose,
-}: NotificationDropdownProps) {
+export const NotificationDropdown = memo(({ isOpen, onClose }: NotificationDropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const { data: notifications, isLoading, refetch } = useGetUnreadNotificationsQuery(undefined, {
+  const {
+    data: notifications,
+    isLoading,
+    refetch,
+  } = useGetUnreadNotificationsQuery(undefined, {
     skip: !isOpen,
   })
   const [markAsRead] = useMarkAsReadMutation()
@@ -101,28 +107,28 @@ export const NotificationDropdown = memo(function NotificationDropdown({
   return (
     <div
       ref={dropdownRef}
-      className="absolute right-0 mt-2 w-96 max-h-[80vh] overflow-hidden bg-white rounded-lg shadow-xl border border-gray-200 z-50"
+      className="absolute right-0 z-50 mt-2 max-h-[80vh] w-96 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xl"
       role="dialog"
       aria-label="Powiadomienia"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+      <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
         <h3 className="text-base font-semibold text-gray-900">Powiadomienia</h3>
-        {notifications && notifications.length > 0 && (
+        {notifications && notifications.length > 0 ? (
           <button
             onClick={handleMarkAllAsRead}
-            className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+            className="text-sm font-medium text-primary-600 hover:text-primary-700"
           >
             Oznacz wszystkie jako przeczytane
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* Content */}
-      <div className="overflow-y-auto max-h-[60vh]">
+      <div className="max-h-[60vh] overflow-y-auto">
         {isLoading ? (
           <div className="p-8 text-center">
-            <div className="inline-block animate-spin rounded-full h-6 w-6 border-2 border-primary-600 border-t-transparent" />
+            <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
             <p className="mt-2 text-sm text-gray-500">Ładowanie powiadomień...</p>
           </div>
         ) : notifications && notifications.length > 0 ? (
@@ -160,11 +166,11 @@ export const NotificationDropdown = memo(function NotificationDropdown({
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-3 border-t border-gray-200">
+      <div className="border-t border-gray-200 px-4 py-3">
         <Link
           to="/notifications"
           onClick={onClose}
-          className="block text-center text-sm text-primary-600 hover:text-primary-700 font-medium"
+          className="block text-center text-sm font-medium text-primary-600 hover:text-primary-700"
         >
           Zobacz wszystkie powiadomienia
         </Link>

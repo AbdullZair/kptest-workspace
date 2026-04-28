@@ -1,4 +1,11 @@
-export { toUserEntity, getUserRoleName, hasRole, hasAnyRole, isMedicalStaff, isAdmin } from './model/types'
+export {
+  toUserEntity,
+  getUserRoleName,
+  hasRole,
+  hasAnyRole,
+  isMedicalStaff,
+  isAdmin,
+} from './model/types'
 export {
   setCurrentUser,
   updateUser,

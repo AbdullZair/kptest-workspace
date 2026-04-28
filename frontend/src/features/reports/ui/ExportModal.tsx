@@ -72,9 +72,9 @@ export const ExportModal = ({
           patient_id: patientId,
           date_from: dateFrom,
           date_to: dateTo,
-          format: format,
+          format,
           include_charts: includeCharts,
-        } as ExportRequest),
+        }),
       })
 
       if (!response.ok) {
@@ -106,22 +106,16 @@ export const ExportModal = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onClick={onClose} />
 
       {/* Modal Content */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full">
+        <div className="relative w-full max-w-md rounded-lg bg-white shadow-xl">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-neutral-200">
+          <div className="flex items-center justify-between border-b border-neutral-200 p-6">
             <h3 className="text-lg font-semibold text-neutral-900">Eksportuj raport</h3>
-            <button
-              onClick={onClose}
-              className="text-neutral-400 hover:text-neutral-600"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -133,20 +127,18 @@ export const ExportModal = ({
           </div>
 
           {/* Body */}
-          <div className="p-6 space-y-4">
+          <div className="space-y-4 p-6">
             {/* Format Selection */}
             <div>
-              <label className="text-sm font-medium text-neutral-700 mb-2 block">
-                Format
-              </label>
+              <label className="mb-2 block text-sm font-medium text-neutral-700">Format</label>
               <div className="flex gap-2">
                 <button
                   onClick={() => setFormat('PDF')}
                   className={clsx(
-                    'flex-1 px-4 py-2 rounded-md text-sm font-medium border transition-colors',
+                    'flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors',
                     format === 'PDF'
-                      ? 'bg-primary-50 border-primary-600 text-primary-700'
-                      : 'bg-white border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+                      ? 'border-primary-600 bg-primary-50 text-primary-700'
+                      : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
                   )}
                 >
                   PDF
@@ -154,10 +146,10 @@ export const ExportModal = ({
                 <button
                   onClick={() => setFormat('EXCEL')}
                   className={clsx(
-                    'flex-1 px-4 py-2 rounded-md text-sm font-medium border transition-colors',
+                    'flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors',
                     format === 'EXCEL'
-                      ? 'bg-primary-50 border-primary-600 text-primary-700'
-                      : 'bg-white border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+                      ? 'border-primary-600 bg-primary-50 text-primary-700'
+                      : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
                   )}
                 >
                   Excel
@@ -168,37 +160,33 @@ export const ExportModal = ({
             {/* Date Range */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium text-neutral-700 mb-1 block">
-                  Data od
-                </label>
+                <label className="mb-1 block text-sm font-medium text-neutral-700">Data od</label>
                 <input
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-neutral-700 mb-1 block">
-                  Data do
-                </label>
+                <label className="mb-1 block text-sm font-medium text-neutral-700">Data do</label>
                 <input
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md text-sm focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
                 />
               </div>
             </div>
 
             {/* Options */}
             <div>
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center gap-2">
                 <input
                   type="checkbox"
                   checked={includeCharts}
                   onChange={(e) => setIncludeCharts(e.target.checked)}
-                  className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                  className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                 />
                 <span className="text-sm text-neutral-700">Uwzględnij wykresy</span>
               </label>
@@ -206,10 +194,10 @@ export const ExportModal = ({
           </div>
 
           {/* Footer */}
-          <div className="flex gap-3 p-6 border-t border-neutral-200">
+          <div className="flex gap-3 border-t border-neutral-200 p-6">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-neutral-700 bg-neutral-100 rounded-md hover:bg-neutral-200 transition-colors"
+              className="flex-1 rounded-md bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200"
               disabled={isExporting}
             >
               Anuluj
@@ -218,9 +206,9 @@ export const ExportModal = ({
               onClick={handleExport}
               disabled={isExporting}
               className={clsx(
-                'flex-1 px-4 py-2 text-sm font-medium text-white rounded-md transition-colors',
+                'flex-1 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors',
                 isExporting
-                  ? 'bg-primary-400 cursor-not-allowed'
+                  ? 'cursor-not-allowed bg-primary-400'
                   : 'bg-primary-600 hover:bg-primary-700'
               )}
             >

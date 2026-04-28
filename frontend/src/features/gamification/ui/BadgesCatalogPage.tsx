@@ -33,7 +33,8 @@ export const BadgesCatalogPage: React.FC = () => {
 
   // Filter badges by category
   const filteredBadges = useMemo(() => {
-    const badges = activeTab === 'catalog' ? allBadges : myBadges.map((b) => ({ ...b, isEarned: true }))
+    const badges =
+      activeTab === 'catalog' ? allBadges : myBadges.map((b) => ({ ...b, isEarned: true }))
 
     if (selectedCategory === 'ALL') {
       return badges
@@ -58,18 +59,18 @@ export const BadgesCatalogPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="mx-auto max-w-6xl p-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Moje Odznaki</h1>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">Moje Odznaki</h1>
         <p className="text-gray-600">
           Zdobywaj odznaki za realizację celów terapeutycznych i edukacyjnych
         </p>
       </div>
 
       {/* Stats */}
-      {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+      {stats ? (
+        <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-5">
           <Card className="p-4 text-center">
             <div className="text-2xl font-bold text-gray-900">{stats.totalBadges}</div>
             <div className="text-sm text-gray-600">Wszystkie</div>
@@ -91,7 +92,7 @@ export const BadgesCatalogPage: React.FC = () => {
             <div className="text-sm text-gray-600">Kamienie</div>
           </Card>
         </div>
-      )}
+      ) : null}
 
       {/* Tabs */}
       <Tabs
@@ -105,7 +106,7 @@ export const BadgesCatalogPage: React.FC = () => {
       />
 
       {/* Category Filter */}
-      <div className="flex gap-2 mb-6 overflow-x-auto">
+      <div className="mb-6 flex gap-2 overflow-x-auto">
         {categories.map((cat) => (
           <Button
             key={cat.value}
@@ -129,14 +130,12 @@ export const BadgesCatalogPage: React.FC = () => {
           </div>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredBadges.map((badge) => (
             <BadgeCard
               key={'badge_id' in badge ? badge.badge_id : badge.id}
               badge={badge}
-              isEarned={
-                'badge_id' in badge ? true : earnedBadgeIds.has(badge.id)
-              }
+              isEarned={'badge_id' in badge ? true : earnedBadgeIds.has(badge.id)}
               earnedAt={'earned_at' in badge ? badge.earned_at : undefined}
             />
           ))}

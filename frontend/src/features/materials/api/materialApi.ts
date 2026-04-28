@@ -25,7 +25,8 @@ export const materialApiSlice = api.injectEndpoints({
         if (filters.category) params.append('category', filters.category)
         if (filters.difficulty) params.append('difficulty', filters.difficulty)
         if (filters.type) params.append('type', filters.type)
-        if (filters.published !== undefined) params.append('published', filters.published.toString())
+        if (filters.published !== undefined)
+          params.append('published', filters.published.toString())
 
         return {
           url: '/materials',
@@ -35,7 +36,10 @@ export const materialApiSlice = api.injectEndpoints({
       },
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'Material' as const, id })), { type: 'Material', id: 'LIST' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'Material' as const, id })),
+              { type: 'Material', id: 'LIST' },
+            ]
           : [{ type: 'Material', id: 'LIST' }],
     }),
 
@@ -68,7 +72,10 @@ export const materialApiSlice = api.injectEndpoints({
      * Update an existing material
      * @mutation
      */
-    updateMaterial: builder.mutation<EducationalMaterial, { id: string; material: MaterialFormData }>({
+    updateMaterial: builder.mutation<
+      EducationalMaterial,
+      { id: string; material: MaterialFormData }
+    >({
       query: ({ id, material }) => ({
         url: `/materials/${id}`,
         method: 'PUT',
@@ -160,7 +167,10 @@ export const materialApiSlice = api.injectEndpoints({
       }),
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'Material', id })), { type: 'Material', id: 'LIST' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'Material', id })),
+              { type: 'Material', id: 'LIST' },
+            ]
           : [{ type: 'Material', id: 'LIST' }],
     }),
 
@@ -176,7 +186,10 @@ export const materialApiSlice = api.injectEndpoints({
       }),
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'MaterialProgress', id })), { type: 'MaterialProgress', id: 'LIST' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'MaterialProgress', id })),
+              { type: 'MaterialProgress', id: 'LIST' },
+            ]
           : [{ type: 'MaterialProgress', id: 'LIST' }],
     }),
   }),

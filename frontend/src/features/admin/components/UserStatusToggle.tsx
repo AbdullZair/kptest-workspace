@@ -50,73 +50,66 @@ const getStatusLabel = (status: AccountStatus): string => {
  * <UserStatusToggle status="ACTIVE" userId="123" onStatusChange={handleStatusChange} />
  * ```
  */
-export const UserStatusToggle = memo(function UserStatusToggle({
-  status,
-  userId,
-  onStatusChange,
-  disabled = false,
-  className = '',
-}: UserStatusToggleProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState<AccountStatus>(status)
+export const UserStatusToggle = memo(
+  ({ status, userId, onStatusChange, disabled = false, className = '' }: UserStatusToggleProps) => {
+    const [isOpen, setIsOpen] = useState(false)
+    const [selectedStatus, setSelectedStatus] = useState<AccountStatus>(status)
 
-  const statusOptions: AccountStatus[] = ['ACTIVE', 'BLOCKED', 'DEACTIVATED']
+    const statusOptions: AccountStatus[] = ['ACTIVE', 'BLOCKED', 'DEACTIVATED']
 
-  const handleStatusSelect = (newStatus: AccountStatus) => {
-    setSelectedStatus(newStatus)
-    setIsOpen(false)
-    onStatusChange?.(userId, newStatus)
-  }
+    const handleStatusSelect = (newStatus: AccountStatus) => {
+      setSelectedStatus(newStatus)
+      setIsOpen(false)
+      onStatusChange?.(userId, newStatus)
+    }
 
-  const colorClass = getStatusColor(selectedStatus)
+    const colorClass = getStatusColor(selectedStatus)
 
-  return (
-    <div className={`relative inline-block text-left ${className}`}>
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        disabled={disabled}
-        className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full border ${colorClass} hover:opacity-80 transition-opacity disabled:opacity-50`}
-      >
-        {getStatusLabel(selectedStatus)}
-        <svg
-          className={`ml-2 w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+    return (
+      <div className={`relative inline-block text-left ${className}`}>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          disabled={disabled}
+          className={`inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium ${colorClass} transition-opacity hover:opacity-80 disabled:opacity-50`}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
+          {getStatusLabel(selectedStatus)}
+          <svg
+            className={`ml-2 h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
 
-      {isOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="absolute right-0 z-20 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-            <div className="py-1" role="menu">
-              {statusOptions.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => handleStatusSelect(option)}
-                  className={`block w-full text-left px-4 py-2 text-sm ${
-                    selectedStatus === option
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  }`}
-                  role="menuitem"
-                >
-                  {getStatusLabel(option)}
-                </button>
-              ))}
+        {isOpen ? (
+          <>
+            <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
+            <div className="absolute right-0 z-20 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="py-1" role="menu">
+                {statusOptions.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => handleStatusSelect(option)}
+                    className={`block w-full px-4 py-2 text-left text-sm ${
+                      selectedStatus === option
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                    role="menuitem"
+                  >
+                    {getStatusLabel(option)}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        </>
-      )}
-    </div>
-  )
-})
+          </>
+        ) : null}
+      </div>
+    )
+  }
+)
 
 export default UserStatusToggle

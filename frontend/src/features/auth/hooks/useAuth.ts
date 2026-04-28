@@ -34,7 +34,12 @@ const tokenStorage = {
   /**
    * Save tokens to localStorage
    */
-  saveTokens: (accessToken: string, refreshToken: string, expiresIn: number, rememberMe?: boolean) => {
+  saveTokens: (
+    accessToken: string,
+    refreshToken: string,
+    expiresIn: number,
+    rememberMe?: boolean
+  ) => {
     const expiresAt = Date.now() + expiresIn * 1000
     localStorage.setItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN, accessToken)
     localStorage.setItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN, refreshToken)

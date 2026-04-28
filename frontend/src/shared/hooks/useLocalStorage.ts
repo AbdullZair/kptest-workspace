@@ -15,7 +15,7 @@ import { useState, useEffect, useCallback } from 'react'
  * const [user, setUser, removeUser] = useLocalStorage<User | null>('user', null)
  * ```
  */
-export const useLocalStorage = <T,>(
+export const useLocalStorage = <T>(
   key: string,
   initialValue: T
 ): [T, (value: T | ((prev: T) => T)) => void, () => void] => {
@@ -48,7 +48,9 @@ export const useLocalStorage = <T,>(
         if (typeof window !== 'undefined') {
           window.localStorage.setItem(key, JSON.stringify(valueToStore))
           // Dispatch custom event for cross-tab synchronization
-          window.dispatchEvent(new CustomEvent('local-storage', { detail: { key, value: valueToStore } }))
+          window.dispatchEvent(
+            new CustomEvent('local-storage', { detail: { key, value: valueToStore } })
+          )
         }
       } catch (error) {
         console.warn(`Error setting localStorage key "${key}":`, error)

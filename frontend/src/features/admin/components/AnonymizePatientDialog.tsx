@@ -99,17 +99,17 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
               {/* Warning */}
               <div className="rounded-md border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm text-amber-800">
-                  <strong>Uwaga:</strong> Ta operacja jest nieodwracalna. Dane osobowe pacjenta zostaną zastąpione
-                  danymi anonimizowanymi.
+                  <strong>Uwaga:</strong> Ta operacja jest nieodwracalna. Dane osobowe pacjenta
+                  zostaną zastąpione danymi anonimizowanymi.
                 </p>
               </div>
 
               {/* Error display */}
-              {errorMessage && (
+              {errorMessage ? (
                 <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                   Błąd: {errorMessage}
                 </div>
-              )}
+              ) : null}
 
               {/* Reason dropdown */}
               <div>
@@ -127,9 +127,9 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
                     </option>
                   ))}
                 </select>
-                {errors.reason && (
+                {errors.reason ? (
                   <p className="mt-1 text-sm text-red-600">{errors.reason.message}</p>
-                )}
+                ) : null}
               </div>
 
               {/* Additional notes */}
@@ -147,9 +147,9 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
                   className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Opcjonalne notatki..."
                 />
-                {errors.additional_notes && (
+                {errors.additional_notes ? (
                   <p className="mt-1 text-sm text-red-600">{errors.additional_notes.message}</p>
-                )}
+                ) : null}
               </div>
 
               {/* Confirmation input */}
@@ -165,7 +165,7 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
                   {...register('confirmation')}
                   type="text"
                   placeholder="ANONYMIZUJ"
-                  variant={!!errors.confirmation ? 'error' : 'default'}
+                  variant={errors.confirmation ? 'error' : 'default'}
                   errorMessage={errors.confirmation?.message ?? ''}
                   fullWidth
                 />
@@ -173,7 +173,7 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-6 py-4 flex justify-end gap-3">
+            <div className="flex justify-end gap-3 rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-6 py-4">
               <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
                 Anuluj
               </Button>

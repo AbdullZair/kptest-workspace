@@ -52,7 +52,10 @@ export const inboxApiSlice = api.injectEndpoints({
     /**
      * Delegate thread to team member
      */
-    delegateThread: builder.mutation<InboxThread, { threadId: string; body: DelegateMessageRequest }>({
+    delegateThread: builder.mutation<
+      InboxThread,
+      { threadId: string; body: DelegateMessageRequest }
+    >({
       query: ({ threadId, body }) => ({
         url: `/inbox/threads/${threadId}/delegate`,
         method: 'POST',

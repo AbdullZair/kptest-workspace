@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { PrioritySelector } from './PrioritySelector'
-import type { MessagePriority } from '../types'
+import { PrioritySelector } from '../PrioritySelector'
+import type { MessagePriority } from '../../types'
 
 describe('PrioritySelector', () => {
   const mockOnChange = jest.fn()
@@ -123,7 +123,7 @@ describe('PrioritySelector', () => {
 
     const infoButton = screen.getByLabelText('Wybierz priorytet: Informacja')
     const questionButton = screen.getByLabelText('Wybierz priorytet: Pytanie')
-    
+
     expect(infoButton.querySelector('svg')).toBeInTheDocument()
     expect(questionButton.querySelector('svg')).not.toBeInTheDocument()
   })

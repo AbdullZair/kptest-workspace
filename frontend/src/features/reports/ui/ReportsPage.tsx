@@ -12,9 +12,11 @@ import { clsx } from 'clsx'
 export const ReportsPage = () => {
   const [selectedType, setSelectedType] = useState<ReportType | 'ALL'>('ALL')
   const [exportReport] = useExportReportMutation()
-  const { data: reports, isLoading, error } = useGetReportHistoryQuery(
-    selectedType !== 'ALL' ? { type: selectedType } : undefined
-  )
+  const {
+    data: reports,
+    isLoading,
+    error,
+  } = useGetReportHistoryQuery(selectedType !== 'ALL' ? { type: selectedType } : undefined)
 
   const reportTypeLabels: Record<ReportType, string> = {
     COMPLIANCE: 'Compliance',
@@ -56,14 +58,14 @@ export const ReportsPage = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary-600" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
         Wystąpił błąd podczas ładowania raportów
       </div>
     )
@@ -75,7 +77,7 @@ export const ReportsPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">Raporty i Statystyki</h1>
-          <p className="text-neutral-600 mt-1">Przeglądaj i eksportuj raporty</p>
+          <p className="mt-1 text-neutral-600">Przeglądaj i eksportuj raporty</p>
         </div>
         <ExportButton label="Eksportuj raport" />
       </div>
@@ -85,7 +87,7 @@ export const ReportsPage = () => {
         <button
           onClick={() => setSelectedType('ALL')}
           className={clsx(
-            'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
+            'whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors',
             selectedType === 'ALL'
               ? 'bg-primary-600 text-white'
               : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
@@ -98,7 +100,7 @@ export const ReportsPage = () => {
             key={type}
             onClick={() => setSelectedType(type)}
             className={clsx(
-              'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
+              'whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors',
               selectedType === type
                 ? 'bg-primary-600 text-white'
                 : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
@@ -110,38 +112,38 @@ export const ReportsPage = () => {
       </div>
 
       {/* Reports Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="overflow-hidden rounded-lg bg-white shadow">
         <table className="min-w-full divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Typ
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Nazwa
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Okres
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Wygenerowano
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Autor
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Akcje
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200 bg-white">
             {reports && reports.length > 0 ? (
               reports.map((report) => (
                 <tr key={report.id} className="hover:bg-neutral-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="whitespace-nowrap px-6 py-4">
                     <span
                       className={clsx(
-                        'px-2 py-1 rounded-full text-xs font-medium',
+                        'rounded-full px-2 py-1 text-xs font-medium',
                         reportTypeColors[report.type]
                       )}
                     >
@@ -157,20 +159,20 @@ export const ReportsPage = () => {
                       {report.patient_id ? `Pacjent: ${report.patient_id.slice(0, 8)}...` : ''}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
                     {new Date(report.date_from).toLocaleDateString('pl-PL')} -{' '}
                     {new Date(report.date_to).toLocaleDateString('pl-PL')}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
                     {formatDate(report.generated_at)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-neutral-500">
                     {report.generated_by_name || 'System'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                     <button
                       onClick={() => handleDownload(report)}
-                      className="text-primary-600 hover:text-primary-900 mr-4"
+                      className="mr-4 text-primary-600 hover:text-primary-900"
                     >
                       Pobierz
                     </button>

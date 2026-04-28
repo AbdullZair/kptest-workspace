@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { PatientStats } from '../../types'
+import type { PatientStats } from '../types'
 import { clsx } from 'clsx'
 
 export interface PatientStatsCardProps {
@@ -22,14 +22,10 @@ export interface PatientStatsCardProps {
  *
  * Displays patient statistics in a card format
  */
-export const PatientStatsCard = memo(function PatientStatsCard({
-  stats,
-  className,
-  onClick,
-}: PatientStatsCardProps) {
+export const PatientStatsCard = memo(({ stats, className, onClick }: PatientStatsCardProps) => {
   if (!stats) {
     return (
-      <div className={clsx('bg-white rounded-lg shadow p-6', className)}>
+      <div className={clsx('rounded-lg bg-white p-6 shadow', className)}>
         <p className="text-neutral-500">Brak danych pacjenta</p>
       </div>
     )
@@ -37,14 +33,17 @@ export const PatientStatsCard = memo(function PatientStatsCard({
 
   return (
     <div
-      className={clsx('bg-white rounded-lg shadow p-6 cursor-pointer hover:shadow-lg transition-shadow', className)}
+      className={clsx(
+        'cursor-pointer rounded-lg bg-white p-6 shadow transition-shadow hover:shadow-lg',
+        className
+      )}
       onClick={onClick}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="mb-6 flex items-start justify-between">
         <div>
           <h3 className="text-xl font-semibold text-neutral-900">{stats.patient_name}</h3>
-          <p className="text-sm text-neutral-500 mt-1">PESEL: {stats.pesel}</p>
+          <p className="mt-1 text-sm text-neutral-500">PESEL: {stats.pesel}</p>
         </div>
         <div className="text-right">
           <p className="text-sm text-neutral-500">Compliance</p>
@@ -64,36 +63,38 @@ export const PatientStatsCard = memo(function PatientStatsCard({
       </div>
 
       {/* Main Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-primary-50 rounded-lg p-4">
+      <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="rounded-lg bg-primary-50 p-4">
           <p className="text-2xl font-bold text-primary-600">{stats.active_projects}</p>
-          <p className="text-sm text-neutral-600 mt-1">Aktywne projekty</p>
+          <p className="mt-1 text-sm text-neutral-600">Aktywne projekty</p>
         </div>
-        <div className="bg-secondary-50 rounded-lg p-4">
+        <div className="rounded-lg bg-secondary-50 p-4">
           <p className="text-2xl font-bold text-secondary-600">{stats.total_sessions}</p>
-          <p className="text-sm text-neutral-600 mt-1">Wszystkie sesje</p>
+          <p className="mt-1 text-sm text-neutral-600">Wszystkie sesje</p>
         </div>
-        <div className="bg-emerald-50 rounded-lg p-4">
+        <div className="rounded-lg bg-emerald-50 p-4">
           <p className="text-2xl font-bold text-emerald-600">{stats.attended_sessions}</p>
-          <p className="text-sm text-neutral-600 mt-1">Odbyte sesje</p>
+          <p className="mt-1 text-sm text-neutral-600">Odbyte sesje</p>
         </div>
-        <div className="bg-amber-50 rounded-lg p-4">
+        <div className="rounded-lg bg-amber-50 p-4">
           <p className="text-2xl font-bold text-amber-600">{stats.materials_in_progress}</p>
-          <p className="text-sm text-neutral-600 mt-1">Materiały w toku</p>
+          <p className="mt-1 text-sm text-neutral-600">Materiały w toku</p>
         </div>
       </div>
 
       {/* Additional Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="border border-neutral-200 rounded-lg p-3">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+        <div className="rounded-lg border border-neutral-200 p-3">
           <p className="text-sm text-neutral-500">Frekwencja</p>
-          <p className="text-lg font-semibold text-neutral-900">{stats.session_attendance_rate.toFixed(1)}%</p>
+          <p className="text-lg font-semibold text-neutral-900">
+            {stats.session_attendance_rate.toFixed(1)}%
+          </p>
         </div>
-        <div className="border border-neutral-200 rounded-lg p-3">
+        <div className="rounded-lg border border-neutral-200 p-3">
           <p className="text-sm text-neutral-500">Ukończone materiały</p>
           <p className="text-lg font-semibold text-neutral-900">{stats.materials_completed}</p>
         </div>
-        <div className="border border-neutral-200 rounded-lg p-3">
+        <div className="rounded-lg border border-neutral-200 p-3">
           <p className="text-sm text-neutral-500">Wiadomości</p>
           <p className="text-lg font-semibold text-neutral-900">
             {stats.messages_sent} wysłane / {stats.messages_received} otrzymane

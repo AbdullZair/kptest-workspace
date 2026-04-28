@@ -9,7 +9,7 @@ import {
   useSubmitQuizAnswersMutation,
   useGetAttemptsByPatientQuery,
 } from '../api/quizApi'
-import type { QuizAnswerSelection } from '../../types/quiz.types'
+import type { QuizAnswerSelection } from '../types/quiz.types'
 
 /**
  * QuizPage Component
@@ -31,10 +31,11 @@ export const QuizPage: React.FC = () => {
   const [attemptId, setAttemptId] = useState<string | null>(null)
 
   // RTK Query hooks
-  const { data: quiz, isLoading: isLoadingQuiz, error } = useGetQuizForTakingQuery(
-    { id: id! },
-    { skip: !id }
-  )
+  const {
+    data: quiz,
+    isLoading: isLoadingQuiz,
+    error,
+  } = useGetQuizForTakingQuery({ id: id! }, { skip: !id })
   const [startAttempt] = useStartQuizAttemptMutation()
   const [submitAnswers] = useSubmitQuizAnswersMutation()
   const { data: attempts } = useGetAttemptsByPatientQuery({ patientId })
@@ -116,13 +117,11 @@ export const QuizPage: React.FC = () => {
   const lastAttempt = attempts?.[0]
   if (lastAttempt?.completed_at && !showResults) {
     return (
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="mx-auto max-w-3xl p-6">
         <Card>
-          <div className="text-center py-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Już rozwiązałeś ten quiz
-            </h2>
-            <p className="text-gray-600 mb-6">
+          <div className="py-8 text-center">
+            <h2 className="mb-4 text-2xl font-bold text-gray-900">Już rozwiązałeś ten quiz</h2>
+            <p className="mb-6 text-gray-600">
               Twój ostatni wynik: {Math.round(lastAttempt.percentage)}%
             </p>
             <Button variant="primary" onClick={() => navigate('/quizzes')}>
@@ -135,31 +134,26 @@ export const QuizPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="mx-auto max-w-3xl p-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">{quiz.title}</h1>
-        {quiz.description && (
-          <p className="text-gray-600 mb-4">{quiz.description}</p>
-        )}
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">{quiz.title}</h1>
+        {quiz.description ? <p className="mb-4 text-gray-600">{quiz.description}</p> : null}
         <div className="flex items-center gap-4 text-sm text-gray-500">
           <span>
-            Pytania: {quiz.questions.length} | Maksymalna liczba punktów:{' '}
-            {quiz.max_score}
+            Pytania: {quiz.questions.length} | Maksymalna liczba punktów: {quiz.max_score}
           </span>
           <span>Próg zaliczenia: {quiz.pass_threshold}%</span>
-          {quiz.time_limit_seconds && (
+          {quiz.time_limit_seconds ? (
             <span>Czas: {Math.floor(quiz.time_limit_seconds / 60)} min</span>
-          )}
+          ) : null}
         </div>
       </div>
 
       {/* Start Button */}
       {!attemptId && (
-        <Card className="p-6 text-center mb-6">
-          <p className="text-gray-700 mb-4">
-            Rozpocznij quiz, aby sprawdzić swoją wiedzę.
-          </p>
+        <Card className="mb-6 p-6 text-center">
+          <p className="mb-4 text-gray-700">Rozpocznij quiz, aby sprawdzić swoją wiedzę.</p>
           <Button variant="primary" onClick={handleStartQuiz} size="lg">
             Rozpocznij Quiz
           </Button>
@@ -167,7 +161,7 @@ export const QuizPage: React.FC = () => {
       )}
 
       {/* Questions */}
-      {attemptId && quiz.questions.length > 0 && (
+      {attemptId && quiz.questions.length > 0 ? (
         <>
           <QuestionCard
             question={quiz.questions[currentQuestionIndex]}
@@ -177,7 +171,7 @@ export const QuizPage: React.FC = () => {
           />
 
           {/* Navigation */}
-          <div className="flex justify-between items-center mt-6">
+          <div className="mt-6 flex items-center justify-between">
             <Button
               variant="secondary"
               onClick={goToPrevious}
@@ -210,27 +204,23 @@ export const QuizPage: React.FC = () => {
             {quiz.questions.map((_, index) => (
               <div
                 key={index}
-                className={`w-3 h-3 rounded-full ${
+                className={`h-3 w-3 rounded-full ${
                   index === currentQuestionIndex
                     ? 'bg-blue-600'
                     : answers.has(quiz.questions[index].id)
-                    ? 'bg-green-500'
-                    : 'bg-gray-300'
+                      ? 'bg-green-500'
+                      : 'bg-gray-300'
                 }`}
               />
             ))}
           </div>
         </>
-      )}
+      ) : null}
 
       {/* Result Modal */}
-      {showResults && attemptId && (
-        <QuizResultModal
-          isOpen={showResults}
-          onClose={() => navigate('/quizzes')}
-          attempt={null}
-        />
-      )}
+      {showResults && attemptId ? (
+        <QuizResultModal isOpen={showResults} onClose={() => navigate('/quizzes')} attempt={null} />
+      ) : null}
     </div>
   )
 }

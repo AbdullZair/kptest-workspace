@@ -35,47 +35,44 @@ const sizeClasses = {
  * <UserAvatar user={user} showStatus />
  * ```
  */
-export const UserAvatar = memo(function UserAvatar({
-  user,
-  size = 'md',
-  showStatus = false,
-  className,
-}: UserAvatarProps) {
-  const baseClasses = clsx(
-    'inline-flex items-center justify-center',
-    'rounded-full',
-    'font-medium',
-    'bg-primary-100 text-primary-700',
-    'ring-2 ring-white',
-    sizeClasses[size],
-    className
-  )
+export const UserAvatar = memo(
+  ({ user, size = 'md', showStatus = false, className }: UserAvatarProps) => {
+    const baseClasses = clsx(
+      'inline-flex items-center justify-center',
+      'rounded-full',
+      'font-medium',
+      'bg-primary-100 text-primary-700',
+      'ring-2 ring-white',
+      sizeClasses[size],
+      className
+    )
 
-  return (
-    <div className={twMerge(baseClasses)} title={user.fullName}>
-      {user.avatarUrl ? (
-        <img
-          src={user.avatarUrl}
-          alt={user.fullName}
-          className="w-full h-full rounded-full object-cover"
-        />
-      ) : (
-        <span>{user.initials}</span>
-      )}
+    return (
+      <div className={twMerge(baseClasses)} title={user.fullName}>
+        {user.avatarUrl ? (
+          <img
+            src={user.avatarUrl}
+            alt={user.fullName}
+            className="h-full w-full rounded-full object-cover"
+          />
+        ) : (
+          <span>{user.initials}</span>
+        )}
 
-      {showStatus && (
-        <span
-          className={clsx(
-            'absolute bottom-0 right-0',
-            'w-3 h-3 rounded-full border-2 border-white',
-            user.isActive ? 'bg-success-500' : 'bg-neutral-400'
-          )}
-          aria-label={user.isActive ? 'Online' : 'Offline'}
-        />
-      )}
-    </div>
-  )
-})
+        {showStatus ? (
+          <span
+            className={clsx(
+              'absolute bottom-0 right-0',
+              'h-3 w-3 rounded-full border-2 border-white',
+              user.isActive ? 'bg-success-500' : 'bg-neutral-400'
+            )}
+            aria-label={user.isActive ? 'Online' : 'Offline'}
+          />
+        ) : null}
+      </div>
+    )
+  }
+)
 
 /**
  * UserCard props
@@ -98,12 +95,7 @@ interface UserCardProps {
  * <UserCard user={user} onClick={handleClick} />
  * ```
  */
-export const UserCard = memo(function UserCard({
-  user,
-  onClick,
-  className,
-  children,
-}: UserCardProps) {
+export const UserCard = memo(({ user, onClick, className, children }: UserCardProps) => {
   const baseClasses = clsx(
     'flex items-center gap-3',
     'p-3 rounded-lg',
@@ -116,9 +108,9 @@ export const UserCard = memo(function UserCard({
     <div className={twMerge(baseClasses)} onClick={onClick} role={onClick ? 'button' : undefined}>
       <UserAvatar user={user} size="md" />
 
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-neutral-900 truncate">{user.fullName}</p>
-        <p className="text-xs text-neutral-500 truncate">{user.email}</p>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-neutral-900">{user.fullName}</p>
+        <p className="truncate text-xs text-neutral-500">{user.email}</p>
       </div>
 
       {children}
@@ -145,11 +137,7 @@ interface UserBadgeProps {
  * <UserBadge user={assignee} />
  * ```
  */
-export const UserBadge = memo(function UserBadge({
-  user,
-  size = 'sm',
-  className,
-}: UserBadgeProps) {
+export const UserBadge = memo(({ user, size = 'sm', className }: UserBadgeProps) => {
   const sizeClasses = {
     sm: 'gap-1.5',
     md: 'gap-2',
@@ -160,11 +148,7 @@ export const UserBadge = memo(function UserBadge({
     md: 'text-sm',
   }
 
-  const baseClasses = clsx(
-    'inline-flex items-center',
-    sizeClasses[size],
-    className
-  )
+  const baseClasses = clsx('inline-flex items-center', sizeClasses[size], className)
 
   return (
     <div className={twMerge(baseClasses)}>

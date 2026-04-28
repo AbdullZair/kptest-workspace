@@ -20,7 +20,10 @@ export const reportApiSlice = api.injectEndpoints({
      * Get compliance report
      * @query
      */
-    getComplianceReport: builder.query<ComplianceReport, { projectId: string; dateFrom: string; dateTo: string }>({
+    getComplianceReport: builder.query<
+      ComplianceReport,
+      { projectId: string; dateFrom: string; dateTo: string }
+    >({
       query: ({ projectId, dateFrom, dateTo }) => ({
         url: '/reports/compliance',
         method: 'GET',
@@ -30,14 +33,19 @@ export const reportApiSlice = api.injectEndpoints({
           dateTo,
         },
       }),
-      providesTags: (_result, _error, { projectId }) => [{ type: 'Report', projectId, reportType: 'COMPLIANCE' }],
+      providesTags: (_result, _error, { projectId }) => [
+        { type: 'Report', projectId, reportType: 'COMPLIANCE' },
+      ],
     }),
 
     /**
      * Get patient statistics report
      * @query
      */
-    getPatientStats: builder.query<PatientStats, { patientId: string; dateFrom?: string; dateTo?: string }>({
+    getPatientStats: builder.query<
+      PatientStats,
+      { patientId: string; dateFrom?: string; dateTo?: string }
+    >({
       query: ({ patientId, dateFrom, dateTo }) => ({
         url: '/reports/patients',
         method: 'GET',
@@ -47,14 +55,19 @@ export const reportApiSlice = api.injectEndpoints({
           ...(dateTo && { dateTo }),
         },
       }),
-      providesTags: (_result, _error, { patientId }) => [{ type: 'Report', patientId, reportType: 'PATIENT_STATS' }],
+      providesTags: (_result, _error, { patientId }) => [
+        { type: 'Report', patientId, reportType: 'PATIENT_STATS' },
+      ],
     }),
 
     /**
      * Get project statistics report
      * @query
      */
-    getProjectStats: builder.query<ProjectStats, { projectId: string; dateFrom?: string; dateTo?: string }>({
+    getProjectStats: builder.query<
+      ProjectStats,
+      { projectId: string; dateFrom?: string; dateTo?: string }
+    >({
       query: ({ projectId, dateFrom, dateTo }) => ({
         url: '/reports/projects',
         method: 'GET',
@@ -64,14 +77,19 @@ export const reportApiSlice = api.injectEndpoints({
           ...(dateTo && { dateTo }),
         },
       }),
-      providesTags: (_result, _error, { projectId }) => [{ type: 'Report', projectId, reportType: 'PROJECT_STATS' }],
+      providesTags: (_result, _error, { projectId }) => [
+        { type: 'Report', projectId, reportType: 'PROJECT_STATS' },
+      ],
     }),
 
     /**
      * Get material statistics report
      * @query
      */
-    getMaterialStats: builder.query<MaterialStats, { projectId: string; dateFrom?: string; dateTo?: string }>({
+    getMaterialStats: builder.query<
+      MaterialStats,
+      { projectId: string; dateFrom?: string; dateTo?: string }
+    >({
       query: ({ projectId, dateFrom, dateTo }) => ({
         url: '/reports/materials',
         method: 'GET',
@@ -81,7 +99,9 @@ export const reportApiSlice = api.injectEndpoints({
           ...(dateTo && { dateTo }),
         },
       }),
-      providesTags: (_result, _error, { projectId }) => [{ type: 'Report', projectId, reportType: 'MATERIAL_STATS' }],
+      providesTags: (_result, _error, { projectId }) => [
+        { type: 'Report', projectId, reportType: 'MATERIAL_STATS' },
+      ],
     }),
 
     /**

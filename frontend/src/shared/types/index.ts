@@ -131,7 +131,13 @@ export interface Appointment {
 
 export type AppointmentType = 'CHECKUP' | 'FOLLOW_UP' | 'CONSULTATION' | 'PROCEDURE' | 'EMERGENCY'
 
-export type AppointmentStatus = 'SCHEDULED' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW'
+export type AppointmentStatus =
+  | 'SCHEDULED'
+  | 'CONFIRMED'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'CANCELLED'
+  | 'NO_SHOW'
 
 export interface MedicalRecord {
   id: string

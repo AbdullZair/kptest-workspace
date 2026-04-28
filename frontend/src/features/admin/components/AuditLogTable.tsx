@@ -74,9 +74,9 @@ const getActionLabel = (action: AuditLog['action']): string => {
  * Sort icon component
  */
 const SortIcon = ({ order, active }: { order: SortOrder; active: boolean }) => (
-  <span className={clsx('inline-flex flex-col ml-1', active ? 'opacity-100' : 'opacity-30')}>
+  <span className={clsx('ml-1 inline-flex flex-col', active ? 'opacity-100' : 'opacity-30')}>
     <svg
-      className={clsx('w-3 h-3', order === 'asc' && 'text-primary-600')}
+      className={clsx('h-3 w-3', order === 'asc' && 'text-primary-600')}
       fill="currentColor"
       viewBox="0 0 20 20"
     >
@@ -87,7 +87,7 @@ const SortIcon = ({ order, active }: { order: SortOrder; active: boolean }) => (
       />
     </svg>
     <svg
-      className={clsx('w-3 h-3 -mt-1', order === 'desc' && 'text-primary-600')}
+      className={clsx('-mt-1 h-3 w-3', order === 'desc' && 'text-primary-600')}
       fill="currentColor"
       viewBox="0 0 20 20"
     >
@@ -125,7 +125,7 @@ const SortableHeader = ({
 
   return (
     <th
-      className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider cursor-pointer hover:bg-neutral-50 transition-colors"
+      className="cursor-pointer px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600 transition-colors hover:bg-neutral-50"
       onClick={handleClick}
       role="columnheader"
       aria-sort={isActive ? (order === 'asc' ? 'ascending' : 'descending') : 'none'}
@@ -153,143 +153,160 @@ const SortableHeader = ({
  * />
  * ```
  */
-export const AuditLogTable = memo(function AuditLogTable({
-  logs,
-  onLogClick,
-  onViewDetails,
-  sortField,
-  sortOrder,
-  onSortChange,
-  isLoading = false,
-  className,
-}: AuditLogTableProps) {
-  const handleSort = (field: SortField, order: SortOrder) => {
-    onSortChange?.(field, order)
-  }
+export const AuditLogTable = memo(
+  ({
+    logs,
+    onLogClick,
+    onViewDetails,
+    sortField,
+    sortOrder,
+    onSortChange,
+    isLoading = false,
+    className,
+  }: AuditLogTableProps) => {
+    const handleSort = (field: SortField, order: SortOrder) => {
+      onSortChange?.(field, order)
+    }
 
-  const baseStyles = clsx('overflow-hidden rounded-lg border border-neutral-200', className)
+    const baseStyles = clsx('overflow-hidden rounded-lg border border-neutral-200', className)
 
-  if (isLoading) {
-    return (
-      <div className={baseStyles}>
-        <div className="animate-pulse">
-          <div className="h-12 bg-neutral-50 border-b border-neutral-200" />
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 border-b border-neutral-100" />
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  if (logs.length === 0) {
-    return (
-      <div className={baseStyles}>
-        <div className="text-center py-12">
-          <svg
-            className="w-16 h-16 mx-auto mb-4 text-neutral-300"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1}
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-          <p className="text-neutral-500">Brak logów audytu do wyświetlenia</p>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className={baseStyles}>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-neutral-200">
-          <thead className="bg-neutral-50">
-            <tr>
-              <SortableHeader field="action" currentField={sortField} order={sortOrder} onSort={handleSort}>
-                Akcja
-              </SortableHeader>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
-                Typ encji
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
-                ID encji
-              </th>
-              <SortableHeader field="user_id" currentField={sortField} order={sortOrder} onSort={handleSort}>
-                ID użytkownika
-              </SortableHeader>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
-                IP
-              </th>
-              <SortableHeader field="created_at" currentField={sortField} order={sortOrder} onSort={handleSort}>
-                Data i czas
-              </SortableHeader>
-              <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-600 uppercase tracking-wider">
-                Akcje
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-neutral-100">
-            {logs.map((log) => (
-              <tr
-                key={log.log_id}
-                className="hover:bg-neutral-50 transition-colors cursor-pointer"
-                onClick={() => onLogClick?.(log)}
-              >
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <span
-                    className={clsx(
-                      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                      getActionColor(log.action)
-                    )}
-                  >
-                    {getActionLabel(log.action)}
-                  </span>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <code className="text-sm text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
-                    {log.entity_type}
-                  </code>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <code className="text-sm text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
-                    {log.entity_id ? log.entity_id.substring(0, 8) + '...' : '-'}
-                  </code>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <code className="text-sm text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
-                    {log.user_id.substring(0, 8) + '...'}
-                  </code>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-sm text-neutral-600">
-                  {log.ip_address || '-'}
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-sm text-neutral-600">
-                  {formatDate(log.created_at)}
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-right">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onViewDetails?.(log)
-                    }}
-                    className="text-primary-600 hover:text-primary-700 text-sm font-medium"
-                  >
-                    Szczegóły
-                  </button>
-                </td>
-              </tr>
+    if (isLoading) {
+      return (
+        <div className={baseStyles}>
+          <div className="animate-pulse">
+            <div className="h-12 border-b border-neutral-200 bg-neutral-50" />
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-16 border-b border-neutral-100" />
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
+      )
+    }
+
+    if (logs.length === 0) {
+      return (
+        <div className={baseStyles}>
+          <div className="py-12 text-center">
+            <svg
+              className="mx-auto mb-4 h-16 w-16 text-neutral-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <p className="text-neutral-500">Brak logów audytu do wyświetlenia</p>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className={baseStyles}>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-neutral-200">
+            <thead className="bg-neutral-50">
+              <tr>
+                <SortableHeader
+                  field="action"
+                  currentField={sortField}
+                  order={sortOrder}
+                  onSort={handleSort}
+                >
+                  Akcja
+                </SortableHeader>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
+                  Typ encji
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
+                  ID encji
+                </th>
+                <SortableHeader
+                  field="user_id"
+                  currentField={sortField}
+                  order={sortOrder}
+                  onSort={handleSort}
+                >
+                  ID użytkownika
+                </SortableHeader>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
+                  IP
+                </th>
+                <SortableHeader
+                  field="created_at"
+                  currentField={sortField}
+                  order={sortOrder}
+                  onSort={handleSort}
+                >
+                  Data i czas
+                </SortableHeader>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-neutral-600">
+                  Akcje
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-100 bg-white">
+              {logs.map((log) => (
+                <tr
+                  key={log.log_id}
+                  className="cursor-pointer transition-colors hover:bg-neutral-50"
+                  onClick={() => onLogClick?.(log)}
+                >
+                  <td className="whitespace-nowrap px-4 py-3">
+                    <span
+                      className={clsx(
+                        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+                        getActionColor(log.action)
+                      )}
+                    >
+                      {getActionLabel(log.action)}
+                    </span>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    <code className="rounded bg-neutral-100 px-2 py-0.5 text-sm text-neutral-600">
+                      {log.entity_type}
+                    </code>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    <code className="rounded bg-neutral-100 px-2 py-0.5 text-sm text-neutral-600">
+                      {log.entity_id ? `${log.entity_id.substring(0, 8)}...` : '-'}
+                    </code>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    <code className="rounded bg-neutral-100 px-2 py-0.5 text-sm text-neutral-600">
+                      {`${log.user_id.substring(0, 8)}...`}
+                    </code>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-600">
+                    {log.ip_address || '-'}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-600">
+                    {formatDate(log.created_at)}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-right">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onViewDetails?.(log)
+                      }}
+                      className="text-sm font-medium text-primary-600 hover:text-primary-700"
+                    >
+                      Szczegóły
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
 
 export default AuditLogTable

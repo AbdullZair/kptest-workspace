@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Button, Input, Select, Textarea, Checkbox } from '@shared/components'
-import type { TherapyStage, TherapyStageFormData, UnlockMode } from '../../types/stage.types'
-import type { Quiz } from '../../../quizzes/types/quiz.types'
+import type { TherapyStage, TherapyStageFormData, UnlockMode } from '../types/stage.types'
+import type { Quiz } from '@features/quizzes/types/quiz.types'
 
 /**
  * StageFormModal component props
@@ -140,7 +140,7 @@ export const StageFormModal: React.FC<StageFormModalProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 justify-end mt-6">
+        <div className="mt-6 flex justify-end gap-3">
           <Button type="button" variant="secondary" onClick={onClose}>
             Anuluj
           </Button>

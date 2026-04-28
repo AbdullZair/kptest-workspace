@@ -53,7 +53,7 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
 
     const request: DelegateMessageRequest = {
       assignee_id: assigneeId,
-      status: status,
+      status,
       comment: comment || undefined,
     }
 
@@ -79,29 +79,29 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-        <div className="px-6 py-4 border-b border-gray-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="mx-4 w-full max-w-md rounded-lg bg-white shadow-xl">
+        <div className="border-b border-gray-200 px-6 py-4">
           <h3 className="text-lg font-semibold text-gray-900">Deleguj wątek</h3>
-          <p className="text-sm text-gray-500 mt-1 truncate">{threadTitle}</p>
+          <p className="mt-1 truncate text-sm text-gray-500">{threadTitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 py-4">
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
+          {error ? (
+            <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
               Błąd: {String(error)}
             </div>
-          )}
+          ) : null}
 
           <div className="mb-4">
-            <label htmlFor="assignee" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="assignee" className="mb-2 block text-sm font-medium text-gray-700">
               Przypisz do *
             </label>
             <select
               id="assignee"
               value={assigneeId}
               onChange={(e) => setAssigneeId(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Wybierz członka zespołu</option>
@@ -114,14 +114,14 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
           </div>
 
           <div className="mb-4">
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="status" className="mb-2 block text-sm font-medium text-gray-700">
               Status *
             </label>
             <select
               id="status"
               value={status}
               onChange={(e) => setStatus(e.target.value as ThreadStatus)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {STATUS_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -132,7 +132,7 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
           </div>
 
           <div className="mb-6">
-            <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="comment" className="mb-2 block text-sm font-medium text-gray-700">
               Komentarz
             </label>
             <textarea
@@ -140,7 +140,7 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={3}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Dodaj komentarz (opcjonalnie)"
             />
           </div>
@@ -149,14 +149,14 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
             <button
               type="button"
               onClick={handleClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Anuluj
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             >
               {isLoading ? 'Delegowanie...' : 'Deleguj'}
             </button>

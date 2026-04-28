@@ -129,7 +129,7 @@ export const truncate = (text: string, maxLength: number): string => {
     return text
   }
 
-  return text.slice(0, maxLength) + '...'
+  return `${text.slice(0, maxLength)}...`
 }
 
 /**

@@ -51,7 +51,12 @@ export const PatientDetailPage = () => {
   const [cartNumber, setCartNumber] = useState('')
 
   // RTK Query hooks
-  const { data: patient, isLoading, error, refetch } = useGetPatientByIdQuery(id!, {
+  const {
+    data: patient,
+    isLoading,
+    error,
+    refetch,
+  } = useGetPatientByIdQuery(id!, {
     skip: !id,
   })
   const [updatePatient] = useUpdatePatientMutation()
@@ -65,7 +70,11 @@ export const PatientDetailPage = () => {
   }
 
   const handleDelete = async () => {
-    if (window.confirm(`Czy na pewno chcesz usunąć pacjenta ${patient?.first_name} ${patient?.last_name}?`)) {
+    if (
+      window.confirm(
+        `Czy na pewno chcesz usunąć pacjenta ${patient?.first_name} ${patient?.last_name}?`
+      )
+    ) {
       try {
         if (id) {
           await deletePatient(id).unwrap()
@@ -113,7 +122,7 @@ export const PatientDetailPage = () => {
 
   if (error || !patient) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-error-600">Nie znaleziono pacjenta</p>
         <Button variant="primary" onClick={handleBack} className="mt-4">
           Powrót do listy
@@ -128,8 +137,13 @@ export const PatientDetailPage = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={handleBack}>
-            <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg className="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Powrót
           </Button>
@@ -137,15 +151,15 @@ export const PatientDetailPage = () => {
             <h1 className="text-2xl font-bold text-neutral-900">
               {patient.first_name} {patient.last_name}
             </h1>
-            <p className="text-neutral-600 mt-1">PESEL: {patient.pesel}</p>
+            <p className="mt-1 text-neutral-600">PESEL: {patient.pesel}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <VerificationStatus status={patient.verification_status as VerificationStatusType} size="lg" />
+          <VerificationStatus status={patient.verification_status} size="lg" />
 
           <Button variant="outline" onClick={dispatchEdit}>
-            <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -157,7 +171,7 @@ export const PatientDetailPage = () => {
           </Button>
 
           <Button variant="primary" onClick={() => setVerifyDialogOpen(true)}>
-            <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -169,7 +183,7 @@ export const PatientDetailPage = () => {
           </Button>
 
           <Button variant="danger" onClick={handleDelete}>
-            <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -182,17 +196,17 @@ export const PatientDetailPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Patient Information */}
         <Card variant="elevated" className="lg:col-span-2">
           <Card.Header>
             <h2 className="text-lg font-semibold text-neutral-900">Informacje o pacjencie</h2>
           </Card.Header>
           <Card.Body>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Personal Info */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-neutral-900 border-b border-neutral-200 pb-2">
+                <h3 className="border-b border-neutral-200 pb-2 text-sm font-medium text-neutral-900">
                   Dane osobowe
                 </h3>
 
@@ -205,7 +219,7 @@ export const PatientDetailPage = () => {
 
                 <div>
                   <p className="text-sm text-neutral-500">PESEL</p>
-                  <p className="text-base font-mono text-neutral-900">{patient.pesel}</p>
+                  <p className="font-mono text-base text-neutral-900">{patient.pesel}</p>
                 </div>
 
                 <div>
@@ -218,49 +232,51 @@ export const PatientDetailPage = () => {
                   <p className="text-base text-neutral-900">{getGenderLabel(patient.gender)}</p>
                 </div>
 
-                {patient.his_patient_id && (
+                {patient.his_patient_id ? (
                   <div>
                     <p className="text-sm text-neutral-500">HIS Patient ID</p>
-                    <p className="text-base font-mono text-neutral-900">{patient.his_patient_id}</p>
+                    <p className="font-mono text-base text-neutral-900">{patient.his_patient_id}</p>
                   </div>
-                )}
+                ) : null}
               </div>
 
               {/* Contact Info */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-neutral-900 border-b border-neutral-200 pb-2">
+                <h3 className="border-b border-neutral-200 pb-2 text-sm font-medium text-neutral-900">
                   Dane kontaktowe
                 </h3>
 
-                {patient.email && (
+                {patient.email ? (
                   <div>
                     <p className="text-sm text-neutral-500">Email</p>
                     <p className="text-base text-neutral-900">{patient.email}</p>
                   </div>
-                )}
+                ) : null}
 
-                {patient.phone && (
+                {patient.phone ? (
                   <div>
                     <p className="text-sm text-neutral-500">Telefon</p>
                     <p className="text-base text-neutral-900">{patient.phone}</p>
                   </div>
-                )}
+                ) : null}
 
-                {(patient.address_street || patient.address_city) && (
+                {patient.address_street || patient.address_city ? (
                   <div>
                     <p className="text-sm text-neutral-500">Adres</p>
                     <p className="text-base text-neutral-900">
-                      {patient.address_street && <span>{patient.address_street}</span>}
-                      {patient.address_postal_code && <span>, {patient.address_postal_code}</span>}
-                      {patient.address_city && <span> {patient.address_city}</span>}
+                      {patient.address_street ? <span>{patient.address_street}</span> : null}
+                      {patient.address_postal_code ? (
+                        <span>, {patient.address_postal_code}</span>
+                      ) : null}
+                      {patient.address_city ? <span> {patient.address_city}</span> : null}
                     </p>
                   </div>
-                )}
+                ) : null}
               </div>
 
               {/* Verification Info */}
               <div className="space-y-4 md:col-span-2">
-                <h3 className="text-sm font-medium text-neutral-900 border-b border-neutral-200 pb-2">
+                <h3 className="border-b border-neutral-200 pb-2 text-sm font-medium text-neutral-900">
                   Weryfikacja
                 </h3>
 
@@ -268,32 +284,31 @@ export const PatientDetailPage = () => {
                   <div>
                     <p className="text-sm text-neutral-500">Status weryfikacji</p>
                     <div className="mt-1">
-                      <VerificationStatus
-                        status={patient.verification_status as VerificationStatusType}
-                        showLabel
-                      />
+                      <VerificationStatus status={patient.verification_status} showLabel />
                     </div>
                   </div>
 
-                  {patient.verified_at && (
+                  {patient.verified_at ? (
                     <div>
                       <p className="text-sm text-neutral-500">Zweryfikowano</p>
-                      <p className="text-base text-neutral-900">{formatDate(patient.verified_at)}</p>
+                      <p className="text-base text-neutral-900">
+                        {formatDate(patient.verified_at)}
+                      </p>
                     </div>
-                  )}
+                  ) : null}
 
-                  {patient.verification_method && (
+                  {patient.verification_method ? (
                     <div>
                       <p className="text-sm text-neutral-500">Metoda weryfikacji</p>
                       <p className="text-base text-neutral-900">{patient.verification_method}</p>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               </div>
 
               {/* Metadata */}
               <div className="space-y-4 md:col-span-2">
-                <h3 className="text-sm font-medium text-neutral-900 border-b border-neutral-200 pb-2">
+                <h3 className="border-b border-neutral-200 pb-2 text-sm font-medium text-neutral-900">
                   Metadane
                 </h3>
 
@@ -321,7 +336,7 @@ export const PatientDetailPage = () => {
           <Card.Body>
             <div className="space-y-3">
               <Button variant="outline" fullWidth>
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -333,7 +348,7 @@ export const PatientDetailPage = () => {
               </Button>
 
               <Button variant="outline" fullWidth>
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -345,7 +360,7 @@ export const PatientDetailPage = () => {
               </Button>
 
               <Button variant="outline" fullWidth>
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -357,7 +372,7 @@ export const PatientDetailPage = () => {
               </Button>
 
               <Button variant="outline" fullWidth>
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -373,22 +388,22 @@ export const PatientDetailPage = () => {
       </div>
 
       {/* Verify Dialog */}
-      {verifyDialogOpen && (
+      {verifyDialogOpen ? (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="fixed inset-0 bg-black/50" onClick={() => setVerifyDialogOpen(false)} />
 
           <div className="flex min-h-full items-center justify-center p-4">
-            <Card variant="elevated" className="w-full max-w-md relative z-10">
+            <Card variant="elevated" className="relative z-10 w-full max-w-md">
               <Card.Header>
                 <h3 className="text-lg font-semibold text-neutral-900">Weryfikacja w HIS</h3>
               </Card.Header>
               <Card.Body>
-                <p className="text-sm text-neutral-600 mb-4">
+                <p className="mb-4 text-sm text-neutral-600">
                   Wprowadź numer karty pacjenta, aby zweryfikować dane w systemie HIS.
                 </p>
 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  <label className="mb-1 block text-sm font-medium text-neutral-700">
                     Numer karty
                   </label>
                   <input
@@ -396,7 +411,7 @@ export const PatientDetailPage = () => {
                     value={cartNumber}
                     onChange={(e) => setCartNumber(e.target.value)}
                     placeholder="Wpisz numer karty..."
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                     autoFocus
                   />
                 </div>
@@ -418,7 +433,7 @@ export const PatientDetailPage = () => {
             </Card>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

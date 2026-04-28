@@ -51,10 +51,7 @@ interface ChangePasswordDialogProps {
  * After successful password change, clears auth and redirects to login
  * because backend revokes all refresh tokens.
  */
-export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ isOpen, onClose }) => {
   const [changePassword, { isLoading, error }] = useChangePasswordMutation()
   const { clearAuth } = useAuth()
 
@@ -100,39 +97,34 @@ export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
   }
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={handleClose}
-      className="relative z-50"
-    >
+    <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/50"
-        aria-hidden="true"
-      />
+      <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
 
       {/* Dialog panel */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="bg-white rounded-lg shadow-xl max-w-md w-full">
+        <Dialog.Panel className="w-full max-w-md rounded-lg bg-white shadow-xl">
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Header */}
-            <div className="px-6 py-4 border-b border-neutral-200">
+            <div className="border-b border-neutral-200 px-6 py-4">
               <Dialog.Title className="text-lg font-semibold text-neutral-900">
                 Zmień hasło
               </Dialog.Title>
-              <Dialog.Description className="text-sm text-neutral-500 mt-1">
+              <Dialog.Description className="mt-1 text-sm text-neutral-500">
                 Po zmianie hasła zostaniesz wylogowany
               </Dialog.Description>
             </div>
 
             {/* Body */}
-            <div className="px-6 py-4 space-y-4">
+            <div className="space-y-4 px-6 py-4">
               {/* Error message */}
-              {error && (
-                <div className="p-3 bg-error-50 border border-error-200 text-error-700 rounded text-sm">
-                  {('data' in error ? (error.data as { message?: string })?.message : 'Błąd zmiany hasła') || 'Błąd zmiany hasła'}
+              {error ? (
+                <div className="rounded border border-error-200 bg-error-50 p-3 text-sm text-error-700">
+                  {('data' in error
+                    ? (error.data as { message?: string })?.message
+                    : 'Błąd zmiany hasła') || 'Błąd zmiany hasła'}
                 </div>
-              )}
+              ) : null}
 
               {/* Current password */}
               <Input
@@ -170,7 +162,7 @@ export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t border-neutral-200 flex justify-end space-x-3">
+            <div className="flex justify-end space-x-3 border-t border-neutral-200 px-6 py-4">
               <Button
                 type="button"
                 variant="outline"
@@ -179,11 +171,7 @@ export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
               >
                 Anuluj
               </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                loading={isSubmitting || isLoading}
-              >
+              <Button type="submit" variant="primary" loading={isSubmitting || isLoading}>
                 Zmień hasło
               </Button>
             </div>

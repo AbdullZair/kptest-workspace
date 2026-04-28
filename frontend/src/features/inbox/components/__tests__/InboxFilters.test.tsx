@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { InboxFilters } from '../components/InboxFilters'
+import { InboxFilters } from '../InboxFilters'
 
 describe('InboxFilters', () => {
   const mockOnFilterChange = jest.fn()
@@ -11,12 +11,7 @@ describe('InboxFilters', () => {
   })
 
   it('renders all filter inputs', () => {
-    render(
-      <InboxFilters
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     expect(screen.getByLabelText(/projekt/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/status/i)).toBeInTheDocument()
@@ -39,23 +34,13 @@ describe('InboxFilters', () => {
   })
 
   it('does not display "Resetuj filtry" button when no filters are active', () => {
-    render(
-      <InboxFilters
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     expect(screen.queryByText(/resetuj filtry/i)).not.toBeInTheDocument()
   })
 
   it('calls onFilterChange when project is selected', () => {
-    render(
-      <InboxFilters
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     const projectSelect = screen.getByLabelText(/projekt/i)
     fireEvent.change(projectSelect, { target: { value: 'project-123' } })
@@ -64,12 +49,7 @@ describe('InboxFilters', () => {
   })
 
   it('calls onFilterChange when status is selected', () => {
-    render(
-      <InboxFilters
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     const statusSelect = screen.getByLabelText(/status/i)
     fireEvent.change(statusSelect, { target: { value: 'IN_PROGRESS' } })
@@ -78,12 +58,7 @@ describe('InboxFilters', () => {
   })
 
   it('calls onFilterChange when assignee is selected', () => {
-    render(
-      <InboxFilters
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     const assigneeSelect = screen.getByLabelText(/przypisany do/i)
     fireEvent.change(assigneeSelect, { target: { value: 'user-123' } })
@@ -92,12 +67,7 @@ describe('InboxFilters', () => {
   })
 
   it('calls onFilterChange when priority is selected', () => {
-    render(
-      <InboxFilters
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     const prioritySelect = screen.getByLabelText(/priorytet/i)
     fireEvent.change(prioritySelect, { target: { value: 'HIGH' } })
@@ -106,12 +76,7 @@ describe('InboxFilters', () => {
   })
 
   it('calls onFilterChange when unread checkbox is toggled', () => {
-    render(
-      <InboxFilters
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     const unreadCheckbox = screen.getByLabelText(/tylko nieprzeczytane/i)
     fireEvent.click(unreadCheckbox)
@@ -120,13 +85,7 @@ describe('InboxFilters', () => {
   })
 
   it('calls onReset when reset button is clicked', () => {
-    render(
-      <InboxFilters
-        projectId="1"
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters projectId="1" onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     const resetButton = screen.getByText(/resetuj filtry/i)
     fireEvent.click(resetButton)
@@ -135,19 +94,11 @@ describe('InboxFilters', () => {
   })
 
   it('resets page to 0 when filter changes', () => {
-    render(
-      <InboxFilters
-        page={5}
-        onFilterChange={mockOnFilterChange}
-        onReset={mockOnReset}
-      />
-    )
+    render(<InboxFilters page={5} onFilterChange={mockOnFilterChange} onReset={mockOnReset} />)
 
     const projectSelect = screen.getByLabelText(/projekt/i)
     fireEvent.change(projectSelect, { target: { value: 'new-project' } })
 
-    expect(mockOnFilterChange).toHaveBeenCalledWith(
-      expect.objectContaining({ page: 0 })
-    )
+    expect(mockOnFilterChange).toHaveBeenCalledWith(expect.objectContaining({ page: 0 }))
   })
 })

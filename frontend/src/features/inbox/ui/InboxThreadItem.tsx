@@ -64,7 +64,7 @@ const AssigneeAvatar: React.FC<{ name: string; size?: 'sm' | 'md' }> = ({ name, 
 
   return (
     <div
-      className={`${sizeClasses} rounded-full bg-blue-500 text-white flex items-center justify-center font-medium`}
+      className={`${sizeClasses} flex items-center justify-center rounded-full bg-blue-500 font-medium text-white`}
       title={name}
     >
       {initials}
@@ -88,19 +88,15 @@ export const InboxThreadItem: React.FC<InboxThreadItemProps> = ({
   const isNew = thread.status === 'NEW'
 
   return (
-    <tr
-      className={`hover:bg-gray-50 ${isNew ? 'bg-blue-50' : ''}`}
-    >
+    <tr className={`hover:bg-gray-50 ${isNew ? 'bg-blue-50' : ''}`}>
       {/* Status with badge */}
-      <td className="px-4 py-3 whitespace-nowrap">
+      <td className="whitespace-nowrap px-4 py-3">
         <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
+          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusBadgeClass(
             thread.status
           )}`}
         >
-          {isNew && (
-            <span className="w-2 h-2 bg-blue-600 rounded-full mr-1.5"></span>
-          )}
+          {isNew ? <span className="mr-1.5 h-2 w-2 rounded-full bg-blue-600" /> : null}
           {getStatusLabel(thread.status)}
         </span>
       </td>
@@ -108,19 +104,19 @@ export const InboxThreadItem: React.FC<InboxThreadItemProps> = ({
       {/* Thread title */}
       <td className="px-4 py-3">
         <div className="text-sm font-medium text-gray-900">{thread.title}</div>
-        <div className="text-xs text-gray-500 mt-0.5">
+        <div className="mt-0.5 text-xs text-gray-500">
           {thread.participants.slice(0, 3).join(', ')}
           {thread.participants.length > 3 && '...'}
         </div>
       </td>
 
       {/* Project name */}
-      <td className="px-4 py-3 whitespace-nowrap">
+      <td className="whitespace-nowrap px-4 py-3">
         <div className="text-sm text-gray-900">{thread.project_name}</div>
       </td>
 
       {/* Assignee with avatar */}
-      <td className="px-4 py-3 whitespace-nowrap">
+      <td className="whitespace-nowrap px-4 py-3">
         {thread.assigned_to && thread.assigned_to_name ? (
           <div className="flex items-center space-x-2">
             <AssigneeAvatar name={thread.assigned_to_name} />
@@ -132,7 +128,7 @@ export const InboxThreadItem: React.FC<InboxThreadItemProps> = ({
       </td>
 
       {/* Last message timestamp */}
-      <td className="px-4 py-3 whitespace-nowrap">
+      <td className="whitespace-nowrap px-4 py-3">
         <div className="text-sm text-gray-900">
           {new Date(thread.last_message_at).toLocaleDateString('pl-PL')}
         </div>
@@ -145,11 +141,11 @@ export const InboxThreadItem: React.FC<InboxThreadItemProps> = ({
       </td>
 
       {/* Message count */}
-      <td className="px-4 py-3 whitespace-nowrap">
+      <td className="whitespace-nowrap px-4 py-3">
         <div className="flex items-center space-x-2">
           <span className="text-sm font-medium text-gray-900">{thread.message_count}</span>
           {thread.unread_count > 0 && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+            <span className="inline-flex items-center rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
               {thread.unread_count} nowych
             </span>
           )}
@@ -157,21 +153,18 @@ export const InboxThreadItem: React.FC<InboxThreadItemProps> = ({
       </td>
 
       {/* Actions */}
-      <td className="px-4 py-3 whitespace-nowrap text-right">
+      <td className="whitespace-nowrap px-4 py-3 text-right">
         <div className="flex items-center justify-end space-x-2">
-          {onDelegateClick && (
+          {onDelegateClick ? (
             <button
               onClick={() => onDelegateClick(thread.id)}
-              className="text-sm text-blue-600 hover:text-blue-900 font-medium"
+              className="text-sm font-medium text-blue-600 hover:text-blue-900"
             >
               Deleguj
             </button>
-          )}
+          ) : null}
           <InboxThreadActions thread={thread} onActionComplete={() => onActionComplete?.()} />
-          <ExportConversationButton
-            threadId={thread.id}
-            threadTitle={thread.title}
-          />
+          <ExportConversationButton threadId={thread.id} threadTitle={thread.title} />
         </div>
       </td>
     </tr>

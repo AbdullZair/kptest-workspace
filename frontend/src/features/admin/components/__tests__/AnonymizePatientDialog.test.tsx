@@ -8,7 +8,17 @@ import { AnonymizePatientDialog } from '../AnonymizePatientDialog'
 // Mock the RTK Query hook
 vi.mock('../../api/adminApi', () => ({
   useAnonymizePatientMutation: () => [
-    vi.fn(() => Promise.resolve({ unwrap: () => Promise.resolve({ patient_id: 'test-id', anonymized_at: new Date().toISOString(), audit_log_id: 'audit-123', message: 'Success' }) })),
+    vi.fn(() =>
+      Promise.resolve({
+        unwrap: () =>
+          Promise.resolve({
+            patient_id: 'test-id',
+            anonymized_at: new Date().toISOString(),
+            audit_log_id: 'audit-123',
+            message: 'Success',
+          }),
+      })
+    ),
     { isLoading: false, error: null },
   ],
 }))
@@ -18,8 +28,7 @@ const createMockStore = () =>
     reducer: {
       [api.reducerPath]: api.reducer,
     },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
   })
 
 describe('AnonymizePatientDialog', () => {
@@ -100,8 +109,21 @@ describe('AnonymizePatientDialog', () => {
 
   it('calls onSuccess and onClose after successful submission', async () => {
     const { useAnonymizePatientMutation } = await import('../../api/adminApi')
-    const mockAnonymize = vi.fn(() => Promise.resolve({ unwrap: () => Promise.resolve({ patient_id: 'test-id', anonymized_at: new Date().toISOString(), audit_log_id: 'audit-123', message: 'Success' }) }))
-    vi.mocked(useAnonymizePatientMutation).mockReturnValue([mockAnonymize, { isLoading: false, error: null }])
+    const mockAnonymize = vi.fn(() =>
+      Promise.resolve({
+        unwrap: () =>
+          Promise.resolve({
+            patient_id: 'test-id',
+            anonymized_at: new Date().toISOString(),
+            audit_log_id: 'audit-123',
+            message: 'Success',
+          }),
+      })
+    )
+    vi.mocked(useAnonymizePatientMutation).mockReturnValue([
+      mockAnonymize,
+      { isLoading: false, error: null },
+    ])
 
     render(
       <Provider store={store}>

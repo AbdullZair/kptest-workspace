@@ -44,9 +44,7 @@ export const ProjectPatientsPage = () => {
   // Handlers
   const handleTogglePatient = (patientId: string) => {
     setSelectedPatientIds((prev) =>
-      prev.includes(patientId)
-        ? prev.filter((id) => id !== patientId)
-        : [...prev, patientId]
+      prev.includes(patientId) ? prev.filter((id) => id !== patientId) : [...prev, patientId]
     )
   }
 
@@ -113,7 +111,7 @@ export const ProjectPatientsPage = () => {
 
   if (!project) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-error-600">Nie znaleziono projektu</p>
         <Button variant="primary" onClick={handleBackClick} className="mt-4">
           Powrót
@@ -128,7 +126,7 @@ export const ProjectPatientsPage = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" onClick={handleBackClick}>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -139,12 +137,16 @@ export const ProjectPatientsPage = () => {
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">Pacjenci w projekcie</h1>
-            <p className="text-neutral-600 mt-1">{project.name}</p>
+            <p className="mt-1 text-neutral-600">{project.name}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="primary" onClick={handleAddPatients} disabled={project.status !== 'ACTIVE'}>
-            <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <Button
+            variant="primary"
+            onClick={handleAddPatients}
+            disabled={project.status !== 'ACTIVE'}
+          >
+            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -157,7 +159,7 @@ export const ProjectPatientsPage = () => {
           {selectedPatientIds.length > 0 && (
             <Button
               variant="outline"
-              className="text-rose-600 border-rose-200"
+              className="border-rose-200 text-rose-600"
               onClick={handleRemoveClick}
             >
               Usuń zaznaczonych ({selectedPatientIds.length})
@@ -171,12 +173,12 @@ export const ProjectPatientsPage = () => {
         <Card.Body>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center gap-2">
                 <input
                   type="checkbox"
                   checked={showInactive}
                   onChange={(e) => setShowInactive(e.target.checked)}
-                  className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                  className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                 />
                 <span className="text-sm text-neutral-700">Pokaż nieaktywnych pacjentów</span>
               </label>
@@ -198,34 +200,32 @@ export const ProjectPatientsPage = () => {
                   <th className="px-4 py-3">
                     <input
                       type="checkbox"
-                      checked={
-                        patients.length > 0 && selectedPatientIds.length === patients.length
-                      }
+                      checked={patients.length > 0 && selectedPatientIds.length === patients.length}
                       onChange={handleSelectAll}
-                      className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                      className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                     />
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                     Pacjent
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                     PESEL
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                     Data dołączenia
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                     Etap terapii
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                     Compliance
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-neutral-100">
+              <tbody className="divide-y divide-neutral-100 bg-white">
                 {patients.map((pp) => (
                   <tr
                     key={pp.id}
@@ -238,40 +238,40 @@ export const ProjectPatientsPage = () => {
                         type="checkbox"
                         checked={selectedPatientIds.includes(pp.patient_id)}
                         onChange={() => handleTogglePatient(pp.patient_id)}
-                        className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                        className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                         disabled={pp.left_at != null}
                       />
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="whitespace-nowrap px-4 py-3">
                       <Link
                         to={`/patients/${pp.patient_id}`}
-                        className="text-primary-600 hover:text-primary-700 font-medium"
+                        className="font-medium text-primary-600 hover:text-primary-700"
                       >
                         {pp.patient_name}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <code className="text-sm text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
+                    <td className="whitespace-nowrap px-4 py-3">
+                      <code className="rounded bg-neutral-100 px-2 py-0.5 text-sm text-neutral-600">
                         {pp.patient_id}
                       </code>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-neutral-600">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-600">
                       {formatDate(pp.enrolled_at)}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="whitespace-nowrap px-4 py-3">
                       <TherapyStageBadge stage={pp.current_stage} />
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="whitespace-nowrap px-4 py-3">
                       {pp.compliance_score != null ? (
                         <div className="flex items-center gap-2">
-                          <div className="w-24 bg-neutral-100 rounded-full h-2">
+                          <div className="h-2 w-24 rounded-full bg-neutral-100">
                             <div
                               className={`h-2 rounded-full ${
                                 pp.compliance_score >= 80
                                   ? 'bg-emerald-500'
                                   : pp.compliance_score >= 50
-                                  ? 'bg-amber-500'
-                                  : 'bg-rose-500'
+                                    ? 'bg-amber-500'
+                                    : 'bg-rose-500'
                               }`}
                               style={{ width: `${pp.compliance_score}%` }}
                             />
@@ -284,13 +284,13 @@ export const ProjectPatientsPage = () => {
                         <span className="text-sm text-neutral-400">-</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="whitespace-nowrap px-4 py-3">
                       {pp.left_at ? (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">
+                        <span className="inline-flex items-center rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-medium text-rose-800">
                           Nieaktywny
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                        <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
                           Aktywny
                         </span>
                       )}
@@ -304,9 +304,9 @@ export const ProjectPatientsPage = () => {
       ) : (
         <Card variant="outlined">
           <Card.Body>
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <svg
-                className="w-16 h-16 mx-auto mb-4 text-neutral-300"
+                className="mx-auto mb-4 h-16 w-16 text-neutral-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -330,12 +330,8 @@ export const ProjectPatientsPage = () => {
       )}
 
       {/* Remove Confirmation Modal */}
-      {isRemoveModalOpen && (
-        <div
-          className="fixed inset-0 z-50 overflow-y-auto"
-          role="dialog"
-          aria-modal="true"
-        >
+      {isRemoveModalOpen ? (
+        <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
           <div
             className="fixed inset-0 bg-black/50 transition-opacity"
             onClick={() => setIsRemoveModalOpen(false)}
@@ -344,16 +340,16 @@ export const ProjectPatientsPage = () => {
             <div className="relative w-full max-w-md">
               <Card variant="elevated">
                 <Card.Body>
-                  <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+                  <h3 className="mb-2 text-lg font-semibold text-neutral-900">
                     Usuń pacjentów z projektu
                   </h3>
-                  <p className="text-neutral-600 mb-4">
+                  <p className="mb-4 text-neutral-600">
                     Czy na pewno chcesz usunąć {selectedPatientIds.length} pacjentów z projektu?
                   </p>
                   <div className="mb-4">
                     <label
                       htmlFor="removalReason"
-                      className="block text-sm font-medium text-neutral-700 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-700"
                     >
                       Powód usunięcia <span className="text-rose-500">*</span>
                     </label>
@@ -362,7 +358,7 @@ export const ProjectPatientsPage = () => {
                       value={removalReason}
                       onChange={(e) => setRemovalReason(e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       placeholder="Wprowadź powód usunięcia pacjentów z projektu..."
                     />
                   </div>
@@ -389,7 +385,7 @@ export const ProjectPatientsPage = () => {
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Assignment Modal */}
       <PatientAssignmentModal
@@ -417,7 +413,9 @@ const TherapyStageBadge = ({ stage }: { stage: TherapyStage }) => {
   const { label, color } = config[stage] || config.NOT_STARTED
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}>
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${color}`}
+    >
       {label}
     </span>
   )

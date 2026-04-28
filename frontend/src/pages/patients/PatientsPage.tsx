@@ -21,7 +21,12 @@ import {
   updateFilter,
 } from '@features/patients'
 import { useDispatch, useSelector } from 'react-redux'
-import type { Patient, PatientFormData, PatientSearchRequest, VerificationStatusType } from '@features/patients/types'
+import type {
+  Patient,
+  PatientFormData,
+  PatientSearchRequest,
+  VerificationStatusType,
+} from '@features/patients/types'
 import type { SortField, SortOrder } from '@features/patients/ui/PatientTable'
 import { useNavigate } from 'react-router-dom'
 
@@ -53,13 +58,16 @@ export const PatientsPage = () => {
   const [verifyPatient] = useVerifyPatientMutation()
 
   // Build query params
-  const queryParams: PatientSearchRequest = useMemo(() => ({
-    page,
-    size: pageSize,
-    sort: sortField,
-    sort_order: sortOrder,
-    ...filters,
-  }), [page, pageSize, sortField, sortOrder, filters])
+  const queryParams: PatientSearchRequest = useMemo(
+    () => ({
+      page,
+      size: pageSize,
+      sort: sortField,
+      sort_order: sortOrder,
+      ...filters,
+    }),
+    [page, pageSize, sortField, sortOrder, filters]
+  )
 
   // Fetch patients
   const { data: patientsData, isLoading, error, refetch } = useGetPatientsQuery(queryParams)
@@ -96,7 +104,11 @@ export const PatientsPage = () => {
   }
 
   const handleDeleteClick = async (patient: Patient) => {
-    if (window.confirm(`Czy na pewno chcesz usunąć pacjenta ${patient.first_name} ${patient.last_name}?`)) {
+    if (
+      window.confirm(
+        `Czy na pewno chcesz usunąć pacjenta ${patient.first_name} ${patient.last_name}?`
+      )
+    ) {
       try {
         await deletePatient(patient.id).unwrap()
       } catch (err) {
@@ -139,7 +151,12 @@ export const PatientsPage = () => {
       ? currentStatuses.filter((s) => s !== status)
       : [...currentStatuses, status]
 
-    dispatch(updateFilter({ key: 'verificationStatus', value: newStatuses.length > 0 ? newStatuses : undefined }))
+    dispatch(
+      updateFilter({
+        key: 'verificationStatus',
+        value: newStatuses.length > 0 ? newStatuses : undefined,
+      })
+    )
   }
 
   const clearFilters = () => {
@@ -149,7 +166,8 @@ export const PatientsPage = () => {
     dispatch(updateFilter({ key: 'status', value: undefined }))
   }
 
-  const hasActiveFilters = searchQuery || (filters.verificationStatus && filters.verificationStatus.length > 0)
+  const hasActiveFilters =
+    searchQuery || (filters.verificationStatus && filters.verificationStatus.length > 0)
 
   if (isLoading && !patientsData) {
     return <PageLoader size="lg" text="Ładowanie pacjentów..." />
@@ -157,7 +175,7 @@ export const PatientsPage = () => {
 
   if (error) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-error-600">Wystąpił błąd podczas ładowania pacjentów</p>
         <Button variant="primary" onClick={() => refetch()} className="mt-4">
           Spróbuj ponownie
@@ -172,13 +190,18 @@ export const PatientsPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">Pacjenci</h1>
-          <p className="text-neutral-600 mt-1">Zarządzaj bazą pacjentów</p>
+          <p className="mt-1 text-neutral-600">Zarządzaj bazą pacjentów</p>
         </div>
         <Button
           variant="primary"
           leftIcon={
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
             </svg>
           }
           onClick={handleCreateClick}
@@ -199,47 +222,47 @@ export const PatientsPage = () => {
             />
 
             {/* Status filters */}
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm text-neutral-600">Status:</span>
               <button
                 onClick={() => handleFilterByStatus('PENDING')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   filters.verificationStatus?.includes('PENDING')
-                    ? 'bg-amber-100 text-amber-800 border-amber-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-amber-300 bg-amber-100 text-amber-800'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Oczekujący
               </button>
               <button
                 onClick={() => handleFilterByStatus('APPROVED')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   filters.verificationStatus?.includes('APPROVED')
-                    ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Zweryfikowany
               </button>
               <button
                 onClick={() => handleFilterByStatus('REJECTED')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   filters.verificationStatus?.includes('REJECTED')
-                    ? 'bg-rose-100 text-rose-800 border-rose-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-rose-300 bg-rose-100 text-rose-800'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Odrzucony
               </button>
 
-              {hasActiveFilters && (
+              {hasActiveFilters ? (
                 <button
                   onClick={clearFilters}
-                  className="ml-auto text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="ml-auto text-sm font-medium text-primary-600 hover:text-primary-700"
                 >
                   Wyczyść filtry
                 </button>
-              )}
+              ) : null}
             </div>
           </div>
         </Card.Body>
@@ -261,9 +284,9 @@ export const PatientsPage = () => {
         </Card.Body>
 
         {/* Pagination */}
-        {patientsData && patientsData.total > 0 && (
+        {patientsData && patientsData.total > 0 ? (
           <Card.Footer>
-            <div className="flex items-center justify-between w-full">
+            <div className="flex w-full items-center justify-between">
               <p className="text-sm text-neutral-600">
                 Wyświetlanie <span className="font-medium">{patientsData.data.length}</span> z{' '}
                 <span className="font-medium">{patientsData.total}</span> pacjentów
@@ -294,7 +317,7 @@ export const PatientsPage = () => {
               </div>
             </div>
           </Card.Footer>
-        )}
+        ) : null}
       </Card>
 
       {/* Form Modal */}

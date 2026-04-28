@@ -41,12 +41,10 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, compact = 
     return (
       <div
         onClick={handleClick}
-        className={`${borderClass} border-l-4 p-2 rounded cursor-pointer hover:shadow-md transition-shadow`}
+        className={`${borderClass} cursor-pointer rounded border-l-4 p-2 transition-shadow hover:shadow-md`}
       >
-        <div className="font-medium text-sm truncate">{event.title}</div>
-        <div className="text-xs text-gray-600">
-          {format(new Date(event.scheduled_at), 'HH:mm')}
-        </div>
+        <div className="truncate text-sm font-medium">{event.title}</div>
+        <div className="text-xs text-gray-600">{format(new Date(event.scheduled_at), 'HH:mm')}</div>
       </div>
     )
   }
@@ -54,9 +52,9 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, compact = 
   return (
     <div
       onClick={handleClick}
-      className={`${borderClass} border-l-4 p-4 rounded cursor-pointer hover:shadow-md transition-shadow bg-white`}
+      className={`${borderClass} cursor-pointer rounded border-l-4 bg-white p-4 transition-shadow hover:shadow-md`}
     >
-      <div className="flex items-start justify-between mb-2">
+      <div className="mb-2 flex items-start justify-between">
         <div>
           <h3 className="font-semibold text-gray-900">{event.title}</h3>
           <p className="text-sm text-gray-600">{EVENT_TYPE_LABELS[event.type]}</p>
@@ -66,45 +64,61 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, compact = 
 
       <div className="space-y-1 text-sm text-gray-600">
         <div className="flex items-center gap-2">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
-          <span>
-            {format(new Date(event.scheduled_at), 'dd MMMM yyyy, HH:mm', { locale: pl })}
-          </span>
+          <span>{format(new Date(event.scheduled_at), 'dd MMMM yyyy, HH:mm', { locale: pl })}</span>
         </div>
 
-        {event.ends_at && (
+        {event.ends_at ? (
           <div className="flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
-            <span>
-              Do: {format(new Date(event.ends_at), 'HH:mm')}
-            </span>
+            <span>Do: {format(new Date(event.ends_at), 'HH:mm')}</span>
           </div>
-        )}
+        ) : null}
 
-        {event.location && (
+        {event.location ? (
           <div className="flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
             </svg>
             <span>{event.location}</span>
           </div>
-        )}
+        ) : null}
       </div>
 
-      {event.description && (
-        <p className="mt-2 text-sm text-gray-700 line-clamp-2">{event.description}</p>
-      )}
+      {event.description ? (
+        <p className="mt-2 line-clamp-2 text-sm text-gray-700">{event.description}</p>
+      ) : null}
 
-      {event.status === 'COMPLETED' && event.patient_notes && (
-        <div className="mt-2 p-2 bg-green-50 rounded text-sm text-gray-700">
+      {event.status === 'COMPLETED' && event.patient_notes ? (
+        <div className="mt-2 rounded bg-green-50 p-2 text-sm text-gray-700">
           <strong>Notatka:</strong> {event.patient_notes}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

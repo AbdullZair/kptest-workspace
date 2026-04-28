@@ -14,11 +14,9 @@ export const anonymizePatientSchema = z.object({
     required_error: 'Wybierz powód anonimizacji',
   }),
   additional_notes: z.string().max(500, 'Notatki nie mogą przekraczać 500 znaków').optional(),
-  confirmation: z
-    .string()
-    .refine((val) => val === 'ANONYMIZUJ', {
-      message: 'Wpisz "ANONYMIZUJ" aby potwierdzić',
-    }),
+  confirmation: z.string().refine((val) => val === 'ANONYMIZUJ', {
+    message: 'Wpisz "ANONYMIZUJ" aby potwierdzić',
+  }),
 })
 
 /**
@@ -55,16 +53,33 @@ export const legalBasisValues = [
  * Used in DataProcessingActivitiesPage CRUD operations
  */
 export const dataProcessingActivitySchema = z.object({
-  name: z.string().min(3, 'Nazwa musi mieć co najmniej 3 znaki').max(200, 'Nazwa nie może przekraczać 200 znaków'),
-  purpose: z.string().min(10, 'Cel musi mieć co najmniej 10 znaków').max(1000, 'Cel nie może przekraczać 1000 znaków'),
+  name: z
+    .string()
+    .min(3, 'Nazwa musi mieć co najmniej 3 znaki')
+    .max(200, 'Nazwa nie może przekraczać 200 znaków'),
+  purpose: z
+    .string()
+    .min(10, 'Cel musi mieć co najmniej 10 znaków')
+    .max(1000, 'Cel nie może przekraczać 1000 znaków'),
   legal_basis: z.enum(legalBasisValues, {
     required_error: 'Wybierz podstawę prawną',
   }),
-  categories: z.array(z.string().min(1, 'Kategoria nie może być pusta')).min(1, 'Dodaj co najmniej jedną kategorię'),
+  categories: z
+    .array(z.string().min(1, 'Kategoria nie może być pusta'))
+    .min(1, 'Dodaj co najmniej jedną kategorię'),
   recipients: z.array(z.string().min(1, 'Odbiorca nie może być pusty')).default([]),
-  retention_period: z.string().min(5, 'Okres przechowywania musi mieć co najmniej 5 znaków').max(200, 'Okres przechowywania nie może przekraczać 200 znaków'),
-  security_measures: z.string().min(10, 'Środki bezpieczeństwa muszą mieć co najmniej 10 znaków').max(2000, 'Środki bezpieczeństwa nie mogą przekraczać 2000 znaków'),
-  data_controller: z.string().min(3, 'Administrator musi mieć co najmniej 3 znaki').max(200, 'Administrator nie może przekraczać 200 znaków'),
+  retention_period: z
+    .string()
+    .min(5, 'Okres przechowywania musi mieć co najmniej 5 znaków')
+    .max(200, 'Okres przechowywania nie może przekraczać 200 znaków'),
+  security_measures: z
+    .string()
+    .min(10, 'Środki bezpieczeństwa muszą mieć co najmniej 10 znaków')
+    .max(2000, 'Środki bezpieczeństwa nie mogą przekraczać 2000 znaków'),
+  data_controller: z
+    .string()
+    .min(3, 'Administrator musi mieć co najmniej 3 znaki')
+    .max(200, 'Administrator nie może przekraczać 200 znaków'),
   data_processor: z.string().max(200, 'Procesor nie może przekraczać 200 znaków').optional(),
 })
 

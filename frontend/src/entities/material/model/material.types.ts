@@ -13,4 +13,4 @@ export type {
   MaterialFormData,
   PatientMaterialProgress,
   MaterialStatistics,
-} from '../../features/materials/types/material.types'
+} from '@features/materials/types/material.types'

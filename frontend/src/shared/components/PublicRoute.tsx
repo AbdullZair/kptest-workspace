@@ -11,18 +11,18 @@ interface PublicRouteProps {
 
 /**
  * PublicRoute Component
- * 
+ *
  * Route guard for public pages (login, register, forgot password, etc.)
  * - Redirects to /dashboard if user is already authenticated
  * - Shows loading state while checking authentication
- * 
+ *
  * @example
  * ```tsx
  * // Login page (redirects to dashboard if already logged in)
  * <PublicRoute>
  *   <LoginPage />
  * </PublicRoute>
- * 
+ *
  * // Register page
  * <PublicRoute>
  *   <RegisterPage />

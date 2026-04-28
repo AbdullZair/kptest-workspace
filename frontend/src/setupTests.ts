@@ -32,7 +32,7 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-} as unknown as typeof ResizeObserver
+}
 
 // Suppress console errors during tests
 const originalError = console.error

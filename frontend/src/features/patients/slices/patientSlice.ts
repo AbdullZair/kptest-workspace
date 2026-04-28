@@ -45,7 +45,10 @@ export const patientSlice = createSlice({
     /**
      * Update single filter
      */
-    updateFilter: (state, action: PayloadAction<{ key: keyof PatientTableFilters; value: unknown }>) => {
+    updateFilter: (
+      state,
+      action: PayloadAction<{ key: keyof PatientTableFilters; value: unknown }>
+    ) => {
       state.filters[action.payload.key] = action.payload.value as never
     },
 
@@ -91,28 +94,19 @@ export const patientSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Handle get patient by ID
-      .addMatcher(
-        patientApiSlice.endpoints.getPatientById.matchFulfilled,
-        (state, action) => {
-          state.selectedPatient = action.payload
-        }
-      )
+      .addMatcher(patientApiSlice.endpoints.getPatientById.matchFulfilled, (state, action) => {
+        state.selectedPatient = action.payload
+      })
       // Handle create patient
-      .addMatcher(
-        patientApiSlice.endpoints.createPatient.matchFulfilled,
-        (state) => {
-          state.isFormModalOpen = false
-          state.editingPatientId = null
-        }
-      )
+      .addMatcher(patientApiSlice.endpoints.createPatient.matchFulfilled, (state) => {
+        state.isFormModalOpen = false
+        state.editingPatientId = null
+      })
       // Handle update patient
-      .addMatcher(
-        patientApiSlice.endpoints.updatePatient.matchFulfilled,
-        (state) => {
-          state.isFormModalOpen = false
-          state.editingPatientId = null
-        }
-      )
+      .addMatcher(patientApiSlice.endpoints.updatePatient.matchFulfilled, (state) => {
+        state.isFormModalOpen = false
+        state.editingPatientId = null
+      })
   },
 })
 
@@ -133,11 +127,14 @@ export const {
 /**
  * Export selectors
  */
-export const selectSelectedPatient = (state: { patient: PatientState }) => state.patient.selectedPatient
+export const selectSelectedPatient = (state: { patient: PatientState }) =>
+  state.patient.selectedPatient
 export const selectFilters = (state: { patient: PatientState }) => state.patient.filters
 export const selectSearchQuery = (state: { patient: PatientState }) => state.patient.searchQuery
-export const selectIsFormModalOpen = (state: { patient: PatientState }) => state.patient.isFormModalOpen
-export const selectEditingPatientId = (state: { patient: PatientState }) => state.patient.editingPatientId
+export const selectIsFormModalOpen = (state: { patient: PatientState }) =>
+  state.patient.isFormModalOpen
+export const selectEditingPatientId = (state: { patient: PatientState }) =>
+  state.patient.editingPatientId
 
 /**
  * Export reducer

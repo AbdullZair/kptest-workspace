@@ -74,7 +74,10 @@ export const stagesApi = api.injectEndpoints({
     }),
 
     // Unlock stage
-    unlockStage: build.mutation<PatientStageProgress, { patientProjectId: string; stageId: string }>({
+    unlockStage: build.mutation<
+      PatientStageProgress,
+      { patientProjectId: string; stageId: string }
+    >({
       query: ({ patientProjectId, stageId }) => ({
         url: `/api/v1/therapy-stages/progress/unlock?patientProjectId=${patientProjectId}&stageId=${stageId}`,
         method: 'POST',

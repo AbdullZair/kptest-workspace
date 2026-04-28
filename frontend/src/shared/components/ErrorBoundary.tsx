@@ -1,9 +1,4 @@
-import {
-  type ComponentType,
-  type ErrorInfo,
-  type PropsWithChildren,
-  Component,
-} from 'react'
+import { type ComponentType, type ErrorInfo, type PropsWithChildren, Component } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 
@@ -121,9 +116,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
       // Render default error UI
       return (
-        <Card variant="outlined" className="max-w-md mx-auto my-8">
+        <Card variant="outlined" className="mx-auto my-8 max-w-md">
           <div className="text-center">
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-error-100 mb-4">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-error-100">
               <svg
                 className="h-6 w-6 text-error-600"
                 fill="none"
@@ -140,23 +135,21 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </svg>
             </div>
 
-            <h3 className="text-lg font-medium text-neutral-900 mb-2">
-              {errorMessage}
-            </h3>
+            <h3 className="mb-2 text-lg font-medium text-neutral-900">{errorMessage}</h3>
 
-            {import.meta.env.DEV && error && (
-              <pre className="mt-4 p-4 bg-neutral-100 rounded-md text-sm text-left overflow-auto max-h-48">
+            {import.meta.env.DEV && error ? (
+              <pre className="mt-4 max-h-48 overflow-auto rounded-md bg-neutral-100 p-4 text-left text-sm">
                 <code>{error.message}</code>
               </pre>
-            )}
+            ) : null}
 
-            {showResetButton && (
+            {showResetButton ? (
               <div className="mt-6">
                 <Button onClick={this.resetError} variant="primary">
                   {resetButtonText}
                 </Button>
               </div>
-            )}
+            ) : null}
           </div>
         </Card>
       )

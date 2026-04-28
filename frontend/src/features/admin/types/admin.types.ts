@@ -10,7 +10,12 @@ export type UserRole = 'ADMIN' | 'COORDINATOR' | 'DOCTOR' | 'NURSE' | 'THERAPIST
 /**
  * Account status enumeration
  */
-export type AccountStatus = 'PENDING_VERIFICATION' | 'ACTIVE' | 'BLOCKED' | 'REJECTED' | 'DEACTIVATED'
+export type AccountStatus =
+  | 'PENDING_VERIFICATION'
+  | 'ACTIVE'
+  | 'BLOCKED'
+  | 'REJECTED'
+  | 'DEACTIVATED'
 
 /**
  * User admin DTO
@@ -436,7 +441,13 @@ export interface ErasureResponse {
 /**
  * Legal basis for data processing
  */
-export type LegalBasis = 'CONSENT' | 'CONTRACT' | 'LEGAL_OBLIGATION' | 'VITAL_INTEREST' | 'PUBLIC_TASK' | 'LEGITIMATE_INTEREST'
+export type LegalBasis =
+  | 'CONSENT'
+  | 'CONTRACT'
+  | 'LEGAL_OBLIGATION'
+  | 'VITAL_INTEREST'
+  | 'PUBLIC_TASK'
+  | 'LEGITIMATE_INTEREST'
 
 /**
  * Data Processing Activity DTO

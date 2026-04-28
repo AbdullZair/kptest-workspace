@@ -63,36 +63,39 @@ export const ProjectFormModal = ({
   }, [project, isOpen])
 
   // Validate form
-  const validate = useMemo(() => () => {
-    const newErrors: Record<string, string> = {}
+  const validate = useMemo(
+    () => () => {
+      const newErrors: Record<string, string> = {}
 
-    if (!formData.name?.trim()) {
-      newErrors.name = 'Nazwa projektu jest wymagana'
-    } else if (formData.name.length > 200) {
-      newErrors.name = 'Nazwa projektu nie może przekraczać 200 znaków'
-    }
-
-    if (formData.description && formData.description.length > 5000) {
-      newErrors.description = 'Opis nie może przekraczać 5000 znaków'
-    }
-
-    if (!formData.start_date) {
-      newErrors.start_date = 'Data rozpoczęcia jest wymagana'
-    }
-
-    if (formData.end_date && formData.start_date && formData.end_date < formData.start_date) {
-      newErrors.end_date = 'Data zakończenia musi być późniejsza niż data rozpoczęcia'
-    }
-
-    if (formData.compliance_threshold !== undefined) {
-      if (formData.compliance_threshold < 0 || formData.compliance_threshold > 100) {
-        newErrors.compliance_threshold = 'Próg compliance musi być między 0 a 100'
+      if (!formData.name?.trim()) {
+        newErrors.name = 'Nazwa projektu jest wymagana'
+      } else if (formData.name.length > 200) {
+        newErrors.name = 'Nazwa projektu nie może przekraczać 200 znaków'
       }
-    }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }, [formData])
+      if (formData.description && formData.description.length > 5000) {
+        newErrors.description = 'Opis nie może przekraczać 5000 znaków'
+      }
+
+      if (!formData.start_date) {
+        newErrors.start_date = 'Data rozpoczęcia jest wymagana'
+      }
+
+      if (formData.end_date && formData.start_date && formData.end_date < formData.start_date) {
+        newErrors.end_date = 'Data zakończenia musi być późniejsza niż data rozpoczęcia'
+      }
+
+      if (formData.compliance_threshold !== undefined) {
+        if (formData.compliance_threshold < 0 || formData.compliance_threshold > 100) {
+          newErrors.compliance_threshold = 'Próg compliance musi być między 0 a 100'
+        }
+      }
+
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    },
+    [formData]
+  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -115,8 +118,7 @@ export const ProjectFormModal = ({
 
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === 'number' ? (value === '' ? undefined : parseInt(value, 10)) : value,
+      [name]: type === 'number' ? (value === '' ? undefined : parseInt(value, 10)) : value,
     }))
 
     // Clear error when user starts typing
@@ -146,16 +148,16 @@ export const ProjectFormModal = ({
         <div className="relative w-full max-w-2xl transform transition-all">
           <Card variant="elevated" className="overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-neutral-50 border-b border-neutral-200">
+            <div className="flex items-center justify-between border-b border-neutral-200 bg-neutral-50 px-6 py-4">
               <h2 id="modal-title" className="text-lg font-semibold text-neutral-900">
                 {project ? 'Edytuj projekt' : 'Nowy projekt'}
               </h2>
               <button
                 onClick={onClose}
-                className="text-neutral-400 hover:text-neutral-600 transition-colors"
+                className="text-neutral-400 transition-colors hover:text-neutral-600"
                 aria-label="Zamknij"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -171,10 +173,7 @@ export const ProjectFormModal = ({
               <Card.Body className="space-y-5">
                 {/* Name */}
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-neutral-700 mb-1"
-                  >
+                  <label htmlFor="name" className="mb-1 block text-sm font-medium text-neutral-700">
                     Nazwa projektu <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -184,7 +183,7 @@ export const ProjectFormModal = ({
                     value={formData.name}
                     onChange={handleChange}
                     className={clsx(
-                      'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500',
+                      'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                       errors.name
                         ? 'border-rose-300 focus:border-rose-500'
                         : 'border-neutral-300 focus:border-primary-500'
@@ -192,16 +191,14 @@ export const ProjectFormModal = ({
                     placeholder="Wprowadź nazwę projektu"
                     disabled={isLoading}
                   />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-rose-600">{errors.name}</p>
-                  )}
+                  {errors.name ? <p className="mt-1 text-sm text-rose-600">{errors.name}</p> : null}
                 </div>
 
                 {/* Description */}
                 <div>
                   <label
                     htmlFor="description"
-                    className="block text-sm font-medium text-neutral-700 mb-1"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
                   >
                     Opis
                   </label>
@@ -212,7 +209,7 @@ export const ProjectFormModal = ({
                     onChange={handleChange}
                     rows={4}
                     className={clsx(
-                      'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none',
+                      'w-full resize-none rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                       errors.description
                         ? 'border-rose-300 focus:border-rose-500'
                         : 'border-neutral-300 focus:border-primary-500'
@@ -220,9 +217,9 @@ export const ProjectFormModal = ({
                     placeholder="Opis projektu (opcjonalny)"
                     disabled={isLoading}
                   />
-                  {errors.description && (
+                  {errors.description ? (
                     <p className="mt-1 text-sm text-rose-600">{errors.description}</p>
-                  )}
+                  ) : null}
                   <p className="mt-1 text-xs text-neutral-500">
                     {formData.description?.length || 0}/5000 znaków
                   </p>
@@ -234,7 +231,7 @@ export const ProjectFormModal = ({
                   <div>
                     <label
                       htmlFor="start_date"
-                      className="block text-sm font-medium text-neutral-700 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-700"
                     >
                       Data rozpoczęcia <span className="text-rose-500">*</span>
                     </label>
@@ -245,23 +242,23 @@ export const ProjectFormModal = ({
                       value={formData.start_date}
                       onChange={handleChange}
                       className={clsx(
-                        'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500',
+                        'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                         errors.start_date
                           ? 'border-rose-300 focus:border-rose-500'
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
                       disabled={isLoading}
                     />
-                    {errors.start_date && (
+                    {errors.start_date ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.start_date}</p>
-                    )}
+                    ) : null}
                   </div>
 
                   {/* End Date */}
                   <div>
                     <label
                       htmlFor="end_date"
-                      className="block text-sm font-medium text-neutral-700 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-700"
                     >
                       Data zakończenia
                     </label>
@@ -272,16 +269,16 @@ export const ProjectFormModal = ({
                       value={formData.end_date}
                       onChange={handleChange}
                       className={clsx(
-                        'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500',
+                        'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                         errors.end_date
                           ? 'border-rose-300 focus:border-rose-500'
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
                       disabled={isLoading}
                     />
-                    {errors.end_date && (
+                    {errors.end_date ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.end_date}</p>
-                    )}
+                    ) : null}
                   </div>
                 </div>
 
@@ -291,7 +288,7 @@ export const ProjectFormModal = ({
                   <div>
                     <label
                       htmlFor="status"
-                      className="block text-sm font-medium text-neutral-700 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-700"
                     >
                       Status
                     </label>
@@ -300,7 +297,7 @@ export const ProjectFormModal = ({
                       name="status"
                       value={formData.status}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       disabled={isLoading}
                     >
                       <option value="PLANNED">Planowany</option>
@@ -315,7 +312,7 @@ export const ProjectFormModal = ({
                   <div>
                     <label
                       htmlFor="compliance_threshold"
-                      className="block text-sm font-medium text-neutral-700 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-700"
                     >
                       Próg compliance (%)
                     </label>
@@ -328,28 +325,23 @@ export const ProjectFormModal = ({
                       min={0}
                       max={100}
                       className={clsx(
-                        'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500',
+                        'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                         errors.compliance_threshold
                           ? 'border-rose-300 focus:border-rose-500'
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
                       disabled={isLoading}
                     />
-                    {errors.compliance_threshold && (
+                    {errors.compliance_threshold ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.compliance_threshold}</p>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </Card.Body>
 
               {/* Footer */}
-              <Card.Footer className="flex items-center justify-end gap-3 px-6 py-4 bg-neutral-50 border-t border-neutral-200">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onClose}
-                  disabled={isLoading}
-                >
+              <Card.Footer className="flex items-center justify-end gap-3 border-t border-neutral-200 bg-neutral-50 px-6 py-4">
+                <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
                   Anuluj
                 </Button>
                 <Button
@@ -360,11 +352,7 @@ export const ProjectFormModal = ({
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
-                      <svg
-                        className="animate-spin h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle
                           className="opacity-25"
                           cx="12"

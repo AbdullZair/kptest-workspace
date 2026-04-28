@@ -7,13 +7,16 @@ interface PriorityBadgeProps {
   size?: 'sm' | 'md' | 'lg'
 }
 
-const priorityConfig: Record<MessagePriority, {
-  bgColor: string
-  textColor: string
-  borderColor: string
-  icon: string
-  label: string
-}> = {
+const priorityConfig: Record<
+  MessagePriority,
+  {
+    bgColor: string
+    textColor: string
+    borderColor: string
+    icon: string
+    label: string
+  }
+> = {
   INFO: {
     bgColor: 'bg-blue-100',
     textColor: 'text-blue-800',
@@ -46,29 +49,18 @@ const sizeClasses = {
 /**
  * PriorityBadge component for displaying message priority
  */
-export function PriorityBadge({
-  priority,
-  showLabel = true,
-  size = 'md',
-}: PriorityBadgeProps) {
+export function PriorityBadge({ priority, showLabel = true, size = 'md' }: PriorityBadgeProps) {
   const config = priorityConfig[priority]
   const sizeClass = sizeClasses[size]
-  
+
   return (
     <span
-      className={`
-        inline-flex items-center gap-1
-        rounded-full border font-medium
-        ${config.bgColor}
-        ${config.textColor}
-        ${config.borderColor}
-        ${sizeClass}
-      `}
+      className={`inline-flex items-center gap-1 rounded-full border font-medium ${config.bgColor} ${config.textColor} ${config.borderColor} ${sizeClass} `}
       role="status"
       aria-label={`Priorytet: ${config.label}`}
     >
       <span aria-hidden="true">{config.icon}</span>
-      {showLabel && <span>{config.label}</span>}
+      {showLabel ? <span>{config.label}</span> : null}
     </span>
   )
 }

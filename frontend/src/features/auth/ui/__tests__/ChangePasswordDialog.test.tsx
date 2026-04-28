@@ -17,18 +17,13 @@ const createTestStore = () =>
     reducer: {
       [api.reducerPath]: api.reducer,
     },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
   })
 
 const renderWithProviders = (component: React.ReactElement) => {
   const store = createTestStore()
   return {
-    ...render(
-      <Provider store={store}>
-        {component}
-      </Provider>
-    ),
+    ...render(<Provider store={store}>{component}</Provider>),
     store,
   }
 }
@@ -41,26 +36,20 @@ describe('ChangePasswordDialog', () => {
   })
 
   it('renders dialog when isOpen is true', () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     expect(screen.getByText('Zmień hasło')).toBeInTheDocument()
     expect(screen.getByText('Po zmianie hasła zostaniesz wylogowany')).toBeInTheDocument()
   })
 
   it('does not render dialog when isOpen is false', () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={false} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={false} onClose={mockOnClose} />)
 
     expect(screen.queryByText('Zmień hasło')).not.toBeInTheDocument()
   })
 
   it('shows validation errors for empty fields', async () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     const submitButton = screen.getByText('Zmień hasło')
     fireEvent.click(submitButton)
@@ -72,9 +61,7 @@ describe('ChangePasswordDialog', () => {
   })
 
   it('shows validation error for password too short', async () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     const currentPassword = screen.getByLabelText('Obecne hasło')
     const newPassword = screen.getByLabelText('Nowe hasło')
@@ -93,9 +80,7 @@ describe('ChangePasswordDialog', () => {
   })
 
   it('shows validation error for missing uppercase letter', async () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     const newPassword = screen.getByLabelText('Nowe hasło')
     fireEvent.change(newPassword, { target: { value: 'newpassword123!' } })
@@ -109,9 +94,7 @@ describe('ChangePasswordDialog', () => {
   })
 
   it('shows validation error for passwords not matching', async () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     const newPassword = screen.getByLabelText('Nowe hasło')
     const confirmNewPassword = screen.getByLabelText('Potwierdź nowe hasło')
@@ -128,9 +111,7 @@ describe('ChangePasswordDialog', () => {
   })
 
   it('shows validation error for new password same as current', async () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     const currentPassword = screen.getByLabelText('Obecne hasło')
     const newPassword = screen.getByLabelText('Nowe hasło')
@@ -149,9 +130,7 @@ describe('ChangePasswordDialog', () => {
   })
 
   it('submits form with valid data', async () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     const currentPassword = screen.getByLabelText('Obecne hasło')
     const newPassword = screen.getByLabelText('Nowe hasło')
@@ -170,9 +149,7 @@ describe('ChangePasswordDialog', () => {
   })
 
   it('closes dialog on cancel button click', () => {
-    renderWithProviders(
-      <ChangePasswordDialog isOpen={true} onClose={mockOnClose} />
-    )
+    renderWithProviders(<ChangePasswordDialog isOpen={true} onClose={mockOnClose} />)
 
     const cancelButton = screen.getByText('Anuluj')
     fireEvent.click(cancelButton)

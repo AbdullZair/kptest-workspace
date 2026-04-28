@@ -28,18 +28,13 @@ const createTestStore = () =>
     reducer: {
       [api.reducerPath]: api.reducer,
     },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
   })
 
 const renderWithProviders = (component: React.ReactElement) => {
   const store = createTestStore()
   return {
-    ...render(
-      <Provider store={store}>
-        {component}
-      </Provider>
-    ),
+    ...render(<Provider store={store}>{component}</Provider>),
     store,
   }
 }

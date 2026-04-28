@@ -49,21 +49,9 @@ const sizeStyles: Record<CardSize, string> = {
  * Variant styles mapping
  */
 const variantStyles: Record<CardVariant, string> = {
-  default: clsx(
-    'bg-white',
-    'border border-neutral-200',
-    'shadow-card'
-  ),
-  elevated: clsx(
-    'bg-white',
-    'border border-neutral-200',
-    'shadow-lg'
-  ),
-  outlined: clsx(
-    'bg-white',
-    'border-2 border-neutral-300',
-    'shadow-none'
-  ),
+  default: clsx('bg-white', 'border border-neutral-200', 'shadow-card'),
+  elevated: clsx('bg-white', 'border border-neutral-200', 'shadow-lg'),
+  outlined: clsx('bg-white', 'border-2 border-neutral-300', 'shadow-none'),
   interactive: clsx(
     'bg-white',
     'border border-neutral-200',
@@ -105,59 +93,61 @@ const variantStyles: Record<CardVariant, string> = {
  * ```
  */
 export const Card = memo(
-  forwardRef<HTMLDivElement, CardProps>(function Card(
-    {
-      children,
-      header,
-      footer,
-      size = 'md',
-      variant = 'default',
-      noPadding = false,
-      fullWidth = false,
-      hoverable = false,
-      onClick,
-      className,
-      ...props
-    },
-    ref
-  ) {
-    const baseStyles = clsx(
-      'rounded-xl',
-      'transition-all duration-200',
-      variantStyles[variant],
-      !noPadding && sizeStyles[size],
-      fullWidth && 'w-full',
-      hoverable && variant !== 'interactive' && 'hover:shadow-lg',
-      className
-    )
+  forwardRef<HTMLDivElement, CardProps>(
+    (
+      {
+        children,
+        header,
+        footer,
+        size = 'md',
+        variant = 'default',
+        noPadding = false,
+        fullWidth = false,
+        hoverable = false,
+        onClick,
+        className,
+        ...props
+      },
+      ref
+    ) => {
+      const baseStyles = clsx(
+        'rounded-xl',
+        'transition-all duration-200',
+        variantStyles[variant],
+        !noPadding && sizeStyles[size],
+        fullWidth && 'w-full',
+        hoverable && variant !== 'interactive' && 'hover:shadow-lg',
+        className
+      )
 
-    return (
-      <div
-        ref={ref}
-        className={twMerge(baseStyles)}
-        onClick={onClick}
-        role={onClick ? 'button' : undefined}
-        tabIndex={onClick ? 0 : undefined}
-        onKeyDown={
-          onClick
-            ? (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  onClick()
+      return (
+        <div
+          ref={ref}
+          className={twMerge(baseStyles)}
+          onClick={onClick}
+          role={onClick ? 'button' : undefined}
+          tabIndex={onClick ? 0 : undefined}
+          onKeyDown={
+            onClick
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onClick()
+                  }
                 }
-              }
-            : undefined
-        }
-        {...props}
-      >
-        {header && <div className="mb-4 pb-4 border-b border-neutral-200">{header}</div>}
+              : undefined
+          }
+          {...props}
+        >
+          {header ? <div className="mb-4 border-b border-neutral-200 pb-4">{header}</div> : null}
 
-        <div className={clsx(header && 'mt-2', footer && 'mb-4')}>{children}</div>
+          <div className={clsx(header && 'mt-2', footer && 'mb-4')}>{children}</div>
 
-        {footer && <div className="mt-4 pt-4 border-t border-neutral-200">{footer}</div>}
-      </div>
-    )
-  })
+          {footer ? <div className="mt-4 border-t border-neutral-200 pt-4">{footer}</div> : null}
+        </div>
+      )
+    }
+  )
 )
 
 /**
@@ -168,10 +158,7 @@ interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const CardHeader = memo(
-  forwardRef<HTMLDivElement, CardHeaderProps>(function CardHeader(
-    { children, className, ...props },
-    ref
-  ) {
+  forwardRef<HTMLDivElement, CardHeaderProps>(({ children, className, ...props }, ref) => {
     const baseStyles = clsx(
       'flex items-center justify-between',
       'mb-4 pb-4 border-b border-neutral-200',
@@ -195,18 +182,17 @@ interface CardBodyProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const CardBody = memo(
-  forwardRef<HTMLDivElement, CardBodyProps>(function CardBody(
-    { children, noPadding = false, className, ...props },
-    ref
-  ) {
-    const baseStyles = clsx(!noPadding && 'py-2', className)
+  forwardRef<HTMLDivElement, CardBodyProps>(
+    ({ children, noPadding = false, className, ...props }, ref) => {
+      const baseStyles = clsx(!noPadding && 'py-2', className)
 
-    return (
-      <div ref={ref} className={twMerge(baseStyles)} {...props}>
-        {children}
-      </div>
-    )
-  })
+      return (
+        <div ref={ref} className={twMerge(baseStyles)} {...props}>
+          {children}
+        </div>
+      )
+    }
+  )
 )
 
 /**
@@ -217,10 +203,7 @@ interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const CardFooter = memo(
-  forwardRef<HTMLDivElement, CardFooterProps>(function CardFooter(
-    { children, className, ...props },
-    ref
-  ) {
+  forwardRef<HTMLDivElement, CardFooterProps>(({ children, className, ...props }, ref) => {
     const baseStyles = clsx(
       'mt-4 pt-4 border-t border-neutral-200',
       'flex items-center justify-between',

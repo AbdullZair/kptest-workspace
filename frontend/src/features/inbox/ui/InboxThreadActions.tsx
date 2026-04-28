@@ -104,13 +104,9 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
   return (
     <div className="relative">
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <Menu.Button className="inline-flex items-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
           Akcje
-          <svg
-            className="ml-2 -mr-1 h-4 w-4"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+          <svg className="-mr-1 ml-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -128,11 +124,11 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white border border-neutral-200 rounded-md shadow-lg z-50 focus:outline-none">
+          <Menu.Items className="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-md border border-neutral-200 bg-white shadow-lg focus:outline-none">
             <div className="py-2">
               {/* Status section */}
-              <div className="px-4 py-2 border-b border-neutral-100">
-                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+              <div className="border-b border-neutral-100 px-4 py-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
                   Status
                 </p>
               </div>
@@ -141,14 +137,14 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
                   {({ active }) => (
                     <button
                       onClick={() => handleStatusChange(option.value)}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between ${
+                      className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm ${
                         active ? 'bg-neutral-100' : ''
                       }`}
                     >
                       <span className="text-neutral-700">{option.label}</span>
                       {thread.status === option.value && (
                         <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getStatusBadgeClass(
+                          className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium ${getStatusBadgeClass(
                             option.value
                           )}`}
                         >
@@ -161,8 +157,8 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
               ))}
 
               {/* Priority section */}
-              <div className="px-4 py-2 border-t border-b border-neutral-100">
-                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+              <div className="border-b border-t border-neutral-100 px-4 py-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
                   Priorytet
                 </p>
               </div>
@@ -171,21 +167,19 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
                   {({ active }) => (
                     <button
                       onClick={() => handlePriorityChange(option.value)}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between ${
+                      className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm ${
                         active ? 'bg-neutral-100' : ''
                       }`}
                     >
-                      <span className={`text-neutral-700 ${option.color}`}>
-                        {option.label}
-                      </span>
+                      <span className={`text-neutral-700 ${option.color}`}>{option.label}</span>
                     </button>
                   )}
                 </Menu.Item>
               ))}
 
               {/* Assignee section */}
-              <div className="px-4 py-2 border-t border-b border-neutral-100">
-                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+              <div className="border-b border-t border-neutral-100 px-4 py-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
                   Przypisz do
                 </p>
               </div>
@@ -194,19 +188,15 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
                   {({ active }) => (
                     <button
                       onClick={() => handleAssigneeChange(member.id)}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between ${
+                      className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm ${
                         active ? 'bg-neutral-100' : ''
                       }`}
                     >
                       <div>
                         <span className="text-neutral-700">{member.name}</span>
-                        <span className="text-neutral-400 text-xs ml-2">
-                          {member.role}
-                        </span>
+                        <span className="ml-2 text-xs text-neutral-400">{member.role}</span>
                       </div>
-                      {thread.assigned_to === member.id && (
-                        <span className="text-blue-600">✓</span>
-                      )}
+                      {thread.assigned_to === member.id && <span className="text-blue-600">✓</span>}
                     </button>
                   )}
                 </Menu.Item>

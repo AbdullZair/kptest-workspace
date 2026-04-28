@@ -1,22 +1,12 @@
 /**
  * Type of therapy event.
  */
-export type EventType =
-  | 'VISIT'
-  | 'SESSION'
-  | 'MEDICATION'
-  | 'EXERCISE'
-  | 'MEASUREMENT'
-  | 'OTHER'
+export type EventType = 'VISIT' | 'SESSION' | 'MEDICATION' | 'EXERCISE' | 'MEASUREMENT' | 'OTHER'
 
 /**
  * Status of a therapy event.
  */
-export type EventStatus =
-  | 'SCHEDULED'
-  | 'COMPLETED'
-  | 'MISSED'
-  | 'CANCELLED'
+export type EventStatus = 'SCHEDULED' | 'COMPLETED' | 'MISSED' | 'CANCELLED'
 
 /**
  * Reminders configuration for therapy events.

@@ -13,11 +13,7 @@ interface AppProps {
 }
 
 export const App: React.FC<AppProps> = ({ children }) => {
-  return (
-    <ErrorBoundary>
-      {children}
-    </ErrorBoundary>
-  )
+  return <ErrorBoundary>{children}</ErrorBoundary>
 }
 
 export default App

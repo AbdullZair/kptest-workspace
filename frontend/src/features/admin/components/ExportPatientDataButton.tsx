@@ -61,7 +61,12 @@ export const ExportPatientDataButton: React.FC<ExportPatientDataButtonProps> = (
           loading={isLoading}
           rightIcon={
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           }
         >
@@ -78,9 +83,7 @@ export const ExportPatientDataButton: React.FC<ExportPatientDataButtonProps> = (
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items
-          className="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md border border-neutral-200 bg-white shadow-lg focus:outline-none"
-        >
+        <Menu.Items className="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md border border-neutral-200 bg-white shadow-lg focus:outline-none">
           <div className="py-1">
             {FORMAT_OPTIONS.map((option) => (
               <Menu.Item key={option.value}>

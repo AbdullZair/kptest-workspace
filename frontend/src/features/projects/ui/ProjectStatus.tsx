@@ -15,10 +15,7 @@ export interface ProjectStatusProps {
 /**
  * Status configuration
  */
-const statusConfig: Record<
-  ProjectStatusType,
-  { label: string; color: string; icon: string }
-> = {
+const statusConfig: Record<ProjectStatusType, { label: string; color: string; icon: string }> = {
   PLANNED: {
     label: 'Planowany',
     color: 'bg-blue-100 text-blue-800 border-blue-300',
@@ -65,40 +62,37 @@ const sizeConfig = {
  * <ProjectStatus status="ACTIVE" size="md" showLabel={true} />
  * ```
  */
-export const ProjectStatus = memo(function ProjectStatus({
-  status,
-  size = 'md',
-  showLabel = true,
-  className,
-}: ProjectStatusProps) {
-  const config = statusConfig[status] || statusConfig.PLANNED
-  const sizeClasses = sizeConfig[size]
+export const ProjectStatus = memo(
+  ({ status, size = 'md', showLabel = true, className }: ProjectStatusProps) => {
+    const config = statusConfig[status] || statusConfig.PLANNED
+    const sizeClasses = sizeConfig[size]
 
-  return (
-    <span
-      className={clsx(
-        'inline-flex items-center gap-1.5 rounded-full font-medium border',
-        sizeClasses,
-        config.color,
-        className
-      )}
-      role="status"
-      aria-label={`Status: ${config.label}`}
-    >
-      <svg
+    return (
+      <span
         className={clsx(
-          'flex-shrink-0',
-          size === 'sm' ? 'w-3 h-3' : size === 'md' ? 'w-4 h-4' : 'w-5 h-5'
+          'inline-flex items-center gap-1.5 rounded-full border font-medium',
+          sizeClasses,
+          config.color,
+          className
         )}
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+        role="status"
+        aria-label={`Status: ${config.label}`}
       >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={config.icon} />
-      </svg>
-      {showLabel && <span>{config.label}</span>}
-    </span>
-  )
-})
+        <svg
+          className={clsx(
+            'flex-shrink-0',
+            size === 'sm' ? 'h-3 w-3' : size === 'md' ? 'h-4 w-4' : 'h-5 w-5'
+          )}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={config.icon} />
+        </svg>
+        {showLabel ? <span>{config.label}</span> : null}
+      </span>
+    )
+  }
+)
 
 export default ProjectStatus

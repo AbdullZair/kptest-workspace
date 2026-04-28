@@ -123,23 +123,26 @@ export function DataTable<T extends Record<string, any>>({
   }
 
   const isAllSelected = sortedData.length > 0 && localSelectedRows.length === sortedData.length
-  const isSomeSelected = localSelectedRows.length > 0 && localSelectedRows.length < sortedData.length
+  const isSomeSelected =
+    localSelectedRows.length > 0 && localSelectedRows.length < sortedData.length
 
   if (isLoading) {
     return (
       <div className={clsx('flex items-center justify-center py-12', className)}>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary-600" />
       </div>
     )
   }
 
   return (
-    <div className={clsx('bg-white rounded-lg border border-neutral-200 overflow-hidden', className)}>
+    <div
+      className={clsx('overflow-hidden rounded-lg border border-neutral-200 bg-white', className)}
+    >
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
             <tr>
-              {selectable && (
+              {selectable ? (
                 <th className="px-6 py-3 text-left">
                   <input
                     type="checkbox"
@@ -151,12 +154,12 @@ export function DataTable<T extends Record<string, any>>({
                     className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                   />
                 </th>
-              )}
+              ) : null}
               {columns.map((column) => (
                 <th
                   key={String(column.key)}
                   className={clsx(
-                    'px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider',
+                    'px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500',
                     column.sortable && sortable && 'cursor-pointer hover:bg-neutral-100',
                     column.className
                   )}
@@ -165,25 +168,30 @@ export function DataTable<T extends Record<string, any>>({
                 >
                   <div className="flex items-center gap-2">
                     {column.header}
-                    {column.sortable && sortable && sortKey === column.key && (
+                    {column.sortable && sortable && sortKey === column.key ? (
                       <svg
                         className={clsx(
-                          'w-4 h-4 text-neutral-400',
-                          sortOrder === 'desc' && 'transform rotate-180'
+                          'h-4 w-4 text-neutral-400',
+                          sortOrder === 'desc' && 'rotate-180 transform'
                         )}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 15l7-7 7 7"
+                        />
                       </svg>
-                    )}
+                    ) : null}
                   </div>
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200 bg-white">
             {sortedData.length === 0 ? (
               <tr>
                 <td
@@ -204,7 +212,7 @@ export function DataTable<T extends Record<string, any>>({
                   )}
                   onClick={() => onRowClick?.(item)}
                 >
-                  {selectable && (
+                  {selectable ? (
                     <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                       <input
                         type="checkbox"
@@ -213,13 +221,16 @@ export function DataTable<T extends Record<string, any>>({
                         className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                       />
                     </td>
-                  )}
+                  ) : null}
                   {columns.map((column) => (
                     <td
                       key={String(column.key)}
-                      className={clsx('px-6 py-4 whitespace-nowrap text-sm text-neutral-900', column.className)}
+                      className={clsx(
+                        'whitespace-nowrap px-6 py-4 text-sm text-neutral-900',
+                        column.className
+                      )}
                     >
-                      {column.render ? column.render(item, index) : String(item[column.key as keyof T] ?? '-')}
+                      {column.render ? column.render(item, index) : String(item[column.key] ?? '-')}
                     </td>
                   ))}
                 </tr>
@@ -230,18 +241,18 @@ export function DataTable<T extends Record<string, any>>({
       </div>
 
       {/* Pagination */}
-      {pagination && (
-        <div className="flex items-center justify-between px-6 py-3 border-t border-neutral-200 bg-white">
+      {pagination ? (
+        <div className="flex items-center justify-between border-t border-neutral-200 bg-white px-6 py-3">
           <div className="flex items-center gap-4">
             <div className="text-sm text-neutral-700">
               Strona {pagination.page + 1} z {Math.ceil(pagination.total / pagination.size)} (
               {pagination.total} rekordów)
             </div>
-            {pagination.onSizeChange && (
+            {pagination.onSizeChange ? (
               <select
                 value={pagination.size}
                 onChange={(e) => pagination.onSizeChange?.(Number(e.target.value))}
-                className="px-3 py-1.5 border border-neutral-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {(pagination.sizeOptions || [10, 20, 50, 100]).map((size) => (
                   <option key={size} value={size}>
@@ -249,26 +260,26 @@ export function DataTable<T extends Record<string, any>>({
                   </option>
                 ))}
               </select>
-            )}
+            ) : null}
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => pagination.onPageChange(pagination.page - 1)}
               disabled={pagination.page === 0}
-              className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Poprzednia
             </button>
             <button
               onClick={() => pagination.onPageChange(pagination.page + 1)}
               disabled={pagination.page >= Math.ceil(pagination.total / pagination.size) - 1}
-              className="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Następna
             </button>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

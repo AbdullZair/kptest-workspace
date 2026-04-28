@@ -49,32 +49,32 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
           setShowModal(true)
           setGeneratedCode(null)
         }}
-        className="text-blue-600 hover:text-blue-900 font-medium text-sm"
+        className="text-sm font-medium text-blue-600 hover:text-blue-900"
       >
         Generuj kod aktywacyjny
       </button>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
-            <div className="px-6 py-4 border-b border-gray-200">
+      {showModal ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="mx-4 w-full max-w-lg rounded-lg bg-white shadow-xl">
+            <div className="border-b border-gray-200 px-6 py-4">
               <h3 className="text-lg font-semibold text-gray-900">Kod aktywacyjny dla pacjenta</h3>
-              <p className="text-sm text-gray-500 mt-1">{patientName}</p>
+              <p className="mt-1 text-sm text-gray-500">{patientName}</p>
               <p className="text-xs text-gray-400">PESEL: {patientPesel}</p>
             </div>
 
             <div className="px-6 py-4">
-              {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
+              {error ? (
+                <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                   Błąd: {String(error)}
                 </div>
-              )}
+              ) : null}
 
               {!generatedCode ? (
                 <>
-                  <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm">
-                    <p className="text-blue-800 font-medium">Informacje o kodzie aktywacyjnym:</p>
-                    <ul className="mt-2 text-blue-700 list-disc list-inside space-y-1">
+                  <div className="mb-4 rounded border border-blue-200 bg-blue-50 p-3 text-sm">
+                    <p className="font-medium text-blue-800">Informacje o kodzie aktywacyjnym:</p>
+                    <ul className="mt-2 list-inside list-disc space-y-1 text-blue-700">
                       <li>Kod będzie miał 8 znaków (wielkie litery i cyfry)</li>
                       <li>Ważność kodu: 72 godziny</li>
                       <li>Pacjent może użyć kodu do aktywacji konta bez email/telefonu</li>
@@ -86,14 +86,14 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
                     <button
                       type="button"
                       onClick={() => setShowModal(false)}
-                      className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       Anuluj
                     </button>
                     <button
                       onClick={handleGenerate}
                       disabled={isLoading}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                     >
                       {isLoading ? 'Generowanie...' : 'Generuj kod'}
                     </button>
@@ -102,10 +102,10 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
               ) : (
                 <>
                   <div className="mb-6">
-                    <p className="text-sm font-medium text-gray-700 mb-2">Wygenerowany kod:</p>
+                    <p className="mb-2 text-sm font-medium text-gray-700">Wygenerowany kod:</p>
                     <div className="flex items-center space-x-2">
-                      <div className="flex-1 p-4 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg text-center">
-                        <span className="text-3xl font-mono font-bold text-gray-900 tracking-wider">
+                      <div className="flex-1 rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 p-4 text-center">
+                        <span className="font-mono text-3xl font-bold tracking-wider text-gray-900">
                           {generatedCode}
                         </span>
                       </div>
@@ -115,7 +115,7 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
                         title="Kopiuj kod"
                       >
                         <svg
-                          className="w-6 h-6"
+                          className="h-6 w-6"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -131,8 +131,8 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
                     </div>
                   </div>
 
-                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded text-sm">
-                    <p className="text-green-800 font-medium">Kod wygenerowany pomyślnie!</p>
+                  <div className="mb-4 rounded border border-green-200 bg-green-50 p-3 text-sm">
+                    <p className="font-medium text-green-800">Kod wygenerowany pomyślnie!</p>
                     <p className="mt-1 text-green-700">
                       Kod jest ważny przez 72 godziny. PDF z instrukcjami został wygenerowany.
                     </p>
@@ -141,13 +141,13 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
                   <div className="flex justify-end space-x-3">
                     <button
                       onClick={handleDownloadPdf}
-                      className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       Pobierz PDF
                     </button>
                     <button
                       onClick={() => setShowModal(false)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       Zamknij
                     </button>
@@ -157,7 +157,7 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </>
   )
 }

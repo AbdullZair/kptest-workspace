@@ -66,9 +66,7 @@ export const PatientAssignmentModal = ({
 
   const handleTogglePatient = (patientId: string) => {
     setSelectedPatientIds((prev) =>
-      prev.includes(patientId)
-        ? prev.filter((id) => id !== patientId)
-        : [...prev, patientId]
+      prev.includes(patientId) ? prev.filter((id) => id !== patientId) : [...prev, patientId]
     )
   }
 
@@ -116,16 +114,16 @@ export const PatientAssignmentModal = ({
         <div className="relative w-full max-w-3xl transform transition-all">
           <Card variant="elevated" className="overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-neutral-50 border-b border-neutral-200">
+            <div className="flex items-center justify-between border-b border-neutral-200 bg-neutral-50 px-6 py-4">
               <h2 id="modal-title" className="text-lg font-semibold text-neutral-900">
                 Przypisz pacjentów do projektu
               </h2>
               <button
                 onClick={onClose}
-                className="text-neutral-400 hover:text-neutral-600 transition-colors"
+                className="text-neutral-400 transition-colors hover:text-neutral-600"
                 aria-label="Zamknij"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -142,7 +140,7 @@ export const PatientAssignmentModal = ({
                 <div>
                   <label
                     htmlFor="search"
-                    className="block text-sm font-medium text-neutral-700 mb-1"
+                    className="mb-1 block text-sm font-medium text-neutral-700"
                   >
                     Szukaj pacjenta
                   </label>
@@ -152,12 +150,12 @@ export const PatientAssignmentModal = ({
                       id="search"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full rounded-lg border border-neutral-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       placeholder="PESEL, imię, nazwisko..."
                       disabled={isLoading || isLoadingPatients}
                     />
                     <svg
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400"
+                      className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -173,19 +171,19 @@ export const PatientAssignmentModal = ({
                 </div>
 
                 {/* Patient List */}
-                <div className="border border-neutral-200 rounded-lg max-h-96 overflow-y-auto">
+                <div className="max-h-96 overflow-y-auto rounded-lg border border-neutral-200">
                   {isLoadingPatients ? (
                     <div className="p-8 text-center">
                       <div className="animate-pulse space-y-3">
                         {[...Array(5)].map((_, i) => (
-                          <div key={i} className="h-12 bg-neutral-100 rounded" />
+                          <div key={i} className="h-12 rounded bg-neutral-100" />
                         ))}
                       </div>
                     </div>
                   ) : availablePatients.length === 0 ? (
                     <div className="p-8 text-center text-neutral-500">
                       <svg
-                        className="w-12 h-12 mx-auto mb-3 text-neutral-300"
+                        className="mx-auto mb-3 h-12 w-12 text-neutral-300"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -199,7 +197,7 @@ export const PatientAssignmentModal = ({
                       </svg>
                       <p>Brak dostępnych pacjentów</p>
                       {existingPatientIds.length > 0 && (
-                        <p className="text-sm mt-1">
+                        <p className="mt-1 text-sm">
                           Niektórzy pacjenci są już przypisani do tego projektu
                         </p>
                       )}
@@ -207,7 +205,7 @@ export const PatientAssignmentModal = ({
                   ) : (
                     <>
                       {/* Select All Header */}
-                      <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3 bg-neutral-50 border-b border-neutral-200">
+                      <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 px-4 py-3">
                         <input
                           type="checkbox"
                           id="select-all"
@@ -216,16 +214,16 @@ export const PatientAssignmentModal = ({
                             selectedPatientIds.length === availablePatients.length
                           }
                           onChange={handleSelectAll}
-                          className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                          className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                         />
                         <label
                           htmlFor="select-all"
-                          className="text-sm font-medium text-neutral-700 cursor-pointer select-none"
+                          className="cursor-pointer select-none text-sm font-medium text-neutral-700"
                         >
                           Zaznacz wszystkich ({availablePatients.length})
                         </label>
                         {selectedPatientIds.length > 0 && (
-                          <span className="ml-auto text-sm text-primary-600 font-medium">
+                          <span className="ml-auto text-sm font-medium text-primary-600">
                             Wybrano: {selectedPatientIds.length}
                           </span>
                         )}
@@ -237,7 +235,7 @@ export const PatientAssignmentModal = ({
                           <label
                             key={patient.id}
                             className={clsx(
-                              'flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors',
+                              'flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors',
                               selectedPatientIds.includes(patient.id)
                                 ? 'bg-primary-50'
                                 : 'hover:bg-neutral-50'
@@ -247,23 +245,21 @@ export const PatientAssignmentModal = ({
                               type="checkbox"
                               checked={selectedPatientIds.includes(patient.id)}
                               onChange={() => handleTogglePatient(patient.id)}
-                              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                              className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                             />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-neutral-900 truncate">
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-medium text-neutral-900">
                                 {patient.first_name} {patient.last_name}
                               </p>
-                              <p className="text-xs text-neutral-500">
-                                PESEL: {patient.pesel}
-                              </p>
+                              <p className="text-xs text-neutral-500">PESEL: {patient.pesel}</p>
                             </div>
                             <div className="flex-shrink-0">
                               {patient.verification_status === 'APPROVED' ? (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
                                   Zweryfikowany
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
                                   Oczekujący
                                 </span>
                               )}
@@ -277,9 +273,9 @@ export const PatientAssignmentModal = ({
 
                 {/* Info */}
                 {existingPatientIds.length > 0 && (
-                  <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-lg">
+                  <div className="flex items-start gap-2 rounded-lg bg-blue-50 p-3">
                     <svg
-                      className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
+                      className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -292,21 +288,16 @@ export const PatientAssignmentModal = ({
                       />
                     </svg>
                     <p className="text-sm text-blue-700">
-                      {existingPatientIds.length} pacjentów jest już przypisanych do tego projektu
-                      i nie są wyświetlani na liście.
+                      {existingPatientIds.length} pacjentów jest już przypisanych do tego projektu i
+                      nie są wyświetlani na liście.
                     </p>
                   </div>
                 )}
               </Card.Body>
 
               {/* Footer */}
-              <Card.Footer className="flex items-center justify-end gap-3 px-6 py-4 bg-neutral-50 border-t border-neutral-200">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onClose}
-                  disabled={isLoading}
-                >
+              <Card.Footer className="flex items-center justify-end gap-3 border-t border-neutral-200 bg-neutral-50 px-6 py-4">
+                <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
                   Anuluj
                 </Button>
                 <Button
@@ -317,11 +308,7 @@ export const PatientAssignmentModal = ({
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
-                      <svg
-                        className="animate-spin h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle
                           className="opacity-25"
                           cx="12"

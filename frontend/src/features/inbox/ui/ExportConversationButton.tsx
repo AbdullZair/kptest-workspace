@@ -23,8 +23,8 @@ export const ExportConversationButton: React.FC<ExportConversationButtonProps> =
       const response = await fetch(`/api/v1/messages/threads/${threadId}/export?format=pdf`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/pdf',
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/pdf',
         },
       })
 
@@ -57,12 +57,7 @@ export const ExportConversationButton: React.FC<ExportConversationButtonProps> =
       size="sm"
       onClick={handleExport}
       leftIcon={
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"

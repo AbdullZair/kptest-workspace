@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { anonymizePatientSchema, erasePatientSchema, dataProcessingActivitySchema } from '../schemas'
+import {
+  anonymizePatientSchema,
+  erasePatientSchema,
+  dataProcessingActivitySchema,
+} from '../schemas'
 
 describe('RODO Zod Schemas', () => {
   describe('anonymizePatientSchema', () => {
@@ -31,7 +35,7 @@ describe('RODO Zod Schemas', () => {
         confirmation: 'ANONYMIZUJ',
       }
 
-      const result = anonymizePatientSchema.safeParse(invalidData as any)
+      const result = anonymizePatientSchema.safeParse(invalidData)
       expect(result.success).toBe(false)
     })
 
@@ -178,7 +182,14 @@ describe('RODO Zod Schemas', () => {
     })
 
     it('accepts all valid legal basis values', () => {
-      const legalBasisValues = ['CONSENT', 'CONTRACT', 'LEGAL_OBLIGATION', 'VITAL_INTEREST', 'PUBLIC_TASK', 'LEGITIMATE_INTEREST'] as const
+      const legalBasisValues = [
+        'CONSENT',
+        'CONTRACT',
+        'LEGAL_OBLIGATION',
+        'VITAL_INTEREST',
+        'PUBLIC_TASK',
+        'LEGITIMATE_INTEREST',
+      ] as const
 
       legalBasisValues.forEach((legal_basis) => {
         const validData = {

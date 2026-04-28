@@ -73,7 +73,10 @@ export const adminApiSlice = api.injectEndpoints({
     /**
      * Update user status
      */
-    updateUserStatus: builder.mutation<UserAdmin, { userId: string; body: UpdateUserStatusRequest }>({
+    updateUserStatus: builder.mutation<
+      UserAdmin,
+      { userId: string; body: UpdateUserStatusRequest }
+    >({
       query: ({ userId, body }) => ({
         url: `/admin/users/${userId}/status`,
         method: 'PUT',
@@ -266,7 +269,10 @@ export const adminApiSlice = api.injectEndpoints({
     /**
      * Anonymize patient data
      */
-    anonymizePatient: builder.mutation<AnonymizationResponse, { patientId: string; body: AnonymizePatientRequest }>({
+    anonymizePatient: builder.mutation<
+      AnonymizationResponse,
+      { patientId: string; body: AnonymizePatientRequest }
+    >({
       query: ({ patientId, body }) => ({
         url: `/admin/patients/${patientId}/anonymize`,
         method: 'POST',
@@ -289,7 +295,10 @@ export const adminApiSlice = api.injectEndpoints({
     /**
      * Erase patient data (RODO Art. 17)
      */
-    erasePatient: builder.mutation<ErasureResponse, { patientId: string; body: ErasePatientRequest }>({
+    erasePatient: builder.mutation<
+      ErasureResponse,
+      { patientId: string; body: ErasePatientRequest }
+    >({
       query: ({ patientId, body }) => ({
         url: `/admin/patients/${patientId}/erase`,
         method: 'DELETE',
@@ -303,7 +312,10 @@ export const adminApiSlice = api.injectEndpoints({
     /**
      * Get all data processing activities
      */
-    getDataProcessingActivities: builder.query<PageResponse<DataProcessingActivity>, DataProcessingActivityFilters>({
+    getDataProcessingActivities: builder.query<
+      PageResponse<DataProcessingActivity>,
+      DataProcessingActivityFilters
+    >({
       query: (filters) => {
         const params = new URLSearchParams()
         if (filters.legal_basis) params.append('legalBasis', filters.legal_basis)
@@ -328,7 +340,10 @@ export const adminApiSlice = api.injectEndpoints({
     /**
      * Create data processing activity
      */
-    createDataProcessingActivity: builder.mutation<DataProcessingActivity, DataProcessingActivityInput>({
+    createDataProcessingActivity: builder.mutation<
+      DataProcessingActivity,
+      DataProcessingActivityInput
+    >({
       query: (body) => ({
         url: '/admin/data-processing-activities',
         method: 'POST',
@@ -340,7 +355,10 @@ export const adminApiSlice = api.injectEndpoints({
     /**
      * Update data processing activity
      */
-    updateDataProcessingActivity: builder.mutation<DataProcessingActivity, { id: string; body: DataProcessingActivityInput }>({
+    updateDataProcessingActivity: builder.mutation<
+      DataProcessingActivity,
+      { id: string; body: DataProcessingActivityInput }
+    >({
       query: ({ id, body }) => ({
         url: `/admin/data-processing-activities/${id}`,
         method: 'PUT',

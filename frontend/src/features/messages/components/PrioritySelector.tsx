@@ -9,7 +9,12 @@ interface PrioritySelectorProps {
   error?: string
 }
 
-const priorityOptions: { value: MessagePriority; label: string; icon: string; description: string }[] = [
+const priorityOptions: {
+  value: MessagePriority
+  label: string
+  icon: string
+  description: string
+}[] = [
   {
     value: 'INFO',
     label: 'Informacja',
@@ -54,51 +59,38 @@ export function PrioritySelector({
 }: PrioritySelectorProps) {
   return (
     <div className="w-full">
-      {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          {label}
-        </label>
-      )}
-      
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      {label ? (
+        <label className="mb-2 block text-sm font-medium text-gray-700">{label}</label>
+      ) : null}
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {priorityOptions.map((option) => {
           const isSelected = value === option.value
           const colorClass = isSelected
             ? prioritySelectedColors[option.value]
             : priorityColors[option.value]
-          
+
           return (
             <button
               key={option.value}
               type="button"
               onClick={() => onChange(option.value)}
               disabled={disabled}
-              className={`
-                relative flex flex-col items-center p-4 rounded-lg border-2 
-                transition-all duration-200 ease-in-out
-                focus:outline-none focus:ring-2 focus:ring-offset-2
-                disabled:opacity-50 disabled:cursor-not-allowed
-                ${colorClass}
-                ${isSelected ? 'transform scale-105 shadow-lg' : 'shadow-sm hover:shadow-md'}
-              `}
+              className={`relative flex flex-col items-center rounded-lg border-2 p-4 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${colorClass} ${isSelected ? 'scale-105 transform shadow-lg' : 'shadow-sm hover:shadow-md'} `}
               aria-pressed={isSelected}
               aria-label={`Wybierz priorytet: ${option.label}`}
             >
-              <span className="text-2xl mb-2" aria-hidden="true">
+              <span className="mb-2 text-2xl" aria-hidden="true">
                 {option.icon}
               </span>
-              <span className="font-semibold text-sm mb-1">
-                {option.label}
-              </span>
-              <span className="text-xs text-center opacity-80">
-                {option.description}
-              </span>
-              {isSelected && (
+              <span className="mb-1 text-sm font-semibold">{option.label}</span>
+              <span className="text-center text-xs opacity-80">{option.description}</span>
+              {isSelected ? (
                 <span
-                  className="absolute top-2 right-2 w-4 h-4 bg-white rounded-full flex items-center justify-center"
+                  className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-white"
                   aria-hidden="true"
                 >
-                  <svg className="w-3 h-3 text-current" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="h-3 w-3 text-current" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -106,17 +98,17 @@ export function PrioritySelector({
                     />
                   </svg>
                 </span>
-              )}
+              ) : null}
             </button>
           )
         })}
       </div>
-      
-      {error && (
+
+      {error ? (
         <p className="mt-2 text-sm text-red-600" role="alert">
           {error}
         </p>
-      )}
+      ) : null}
     </div>
   )
 }

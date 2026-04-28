@@ -25,7 +25,12 @@ export const ProjectsPage = () => {
   const [editingProject, setEditingProject] = useState<Project | undefined>()
 
   // RTK Query hooks
-  const { data: projects, isLoading, error, refetch } = useGetProjectsQuery({
+  const {
+    data: projects,
+    isLoading,
+    error,
+    refetch,
+  } = useGetProjectsQuery({
     status: statusFilter,
     name: searchQuery || undefined,
   })
@@ -99,13 +104,18 @@ export const ProjectsPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">Projekty terapeutyczne</h1>
-          <p className="text-neutral-600 mt-1">Zarządzaj projektami terapeutycznymi</p>
+          <p className="mt-1 text-neutral-600">Zarządzaj projektami terapeutycznymi</p>
         </div>
         <Button
           variant="primary"
           leftIcon={
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
             </svg>
           }
           onClick={handleCreateClick}
@@ -115,7 +125,7 @@ export const ProjectsPage = () => {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard
           title="Wszystkie projekty"
           value={projects?.length || 0}
@@ -159,12 +169,7 @@ export const ProjectsPage = () => {
           title="Zakończone"
           value={projects?.filter((p) => p.status === 'COMPLETED').length || 0}
           icon={
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           }
           color="violet"
         />
@@ -181,10 +186,10 @@ export const ProjectsPage = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Szukaj projektów po nazwie..."
-                className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full rounded-lg border border-neutral-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400"
+                className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -199,67 +204,67 @@ export const ProjectsPage = () => {
             </div>
 
             {/* Status filters */}
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm text-neutral-600">Status:</span>
               <button
                 onClick={() => handleFilterByStatus('ALL')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   !statusFilter
-                    ? 'bg-primary-100 text-primary-800 border-primary-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-primary-300 bg-primary-100 text-primary-800'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Wszystkie
               </button>
               <button
                 onClick={() => handleFilterByStatus('PLANNED')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   statusFilter === 'PLANNED'
-                    ? 'bg-blue-100 text-blue-800 border-blue-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-blue-300 bg-blue-100 text-blue-800'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Planowane
               </button>
               <button
                 onClick={() => handleFilterByStatus('ACTIVE')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   statusFilter === 'ACTIVE'
-                    ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Aktywne
               </button>
               <button
                 onClick={() => handleFilterByStatus('COMPLETED')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   statusFilter === 'COMPLETED'
-                    ? 'bg-violet-100 text-violet-800 border-violet-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-violet-300 bg-violet-100 text-violet-800'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Zakończone
               </button>
               <button
                 onClick={() => handleFilterByStatus('ARCHIVED')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   statusFilter === 'ARCHIVED'
-                    ? 'bg-neutral-100 text-neutral-700 border-neutral-300'
-                    : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                    ? 'border-neutral-300 bg-neutral-100 text-neutral-700'
+                    : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
               >
                 Zarchiwizowane
               </button>
 
-              {hasActiveFilters && (
+              {hasActiveFilters ? (
                 <button
                   onClick={clearFilters}
-                  className="ml-auto text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="ml-auto text-sm font-medium text-primary-600 hover:text-primary-700"
                 >
                   Wyczyść filtry
                 </button>
-              )}
+              ) : null}
             </div>
           </div>
         </Card.Body>
@@ -267,7 +272,7 @@ export const ProjectsPage = () => {
 
       {/* Projects Grid */}
       {error ? (
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-error-600">Wystąpił błąd podczas ładowania projektów</p>
           <Button variant="primary" onClick={() => refetch()} className="mt-4">
             Spróbuj ponownie
@@ -276,9 +281,9 @@ export const ProjectsPage = () => {
       ) : !projects || projects.length === 0 ? (
         <Card variant="outlined">
           <Card.Body>
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <svg
-                className="w-16 h-16 mx-auto mb-4 text-neutral-300"
+                className="mx-auto mb-4 h-16 w-16 text-neutral-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -298,7 +303,7 @@ export const ProjectsPage = () => {
           </Card.Body>
         </Card>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -348,8 +353,8 @@ const StatCard = ({
   return (
     <Card variant="outlined" className="p-4">
       <div className="flex items-center gap-3">
-        <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className={`rounded-lg p-3 ${colorClasses[color]}`}>
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {icon}
           </svg>
         </div>

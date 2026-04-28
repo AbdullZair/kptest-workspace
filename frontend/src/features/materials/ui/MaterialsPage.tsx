@@ -12,7 +12,12 @@ import {
   useMarkAsCompleteMutation,
 } from '../api/materialApi'
 import { useNavigate } from 'react-router-dom'
-import type { EducationalMaterial, MaterialProgress, MaterialType, DifficultyLevel } from '../types/material.types'
+import type {
+  EducationalMaterial,
+  MaterialProgress,
+  MaterialType,
+  DifficultyLevel,
+} from '../types/material.types'
 
 /**
  * MaterialsPage Component
@@ -30,11 +35,15 @@ export const MaterialsPage = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | undefined>()
   const [selectedType, setSelectedType] = useState<MaterialType | undefined>()
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'in_progress' | 'completed'>('all')
+  const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'in_progress' | 'completed'>(
+    'all'
+  )
 
   // RTK Query hooks
-  const { data: materials = [], isLoading: isLoadingMaterials } = useGetPatientMaterialsQuery(patientId)
-  const { data: progressRecords = [], isLoading: isLoadingProgress } = useGetPatientProgressQuery(patientId)
+  const { data: materials = [], isLoading: isLoadingMaterials } =
+    useGetPatientMaterialsQuery(patientId)
+  const { data: progressRecords = [], isLoading: isLoadingProgress } =
+    useGetPatientProgressQuery(patientId)
   const [recordView] = useRecordViewMutation()
   const [markAsComplete] = useMarkAsCompleteMutation()
 
@@ -61,7 +70,11 @@ export const MaterialsPage = () => {
     return materials.filter((material) => {
       // Status filter
       const progress = progressMap.get(material.id)
-      if (filterStatus === 'pending' && progress?.status !== 'PENDING' && progress?.status !== undefined) {
+      if (
+        filterStatus === 'pending' &&
+        progress?.status !== 'PENDING' &&
+        progress?.status !== undefined
+      ) {
         return false
       }
       if (filterStatus === 'in_progress' && progress?.status !== 'IN_PROGRESS') {
@@ -93,7 +106,15 @@ export const MaterialsPage = () => {
 
       return true
     })
-  }, [materials, progressMap, filterStatus, selectedCategory, selectedDifficulty, selectedType, searchQuery])
+  }, [
+    materials,
+    progressMap,
+    filterStatus,
+    selectedCategory,
+    selectedDifficulty,
+    selectedType,
+    searchQuery,
+  ])
 
   // Calculate progress stats
   const progressStats = useMemo(() => {
@@ -134,7 +155,8 @@ export const MaterialsPage = () => {
     setFilterStatus('all')
   }
 
-  const hasActiveFilters = selectedCategory || selectedDifficulty || selectedType || searchQuery || filterStatus !== 'all'
+  const hasActiveFilters =
+    selectedCategory || selectedDifficulty || selectedType || searchQuery || filterStatus !== 'all'
 
   if (isLoadingMaterials || isLoadingProgress) {
     return <PageLoader size="lg" text="Ładowanie materiałów..." />
@@ -145,7 +167,7 @@ export const MaterialsPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-neutral-900">Materiały edukacyjne</h1>
-        <p className="text-neutral-600 mt-1">Przeglądaj i czytaj materiały edukacyjne</p>
+        <p className="mt-1 text-neutral-600">Przeglądaj i czytaj materiały edukacyjne</p>
       </div>
 
       {/* Progress Summary */}
@@ -179,57 +201,57 @@ export const MaterialsPage = () => {
           />
 
           {/* Status filter */}
-          <div className="mt-4 flex items-center gap-2 flex-wrap">
+          <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="text-sm text-neutral-600">Status:</span>
             <button
               onClick={() => setFilterStatus('all')}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+              className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'all'
-                  ? 'bg-primary-50 border-primary-200 text-primary-700'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
+                  ? 'border-primary-200 bg-primary-50 text-primary-700'
+                  : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
             >
               Wszystkie
             </button>
             <button
               onClick={() => setFilterStatus('pending')}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+              className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'pending'
-                  ? 'bg-neutral-100 border-neutral-200 text-neutral-700'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
+                  ? 'border-neutral-200 bg-neutral-100 text-neutral-700'
+                  : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
             >
               Do przeczytania
             </button>
             <button
               onClick={() => setFilterStatus('in_progress')}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+              className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'in_progress'
-                  ? 'bg-blue-50 border-blue-200 text-blue-700'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
+                  ? 'border-blue-200 bg-blue-50 text-blue-700'
+                  : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
             >
               W trakcie
             </button>
             <button
               onClick={() => setFilterStatus('completed')}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+              className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'completed'
-                  ? 'bg-green-50 border-green-200 text-green-700'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
+                  ? 'border-green-200 bg-green-50 text-green-700'
+                  : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
             >
               Ukończone
             </button>
 
-            {hasActiveFilters && (
+            {hasActiveFilters ? (
               <button
                 onClick={handleClearFilters}
-                className="ml-auto text-sm text-primary-600 hover:text-primary-700 font-medium"
+                className="ml-auto text-sm font-medium text-primary-600 hover:text-primary-700"
               >
                 Wyczyść filtry
               </button>
-            )}
+            ) : null}
           </div>
         </Card.Body>
       </Card>
@@ -238,8 +260,13 @@ export const MaterialsPage = () => {
       {filteredMaterials.length === 0 ? (
         <Card variant="outlined">
           <Card.Body>
-            <div className="text-center py-12">
-              <svg className="w-16 h-16 mx-auto text-neutral-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="py-12 text-center">
+              <svg
+                className="mx-auto mb-4 h-16 w-16 text-neutral-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -248,7 +275,7 @@ export const MaterialsPage = () => {
                 />
               </svg>
               <h3 className="text-lg font-semibold text-neutral-900">Brak materiałów</h3>
-              <p className="text-neutral-600 mt-2">
+              <p className="mt-2 text-neutral-600">
                 {hasActiveFilters
                   ? 'Nie znaleziono materiałów pasujących do wybranych filtrów'
                   : 'Nie masz jeszcze przypisanych żadnych materiałów edukacyjnych'}
@@ -257,7 +284,7 @@ export const MaterialsPage = () => {
           </Card.Body>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredMaterials.map((material) => (
             <MaterialCard
               key={material.id}
