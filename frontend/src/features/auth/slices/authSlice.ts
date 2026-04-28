@@ -155,9 +155,12 @@ const authSlice = createSlice({
       })
       .addMatcher(authApiSlice.endpoints.register.matchFulfilled, (state, action) => {
         state.isLoading = false
-        state.isAuthenticated = true
-        state.user = action.payload.user
-        state.tokens = action.payload.tokens
+        // Patient registration ends in PENDING_VERIFICATION (US-NH-01) and the
+        // backend does not return tokens — keep the user logged out in that case.
+        const tokens = action.payload?.tokens ?? null
+        state.tokens = tokens
+        state.isAuthenticated = Boolean(tokens?.accessToken)
+        state.user = action.payload?.user ?? null
         state.error = null
       })
       .addMatcher(authApiSlice.endpoints.register.matchRejected, (state, action) => {

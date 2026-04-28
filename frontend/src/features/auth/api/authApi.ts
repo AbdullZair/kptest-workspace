@@ -23,7 +23,9 @@ import type { User } from '@shared/types'
 export const authApiSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     /**
-     * Register new user account
+     * Register new user account.
+     * Backend returns UserProfileResponse (no tokens - user starts as PENDING_VERIFICATION
+     * and must complete HIS verification before login).
      * @mutation
      */
     register: builder.mutation<RegisterResponse, RegisterRequest>({
@@ -31,6 +33,32 @@ export const authApiSlice = api.injectEndpoints({
         url: '/auth/register',
         method: 'POST',
         body: credentials,
+      }),
+      transformResponse: (response: {
+        user_id: string
+        email: string
+        phone?: string
+        role: string
+        status: string
+        first_name?: string
+        last_name?: string
+        pesel?: string
+        created_at: string
+        two_factor_enabled: boolean
+      }) => ({
+        user: {
+          id: response.user_id,
+          email: response.email,
+          phone: response.phone,
+          role: response.role,
+          status: response.status,
+          firstName: response.first_name,
+          lastName: response.last_name,
+          is2FAEnabled: response.two_factor_enabled,
+          emailVerified: false,
+          phoneVerified: false,
+        } as any,
+        tokens: null as any,
       }),
       invalidatesTags: ['User'],
     }),

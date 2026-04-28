@@ -75,28 +75,30 @@ test.describe('KPTEST Portal - Testy E2E', () => {
   });
 
   // Test: TC-03 Rejestracja Pacjenta - Sukces
-  // SKIP: niezgodność kontraktu między RegisterPage a backendem.
-  // Frontend wysyła { email, password, firstName, lastName, phone }, ale
-  // POST /api/v1/auth/register wymaga { identifier, pesel, termsAccepted, ... }
-  // i zwraca 400 VALIDATION_ERROR. Wymaga decyzji czy /auth/register obsługuje
-  // tylko rejestrację pacjentów (z PESEL) czy także personelu — patrz US-NH-01/02.
-  test.skip('TC-03: Rejestracja Pacjenta - Sukces', async ({ page }) => {
+  // Backend tworzy konto ze statusem PENDING_VERIFICATION (US-NH-01) — bez tokenów,
+  // więc sukces objawia się banerem "[data-testid=success-message]" i redirectem
+  // na /login.
+  test('TC-03: Rejestracja Pacjenta - Sukces', async ({ page }) => {
     console.log('🧪 Rozpoczynanie TC-03: Rejestracja Pacjenta - Sukces');
-    
+
     // Krok 1: Otwórz stronę rejestracji
     await page.goto('/register');
     await page.screenshot({ path: 'printscreeny/TC03_01_strona_rejestracji.png' });
-    
-    // Krok 2: Wypełnij formularz (pola zgodne z RegisterPage: brak pesel, jest phone, acceptTerms)
+
+    // Krok 2: Wypełnij formularz (pesel + phone unikalne na każdy run)
+    const stamp = Date.now();
+    const randomDigits = String(Math.floor(Math.random() * 1e10)).padStart(10, '0');
     const testData = {
-      email: `test.${Date.now()}@email.com`,
-      phone: '+48500600700',
+      email: `test.${stamp}@email.com`,
+      phone: `+48${String(stamp).slice(-9)}`,
+      pesel: `9${randomDigits}`,
       firstName: 'Test',
       lastName: 'Pacjent',
       password: 'TestP@ssw0rd123',
     };
 
     await page.fill('input[name="email"]', testData.email);
+    await page.fill('input[name="pesel"]', testData.pesel);
     await page.fill('input[name="phone"]', testData.phone);
     await page.fill('input[name="firstName"]', testData.firstName);
     await page.fill('input[name="lastName"]', testData.lastName);
@@ -105,18 +107,18 @@ test.describe('KPTEST Portal - Testy E2E', () => {
 
     await page.screenshot({ path: 'printscreeny/TC03_02_wypelniono_formularz.png' });
 
-    // Krok 3: Zaakceptuj regulamin (pole nazywa się acceptTerms)
+    // Krok 3: Zaakceptuj regulamin
     await page.check('input[name="acceptTerms"]');
 
     // Krok 4: Kliknij "Zarejestruj się"
     await page.click('button[type="submit"]');
-    await page.waitForURL(/\/(dashboard|login)/, { timeout: 10000 });
-    await page.screenshot({ path: 'printscreeny/TC03_03_kliknieto_register.png' });
 
-    // Krok 5: Zweryfikuj sukces — RegisterPage przekierowuje na /dashboard po sukcesie
-    const currentUrl = page.url();
-    console.log(`Aktualny URL: ${currentUrl}`);
-    expect(currentUrl).toContain('/dashboard');
+    // Krok 5: Zweryfikuj komunikat sukcesu (PENDING_VERIFICATION)
+    await page.waitForSelector('[data-testid="success-message"]', { timeout: 10000 });
+    const successMessage = await page.textContent('[data-testid="success-message"]');
+    console.log(`Komunikat sukcesu: ${successMessage}`);
+    expect(successMessage).toBeTruthy();
+    expect((successMessage ?? '').toLowerCase()).toContain('weryfikac');
 
     await page.screenshot({ path: 'printscreeny/TC03_04_rejestracja_sukces.png' });
 
@@ -232,11 +234,10 @@ test.describe('KPTEST Portal - Testy E2E', () => {
   });
 
   // Test: TC-07 Panel RODO - Eksport Danych
-  // SKIP: oczekuje strony /admin/rodo z patient-select dropdownem i flow JSON download.
-  // Aktualna implementacja: per-patient na /admin/patients/:id/data + komponent
-  // ExportPatientDataButton (US-A-11). Test wymaga osobnego widoku listy z dropdownem
-  // pacjentów — decyzja architektoniczna; zob. spec.md US-A-11.
-  test.skip('TC-07: Panel RODO - Eksport Danych', async ({ page }) => {
+  // Implementacja: /admin/rodo (RodoPanelPage) — lista pacjentów + sekcje
+  // Eksport / Anonimizacja / Usunięcie. Per-patient widok pozostaje na
+  // /admin/patients/:id/data.
+  test('TC-07: Panel RODO - Eksport Danych', async ({ page }) => {
     console.log('🧪 Rozpoczynanie TC-07: Panel RODO - Eksport Danych');
     
     // Krok 1: Zaloguj się jako admin

@@ -16,6 +16,7 @@ export const RegisterPage = () => {
   const navigate = useNavigate()
   const { register: registerUser, error, clearAuthError } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   const {
     register,
@@ -30,6 +31,7 @@ export const RegisterPage = () => {
       confirmPassword: '',
       firstName: '',
       lastName: '',
+      pesel: '',
       phone: '',
       acceptTerms: false,
     },
@@ -40,15 +42,25 @@ export const RegisterPage = () => {
     clearAuthError()
 
     const result = await registerUser({
+      identifier: data.email,
       email: data.email,
       password: data.password,
       firstName: data.firstName,
       lastName: data.lastName,
+      pesel: data.pesel,
       phone: data.phone,
+      termsAccepted: data.acceptTerms ? 'true' : '',
     })
 
     if (result.success) {
-      navigate('/dashboard')
+      // Patient registers with PENDING_VERIFICATION status (US-NH-01) — backend
+      // does not return tokens, so we surface success and let the user move on.
+      const data = result.data as { tokens?: unknown } | undefined
+      if (data?.tokens) {
+        navigate('/dashboard')
+      } else {
+        setSuccess(true)
+      }
     }
 
     setIsSubmitting(false)
@@ -86,6 +98,21 @@ export const RegisterPage = () => {
           </div>
         ) : null}
 
+        {/* Success message — patient pending staff verification (US-NH-01) */}
+        {success ? (
+          <div
+            className="mb-6 rounded-lg border border-success-200 bg-success-50 p-4"
+            data-testid="success-message"
+            role="status"
+          >
+            <p className="text-sm text-success-800">
+              Rejestracja zakończona. Konto czeka na weryfikację przez personel medyczny —
+              zostaniesz poinformowany po jej zakończeniu. Za chwilę przekierujemy Cię na
+              stronę logowania.
+            </p>
+          </div>
+        ) : null}
+
         {/* Register form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" data-testid="register-form">
           <div className="grid grid-cols-2 gap-4">
@@ -116,6 +143,17 @@ export const RegisterPage = () => {
             fullWidth
             data-testid="email-input"
             {...register('email')}
+          />
+
+          <Input
+            label="PESEL"
+            type="text"
+            placeholder="00000000000"
+            error={errors.pesel?.message}
+            fullWidth
+            data-testid="pesel-input"
+            maxLength={11}
+            {...register('pesel')}
           />
 
           <Input

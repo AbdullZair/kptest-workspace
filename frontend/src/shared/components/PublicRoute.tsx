@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@features/auth'
-import { PageLoader } from './PageLoader'
 
 /**
  * PublicRoute props
@@ -30,15 +29,12 @@ interface PublicRouteProps {
  * ```
  */
 export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated } = useAuth()
   const location = useLocation()
 
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return <PageLoader />
-  }
-
-  // Redirect to dashboard if already authenticated
+  // Don't gate behind a global loader — that would unmount forms (login,
+  // register) every time their own mutation flips isLoading=true and lose
+  // their local state. Auth status comes from a synchronous selector.
   if (isAuthenticated) {
     const from = (location.state as { from?: Location })?.from || { pathname: '/dashboard' }
     return <Navigate to={from} replace />

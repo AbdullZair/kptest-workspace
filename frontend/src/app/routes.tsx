@@ -68,6 +68,7 @@ const AdminAuditLogsPage = lazy(() => import('@features/admin/ui/AdminAuditLogsP
 const AdminSystemPage = lazy(() => import('@features/admin/ui/AdminSystemPage'))
 const AdminSystemLogsPage = lazy(() => import('@features/admin/ui/AdminSystemLogsPage'))
 const PatientDataAdminPage = lazy(() => import('@features/admin/ui/PatientDataAdminPage'))
+const RodoPanelPage = lazy(() => import('@features/admin/ui/RodoPanelPage'))
 const DataProcessingActivitiesPage = lazy(
   () => import('@features/admin/ui/DataProcessingActivitiesPage')
 )
@@ -348,6 +349,16 @@ export const routes: RouteObject[] = [
           <ProtectedRoute allowedRoles={['ADMIN']}>
             <Suspense fallback={<PageLoader />}>
               <PatientDataAdminPage />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/rodo',
+        element: (
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <RodoPanelPage />
             </Suspense>
           </ProtectedRoute>
         ),

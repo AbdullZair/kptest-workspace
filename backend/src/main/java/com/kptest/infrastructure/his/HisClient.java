@@ -3,11 +3,19 @@ package com.kptest.infrastructure.his;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kptest.exception.HisIntegrationException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hc.client5.http.config.ConnectionConfig;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.core5.util.TimeValue;
+import org.apache.hc.core5.util.Timeout;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
@@ -31,6 +39,10 @@ import java.util.Optional;
  * status code translation and JSON parsing. Domain-level decisions
  * (matched / mismatch / not-found) live in
  * {@link com.kptest.application.service.HisService}.</p>
+ *
+ * <p>Transport is provided by Apache HttpClient 5 with a pooled connection
+ * manager. Pool sizing and timeouts are driven by {@code kptest.his.client.*}
+ * properties (see {@code application.yml} for defaults).</p>
  */
 @Slf4j
 @Component
@@ -43,27 +55,59 @@ public class HisClient {
     private final String baseUrl;
     private final String apiKey;
     private final Duration connectTimeout;
-    private final Duration readTimeout;
+    private final Duration responseTimeout;
+    private final int maxTotalConnections;
+    private final int maxConnectionsPerRoute;
+    private final Duration validateAfterInactivity;
 
     private RestClient restClient;
 
     public HisClient(
         @Value("${kptest.his.base-url:http://his-mock:8081}") String baseUrl,
         @Value("${kptest.his.api-key:dev-api-key}") String apiKey,
-        @Value("${kptest.his.connect-timeout-ms:5000}") long connectTimeoutMs,
-        @Value("${kptest.his.read-timeout-ms:10000}") long readTimeoutMs
+        @Value("${kptest.his.client.connect-timeout-ms:2000}") long connectTimeoutMs,
+        @Value("${kptest.his.client.response-timeout-ms:5000}") long responseTimeoutMs,
+        @Value("${kptest.his.client.max-total-connections:50}") int maxTotalConnections,
+        @Value("${kptest.his.client.max-connections-per-route:20}") int maxConnectionsPerRoute,
+        @Value("${kptest.his.client.validate-after-inactivity-ms:10000}") long validateAfterInactivityMs
     ) {
         this.baseUrl = baseUrl;
         this.apiKey = apiKey;
         this.connectTimeout = Duration.ofMillis(connectTimeoutMs);
-        this.readTimeout = Duration.ofMillis(readTimeoutMs);
+        this.responseTimeout = Duration.ofMillis(responseTimeoutMs);
+        this.maxTotalConnections = maxTotalConnections;
+        this.maxConnectionsPerRoute = maxConnectionsPerRoute;
+        this.validateAfterInactivity = Duration.ofMillis(validateAfterInactivityMs);
     }
 
     @PostConstruct
     void init() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout((int) connectTimeout.toMillis());
-        factory.setReadTimeout((int) readTimeout.toMillis());
+        ConnectionConfig connectionConfig = ConnectionConfig.custom()
+            .setConnectTimeout(Timeout.ofMilliseconds(connectTimeout.toMillis()))
+            .setValidateAfterInactivity(TimeValue.ofMilliseconds(validateAfterInactivity.toMillis()))
+            .build();
+
+        PoolingHttpClientConnectionManager connectionManager =
+            PoolingHttpClientConnectionManagerBuilder.create()
+                .setMaxConnTotal(maxTotalConnections)
+                .setMaxConnPerRoute(maxConnectionsPerRoute)
+                .setDefaultConnectionConfig(connectionConfig)
+                .build();
+
+        RequestConfig requestConfig = RequestConfig.custom()
+            .setConnectionRequestTimeout(Timeout.ofMilliseconds(connectTimeout.toMillis()))
+            .setResponseTimeout(Timeout.ofMilliseconds(responseTimeout.toMillis()))
+            .build();
+
+        CloseableHttpClient httpClient = HttpClientBuilder.create()
+            .setConnectionManager(connectionManager)
+            .setDefaultRequestConfig(requestConfig)
+            .evictExpiredConnections()
+            .evictIdleConnections(TimeValue.ofMinutes(1))
+            .build();
+
+        HttpComponentsClientHttpRequestFactory factory =
+            new HttpComponentsClientHttpRequestFactory(httpClient);
 
         this.restClient = RestClient.builder()
             .baseUrl(baseUrl)
@@ -72,8 +116,16 @@ public class HisClient {
             .requestFactory(factory)
             .build();
 
-        log.info("HisClient initialised - baseUrl={}, connectTimeoutMs={}, readTimeoutMs={}",
-            baseUrl, connectTimeout.toMillis(), readTimeout.toMillis());
+        log.info(
+            "HisClient initialised - baseUrl={}, connectTimeoutMs={}, responseTimeoutMs={}, "
+                + "maxTotal={}, maxPerRoute={}, validateAfterInactivityMs={}",
+            baseUrl,
+            connectTimeout.toMillis(),
+            responseTimeout.toMillis(),
+            maxTotalConnections,
+            maxConnectionsPerRoute,
+            validateAfterInactivity.toMillis()
+        );
     }
 
     /**

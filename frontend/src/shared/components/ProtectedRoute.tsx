@@ -56,9 +56,16 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
     return <Navigate to="/login" replace state={{ from: location }} />
   }
 
-  // Check role-based access if roles are specified
+  // Check role-based access if roles are specified.
+  // While the user object is still hydrating from getCurrentUser (right
+  // after a hard reload — tokens come from localStorage but user is still
+  // pending), keep the loader rather than redirecting away.
   if (allowedRoles && allowedRoles.length > 0) {
-    const userRole = user?.role as UserRole | undefined
+    if (!user) {
+      return <PageLoader />
+    }
+
+    const userRole = user.role as UserRole | undefined
 
     if (!userRole || !allowedRoles.includes(userRole)) {
       // Redirect to unauthorized page or dashboard

@@ -56,8 +56,9 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
         SELECT DISTINCT p FROM Patient p
         LEFT JOIN p.user u
         WHERE (:pesel IS NULL OR p.pesel = :pesel)
-          AND (:name IS NULL OR LOWER(p.firstName) LIKE LOWER(CONCAT('%', :name, '%')) 
-                            OR LOWER(p.lastName) LIKE LOWER(CONCAT('%', :name, '%')))
+          AND (CAST(:name AS string) IS NULL
+               OR LOWER(p.firstName) LIKE LOWER(CONCAT('%', CAST(:name AS string), '%'))
+               OR LOWER(p.lastName) LIKE LOWER(CONCAT('%', CAST(:name AS string), '%')))
           AND (:hisPatientId IS NULL OR p.hisPatientId = :hisPatientId)
           AND (:status IS NULL OR u.status IN :status)
           AND (:verificationStatus IS NULL OR p.verificationStatus IN :verificationStatus)
@@ -79,8 +80,9 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
         SELECT COUNT(DISTINCT p) FROM Patient p
         LEFT JOIN p.user u
         WHERE (:pesel IS NULL OR p.pesel = :pesel)
-          AND (:name IS NULL OR LOWER(p.firstName) LIKE LOWER(CONCAT('%', :name, '%')) 
-                            OR LOWER(p.lastName) LIKE LOWER(CONCAT('%', :name, '%')))
+          AND (CAST(:name AS string) IS NULL
+               OR LOWER(p.firstName) LIKE LOWER(CONCAT('%', CAST(:name AS string), '%'))
+               OR LOWER(p.lastName) LIKE LOWER(CONCAT('%', CAST(:name AS string), '%')))
           AND (:hisPatientId IS NULL OR p.hisPatientId = :hisPatientId)
           AND (:status IS NULL OR u.status IN :status)
           AND (:verificationStatus IS NULL OR p.verificationStatus IN :verificationStatus)

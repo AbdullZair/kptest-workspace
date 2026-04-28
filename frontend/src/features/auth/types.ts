@@ -34,15 +34,22 @@ export interface LoginResponse {
 }
 
 /**
- * Register request payload
+ * Register request payload (matches backend POST /api/v1/auth/register contract)
+ *
+ * Backend expects:
+ * - identifier: email or phone (used to determine login channel)
+ * - pesel: 11-digit Polish national ID for patient verification
+ * - termsAccepted: required string flag (e.g. "true")
  */
 export interface RegisterRequest {
+  identifier: string
   email: string
   password: string
   firstName: string
   lastName: string
+  pesel: string
   phone?: string
-  acceptTerms: boolean
+  termsAccepted: string
 }
 
 /**

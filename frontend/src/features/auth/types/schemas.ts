@@ -19,13 +19,19 @@ export const registerSchema = z
     email: z.string().email('Nieprawidłowy adres email'),
     password: z
       .string()
-      .min(8, 'Hasło musi mieć co najmniej 8 znaków')
+      .min(10, 'Hasło musi mieć co najmniej 10 znaków')
       .regex(/[A-Z]/, 'Hasło musi zawierać wielką literę')
       .regex(/[a-z]/, 'Hasło musi zawierać małą literę')
-      .regex(/[0-9]/, 'Hasło musi zawierać cyfrę'),
+      .regex(/[0-9]/, 'Hasło musi zawierać cyfrę')
+      .regex(/[@$!%*?&]/, 'Hasło musi zawierać znak specjalny'),
     confirmPassword: z.string(),
     firstName: z.string().min(1, 'Imię jest wymagane'),
     lastName: z.string().min(1, 'Nazwisko jest wymagane'),
+    pesel: z
+      .string()
+      .min(11, 'PESEL musi mieć 11 cyfr')
+      .max(11, 'PESEL musi mieć 11 cyfr')
+      .regex(/^\d{11}$/, 'PESEL musi zawierać tylko cyfry'),
     phone: z.string().optional(),
     acceptTerms: z.boolean().refine((val) => val === true, 'Musisz zaakceptować regulamin'),
   })
