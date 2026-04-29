@@ -6,7 +6,7 @@ import {
   useResetUserPasswordMutation,
   useDeleteUserMutation,
 } from '../api/adminApi'
-import { UserTable } from '../components'
+import { UserTable, CreateStaffModal } from '../components'
 import type { UserAdmin, UserFilters, UserRole, AccountStatus } from '../types'
 import { clsx } from 'clsx'
 
@@ -24,6 +24,8 @@ export function AdminUsersPage() {
   const [selectedUser, setSelectedUser] = useState<UserAdmin | null>(null)
   const [showResetModal, setShowResetModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showCreateStaffModal, setShowCreateStaffModal] = useState(false)
+  const [createStaffSuccess, setCreateStaffSuccess] = useState(false)
 
   const { data, isLoading, error, refetch } = useGetAdminUsersQuery(filters)
   const [updateUserStatus] = useUpdateUserStatusMutation()
@@ -132,7 +134,26 @@ export function AdminUsersPage() {
           <h1 className="text-2xl font-bold text-neutral-900">{t('admin.users.title')}</h1>
           <p className="mt-1 text-sm text-neutral-500">{t('admin.users.subtitle')}</p>
         </div>
+        <button
+          type="button"
+          data-testid="admin-add-staff-button"
+          onClick={() => setShowCreateStaffModal(true)}
+          className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+        >
+          Dodaj pracownika
+        </button>
       </div>
+
+      {/* Create staff success banner */}
+      {createStaffSuccess ? (
+        <div
+          role="status"
+          data-testid="admin-create-staff-success"
+          className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800"
+        >
+          Pracownik dodany
+        </div>
+      ) : null}
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">
@@ -231,6 +252,17 @@ export function AdminUsersPage() {
           ) : null}
         </>
       )}
+
+      {/* Create Staff Modal */}
+      <CreateStaffModal
+        isOpen={showCreateStaffModal}
+        onClose={() => setShowCreateStaffModal(false)}
+        onSuccess={() => {
+          setCreateStaffSuccess(true)
+          refetch()
+          window.setTimeout(() => setCreateStaffSuccess(false), 4000)
+        }}
+      />
 
       {/* Reset Password Modal */}
       {showResetModal && selectedUser ? (

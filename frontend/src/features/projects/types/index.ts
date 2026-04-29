@@ -6,6 +6,7 @@ export type {
   AssignPatientsRequest,
   RemovePatientsRequest,
   PatientProject,
+  ProjectPatientSummary,
   ProjectTeam,
   ProjectRole,
   ProjectFilters,

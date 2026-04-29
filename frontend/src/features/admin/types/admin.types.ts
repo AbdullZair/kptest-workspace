@@ -222,6 +222,21 @@ export interface SystemLogFilters {
 }
 
 /**
+ * Create staff request (US-A-01)
+ * Server-side schema constrains role to staff-only roles.
+ */
+export type CreateStaffRole = Exclude<UserRole, 'PATIENT'>
+
+export interface CreateStaffRequest {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phone?: string
+  role: CreateStaffRole
+}
+
+/**
  * Update user role request
  */
 export interface UpdateUserRoleRequest {

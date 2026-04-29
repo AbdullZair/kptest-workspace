@@ -77,6 +77,32 @@ public class AdminController {
     }
 
     /**
+     * Create a new staff user (US-A-01).
+     * Body: email, password, firstName, lastName, phone (optional), role.
+     * Hashes the password and creates a Staff entity for staff roles.
+     */
+    @PostMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Create staff user",
+        description = "US-A-01: Creates a new staff user account (ADMIN/DOCTOR/COORDINATOR/NURSE/THERAPIST) with hashed password and Staff profile.")
+    public ResponseEntity<UserAdminDto> createStaff(
+        @Valid @RequestBody CreateStaffRequest request
+    ) {
+        log.info("POST /api/v1/admin/users - email: {}, role: {}", request.email(), request.role());
+
+        UserAdminDto created = adminService.createStaff(
+            request.email(),
+            request.password(),
+            request.firstName(),
+            request.lastName(),
+            request.phone(),
+            request.role()
+        );
+
+        return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(created);
+    }
+
+    /**
      * Get user by ID.
      */
     @GetMapping("/users/{id}")

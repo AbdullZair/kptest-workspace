@@ -32,6 +32,7 @@ import type {
   ApproveVerificationRequest,
   RejectVerificationRequest,
   VerificationDecisionResponse,
+  CreateStaffRequest,
 } from '../types'
 
 /**
@@ -65,6 +66,18 @@ export const adminApiSlice = api.injectEndpoints({
     getAdminUserById: builder.query<UserAdmin, string>({
       query: (userId) => `/admin/users/${userId}`,
       providesTags: ['AdminUser'],
+    }),
+
+    /**
+     * Create staff user (US-A-01)
+     */
+    createStaff: builder.mutation<UserAdmin, CreateStaffRequest>({
+      query: (body) => ({
+        url: '/admin/users',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['AdminUser'],
     }),
 
     /**
@@ -446,6 +459,7 @@ export const adminApiSlice = api.injectEndpoints({
 export const {
   useGetAdminUsersQuery,
   useGetAdminUserByIdQuery,
+  useCreateStaffMutation,
   useUpdateUserRoleMutation,
   useUpdateUserStatusMutation,
   useResetUserPasswordMutation,

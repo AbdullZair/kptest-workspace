@@ -110,6 +110,21 @@ export interface PatientProject {
 }
 
 /**
+ * Project patient summary returned by GET /projects/{id}/patients.
+ * Flat, safe DTO that mirrors the backend ProjectPatientSummaryDto.
+ */
+export interface ProjectPatientSummary {
+  id: string
+  patient_id: string
+  first_name: string
+  last_name: string
+  current_stage: TherapyStage
+  compliance_score?: number
+  enrolled_at: string
+  active: boolean
+}
+
+/**
  * Project team member
  */
 export interface ProjectTeam {

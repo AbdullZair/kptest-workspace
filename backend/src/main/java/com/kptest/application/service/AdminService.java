@@ -39,11 +39,14 @@ import com.kptest.domain.quiz.repository.QuizAnswerSelectionRepository;
 import com.kptest.domain.quiz.repository.QuizRepository;
 import com.kptest.domain.schedule.TherapyEvent;
 import com.kptest.domain.schedule.repository.TherapyEventRepository;
+import com.kptest.domain.staff.Staff;
+import com.kptest.domain.staff.StaffRepository;
 import com.kptest.domain.user.AccountStatus;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRepository;
 import com.kptest.domain.user.UserRole;
 import com.kptest.exception.BusinessRuleException;
+import com.kptest.exception.DuplicateResourceException;
 import com.kptest.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +57,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,6 +107,8 @@ public class AdminService {
     private final NotificationRepository notificationRepository;
     private final EmergencyContactRepository emergencyContactRepository;
     private final DataProcessingErasureLogRepository dataProcessingErasureLogRepository;
+    private final StaffRepository staffRepository;
+    private final PasswordEncoder passwordEncoder;
     private ObjectMapper objectMapper;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_INSTANT;
@@ -158,6 +164,81 @@ public class AdminService {
             .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         return UserAdminDto.fromUser(user);
+    }
+
+    /**
+     * Create a new staff user (US-A-01).
+     *
+     * <p>Validates uniqueness of email, hashes the password, persists the
+     * {@link User} with role + ACTIVE status, and creates the matching
+     * {@link Staff} profile. Patient accounts must use the patient
+     * registration flow — only staff roles are permitted here.</p>
+     *
+     * @param email staff email (must be unique)
+     * @param rawPassword raw password (will be hashed via {@link PasswordEncoder})
+     * @param firstName staff first name
+     * @param lastName staff last name
+     * @param phone optional phone number
+     * @param role one of ADMIN, DOCTOR, COORDINATOR, NURSE, THERAPIST
+     * @return {@link UserAdminDto} of the created user
+     * @throws DuplicateResourceException when email or phone already exists
+     * @throws BusinessRuleException when role is PATIENT or unknown
+     */
+    public UserAdminDto createStaff(String email, String rawPassword, String firstName,
+                                    String lastName, String phone, String role) {
+        log.info("Creating staff user with email: {}, role: {}", email, role);
+
+        UserRole userRole = parseStaffRole(role);
+
+        if (userRepository.existsByEmail(email)) {
+            throw new DuplicateResourceException("User", "email", email);
+        }
+        if (phone != null && !phone.isBlank() && userRepository.existsByPhone(phone)) {
+            throw new DuplicateResourceException("User", "phone", phone);
+        }
+
+        String passwordHash = passwordEncoder.encode(rawPassword);
+        User user = User.create(email, passwordHash, userRole);
+        user.setStatus(AccountStatus.ACTIVE);
+        if (phone != null && !phone.isBlank()) {
+            user.setPhone(phone);
+        }
+        User savedUser = userRepository.save(user);
+
+        Staff staff = Staff.create(
+            savedUser,
+            firstName,
+            lastName,
+            "EMP-" + savedUser.getId().toString().substring(0, 8),
+            null
+        );
+        staff.setEmail(email);
+        if (phone != null && !phone.isBlank()) {
+            staff.setPhone(phone);
+        }
+        staff.setHiredAt(Instant.now());
+        staffRepository.save(staff);
+
+        log.info("Created staff user {} with role {}", savedUser.getId(), userRole);
+
+        return UserAdminDto.fromUser(savedUser);
+    }
+
+    /**
+     * Parse and validate that the requested role is a staff role (not PATIENT).
+     */
+    private UserRole parseStaffRole(String role) {
+        UserRole parsed;
+        try {
+            parsed = UserRole.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            throw new BusinessRuleException("Unknown role: " + role);
+        }
+        if (parsed == UserRole.PATIENT) {
+            throw new BusinessRuleException(
+                "Patient accounts must be created via patient registration flow");
+        }
+        return parsed;
     }
 
     /**

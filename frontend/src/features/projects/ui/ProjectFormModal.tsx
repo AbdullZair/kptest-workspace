@@ -1,12 +1,21 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Button, Card } from '@shared/components'
+import { useGetAdminUsersQuery } from '@features/admin/api/adminApi'
+import { useGetPatientsQuery } from '@features/patients/api/patientApi'
 import type { ProjectFormModalProps, ProjectFormData } from '../types'
+import type { UserAdmin } from '@features/admin/types'
 import { clsx } from 'clsx'
 
 /**
  * ProjectFormModal Component
  *
- * Modal for creating and editing projects
+ * Modal for creating and editing projects. In create mode the form also
+ * exposes team-member and patient pickers so that the backend
+ * `POST /api/v1/projects` request is fully populated (team_member_ids,
+ * patient_ids). In edit mode these pickers are hidden because
+ * `PUT /api/v1/projects/{id}` doesn't accept them — managing team and
+ * patient enrolment lives in the project detail view (PatientAssignmentModal
+ * + dedicated team endpoints).
  *
  * @example
  * ```tsx
@@ -26,6 +35,8 @@ export const ProjectFormModal = ({
   project,
   isLoading = false,
 }: ProjectFormModalProps) => {
+  const isEditMode = Boolean(project)
+
   const [formData, setFormData] = useState<ProjectFormData>({
     name: '',
     description: '',
@@ -33,9 +44,13 @@ export const ProjectFormModal = ({
     end_date: '',
     status: 'PLANNED',
     compliance_threshold: 80,
+    team_member_ids: [],
+    patient_ids: [],
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [staffSearch, setStaffSearch] = useState('')
+  const [patientSearch, setPatientSearch] = useState('')
 
   // Populate form when editing
   useEffect(() => {
@@ -47,6 +62,8 @@ export const ProjectFormModal = ({
         end_date: project.end_date ? (project.end_date.split('T')[0] ?? '') : '',
         status: project.status || 'PLANNED',
         compliance_threshold: project.compliance_threshold || 80,
+        team_member_ids: [],
+        patient_ids: [],
       })
     } else {
       // Reset form for create mode
@@ -57,10 +74,63 @@ export const ProjectFormModal = ({
         end_date: '',
         status: 'PLANNED',
         compliance_threshold: 80,
+        team_member_ids: [],
+        patient_ids: [],
       })
     }
     setErrors({})
+    setStaffSearch('')
+    setPatientSearch('')
   }, [project, isOpen])
+
+  // ============== Staff (team members) data ==============
+  // Fetch a generous page of users; filter out PATIENT role client-side.
+  const { data: usersPage, isFetching: isFetchingStaff } = useGetAdminUsersQuery(
+    { page: 0, size: 100 },
+    { skip: !isOpen || isEditMode }
+  )
+
+  const staffUsers = useMemo<UserAdmin[]>(() => {
+    const all = usersPage?.content ?? []
+    const staff = all.filter((u) => u.role !== 'PATIENT')
+    if (!staffSearch.trim()) return staff
+    const q = staffSearch.trim().toLowerCase()
+    return staff.filter(
+      (u) => u.email.toLowerCase().includes(q) || u.role.toLowerCase().includes(q)
+    )
+  }, [usersPage, staffSearch])
+
+  // ============== Patients data ==============
+  const { data: patientsPage, isFetching: isFetchingPatients } = useGetPatientsQuery(
+    {
+      page: 0,
+      size: 100,
+      ...(patientSearch.trim().length >= 2 ? { name: patientSearch.trim() } : {}),
+    },
+    { skip: !isOpen || isEditMode }
+  )
+  const patients = patientsPage?.data ?? []
+
+  // ============== Selection helpers ==============
+  const toggleTeamMember = (userId: string) => {
+    setFormData((prev) => {
+      const current = prev.team_member_ids ?? []
+      const next = current.includes(userId)
+        ? current.filter((id) => id !== userId)
+        : [...current, userId]
+      return { ...prev, team_member_ids: next }
+    })
+  }
+
+  const togglePatient = (patientId: string) => {
+    setFormData((prev) => {
+      const current = prev.patient_ids ?? []
+      const next = current.includes(patientId)
+        ? current.filter((id) => id !== patientId)
+        : [...current, patientId]
+      return { ...prev, patient_ids: next }
+    })
+  }
 
   // Validate form
   const validate = useMemo(
@@ -109,11 +179,26 @@ export const ProjectFormModal = ({
     const toInstant = (d: string | undefined): string | undefined =>
       d ? (d.includes('T') ? d : `${d}T00:00:00Z`) : undefined
 
-    const payload = {
+    // In edit mode we strip team_member_ids / patient_ids from the payload —
+    // backend PUT /projects/{id} ignores them and there is no UI for editing
+    // those collections through this modal.
+    const basePayload: ProjectFormData = {
       ...formData,
       start_date: toInstant(formData.start_date) ?? '',
       end_date: toInstant(formData.end_date),
     }
+
+    const payload: ProjectFormData = isEditMode
+      ? {
+          ...basePayload,
+          team_member_ids: undefined,
+          patient_ids: undefined,
+        }
+      : {
+          ...basePayload,
+          team_member_ids: formData.team_member_ids ?? [],
+          patient_ids: formData.patient_ids ?? [],
+        }
 
     try {
       await onSubmit(payload)
@@ -139,6 +224,9 @@ export const ProjectFormModal = ({
   }
 
   if (!isOpen) return null
+
+  const selectedTeam = formData.team_member_ids ?? []
+  const selectedPatients = formData.patient_ids ?? []
 
   return (
     <div
@@ -354,6 +442,131 @@ export const ProjectFormModal = ({
                     ) : null}
                   </div>
                 </div>
+
+                {/* Team & Patients (create mode only) */}
+                {isEditMode ? (
+                  <div className="rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-600">
+                    Edycja zespołu i pacjentów dostępna jest w widoku szczegółów projektu.
+                  </div>
+                ) : (
+                  <>
+                    {/* Team members */}
+                    <div data-testid="project-team-section">
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="block text-sm font-medium text-neutral-700">
+                          Zespół projektu
+                        </label>
+                        <span className="text-xs text-neutral-500">
+                          Wybrano: {selectedTeam.length}
+                        </span>
+                      </div>
+                      <input
+                        type="search"
+                        value={staffSearch}
+                        onChange={(e) => setStaffSearch(e.target.value)}
+                        placeholder="Szukaj po e-mailu lub roli..."
+                        className="mb-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        disabled={isLoading || isFetchingStaff}
+                        data-testid="project-team-search"
+                      />
+                      <div className="max-h-48 overflow-y-auto rounded-lg border border-neutral-200">
+                        {isFetchingStaff ? (
+                          <p className="px-3 py-2 text-sm text-neutral-500">
+                            Ładowanie użytkowników...
+                          </p>
+                        ) : staffUsers.length === 0 ? (
+                          <p className="px-3 py-2 text-sm text-neutral-500">
+                            Brak użytkowników do wyświetlenia.
+                          </p>
+                        ) : (
+                          <ul className="divide-y divide-neutral-100">
+                            {staffUsers.map((user) => {
+                              const checked = selectedTeam.includes(user.user_id)
+                              return (
+                                <li key={user.user_id}>
+                                  <label className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-neutral-50">
+                                    <input
+                                      type="checkbox"
+                                      checked={checked}
+                                      onChange={() => toggleTeamMember(user.user_id)}
+                                      disabled={isLoading}
+                                      className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                      data-testid={`team-checkbox-${user.user_id}`}
+                                    />
+                                    <span className="flex-1 text-sm text-neutral-800">
+                                      {user.email}
+                                    </span>
+                                    <span className="rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">
+                                      {user.role}
+                                    </span>
+                                  </label>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Patients */}
+                    <div data-testid="project-patients-section">
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="block text-sm font-medium text-neutral-700">
+                          Pacjenci
+                        </label>
+                        <span className="text-xs text-neutral-500">
+                          Wybrano: {selectedPatients.length}
+                        </span>
+                      </div>
+                      <input
+                        type="search"
+                        value={patientSearch}
+                        onChange={(e) => setPatientSearch(e.target.value)}
+                        placeholder="Szukaj po imieniu lub nazwisku (min. 2 znaki)..."
+                        className="mb-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        disabled={isLoading || isFetchingPatients}
+                        data-testid="project-patients-search"
+                      />
+                      <div className="max-h-48 overflow-y-auto rounded-lg border border-neutral-200">
+                        {isFetchingPatients ? (
+                          <p className="px-3 py-2 text-sm text-neutral-500">
+                            Ładowanie pacjentów...
+                          </p>
+                        ) : patients.length === 0 ? (
+                          <p className="px-3 py-2 text-sm text-neutral-500">
+                            Brak pacjentów do wyświetlenia.
+                          </p>
+                        ) : (
+                          <ul className="divide-y divide-neutral-100">
+                            {patients.map((p) => {
+                              const checked = selectedPatients.includes(p.id)
+                              return (
+                                <li key={p.id}>
+                                  <label className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-neutral-50">
+                                    <input
+                                      type="checkbox"
+                                      checked={checked}
+                                      onChange={() => togglePatient(p.id)}
+                                      disabled={isLoading}
+                                      className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                                      data-testid={`patient-checkbox-${p.id}`}
+                                    />
+                                    <span className="flex-1 text-sm text-neutral-800">
+                                      {p.first_name} {p.last_name}
+                                    </span>
+                                    <span className="rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">
+                                      {p.verification_status}
+                                    </span>
+                                  </label>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
               </Card.Body>
 
               {/* Footer */}

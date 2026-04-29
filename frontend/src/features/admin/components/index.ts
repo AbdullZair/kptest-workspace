@@ -37,3 +37,6 @@ export type { ExportPatientDataButtonProps } from './ExportPatientDataButton'
 
 export { ErasePatientDialog } from './ErasePatientDialog'
 export type { ErasePatientDialogProps } from './ErasePatientDialog'
+
+export { CreateStaffModal } from './CreateStaffModal'
+export type { CreateStaffModalProps } from './CreateStaffModal'

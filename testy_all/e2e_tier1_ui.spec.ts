@@ -308,15 +308,29 @@ test.describe('US-L-01..04 — materiały edukacyjne', () => {
     await page.goto('/materials/admin')
     await page.waitForTimeout(2000)
 
-    const addBtn = page.locator('[data-testid="material-add-button"]').first()
-    const visible = await addBtn.isVisible().catch(() => false)
-    if (!visible) {
+    // Dropdown projektu — wymagane przed odblokowaniem przycisku "Dodaj materiał"
+    const projectSelect = page.locator('[data-testid="material-project-select"]')
+    const projectVisible = await projectSelect.isVisible().catch(() => false)
+    if (!projectVisible) {
       test.info().annotations.push({
         type: 'issue',
-        description: 'material-add-button not rendered — admin materials page may be inaccessible',
+        description: 'material-project-select not rendered — admin materials page may be inaccessible',
       })
       return
     }
+    // Wybierz pierwszy nie-pusty projekt z listy
+    const firstProjectOption = await projectSelect.locator('option').nth(1).getAttribute('value')
+    if (!firstProjectOption) {
+      test.info().annotations.push({
+        type: 'issue',
+        description: 'no project available to assign material',
+      })
+      return
+    }
+    await projectSelect.selectOption(firstProjectOption)
+    await page.waitForTimeout(500)
+
+    const addBtn = page.locator('[data-testid="material-add-button"]').first()
     await addBtn.click()
     await page.waitForSelector('[data-testid="material-form"]', { timeout: 5000 })
 
@@ -345,12 +359,16 @@ test.describe('US-L-01..04 — materiały edukacyjne', () => {
     await page.goto('/materials/admin')
     await page.waitForTimeout(2000)
 
-    const addBtn = page.locator('[data-testid="material-add-button"]').first()
-    const visible = await addBtn.isVisible().catch(() => false)
-    if (!visible) {
-      test.info().annotations.push({ type: 'issue', description: 'material-add-button missing' })
+    const projectSelect = page.locator('[data-testid="material-project-select"]')
+    const firstProjectOption = await projectSelect.locator('option').nth(1).getAttribute('value')
+    if (!firstProjectOption) {
+      test.info().annotations.push({ type: 'issue', description: 'no project to attach material' })
       return
     }
+    await projectSelect.selectOption(firstProjectOption)
+    await page.waitForTimeout(500)
+
+    const addBtn = page.locator('[data-testid="material-add-button"]').first()
     await addBtn.click()
     await page.waitForSelector('[data-testid="material-form"]', { timeout: 5000 })
 

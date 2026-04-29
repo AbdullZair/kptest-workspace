@@ -7,6 +7,7 @@ import type {
   AssignPatientsRequest,
   RemovePatientsRequest,
   PatientProject,
+  ProjectPatientSummary,
   ProjectTeam,
 } from '../types'
 
@@ -165,6 +166,23 @@ export const projectApiSlice = api.injectEndpoints({
     }),
 
     /**
+     * Get patient summaries for a project (flat DTO with first/last name).
+     * Mirrors backend ProjectPatientSummaryDto.
+     * @query
+     */
+    getProjectPatientSummaries: builder.query<
+      ProjectPatientSummary[],
+      { projectId: string; activeOnly?: boolean }
+    >({
+      query: ({ projectId, activeOnly = true }) => ({
+        url: `/projects/${projectId}/patients`,
+        method: 'GET',
+        params: { activeOnly },
+      }),
+      providesTags: (_result, _error, { projectId }) => [{ type: 'PatientProject', projectId }],
+    }),
+
+    /**
      * Get project team members
      * @query
      */
@@ -233,6 +251,7 @@ export const {
   useRemovePatientsMutation,
   useGetProjectStatisticsQuery,
   useGetProjectPatientsQuery,
+  useGetProjectPatientSummariesQuery,
   useGetProjectTeamQuery,
   useGetMyActiveProjectsQuery,
 } = projectApiSlice
