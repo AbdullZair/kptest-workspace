@@ -108,22 +108,8 @@ class NotificationControllerRegisterDeviceTest {
             );
         }
 
-        @Test
-        @org.junit.jupiter.api.Disabled("Security filter chain is mocked out in @WebMvcTest slice; covered by integration tests")
-        @DisplayName("shouldReturn401_WhenNotAuthenticated")
-        void shouldReturn401_WhenNotAuthenticated() throws Exception {
-            RegisterDeviceRequest request = new RegisterDeviceRequest(
-                TEST_DEVICE_TOKEN,
-                TEST_PLATFORM
-            );
-
-            mockMvc.perform(post("/api/v1/notifications/devices/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
-
-            then(notificationService).should(never()).registerDeviceToken(any(), any(), any());
-        }
+        // Negative-auth case (no token -> 401/403) moved to
+        // com.kptest.controller.integration.SecurityIntegrationTest.
 
         @Test
         @DisplayName("shouldReturn400_WhenTokenMissing")
