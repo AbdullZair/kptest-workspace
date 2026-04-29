@@ -298,6 +298,7 @@ export const api = createApi({
     'ReportHistory',
     'PatientBadges',
     'Report',
+    'PendingVerification',
   ],
   endpoints: () => ({}),
 })

@@ -33,11 +33,14 @@ class AdminControllerAuditLogTest {
     @Mock
     private AdminService adminService;
 
+    @Mock
+    private com.kptest.application.service.PatientService patientService;
+
     private AdminController adminController;
 
     @BeforeEach
     void setUp() {
-        adminController = new AdminController(adminService);
+        adminController = new AdminController(adminService, patientService);
     }
 
     @Test

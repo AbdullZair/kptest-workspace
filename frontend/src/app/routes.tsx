@@ -72,6 +72,9 @@ const RodoPanelPage = lazy(() => import('@features/admin/ui/RodoPanelPage'))
 const DataProcessingActivitiesPage = lazy(
   () => import('@features/admin/ui/DataProcessingActivitiesPage')
 )
+const PendingVerificationsPage = lazy(
+  () => import('@features/admin/ui/PendingVerificationsPage')
+)
 
 /**
  * Route configuration
@@ -369,6 +372,16 @@ export const routes: RouteObject[] = [
           <ProtectedRoute allowedRoles={['ADMIN']}>
             <Suspense fallback={<PageLoader />}>
               <DataProcessingActivitiesPage />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/pending-verifications',
+        element: (
+          <ProtectedRoute allowedRoles={['ADMIN', 'COORDINATOR', 'DOCTOR']}>
+            <Suspense fallback={<PageLoader />}>
+              <PendingVerificationsPage />
             </Suspense>
           </ProtectedRoute>
         ),

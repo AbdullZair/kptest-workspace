@@ -2,6 +2,7 @@ package com.kptest.api.controller;
 
 import com.kptest.api.dto.*;
 import com.kptest.application.service.AdminService;
+import com.kptest.application.service.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,7 @@ import java.util.concurrent.CompletableFuture;
 public class AdminController {
 
     private final AdminService adminService;
+    private final PatientService patientService;
 
     // ==================== USER MANAGEMENT ====================
 
@@ -537,6 +539,75 @@ public class AdminController {
         var logs = adminService.getErasureLogs(id);
 
         return ResponseEntity.ok(logs);
+    }
+
+    // ==================== US-NH-01: Staff verification of HIS-registered patients ====================
+
+    /**
+     * List patients awaiting staff verification (US-NH-01).
+     * Sorted by created_at DESC. Visible to ADMIN, COORDINATOR, and DOCTOR roles.
+     */
+    @GetMapping("/patients/pending")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COORDINATOR', 'DOCTOR')")
+    @Operation(summary = "List pending verifications",
+        description = "US-NH-01: Returns patients with verification_status = PENDING, sorted by created_at DESC.")
+    public ResponseEntity<PageResponse<PendingVerificationDto>> getPendingVerifications(
+        @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
+        @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size
+    ) {
+        log.info("GET /api/v1/admin/patients/pending - page={}, size={}", page, size);
+
+        var result = patientService.findPendingVerifications(page, size);
+
+        return ResponseEntity.ok(new PageResponse<>(
+            result.content(),
+            result.pageNumber(),
+            result.pageSize(),
+            result.totalElements(),
+            result.totalPages(),
+            result.isFirst(),
+            result.isLast()
+        ));
+    }
+
+    /**
+     * Approve a pending patient verification (US-NH-01).
+     * Method = HIS triggers a HIS lookup; method = MANUAL requires a reason of at least 10 characters.
+     */
+    @PostMapping("/patients/{id}/approve")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COORDINATOR', 'DOCTOR')")
+    @Operation(summary = "Approve patient verification",
+        description = "US-NH-01: Approves a pending patient verification using HIS lookup or manual override with justification.")
+    public ResponseEntity<VerificationDecisionResponse> approveVerification(
+        @Parameter(description = "Patient ID") @PathVariable UUID id,
+        @Valid @RequestBody ApproveVerificationRequest request
+    ) {
+        log.info("POST /api/v1/admin/patients/{}/approve - method={}", id, request.method());
+
+        UUID currentUserId = getCurrentUserId();
+        VerificationDecisionResponse response = patientService.approveVerification(id, request, currentUserId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Reject a pending patient verification (US-NH-01).
+     * Requires a non-empty reason (min 10 characters). Rejection is irreversible.
+     */
+    @PostMapping("/patients/{id}/reject")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COORDINATOR', 'DOCTOR')")
+    @Operation(summary = "Reject patient verification",
+        description = "US-NH-01: Rejects a pending patient verification with a mandatory justification (min 10 characters).")
+    public ResponseEntity<VerificationDecisionResponse> rejectVerification(
+        @Parameter(description = "Patient ID") @PathVariable UUID id,
+        @Valid @RequestBody RejectVerificationRequest request
+    ) {
+        log.info("POST /api/v1/admin/patients/{}/reject", id);
+
+        UUID currentUserId = getCurrentUserId();
+        VerificationDecisionResponse response = patientService.rejectVerification(id, request, currentUserId);
+
+        return ResponseEntity.ok(response);
     }
 
     /**
