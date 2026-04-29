@@ -2,8 +2,6 @@ package com.kptest.api.controller;
 
 import com.kptest.api.dto.*;
 import com.kptest.application.service.ProjectService;
-import com.kptest.domain.project.PatientProject;
-import com.kptest.domain.project.ProjectTeam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -209,7 +209,7 @@ public class ProjectController {
     @GetMapping("/{id}/patients")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE', 'THERAPIST')")
     @Operation(summary = "Get project patients", description = "Returns patients enrolled in a project")
-    public ResponseEntity<List<PatientProject>> getProjectPatients(
+    public ResponseEntity<List<ProjectPatientSummaryDto>> getProjectPatients(
         @Parameter(description = "Project ID")
         @PathVariable UUID id,
 
@@ -218,7 +218,7 @@ public class ProjectController {
     ) {
         log.info("GET /api/v1/projects/{}/patients - activeOnly={}", id, activeOnly);
 
-        List<PatientProject> patients = projectService.getProjectPatients(id, activeOnly);
+        List<ProjectPatientSummaryDto> patients = projectService.getProjectPatients(id, activeOnly);
 
         return ResponseEntity.ok(patients);
     }
@@ -229,13 +229,13 @@ public class ProjectController {
     @GetMapping("/{id}/team")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE', 'THERAPIST')")
     @Operation(summary = "Get project team", description = "Returns team members assigned to a project")
-    public ResponseEntity<List<ProjectTeam>> getProjectTeam(
+    public ResponseEntity<List<ProjectTeamMemberDto>> getProjectTeam(
         @Parameter(description = "Project ID")
         @PathVariable UUID id
     ) {
         log.info("GET /api/v1/projects/{}/team", id);
 
-        List<ProjectTeam> team = projectService.getProjectTeam(id);
+        List<ProjectTeamMemberDto> team = projectService.getProjectTeam(id);
 
         return ResponseEntity.ok(team);
     }
@@ -249,7 +249,6 @@ public class ProjectController {
     public ResponseEntity<List<ProjectResponse>> getMyActiveProjects() {
         log.info("GET /api/v1/projects/my/active");
 
-        // TODO: Get user ID from security context
         UUID userId = getCurrentUserId();
 
         List<ProjectResponse> projects = projectService.findActiveByUserId(userId);
@@ -258,22 +257,24 @@ public class ProjectController {
     }
 
     /**
-     * Get current staff ID from security context.
-     * TODO: Implement proper security context extraction
-     */
-    private UUID getCurrentStaffId() {
-        // Placeholder - should extract from authentication token
-        // This would typically use SecurityContextHolder or a custom annotation
-        return null; // Will need to be handled by service with optional null check
-    }
-
-    /**
      * Get current user ID from security context.
-     * TODO: Implement proper security context extraction
+     * Reads the authenticated principal name (user UUID) from SecurityContextHolder.
+     *
+     * @throws IllegalStateException if no authenticated user is present or principal is not a UUID
      */
     private UUID getCurrentUserId() {
-        // Placeholder - should extract from authentication token
-        return UUID.randomUUID(); // Temporary placeholder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null) {
+            log.warn("No authenticated user in SecurityContext");
+            throw new IllegalStateException("No authenticated user in SecurityContext");
+        }
+        String userId = authentication.getName();
+        try {
+            return UUID.fromString(userId);
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to parse user ID from security context: {}", userId);
+            throw new IllegalStateException("Invalid user ID in security context: " + userId, e);
+        }
     }
 
     /**

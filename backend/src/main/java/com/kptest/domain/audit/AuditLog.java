@@ -38,9 +38,11 @@ public class AuditLog {
     private UUID entityId;
 
     @Column(name = "old_value", columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String oldValue;
 
     @Column(name = "new_value", columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String newValue;
 
     @Column(name = "ip_address", length = 45)

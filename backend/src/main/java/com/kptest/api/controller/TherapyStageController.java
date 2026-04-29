@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -180,8 +182,7 @@ public class TherapyStageController {
     ) {
         log.info("POST /api/v1/therapy-stages/progress/unlock - patientProjectId={}, stageId={}", patientProjectId, stageId);
 
-        // In real app, userId would come from authentication context
-        UUID unlockedBy = patientProjectId; // Placeholder
+        UUID unlockedBy = getCurrentUserId();
 
         PatientStageProgressDto progress = therapyStageService.unlockStage(patientProjectId, stageId, unlockedBy);
 
@@ -206,8 +207,7 @@ public class TherapyStageController {
     ) {
         log.info("POST /api/v1/therapy-stages/progress/complete - patientProjectId={}, stageId={}", patientProjectId, stageId);
 
-        // In real app, userId would come from authentication context
-        UUID completedBy = patientProjectId; // Placeholder
+        UUID completedBy = getCurrentUserId();
 
         PatientStageProgressDto progress = therapyStageService.completeStage(patientProjectId, stageId, completedBy, reason);
 
@@ -232,6 +232,26 @@ public class TherapyStageController {
             return ResponseEntity.ok(currentStage);
         } else {
             return ResponseEntity.noContent().build();
+        }
+    }
+
+    /**
+     * Get current user ID from security context.
+     *
+     * @throws IllegalStateException if no authenticated user is present or principal is not a UUID
+     */
+    private UUID getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null) {
+            log.warn("No authenticated user in SecurityContext");
+            throw new IllegalStateException("No authenticated user in SecurityContext");
+        }
+        String userId = authentication.getName();
+        try {
+            return UUID.fromString(userId);
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to parse user ID from security context: {}", userId);
+            throw new IllegalStateException("Invalid user ID in security context: " + userId, e);
         }
     }
 }

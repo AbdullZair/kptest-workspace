@@ -1,5 +1,6 @@
 package com.kptest.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kptest.domain.patient.Patient;
 import com.kptest.domain.staff.Staff;
 import jakarta.persistence.*;
@@ -36,6 +37,7 @@ public class User {
     private String phone;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
@@ -50,6 +52,7 @@ public class User {
     private boolean twoFactorEnabled;
 
     @Column(name = "two_factor_secret", length = 255)
+    @JsonIgnore
     private String twoFactorSecret;
 
     @Column(name = "failed_login_attempts", nullable = false)
@@ -77,9 +80,11 @@ public class User {
 
     // One-to-one relationships
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Patient patient;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Staff staff;
 
     /**

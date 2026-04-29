@@ -268,6 +268,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(
+            IllegalArgumentException ex,
+            org.springframework.web.context.request.WebRequest request) {
+
+        ErrorResponse response = ErrorResponse.of(
+            "VALIDATION_ERROR",
+            ex.getMessage() != null ? ex.getMessage() : "Invalid argument",
+            HttpStatus.BAD_REQUEST,
+            request.getDescription(false).replace("uri=", "")
+        );
+
+        log.warn("Illegal argument: {}", ex.getMessage());
+
+        return ResponseEntity.badRequest().body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex) {

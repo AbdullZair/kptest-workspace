@@ -47,6 +47,9 @@ public class CalendarController {
             @Parameter(description = "Filter by patient ID")
             @RequestParam(required = false) UUID patientId,
 
+            @Parameter(description = "Filter by project ID")
+            @RequestParam(required = false) UUID projectId,
+
             @Parameter(description = "Filter by event type")
             @RequestParam(required = false) EventType type,
 
@@ -59,10 +62,11 @@ public class CalendarController {
             @Parameter(description = "Filter by end date (ISO-8601)")
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant endDate
     ) {
-        log.debug("GET /api/v1/calendar/events - patientId={}, type={}, status={}", patientId, type, status);
+        log.debug("GET /api/v1/calendar/events - patientId={}, projectId={}, type={}, status={}",
+                patientId, projectId, type, status);
 
         List<TherapyEventDto> events = calendarService.getEvents(
-                patientId, type, status, startDate, endDate
+                patientId, projectId, type, status, startDate, endDate
         );
 
         return ResponseEntity.ok(events);

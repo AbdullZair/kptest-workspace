@@ -196,4 +196,24 @@ public interface TherapyEventRepository extends JpaRepository<TherapyEvent, UUID
      * Find all events.
      */
     List<TherapyEvent> findAll();
+
+    /**
+     * Unified filter query — all parameters are optional (null = ignore).
+     */
+    @Query("SELECT e FROM TherapyEvent e WHERE " +
+           "(:patientId IS NULL OR e.patientId = :patientId) " +
+           "AND (:projectId IS NULL OR e.projectId = :projectId) " +
+           "AND (:type IS NULL OR e.type = :type) " +
+           "AND (:status IS NULL OR e.status = :status) " +
+           "AND (CAST(:startDate AS timestamp) IS NULL OR e.scheduledAt >= :startDate) " +
+           "AND (CAST(:endDate AS timestamp) IS NULL OR e.scheduledAt <= :endDate) " +
+           "ORDER BY e.scheduledAt ASC")
+    List<TherapyEvent> findByFilters(
+        @Param("patientId") UUID patientId,
+        @Param("projectId") UUID projectId,
+        @Param("type") EventType type,
+        @Param("status") EventStatus status,
+        @Param("startDate") Instant startDate,
+        @Param("endDate") Instant endDate
+    );
 }

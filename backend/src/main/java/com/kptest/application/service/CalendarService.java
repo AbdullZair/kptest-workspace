@@ -44,28 +44,24 @@ public class CalendarService {
             Instant startDate,
             Instant endDate
     ) {
-        log.debug("Getting events with filters: patientId={}, type={}, status={}, startDate={}, endDate={}",
-                patientId, type, status, startDate, endDate);
+        return getEvents(patientId, null, type, status, startDate, endDate);
+    }
 
-        List<TherapyEvent> events;
+    @Transactional(readOnly = true)
+    public List<TherapyEventDto> getEvents(
+            UUID patientId,
+            UUID projectId,
+            EventType type,
+            EventStatus status,
+            Instant startDate,
+            Instant endDate
+    ) {
+        log.debug("Getting events with filters: patientId={}, projectId={}, type={}, status={}, startDate={}, endDate={}",
+                patientId, projectId, type, status, startDate, endDate);
 
-        if (patientId != null && startDate != null && endDate != null) {
-            if (status != null && type != null) {
-                events = therapyEventRepository.findByPatientIdAndStatusAndDateRange(patientId, status, startDate, endDate);
-            } else if (status != null) {
-                events = therapyEventRepository.findByPatientIdAndStatusAndDateRange(patientId, status, startDate, endDate);
-            } else if (type != null) {
-                events = therapyEventRepository.findByPatientIdAndTypeAndDateRange(patientId, type, startDate, endDate);
-            } else {
-                events = therapyEventRepository.findByPatientIdAndDateRange(patientId, startDate, endDate);
-            }
-        } else if (patientId != null) {
-            events = therapyEventRepository.findByPatientIdOrderByScheduledAtAsc(patientId);
-        } else if (startDate != null && endDate != null) {
-            events = therapyEventRepository.findByDateRange(startDate, endDate);
-        } else {
-            events = therapyEventRepository.findAll();
-        }
+        List<TherapyEvent> events = therapyEventRepository.findByFilters(
+                patientId, projectId, type, status, startDate, endDate
+        );
 
         return events.stream()
                 .map(TherapyEventDto::fromTherapyEvent)

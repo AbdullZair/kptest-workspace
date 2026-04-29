@@ -361,32 +361,54 @@ public class ProjectService {
     }
 
     /**
-     * Get patients assigned to a project.
+     * Get patients assigned to a project as flat summary DTOs.
+     * Avoids exposing JPA entity graphs / PII (PESEL, user account fields).
      *
      * @param projectId Project ID
      * @param activeOnly Whether to return only active enrollments
-     * @return List of patient projects
+     * @return List of project patient summary DTOs
      */
     @Transactional(readOnly = true)
-    public List<PatientProject> getProjectPatients(UUID projectId, boolean activeOnly) {
+    public List<ProjectPatientSummaryDto> getProjectPatients(UUID projectId, boolean activeOnly) {
         log.debug("Getting patients for project: {} (activeOnly={})", projectId, activeOnly);
 
-        if (activeOnly) {
-            return patientProjectRepository.findActiveByProjectId(projectId);
-        }
-        return patientProjectRepository.findByPatientId(projectId);
+        List<PatientProject> enrollments = activeOnly
+            ? patientProjectRepository.findActiveByProjectId(projectId)
+            : patientProjectRepository.findByPatientId(projectId);
+
+        return enrollments.stream()
+            .map(pp -> new ProjectPatientSummaryDto(
+                pp.getId(),
+                pp.getPatient().getId(),
+                pp.getPatient().getFirstName(),
+                pp.getPatient().getLastName(),
+                pp.getCurrentStage(),
+                pp.getComplianceScore(),
+                pp.getEnrolledAt(),
+                pp.getLeftAt() == null
+            ))
+            .toList();
     }
 
     /**
-     * Get team members for a project.
+     * Get team members for a project as flat DTOs.
+     * Avoids exposing JPA entity graphs / sensitive User fields (passwordHash, 2FA secret).
      *
      * @param projectId Project ID
-     * @return List of project team members
+     * @return List of project team member DTOs
      */
     @Transactional(readOnly = true)
-    public List<ProjectTeam> getProjectTeam(UUID projectId) {
+    public List<ProjectTeamMemberDto> getProjectTeam(UUID projectId) {
         log.debug("Getting team members for project: {}", projectId);
-        return projectTeamRepository.findByProjectId(projectId);
+        return projectTeamRepository.findByProjectId(projectId).stream()
+            .map(pt -> new ProjectTeamMemberDto(
+                pt.getId(),
+                pt.getUser().getId(),
+                pt.getUser().getEmail(),
+                pt.getRole(),
+                pt.getAssignedAt()
+            ))
+            .toList();
     }
 
     /**

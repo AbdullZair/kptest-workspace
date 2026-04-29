@@ -125,10 +125,10 @@ public class AdminService {
         int size = filters.size() != null ? filters.size() : 20;
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        Page<User> users = userRepository.findAll(pageable);
-        List<UserAdminDto> allDtos = users.stream().map(UserAdminDto::fromUser).toList();
-
-        List<UserAdminDto> filtered = allDtos;
+        List<UserAdminDto> filtered = userRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
+            .stream()
+            .map(UserAdminDto::fromUser)
+            .toList();
         if (filters.role() != null) {
             String roleFilter = filters.role();
             filtered = filtered.stream().filter(user -> user.role().equals(roleFilter)).toList();
@@ -140,7 +140,9 @@ public class AdminService {
 
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), filtered.size());
-        List<UserAdminDto> pageContent = filtered.subList(start, end);
+        List<UserAdminDto> pageContent = start >= filtered.size()
+            ? List.of()
+            : filtered.subList(start, end);
 
         return new org.springframework.data.domain.PageImpl<>(pageContent, pageable, filtered.size());
     }
@@ -874,8 +876,10 @@ public class AdminService {
             oldValues.put("phone", patient.getUser().getPhone());
         }
 
-        // Generate anonymized values
-        String anonymizedPesel = "XXXXXXXXXXX-" + generatePeselHash(patient);
+        // Generate anonymized values. PESEL column is varchar(11) — anonimizowany
+        // PESEL musi mieścić się w 11 znakach i być unikatowy per pacjent.
+        // Pattern: "A" + 10-cyfrowy hash UUID pacjenta = 11 znaków, unique.
+        String anonymizedPesel = "A" + generatePeselHash(patient);
         String anonymizedLastName = "ANON-" + generateSequenceSuffix(patientId);
         String anonymizedEmail = "anon-" + patientId + "@deleted.local";
 

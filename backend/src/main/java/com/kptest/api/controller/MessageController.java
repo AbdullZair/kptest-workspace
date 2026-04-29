@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,13 +92,11 @@ public class MessageController {
     @Operation(summary = "Create thread", description = "Creates a new message thread")
     public ResponseEntity<MessageThreadDto> createThread(
         @Parameter(description = "Thread data")
-        @Valid @RequestBody CreateThreadRequest request,
-
-        @RequestParam String userId
+        @Valid @RequestBody CreateThreadRequest request
     ) {
         log.info("POST /api/v1/messages/threads - title: {}, type: {}", request.title(), request.type());
 
-        UUID createdBy = UUID.fromString(userId);
+        UUID createdBy = getCurrentUserId();
         MessageThreadDto thread = messageService.createThread(request, createdBy);
 
         return ResponseEntity
@@ -138,13 +138,11 @@ public class MessageController {
         @PathVariable UUID id,
 
         @Parameter(description = "Message data")
-        @Valid @RequestBody SendMessageRequest request,
-
-        @RequestParam String userId
+        @Valid @RequestBody SendMessageRequest request
     ) {
         log.info("POST /api/v1/messages/threads/{}/messages - thread: {}", id, id);
 
-        UUID senderId = UUID.fromString(userId);
+        UUID senderId = getCurrentUserId();
         MessageDto message = messageService.sendMessage(id, request, senderId);
 
         return ResponseEntity
@@ -160,13 +158,11 @@ public class MessageController {
     @Operation(summary = "Mark message as read", description = "Marks a message as read by the current user")
     public ResponseEntity<MessageDto> markAsRead(
         @Parameter(description = "Message ID")
-        @PathVariable UUID id,
-
-        @RequestParam String userId
+        @PathVariable UUID id
     ) {
         log.info("POST /api/v1/messages/messages/{}/read", id);
 
-        UUID userIdParam = UUID.fromString(userId);
+        UUID userIdParam = getCurrentUserId();
         MessageDto message = messageService.markAsRead(id, userIdParam);
 
         return ResponseEntity.ok(message);
@@ -183,13 +179,11 @@ public class MessageController {
         @PathVariable UUID id,
 
         @Parameter(description = "File to upload")
-        @RequestParam("file") MultipartFile file,
-
-        @RequestParam String userId
+        @RequestParam("file") MultipartFile file
     ) throws IOException {
         log.info("POST /api/v1/messages/messages/{}/attachments - file: {}", id, file.getOriginalFilename());
 
-        UUID userIdParam = UUID.fromString(userId);
+        UUID userIdParam = getCurrentUserId();
         MessageAttachmentDto attachment = messageService.uploadAttachment(id, file, userIdParam);
 
         return ResponseEntity
@@ -211,11 +205,9 @@ public class MessageController {
         @RequestParam(defaultValue = "0") int page,
 
         @Parameter(description = "Page size")
-        @RequestParam(defaultValue = "20") int size,
-
-        @RequestParam String userId
+        @RequestParam(defaultValue = "20") int size
     ) {
-        UUID userUuid = UUID.fromString(userId);
+        UUID userUuid = getCurrentUserId();
 
         log.info("GET /api/v1/messages/unread - userId={}, projectId={}, page={}, size={}", userUuid, projectId, page, size);
 
@@ -236,11 +228,9 @@ public class MessageController {
     @Operation(summary = "Get unread count", description = "Returns the count of unread messages for the current user")
     public ResponseEntity<Map<String, Long>> getUnreadCount(
         @Parameter(description = "Project ID to filter by")
-        @RequestParam(required = false) UUID projectId,
-
-        @RequestParam String userId
+        @RequestParam(required = false) UUID projectId
     ) {
-        UUID userUuid = UUID.fromString(userId);
+        UUID userUuid = getCurrentUserId();
 
         log.info("GET /api/v1/messages/unread/count - userId={}, projectId={}", userUuid, projectId);
 
@@ -276,5 +266,26 @@ public class MessageController {
             .ok()
             .headers(headers)
             .body(pdfContent);
+    }
+
+    /**
+     * Get current user ID from security context.
+     * Reads the authenticated principal name (user UUID) from SecurityContextHolder.
+     *
+     * @throws IllegalStateException if no authenticated user is present or principal is not a UUID
+     */
+    private UUID getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null) {
+            log.warn("No authenticated user in SecurityContext");
+            throw new IllegalStateException("No authenticated user in SecurityContext");
+        }
+        String userId = authentication.getName();
+        try {
+            return UUID.fromString(userId);
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to parse user ID from security context: {}", userId);
+            throw new IllegalStateException("Invalid user ID in security context: " + userId, e);
+        }
     }
 }
