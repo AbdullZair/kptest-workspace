@@ -119,6 +119,7 @@ export const ProjectsPage = () => {
             </svg>
           }
           onClick={handleCreateClick}
+          data-testid="projects-add-button"
         >
           Nowy projekt
         </Button>
@@ -187,6 +188,7 @@ export const ProjectsPage = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Szukaj projektów po nazwie..."
                 className="w-full rounded-lg border border-neutral-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                data-testid="projects-search-input"
               />
               <svg
                 className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400"
@@ -223,6 +225,7 @@ export const ProjectsPage = () => {
                     ? 'border-blue-300 bg-blue-100 text-blue-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
+                data-testid="projects-filter-PLANNED"
               >
                 Planowane
               </button>
@@ -233,6 +236,7 @@ export const ProjectsPage = () => {
                     ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
+                data-testid="projects-filter-ACTIVE"
               >
                 Aktywne
               </button>
@@ -243,6 +247,7 @@ export const ProjectsPage = () => {
                     ? 'border-violet-300 bg-violet-100 text-violet-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
+                data-testid="projects-filter-COMPLETED"
               >
                 Zakończone
               </button>
@@ -253,6 +258,7 @@ export const ProjectsPage = () => {
                     ? 'border-neutral-300 bg-neutral-100 text-neutral-700'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
+                data-testid="projects-filter-ARCHIVED"
               >
                 Zarchiwizowane
               </button>

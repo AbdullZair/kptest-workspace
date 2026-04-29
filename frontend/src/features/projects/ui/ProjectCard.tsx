@@ -116,7 +116,10 @@ export const ProjectCard = memo(
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between border-t border-neutral-100 pt-4">
+          <div
+            className="flex items-center justify-between border-t border-neutral-100 pt-4"
+            data-testid={`project-card-${project.id}`}
+          >
             <div className="text-xs text-neutral-500">
               {project.created_by_name ? <span>Utworzył: {project.created_by_name}</span> : null}
             </div>
@@ -126,6 +129,7 @@ export const ProjectCard = memo(
                 size="sm"
                 onClick={handleEditClick}
                 className="border-primary-200 text-primary-600 hover:bg-primary-50"
+                data-testid="project-edit-button"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path

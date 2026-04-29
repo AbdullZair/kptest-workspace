@@ -99,6 +99,17 @@ public class MaterialService {
         // Validate material type and URLs
         validateMaterialUrls(materialDto);
 
+        // Wymagane created_by — jeśli klient nie podał, ustal z SecurityContext.
+        java.util.UUID createdBy = materialDto.createdBy();
+        if (createdBy == null) {
+            var auth = org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication();
+            if (auth != null && auth.getPrincipal() instanceof String userIdStr) {
+                try { createdBy = java.util.UUID.fromString(userIdStr); }
+                catch (IllegalArgumentException ignored) { /* leave null */ }
+            }
+        }
+
         // Create material
         EducationalMaterial material = EducationalMaterial.create(
             materialDto.projectId(),
@@ -107,7 +118,7 @@ public class MaterialService {
             materialDto.type(),
             materialDto.category(),
             materialDto.difficulty(),
-            materialDto.createdBy()
+            createdBy
         );
 
         // Set optional fields

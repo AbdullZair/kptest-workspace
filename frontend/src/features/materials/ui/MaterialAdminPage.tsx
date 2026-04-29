@@ -158,7 +158,7 @@ export const MaterialAdminPage = () => {
           <h1 className="text-2xl font-bold text-neutral-900">Zarządzanie materiałami</h1>
           <p className="mt-1 text-neutral-600">Twórz i zarządzaj materiałami edukacyjnymi</p>
         </div>
-        <Button variant="primary" onClick={handleCreateClick}>
+        <Button variant="primary" onClick={handleCreateClick} data-testid="material-add-button">
           <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
@@ -325,7 +325,7 @@ const MaterialFormModal = ({ isOpen, onClose, onSubmit, material }: MaterialForm
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 p-6">
+        <form onSubmit={handleSubmit} className="space-y-4 p-6" data-testid="material-form">
           {/* Title */}
           <div>
             <label className="mb-1 block text-sm font-medium text-neutral-700">Tytuł *</label>
@@ -335,6 +335,7 @@ const MaterialFormModal = ({ isOpen, onClose, onSubmit, material }: MaterialForm
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
               fullWidth
+              data-testid="material-title"
             />
           </div>
 
@@ -347,6 +348,7 @@ const MaterialFormModal = ({ isOpen, onClose, onSubmit, material }: MaterialForm
               value={formData.type}
               onChange={(e) => setFormData({ ...formData, type: e.target.value as MaterialType })}
               className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              data-testid="material-type-select"
             >
               <option value="ARTICLE">Artykuł</option>
               <option value="PDF">PDF</option>
@@ -366,6 +368,7 @@ const MaterialFormModal = ({ isOpen, onClose, onSubmit, material }: MaterialForm
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               placeholder="np. Cukrzyca, Nadciśnienie"
               fullWidth
+              data-testid="material-category"
             />
           </div>
 
@@ -398,6 +401,7 @@ const MaterialFormModal = ({ isOpen, onClose, onSubmit, material }: MaterialForm
                 rows={8}
                 className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                 placeholder="Treść artykułu w formacie HTML..."
+                data-testid="material-content"
               />
             </div>
           )}
@@ -448,10 +452,10 @@ const MaterialFormModal = ({ isOpen, onClose, onSubmit, material }: MaterialForm
 
           {/* Actions */}
           <div className="flex justify-end gap-3 border-t border-neutral-200 pt-4">
-            <Button type="button" variant="ghost" onClick={onClose}>
+            <Button type="button" variant="ghost" onClick={onClose} data-testid="material-cancel">
               Anuluj
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" data-testid="material-save">
               {material ? 'Zapisz zmiany' : 'Dodaj materiał'}
             </Button>
           </div>

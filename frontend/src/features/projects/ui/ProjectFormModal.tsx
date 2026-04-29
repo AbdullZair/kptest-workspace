@@ -180,7 +180,7 @@ export const ProjectFormModal = ({
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} data-testid="project-form">
               <Card.Body className="space-y-5">
                 {/* Name */}
                 <div>
@@ -201,6 +201,7 @@ export const ProjectFormModal = ({
                     )}
                     placeholder="Wprowadź nazwę projektu"
                     disabled={isLoading}
+                    data-testid="project-name"
                   />
                   {errors.name ? <p className="mt-1 text-sm text-rose-600">{errors.name}</p> : null}
                 </div>
@@ -227,6 +228,7 @@ export const ProjectFormModal = ({
                     )}
                     placeholder="Opis projektu (opcjonalny)"
                     disabled={isLoading}
+                    data-testid="project-description"
                   />
                   {errors.description ? (
                     <p className="mt-1 text-sm text-rose-600">{errors.description}</p>
@@ -259,6 +261,7 @@ export const ProjectFormModal = ({
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
                       disabled={isLoading}
+                      data-testid="project-start-date"
                     />
                     {errors.start_date ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.start_date}</p>
@@ -286,6 +289,7 @@ export const ProjectFormModal = ({
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
                       disabled={isLoading}
+                      data-testid="project-end-date"
                     />
                     {errors.end_date ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.end_date}</p>
@@ -310,6 +314,7 @@ export const ProjectFormModal = ({
                       onChange={handleChange}
                       className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       disabled={isLoading}
+                      data-testid="project-status"
                     >
                       <option value="PLANNED">Planowany</option>
                       <option value="ACTIVE">Aktywny</option>
@@ -342,6 +347,7 @@ export const ProjectFormModal = ({
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
                       disabled={isLoading}
+                      data-testid="project-compliance-threshold"
                     />
                     {errors.compliance_threshold ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.compliance_threshold}</p>
@@ -352,7 +358,13 @@ export const ProjectFormModal = ({
 
               {/* Footer */}
               <Card.Footer className="flex items-center justify-end gap-3 border-t border-neutral-200 bg-neutral-50 px-6 py-4">
-                <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onClose}
+                  disabled={isLoading}
+                  data-testid="project-cancel"
+                >
                   Anuluj
                 </Button>
                 <Button
@@ -360,6 +372,7 @@ export const ProjectFormModal = ({
                   variant="primary"
                   disabled={isLoading}
                   className="min-w-[120px]"
+                  data-testid="project-save"
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">

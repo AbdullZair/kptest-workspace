@@ -196,7 +196,7 @@ export const PatientFormModal = memo(
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" data-testid="patient-form">
               {/* Personal Information Section */}
               <div>
                 <h3 className="mb-3 text-sm font-medium text-neutral-900">Dane osobowe</h3>
@@ -210,6 +210,7 @@ export const PatientFormModal = memo(
                     variant={errors.pesel ? 'error' : 'default'}
                     disabled={isLoading}
                     required
+                    data-testid="patient-pesel"
                   />
 
                   <Input
@@ -229,6 +230,7 @@ export const PatientFormModal = memo(
                     variant={errors.first_name ? 'error' : 'default'}
                     disabled={isLoading}
                     required
+                    data-testid="patient-firstName"
                   />
 
                   <Input
@@ -240,6 +242,7 @@ export const PatientFormModal = memo(
                     variant={errors.last_name ? 'error' : 'default'}
                     disabled={isLoading}
                     required
+                    data-testid="patient-lastName"
                   />
 
                   <Input
@@ -282,6 +285,7 @@ export const PatientFormModal = memo(
                     error={errors.email}
                     variant={errors.email ? 'error' : 'default'}
                     disabled={isLoading}
+                    data-testid="patient-email"
                   />
 
                   <Input
@@ -293,6 +297,7 @@ export const PatientFormModal = memo(
                     error={errors.phone}
                     variant={errors.phone ? 'error' : 'default'}
                     disabled={isLoading}
+                    data-testid="patient-phone"
                   />
                 </div>
               </div>
@@ -331,10 +336,21 @@ export const PatientFormModal = memo(
 
               {/* Actions */}
               <div className="mt-6 flex items-center justify-end gap-3 border-t border-neutral-200 pt-4">
-                <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onClose}
+                  disabled={isLoading}
+                  data-testid="patient-cancel"
+                >
                   Anuluj
                 </Button>
-                <Button type="submit" variant="primary" loading={isLoading}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  loading={isLoading}
+                  data-testid="patient-save"
+                >
                   {isEditing ? 'Zapisz zmiany' : 'Dodaj pacjenta'}
                 </Button>
               </div>

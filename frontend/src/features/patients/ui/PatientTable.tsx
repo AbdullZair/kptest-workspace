@@ -191,7 +191,7 @@ export const PatientTable = memo(
     return (
       <div className={baseStyles}>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-neutral-200">
+          <table className="min-w-full divide-y divide-neutral-200" data-testid="patients-table">
             <thead className="bg-neutral-50">
               <tr>
                 <SortableHeader

@@ -192,6 +192,7 @@ export const PatientsPage = () => {
             </svg>
           }
           onClick={handleCreateClick}
+          data-testid="patients-add-button"
         >
           Dodaj pacjenta
         </Button>
@@ -218,6 +219,7 @@ export const PatientsPage = () => {
                     ? 'border-amber-300 bg-amber-100 text-amber-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
+                data-testid="patients-filter-status-PENDING"
               >
                 Oczekujący
               </button>
@@ -228,6 +230,7 @@ export const PatientsPage = () => {
                     ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
+                data-testid="patients-filter-status-APPROVED"
               >
                 Zweryfikowany
               </button>
@@ -238,6 +241,7 @@ export const PatientsPage = () => {
                     ? 'border-rose-300 bg-rose-100 text-rose-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
+                data-testid="patients-filter-status-REJECTED"
               >
                 Odrzucony
               </button>

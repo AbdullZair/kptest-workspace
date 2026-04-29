@@ -51,6 +51,7 @@ public class Project {
     private Integer complianceThreshold;
 
     @Column(columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String config;
 
     @CreatedDate

@@ -87,9 +87,11 @@ public class ProjectService {
     public ProjectResponse create(ProjectCreateRequest request, UUID staffId) {
         log.info("Creating project: {}", request.name());
 
-        // Find staff member
-        Staff staff = staffRepository.findById(staffId)
-            .orElseThrow(() -> new ResourceNotFoundException("Staff not found with id: " + staffId));
+        // ProjectController passes the authenticated user's id, not the
+        // staff row pk. Look up by user_id (Staff.user_id is unique).
+        Staff staff = staffRepository.findByUserId(staffId)
+            .or(() -> staffRepository.findById(staffId))
+            .orElseThrow(() -> new ResourceNotFoundException("Staff not found for user id: " + staffId));
 
         // Create project
         Project project = Project.create(

@@ -96,6 +96,7 @@ export const PatientSearch = memo(
             placeholder={placeholder}
             disabled={disabled}
             fullWidth
+            data-testid="patients-search-input"
             leftIcon={
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path

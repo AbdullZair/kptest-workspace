@@ -146,6 +146,7 @@ export const CalendarPage: React.FC = () => {
           <button
             onClick={() => setIsFormOpen(true)}
             className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            data-testid="event-add-button"
           >
             + Dodaj wydarzenie
           </button>
