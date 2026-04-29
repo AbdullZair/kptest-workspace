@@ -42,7 +42,7 @@ export const ReportsPage = () => {
     })
   }
 
-  const handleDownload = async (report: (typeof reports)[0]) => {
+  const handleDownload = async (report: NonNullable<typeof reports>[number]) => {
     try {
       await exportReport({
         report_type: report.type,

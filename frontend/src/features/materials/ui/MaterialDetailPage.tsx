@@ -3,7 +3,6 @@ import { Card, Button, PageLoader } from '@shared/components'
 import { MaterialViewer, MaterialTypeIcon, ProgressTracker } from '../components'
 import {
   useGetMaterialByIdQuery,
-  useRecordViewMutation,
   useMarkAsCompleteMutation,
 } from '../api/materialApi'
 import { useMemo } from 'react'
@@ -28,11 +27,10 @@ export const MaterialDetailPage = () => {
   } = useGetMaterialByIdQuery(id!, {
     skip: !id,
   })
-  const [recordView] = useRecordViewMutation()
   const [markAsComplete] = useMarkAsCompleteMutation()
 
   // Material progress (mock - would come from progress API)
-  const materialProgress = useMemo(() => {
+  const materialProgress = useMemo<{ status?: string } | null>(() => {
     // In real app, fetch from progress API
     return null
   }, [])
@@ -42,16 +40,6 @@ export const MaterialDetailPage = () => {
   // Handlers
   const handleBack = () => {
     navigate('/materials')
-  }
-
-  const handleView = async () => {
-    if (!id) return
-
-    try {
-      await recordView({ id, patientId }).unwrap()
-    } catch (err) {
-      console.error('Failed to record view:', err)
-    }
   }
 
   const handleComplete = async () => {

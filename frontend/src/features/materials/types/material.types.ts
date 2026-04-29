@@ -105,6 +105,10 @@ export interface MaterialFormData {
   assigned_to_patients?: string[]
   assigned_to_stages?: string[]
   published?: boolean
+  /** Project the material is being uploaded to (admin flow). */
+  project_id?: string
+  /** ID of the user creating the material (admin flow). */
+  created_by?: string
 }
 
 /**

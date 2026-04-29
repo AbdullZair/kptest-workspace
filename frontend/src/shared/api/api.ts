@@ -20,20 +20,6 @@ let refreshSubscribers: Array<(token: string) => void> = []
 let refreshFailedSubscribers: Array<() => void> = []
 
 /**
- * Subscribe to token refresh success
- */
-function subscribeTokenRefresh(cb: (token: string) => void): void {
-  refreshSubscribers.push(cb)
-}
-
-/**
- * Subscribe to token refresh failure
- */
-function subscribeTokenRefreshFailed(cb: () => void): void {
-  refreshFailedSubscribers.push(cb)
-}
-
-/**
  * Execute all refresh subscribers
  */
 function onTokenRefreshed(token: string): void {
@@ -67,18 +53,6 @@ function getRefreshToken(): string | null {
     return null
   }
   return localStorage.getItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN)
-}
-
-/**
- * Check if token is expired (with 30 second buffer)
- */
-function isTokenExpired(): boolean {
-  if (typeof window === 'undefined') {
-    return true
-  }
-  const expiry = localStorage.getItem(AUTH_STORAGE_KEYS.TOKEN_EXPIRY)
-  if (!expiry) return true
-  return Date.now() >= parseInt(expiry, 10) - 30000
 }
 
 /**
@@ -165,7 +139,7 @@ export const customBaseQuery = async (
 ): Promise<{ data: unknown } | { error: ApiError }> => {
   const baseQuery = fetchBaseQuery({
     baseUrl: extraOptions.baseUrl || API_BASE_URL,
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers) => {
       // Get token from localStorage
       const token = getAccessToken()
 
@@ -201,13 +175,12 @@ export const customBaseQuery = async (
               result = await baseQuery(args, api, extraOptions)
             } else {
               const fetchArgs = args
+              const newHeaders = new Headers(fetchArgs.headers as HeadersInit | undefined)
+              newHeaders.set('authorization', `Bearer ${newToken}`)
               result = await baseQuery(
                 {
                   ...fetchArgs,
-                  headers: new Headers(fetchArgs.headers).set(
-                    'authorization',
-                    `Bearer ${newToken}`
-                  ),
+                  headers: newHeaders,
                 },
                 api,
                 extraOptions
@@ -268,7 +241,7 @@ export const customBaseQuery = async (
       }
     }
 
-    return result
+    return result as { data: unknown } | { error: ApiError }
   } catch (error) {
     return {
       error: {
@@ -286,7 +259,7 @@ export const customBaseQuery = async (
  */
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: customBaseQuery as BaseQueryFn<string | FetchArgs, unknown, ApiError>,
+  baseQuery: customBaseQuery as unknown as BaseQueryFn<string | FetchArgs, unknown, ApiError>,
   tagTypes: [
     'User',
     'Patient',
@@ -313,6 +286,18 @@ export const api = createApi({
     'SystemMetrics',
     'PatientData',
     'DataProcessingActivity',
+    'Quizzes',
+    'QuizAttempts',
+    'Badges',
+    'TherapyStages',
+    'StageProgress',
+    'InboxThread',
+    'InboxMessage',
+    'DashboardKpi',
+    'NotificationPreferences',
+    'ReportHistory',
+    'PatientBadges',
+    'Report',
   ],
   endpoints: () => ({}),
 })
@@ -321,8 +306,10 @@ export const api = createApi({
  * Inject new endpoints into the API
  */
 export const injectApiEndpoints = <T extends Record<string, unknown>>(endpoints: T): void => {
+  // RTK Query's injectEndpoints expects EndpointDefinitions; cast through unknown
+  // since the generic signature relies on builder, not direct objects.
   api.injectEndpoints({
-    endpoints: () => endpoints,
+    endpoints: (() => endpoints) as unknown as Parameters<typeof api.injectEndpoints>[0]['endpoints'],
     overrideExisting: false,
   })
 }

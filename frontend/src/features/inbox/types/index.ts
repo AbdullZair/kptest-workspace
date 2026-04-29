@@ -3,6 +3,19 @@
  */
 
 /**
+ * Generic paginated response (Spring Page-style)
+ */
+export interface PageResponse<T> {
+  content: T[]
+  totalElements: number
+  totalPages: number
+  size: number
+  number: number
+  first?: boolean
+  last?: boolean
+}
+
+/**
  * Thread status enumeration
  */
 export type ThreadStatus = 'NEW' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'

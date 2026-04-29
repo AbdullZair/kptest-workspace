@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { clsx } from 'clsx'
-import type { ExportRequest, ReportType } from '../types'
+import type { ReportType } from '../types'
 
 export interface ExportButtonProps {
   /**
@@ -35,6 +35,10 @@ export interface ExportButtonProps {
    * Additional CSS classes
    */
   className?: string
+  /**
+   * Whether export should include charts (forwarded into the export request)
+   */
+  includeCharts?: boolean
   /**
    * Export success callback
    */

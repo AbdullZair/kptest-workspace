@@ -61,7 +61,7 @@ const getNavigationByRole = (role?: UserRole): NavItem[] => {
           />
         </svg>
       ),
-      roles: ['ADMIN', 'DOCTOR', 'COORDINATOR', 'THERAPIST'],
+      roles: ['ADMIN', 'DOCTOR', 'COORDINATOR', 'THERAPIST'] as unknown as UserRole[],
     },
     {
       name: 'Kalendarz',

@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { ForcePasswordResetButton } from '../ForcePasswordResetButton'
 import * as adminApi from '../../api/adminApi'

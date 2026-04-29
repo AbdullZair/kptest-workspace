@@ -37,7 +37,7 @@ const getActionColor = (action: string): string => {
     LOGIN: 'bg-purple-100 text-purple-800 border-purple-200',
     LOGOUT: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   }
-  return colors[action] || colors.VIEW
+  return colors[action] || colors.VIEW || ''
 }
 
 /**
@@ -50,7 +50,7 @@ const getLevelColor = (level: string): string => {
     WARN: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     ERROR: 'bg-red-100 text-red-800 border-red-200',
   }
-  return colors[level] || colors.INFO
+  return colors[level] || colors.INFO || ''
 }
 
 /**

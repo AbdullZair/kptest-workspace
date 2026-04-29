@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { MaterialStatus } from '../types/material.types'
 
@@ -129,7 +128,7 @@ const getSizeClasses = (
 export const ProgressTracker = memo(
   ({
     status,
-    completedAt,
+    completedAt: _completedAt,
     timeSpentSeconds,
     quizScore,
     size = 'md',

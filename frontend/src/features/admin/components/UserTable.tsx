@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import type { UserAdmin } from '../types'
 import { UserRoleBadge } from './UserRoleBadge'
 import { UserStatusToggle } from './UserStatusToggle'
@@ -106,7 +106,7 @@ const SortableHeader = ({
     >
       <span className="flex items-center">
         {children}
-        <SortIcon order={isActive ? order : 'asc'} active={isActive} />
+        <SortIcon order={isActive && order ? order : 'asc'} active={isActive} />
       </span>
     </th>
   )

@@ -65,13 +65,6 @@ const ComplianceGauge: React.FC<ComplianceGaugeProps> = ({
     return 'text-error-500'
   }
 
-  const getLabel = (val: number) => {
-    if (val >= 80) return 'Doskonały'
-    if (val >= 60) return 'Dobry'
-    if (val >= 40) return 'Średni'
-    return 'Niski'
-  }
-
   return (
     <div className="relative inline-flex items-center justify-center">
       <svg width={width} height={width} className="-rotate-90 transform">

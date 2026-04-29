@@ -1,12 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@features/auth'
-import { ConversationView, AttachmentUpload } from '../components'
+import { ConversationView } from '../components'
 import {
   useGetThreadByIdQuery,
   useGetThreadMessagesQuery,
   useSendMessageMutation,
   useMarkAsReadMutation,
-  useUploadAttachmentMutation,
 } from '../api/messageApi'
 import type { MessageFormData } from '../types'
 
@@ -47,8 +46,6 @@ export const ConversationPage = function ConversationPage() {
   // Mark as read mutation
   const [markAsRead] = useMarkAsReadMutation()
 
-  // Upload attachment mutation
-  const [uploadAttachment] = useUploadAttachmentMutation()
 
   // Handle send message
   const handleSendMessage = async (data: MessageFormData) => {
@@ -69,16 +66,6 @@ export const ConversationPage = function ConversationPage() {
       await markAsRead(messageId).unwrap()
     } catch (error) {
       console.error('Failed to mark as read:', error)
-    }
-  }
-
-  // Handle upload attachment
-  const handleUploadAttachment = async (messageId: string, file: File) => {
-    try {
-      await uploadAttachment({ messageId, file }).unwrap()
-    } catch (error) {
-      console.error('Failed to upload attachment:', error)
-      throw error
     }
   }
 

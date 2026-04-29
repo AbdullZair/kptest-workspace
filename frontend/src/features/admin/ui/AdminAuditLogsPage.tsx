@@ -20,7 +20,7 @@ export function AdminAuditLogsPage() {
   const { data, isLoading, error, refetch } = useGetAuditLogsQuery(filters)
   const [exportAuditLogs] = useExportAuditLogsMutation()
 
-  const handleSortChange = (field: string, order: 'asc' | 'desc') => {
+  const handleSortChange = (_field: string, _order: 'asc' | 'desc') => {
     setFilters((prev) => ({ ...prev, page: 0 }))
   }
 

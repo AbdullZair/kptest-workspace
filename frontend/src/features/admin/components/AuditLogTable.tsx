@@ -132,7 +132,7 @@ const SortableHeader = ({
     >
       <span className="flex items-center">
         {children}
-        <SortIcon order={isActive ? order : 'asc'} active={isActive} />
+        <SortIcon order={isActive && order ? order : 'asc'} active={isActive} />
       </span>
     </th>
   )

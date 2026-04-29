@@ -101,19 +101,19 @@ export const PatientFormModal = memo(
       const newErrors: Record<string, string> = {}
 
       // Validate PESEL
-      if (!formData.pesel.trim()) {
+      if (!formData.pesel?.trim()) {
         newErrors.pesel = 'PESEL jest wymagany'
       } else if (!/^\d{11}$/.test(formData.pesel)) {
         newErrors.pesel = 'PESEL musi zawierać 11 cyfr'
       }
 
       // Validate first name
-      if (!formData.first_name.trim()) {
+      if (!formData.first_name?.trim()) {
         newErrors.first_name = 'Imię jest wymagane'
       }
 
       // Validate last name
-      if (!formData.last_name.trim()) {
+      if (!formData.last_name?.trim()) {
         newErrors.last_name = 'Nazwisko jest wymagane'
       }
 

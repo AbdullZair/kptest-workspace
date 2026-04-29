@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { useExportPatientDataMutation } from '../api/adminApi'
 import { Button } from '@shared/components'

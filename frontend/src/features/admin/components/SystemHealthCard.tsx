@@ -19,7 +19,7 @@ const getStatusColor = (status: string): string => {
     DOWN: 'bg-red-500',
     DEGRADED: 'bg-yellow-500',
   }
-  return colors[status] || colors.DEGRADED
+  return colors[status] || colors.DEGRADED || ''
 }
 
 /**

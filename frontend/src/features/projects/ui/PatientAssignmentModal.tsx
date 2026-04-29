@@ -24,14 +24,13 @@ export const PatientAssignmentModal = ({
   isOpen,
   onClose,
   onSubmit,
-  projectId,
+  projectId: _projectId,
   existingPatientIds = [],
   isLoading = false,
 }: PatientAssignmentModalProps) => {
   const [selectedPatientIds, setSelectedPatientIds] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(0)
-  const pageSize = 10
 
   // Fetch patients
   const { data: patientsData, isLoading: isLoadingPatients } = useGetPatientsQuery({

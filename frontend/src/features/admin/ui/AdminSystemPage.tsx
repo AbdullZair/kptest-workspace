@@ -6,7 +6,6 @@ import {
   useCreateBackupMutation,
 } from '../api/adminApi'
 import { SystemHealthCard, SystemMetricsChart } from '../components'
-import { clsx } from 'clsx'
 
 /**
  * AdminSystemPage Component

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Button, Card } from '@shared/components'
-import type { ProjectFormModalProps, ProjectFormData, ProjectStatus } from '../types'
+import type { ProjectFormModalProps, ProjectFormData } from '../types'
 import { clsx } from 'clsx'
 
 /**
@@ -29,7 +29,7 @@ export const ProjectFormModal = ({
   const [formData, setFormData] = useState<ProjectFormData>({
     name: '',
     description: '',
-    start_date: new Date().toISOString().split('T')[0],
+    start_date: new Date().toISOString().split('T')[0] ?? '',
     end_date: '',
     status: 'PLANNED',
     compliance_threshold: 80,
@@ -43,8 +43,8 @@ export const ProjectFormModal = ({
       setFormData({
         name: project.name || '',
         description: project.description || '',
-        start_date: project.start_date ? project.start_date.split('T')[0] : '',
-        end_date: project.end_date ? project.end_date.split('T')[0] : '',
+        start_date: project.start_date ? (project.start_date.split('T')[0] ?? '') : '',
+        end_date: project.end_date ? (project.end_date.split('T')[0] ?? '') : '',
         status: project.status || 'PLANNED',
         compliance_threshold: project.compliance_threshold || 80,
       })
@@ -53,7 +53,7 @@ export const ProjectFormModal = ({
       setFormData({
         name: '',
         description: '',
-        start_date: new Date().toISOString().split('T')[0],
+        start_date: new Date().toISOString().split('T')[0] ?? '',
         end_date: '',
         status: 'PLANNED',
         compliance_threshold: 80,

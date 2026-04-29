@@ -105,9 +105,9 @@ export interface PatientVerifyResponse {
  * Patient form data for create/edit
  */
 export interface PatientFormData {
-  pesel: string
-  first_name: string
-  last_name: string
+  pesel?: string
+  first_name?: string
+  last_name?: string
   date_of_birth?: string
   gender?: 'MALE' | 'FEMALE' | 'OTHER' | 'UNKNOWN'
   email?: string

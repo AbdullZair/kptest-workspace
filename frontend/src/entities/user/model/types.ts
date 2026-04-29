@@ -64,4 +64,3 @@ export const isAdmin = (user: User | null): boolean => {
 }
 
 export type { User }
-export { toUserEntity, getUserRoleName, hasRole, hasAnyRole, isMedicalStaff, isAdmin }

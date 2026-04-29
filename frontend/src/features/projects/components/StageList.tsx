@@ -19,7 +19,7 @@ export interface StageListProps {
  */
 export const StageList: React.FC<StageListProps> = ({
   stages,
-  projectId,
+  projectId: _projectId,
   onReorder,
   onEdit,
   onDelete,
@@ -52,6 +52,7 @@ export const StageList: React.FC<StageListProps> = ({
 
       const newStages = [...stages]
       const [draggedStage] = newStages.splice(draggedIndex, 1)
+      if (!draggedStage) return
       newStages.splice(dropIndex, 0, draggedStage)
 
       const stageIds = newStages.map((s) => s.id)
@@ -84,7 +85,7 @@ export const StageList: React.FC<StageListProps> = ({
       {stages.map((stage, index) => {
         const isDragging = draggedIndex === index
         const isDragOver = dragOverIndex === index
-        const canDrag = isStaff && onReorder
+        const canDrag = Boolean(isStaff && onReorder)
 
         return (
           <div

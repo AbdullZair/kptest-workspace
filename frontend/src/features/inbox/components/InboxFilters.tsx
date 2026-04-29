@@ -7,6 +7,10 @@ interface InboxFiltersProps {
   assignedTo?: string
   isUnread?: boolean
   priority?: MessagePriority
+  /** Current page number (forwarded as part of filter state) */
+  page?: number
+  /** Page size (forwarded as part of filter state) */
+  size?: number
   onFilterChange: (filters: Partial<InboxFiltersProps>) => void
   onReset: () => void
 }

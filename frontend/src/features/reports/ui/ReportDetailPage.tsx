@@ -6,7 +6,6 @@ import {
   useGetMaterialStatsQuery,
 } from '../api'
 import { ComplianceChart, PatientStatsCard, ProjectStatsCard, ExportButton } from '../components'
-import type { ComplianceTrendEntry } from '../types'
 
 /**
  * ReportDetailPage Component

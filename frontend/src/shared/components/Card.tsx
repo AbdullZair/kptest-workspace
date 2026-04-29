@@ -92,7 +92,7 @@ const variantStyles: Record<CardVariant, string> = {
  * </Card>
  * ```
  */
-export const Card = memo(
+const CardBase = memo(
   forwardRef<HTMLDivElement, CardProps>(
     (
       {
@@ -218,18 +218,21 @@ const CardFooter = memo(
   })
 )
 
-// Attach sub-components to Card
+// Attach sub-components to Card with proper typing
+type CardComponent = typeof CardBase & {
+  Header: typeof CardHeader
+  Body: typeof CardBody
+  Footer: typeof CardFooter
+}
+
+export const Card = CardBase as CardComponent
 Card.Header = CardHeader
 Card.Body = CardBody
 Card.Footer = CardFooter
 
 export type { CardHeaderProps, CardBodyProps, CardFooterProps }
 
-// Export Card with sub-components type
-export const CardWithSubcomponents = Card as typeof Card & {
-  Header: typeof CardHeader
-  Body: typeof CardBody
-  Footer: typeof CardFooter
-}
+// Export Card with sub-components type (alias for backward compat)
+export const CardWithSubcomponents = Card
 
 export default Card

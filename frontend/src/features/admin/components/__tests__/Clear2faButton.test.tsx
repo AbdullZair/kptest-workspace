@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { Clear2faButton } from '../Clear2faButton'
 import * as adminApi from '../../api/adminApi'

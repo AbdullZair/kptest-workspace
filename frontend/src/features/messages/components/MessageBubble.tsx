@@ -24,17 +24,6 @@ const formatTime = (dateString: string): string => {
   })
 }
 
-/**
- * Format date for display
- */
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('pl-PL', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}
 
 /**
  * Get priority badge color
@@ -101,7 +90,7 @@ export const MessageBubble = memo(
           ) : null}
 
           <Card
-            variant={isOwn ? 'primary' : 'default'}
+            variant={isOwn ? 'elevated' : 'default'}
             size="md"
             className={`${isOwn ? 'border-blue-200 bg-blue-50' : 'bg-white'}`}
           >

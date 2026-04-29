@@ -70,7 +70,8 @@ export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ isOp
     },
   })
 
-  const newPassword = watch('newPassword')
+  // Watched for potential strength meter; currently unused but reserves the dependency.
+  void watch('newPassword')
 
   const onSubmit = async (data: ChangePasswordDialogFormData) => {
     try {

@@ -28,7 +28,7 @@ export const MessagesPage = function MessagesPage() {
     isLoading: isLoadingThreads,
     refetch,
   } = useGetThreadsQuery({
-    project_id: user?.project_id,
+    project_id: (user as unknown as { project_id?: string } | null)?.project_id,
     type: selectedType === 'ALL' ? undefined : selectedType,
     page: 0,
     size: 50,
@@ -36,7 +36,7 @@ export const MessagesPage = function MessagesPage() {
 
   // Fetch unread count
   const { data: unreadData } = useGetUnreadCountQuery({
-    project_id: user?.project_id,
+    project_id: (user as unknown as { project_id?: string } | null)?.project_id,
   })
 
   // Create thread mutation
@@ -164,7 +164,7 @@ export const MessagesPage = function MessagesPage() {
           onClose={() => setShowCreateModal(false)}
           onSubmit={handleCreateThread}
           isLoading={isCreating}
-          defaultProjectId={user?.project_id}
+          defaultProjectId={(user as unknown as { project_id?: string } | null)?.project_id}
         />
       ) : null}
     </div>

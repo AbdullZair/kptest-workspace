@@ -342,11 +342,11 @@ const MonthView: React.FC<{
   getEventsForDay: (day: Date) => TherapyEvent[]
   onEventClick: (event: TherapyEvent) => void
 }> = ({ days, currentDate, getEventsForDay, onEventClick }) => {
-  const weeks = []
+  const weeks: Date[][] = []
   let weekDays: Date[] = []
 
   // Pad with empty cells at start
-  const startDayOfWeek = days[0].getDay()
+  const startDayOfWeek = days[0]?.getDay() ?? 0
   for (let i = 0; i < startDayOfWeek; i++) {
     weekDays.push(null as unknown as Date)
   }
@@ -482,7 +482,7 @@ const DayView: React.FC<{
   onEventClick: (event: TherapyEvent) => void
   onEventComplete: (event: TherapyEvent) => void
   onEventExport: (event: TherapyEvent) => void
-}> = ({ day, events, onEventClick, onEventComplete, onEventExport }) => {
+}> = ({ day, events, onEventClick, onEventComplete: _onEventComplete, onEventExport: _onEventExport }) => {
   return (
     <div className="rounded-lg bg-white shadow">
       <div className="border-b p-4">

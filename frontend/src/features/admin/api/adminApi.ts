@@ -23,6 +23,10 @@ import type {
   DataProcessingActivity,
   DataProcessingActivityFilters,
   DataProcessingActivityInput,
+  ForcePasswordResetRequest,
+  Clear2faRequest,
+  Clear2faResponse,
+  ActivationCodeResponse,
 } from '../types'
 
 /**

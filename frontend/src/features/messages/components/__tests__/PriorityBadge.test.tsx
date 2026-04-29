@@ -1,7 +1,5 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { PriorityBadge } from '../PriorityBadge'
-import type { MessagePriority } from '../../types'
 
 describe('PriorityBadge', () => {
   it('should render INFO priority badge', () => {

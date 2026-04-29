@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Card, Button, PageLoader } from '@shared/components'
+import { Card, PageLoader } from '@shared/components'
 import {
   MaterialCard,
   MaterialFilters as MaterialFiltersComponent,
@@ -9,7 +9,6 @@ import {
   useGetPatientMaterialsQuery,
   useGetPatientProgressQuery,
   useRecordViewMutation,
-  useMarkAsCompleteMutation,
 } from '../api/materialApi'
 import { useNavigate } from 'react-router-dom'
 import type {
@@ -45,7 +44,6 @@ export const MaterialsPage = () => {
   const { data: progressRecords = [], isLoading: isLoadingProgress } =
     useGetPatientProgressQuery(patientId)
   const [recordView] = useRecordViewMutation()
-  const [markAsComplete] = useMarkAsCompleteMutation()
 
   // Create progress map
   const progressMap = useMemo(() => {
@@ -137,14 +135,6 @@ export const MaterialsPage = () => {
 
     // Navigate to detail page
     navigate(`/materials/${material.id}`)
-  }
-
-  const handleComplete = async (materialId: string) => {
-    try {
-      await markAsComplete({ id: materialId, patientId }).unwrap()
-    } catch (err) {
-      console.error('Failed to mark as complete:', err)
-    }
   }
 
   const handleClearFilters = () => {

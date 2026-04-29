@@ -86,6 +86,12 @@ kptest:
     connect-timeout-ms: 5000
     read-timeout-ms: 10000
     fallback-enabled: true
+    client:
+      connect-timeout-ms: ${HIS_CLIENT_CONNECT_TIMEOUT_MS:2000}
+      response-timeout-ms: ${HIS_CLIENT_RESPONSE_TIMEOUT_MS:5000}
+      max-total-connections: ${HIS_CLIENT_MAX_TOTAL:50}
+      max-connections-per-route: ${HIS_CLIENT_MAX_PER_ROUTE:20}
+      validate-after-inactivity-ms: ${HIS_CLIENT_VALIDATE_AFTER_INACTIVITY_MS:10000}
   
   audit:
     enabled: true

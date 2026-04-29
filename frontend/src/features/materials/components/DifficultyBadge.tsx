@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { DifficultyLevel } from '../types/material.types'
 

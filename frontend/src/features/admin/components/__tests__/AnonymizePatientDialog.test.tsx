@@ -121,8 +121,10 @@ describe('AnonymizePatientDialog', () => {
       })
     )
     vi.mocked(useAnonymizePatientMutation).mockReturnValue([
-      mockAnonymize,
-      { isLoading: false, error: null },
+      mockAnonymize as unknown as ReturnType<typeof useAnonymizePatientMutation>[0],
+      { isLoading: false, error: null } as unknown as ReturnType<
+        typeof useAnonymizePatientMutation
+      >[1],
     ])
 
     render(

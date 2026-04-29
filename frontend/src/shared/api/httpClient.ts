@@ -42,10 +42,8 @@ interface HttpClientConfig {
  */
 class HttpClient {
   private instance: AxiosInstance
-  private baseURL: string
 
   constructor(config: HttpClientConfig) {
-    this.baseURL = config.baseURL
     this.instance = axios.create({
       baseURL: config.baseURL,
       timeout: config.timeout,

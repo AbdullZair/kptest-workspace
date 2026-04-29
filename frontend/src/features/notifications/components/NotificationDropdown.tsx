@@ -7,7 +7,6 @@ import {
   useMarkAllAsReadMutation,
 } from '../api/notificationApi'
 import { NotificationItem } from './NotificationItem'
-import { Button } from '@shared/components/Button'
 import type { Notification } from '@entities/notification'
 
 /**

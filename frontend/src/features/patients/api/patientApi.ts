@@ -1,7 +1,6 @@
 import { api } from '@shared/api'
 import type {
   Patient,
-  PatientDto,
   PatientFormData,
   PatientSearchRequest,
   PatientSearchResponse,

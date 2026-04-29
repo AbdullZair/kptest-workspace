@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { clsx } from 'clsx'
-import type { ExportRequest, ReportType } from '../types'
+import type { ReportType } from '../types'
 
 export interface ExportModalProps {
   /**

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { Card, Button, PageLoader } from '@shared/components'
 import { ProjectCard, ProjectFormModal } from '.'
 import {
@@ -36,7 +36,7 @@ export const ProjectsPage = () => {
   })
   const [createProject, { isLoading: isCreating }] = useCreateProjectMutation()
   const [updateProject, { isLoading: isUpdating }] = useUpdateProjectMutation()
-  const [deleteProject, { isLoading: isDeleting }] = useDeleteProjectMutation()
+  const [deleteProject] = useDeleteProjectMutation()
 
   // Handlers
   const handleProjectClick = (project: Project) => {

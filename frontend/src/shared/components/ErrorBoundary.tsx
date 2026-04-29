@@ -5,7 +5,7 @@ import { Card } from './Card'
 /**
  * Error Boundary props interface
  */
-interface ErrorBoundaryProps extends PropsWithChildren {
+export interface ErrorBoundaryProps extends PropsWithChildren {
   /** Custom fallback component */
   fallback?: ComponentType<{ error: Error; resetError: () => void }>
   /** Error message to display */
@@ -69,7 +69,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
    * componentDidCatch
    * Logs error information to error reporting service
    */
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({ errorInfo })
 
     // Call onError callback if provided
@@ -98,7 +98,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   /**
    * Render fallback UI or children
    */
-  render(): React.ReactNode {
+  override render(): React.ReactNode {
     const { hasError, error } = this.state
     const {
       children,

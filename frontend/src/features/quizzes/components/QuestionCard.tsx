@@ -91,7 +91,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       </div>
 
       <div className="space-y-3">
-        {question.answers.map((answer, index) => {
+        {question.answers.map((answer, _index) => {
           const isSelected = localSelection.includes(answer.id)
           const isCorrect = showResult && answer.correct
           const isWrong = showResult && isSelected && !answer.correct

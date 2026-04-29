@@ -1,12 +1,12 @@
 import { createSlice, createEntityAdapter, type PayloadAction } from '@reduxjs/toolkit'
 import type { User } from '@shared/types'
-import type { UserEntity, toUserEntity } from './types'
+import type { UserEntity } from './types'
+import { toUserEntity } from './types'
 
 /**
  * User entity adapter
  */
 const usersAdapter = createEntityAdapter<UserEntity>({
-  selectId: (user: UserEntity) => user.id,
   sortComparer: (a: UserEntity, b: UserEntity) => a.lastName.localeCompare(b.lastName),
 })
 
@@ -94,12 +94,15 @@ export const selectIsAuthenticated = (state: { user: UserState }): boolean =>
 /**
  * Adapter selectors (for future use with multiple users)
  */
+// Adapter selectors operate on the EntityState; the slice state is shaped
+// differently (currentUser-only) so we get a default entity state here.
+const _emptyEntityState = usersAdapter.getInitialState()
 export const {
   selectAll: selectAllUsers,
   selectById: selectUserById,
   selectIds: selectUserIds,
   selectEntities: selectUserEntities,
-} = usersAdapter.getSelectors((state: { user: UserState }) => state)
+} = usersAdapter.getSelectors(() => _emptyEntityState)
 
 /**
  * Reducer

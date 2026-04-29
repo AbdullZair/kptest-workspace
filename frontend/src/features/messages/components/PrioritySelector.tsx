@@ -1,4 +1,3 @@
-import React from 'react'
 import { MessagePriority } from '../types'
 
 interface PrioritySelectorProps {

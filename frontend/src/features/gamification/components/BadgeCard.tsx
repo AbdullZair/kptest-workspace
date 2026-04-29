@@ -110,7 +110,8 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
           className="flex h-20 w-20 items-center justify-center rounded-lg"
           style={{
             backgroundColor:
-              ('badge_color' in badge ? badge.badge_color : badge.color) || '#f3f4f6',
+              ('badge_color' in badge ? badge.badge_color : (badge as { color?: string }).color) ||
+              '#f3f4f6',
           }}
         >
           {getBadgeIcon()}
@@ -132,7 +133,7 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
             <span className={`rounded-full px-2 py-1 text-xs ${getCategoryColor()}`}>
               {getCategoryLabel()}
             </span>
-            {!isEarned && isBadge && 'rules' in badge && badge.rules && badge.rules.length > 0 ? (
+            {!isEarned && isBadge && 'rules' in badge && badge.rules && badge.rules[0] ? (
               <span className="text-xs text-gray-500">
                 {badge.rules[0].threshold}{' '}
                 {badge.rules[0].rule_type === 'EVENTS_COMPLETED'

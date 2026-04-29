@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { MaterialType } from '../types/material.types'
 

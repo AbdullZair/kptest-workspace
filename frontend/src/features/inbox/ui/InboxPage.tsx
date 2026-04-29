@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useGetInboxThreadsQuery } from '../api/inboxApi'
-import { InboxFilters } from '../components/InboxFilters'
+import { InboxFilters as InboxFiltersComponent } from '../components/InboxFilters'
 import { MessageDelegateModal } from '../components/MessageDelegateModal'
 import InboxThreadActions from './InboxThreadActions'
 import ExportConversationButton from './ExportConversationButton'
-import type { InboxThread, ThreadStatus } from '../types'
+import type { ThreadStatus, InboxFilters } from '../types'
 
 export const InboxPage: React.FC = () => {
   const [filters, setFilters] = useState<Partial<InboxFilters>>({
@@ -44,21 +44,6 @@ export const InboxPage: React.FC = () => {
     }
   }
 
-  const getPriorityBadgeClass = (priority: string): string => {
-    switch (priority) {
-      case 'URGENT':
-        return 'bg-red-100 text-red-800'
-      case 'HIGH':
-        return 'bg-orange-100 text-orange-800'
-      case 'MEDIUM':
-        return 'bg-yellow-100 text-yellow-800'
-      case 'LOW':
-        return 'bg-green-100 text-green-800'
-      default:
-        return 'bg-gray-100 text-gray-800'
-    }
-  }
-
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -91,7 +76,7 @@ export const InboxPage: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <InboxFilters {...filters} onFilterChange={handleFilterChange} onReset={handleResetFilters} />
+      <InboxFiltersComponent {...filters} onFilterChange={handleFilterChange} onReset={handleResetFilters} />
 
       {/* Thread list */}
       <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
@@ -209,12 +194,12 @@ export const InboxPage: React.FC = () => {
       {data && data.totalPages > 1 ? (
         <div className="mt-4 flex items-center justify-between">
           <div className="text-sm text-gray-700">
-            Strona {data.pageNumber + 1} z {data.totalPages} ({data.totalElements} wątków)
+            Strona {data.number + 1} z {data.totalPages} ({data.totalElements} wątków)
           </div>
           <div className="flex space-x-2">
             <button
               onClick={() => handleFilterChange({ page: Math.max(0, (filters.page || 0) - 1) })}
-              disabled={data.isFirst}
+              disabled={data.first}
               className="rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Poprzednia
@@ -223,7 +208,7 @@ export const InboxPage: React.FC = () => {
               onClick={() =>
                 handleFilterChange({ page: Math.min(data.totalPages - 1, (filters.page || 0) + 1) })
               }
-              disabled={data.isLast}
+              disabled={data.last}
               className="rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Następna

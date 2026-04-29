@@ -1,7 +1,6 @@
 import { type ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 import { useAuth } from '@features/auth'
 import { useTheme } from '@app/providers'
 
@@ -99,7 +98,7 @@ const navigation: NavItem[] = [
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const navigate = useNavigate()
   const { user, logout } = useAuth()
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { setTheme, resolvedTheme } = useTheme()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleLogout = async () => {

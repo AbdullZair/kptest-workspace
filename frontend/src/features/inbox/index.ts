@@ -7,7 +7,7 @@ export * from './api/inboxApi'
 
 // Components
 export { InboxPage } from './ui/InboxPage'
-export { InboxFilters } from './components/InboxFilters'
+export { InboxFilters as InboxFiltersComponent } from './components/InboxFilters'
 export { MessageDelegateModal } from './components/MessageDelegateModal'
 
 // Types

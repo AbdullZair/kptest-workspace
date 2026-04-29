@@ -1,7 +1,6 @@
 import { api } from '@shared/api'
 import type {
   EducationalMaterial,
-  MaterialDto,
   MaterialFormData,
   MaterialFilters,
   MaterialProgress,
@@ -168,10 +167,10 @@ export const materialApiSlice = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Material', id })),
-              { type: 'Material', id: 'LIST' },
+              ...result.map(({ id }) => ({ type: 'Material' as const, id })),
+              { type: 'Material' as const, id: 'LIST' },
             ]
-          : [{ type: 'Material', id: 'LIST' }],
+          : [{ type: 'Material' as const, id: 'LIST' }],
     }),
 
     /**
@@ -187,10 +186,10 @@ export const materialApiSlice = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'MaterialProgress', id })),
-              { type: 'MaterialProgress', id: 'LIST' },
+              ...result.map(({ id }) => ({ type: 'MaterialProgress' as const, id })),
+              { type: 'MaterialProgress' as const, id: 'LIST' },
             ]
-          : [{ type: 'MaterialProgress', id: 'LIST' }],
+          : [{ type: 'MaterialProgress' as const, id: 'LIST' }],
     }),
   }),
   overrideExisting: false,

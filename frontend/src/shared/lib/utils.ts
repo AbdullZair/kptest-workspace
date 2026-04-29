@@ -48,7 +48,7 @@ export const isValidPesel = (pesel: string): boolean => {
 
   const digits = pesel.split('').map(Number)
   const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
-  const checksum = weights.reduce((sum, weight, index) => sum + weight * digits[index], 0)
+  const checksum = weights.reduce((sum, weight, index) => sum + weight * (digits[index] ?? 0), 0)
   const controlDigit = (10 - (checksum % 10)) % 10
 
   return controlDigit === digits[10]

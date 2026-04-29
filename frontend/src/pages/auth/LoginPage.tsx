@@ -1,11 +1,10 @@
-import { type FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
 import { useAuth, loginSchema, type LoginFormData } from '@features/auth'
 import { Button, Input, Card } from '@shared/components'
-import { cn } from '@shared/lib'
 
 /**
  * LoginPage Component

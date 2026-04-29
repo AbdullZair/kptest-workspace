@@ -20,9 +20,11 @@ export function AdminSystemLogsPage() {
   const { data, isLoading, error, refetch } = useGetSystemLogsQuery(filters)
   const [exportSystemLogs] = useExportSystemLogsMutation()
 
-  const handleSortChange = () => {
+  // Reserved for sortable column headers; currently resets pagination only.
+  const _handleSortChange = () => {
     setFilters((prev) => ({ ...prev, page: 0 }))
   }
+  void _handleSortChange
 
   const handleLevelFilter = (level: LogLevel | 'ALL') => {
     setFilters((prev) => ({

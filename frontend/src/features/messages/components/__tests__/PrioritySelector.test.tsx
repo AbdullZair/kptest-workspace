@@ -1,7 +1,5 @@
-import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { PrioritySelector } from '../PrioritySelector'
-import type { MessagePriority } from '../../types'
 
 describe('PrioritySelector', () => {
   const mockOnChange = jest.fn()

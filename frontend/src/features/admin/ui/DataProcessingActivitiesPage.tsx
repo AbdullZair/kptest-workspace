@@ -406,8 +406,7 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && e.currentTarget.value.trim()) {
                         e.preventDefault()
-                        const currentValue = register('categories').value || []
-                        // This is a simplified version - in production you'd want a proper tag input
+                        // Simplified - production would use a proper tag input bound to react-hook-form
                       }
                     }}
                   />

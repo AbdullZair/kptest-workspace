@@ -16,7 +16,7 @@ import { clsx } from 'clsx'
  */
 export const ProjectStatistics = memo(({ statistics, className }: ProjectStatisticsProps) => {
   const {
-    project_name,
+    project_name: _project_name,
     status,
     total_patients,
     active_patients,

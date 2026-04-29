@@ -4,14 +4,12 @@ import {
   PatientTable,
   PatientSearch,
   PatientFormModal,
-  VerificationStatus,
 } from '@features/patients/ui'
 import {
   useGetPatientsQuery,
   useCreatePatientMutation,
   useUpdatePatientMutation,
   useDeletePatientMutation,
-  useVerifyPatientMutation,
   openCreateModal,
   openEditModal,
   closeFormModal,
@@ -25,8 +23,8 @@ import type {
   Patient,
   PatientFormData,
   PatientSearchRequest,
-  VerificationStatusType,
 } from '@features/patients/types'
+import type { VerificationStatusType } from '@features/patients/ui/VerificationStatus'
 import type { SortField, SortOrder } from '@features/patients/ui/PatientTable'
 import { useNavigate } from 'react-router-dom'
 
@@ -48,14 +46,13 @@ export const PatientsPage = () => {
   const [sortField, setSortField] = useState<SortField>('name')
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc')
   const [page, setPage] = useState(0)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize] = useState(20)
   const [searchQuery, setSearchQuery] = useState('')
 
   // RTK Query hooks
   const [createPatient, { isLoading: isCreating }] = useCreatePatientMutation()
   const [updatePatient, { isLoading: isUpdating }] = useUpdatePatientMutation()
-  const [deletePatient, { isLoading: isDeleting }] = useDeletePatientMutation()
-  const [verifyPatient] = useVerifyPatientMutation()
+  const [deletePatient] = useDeletePatientMutation()
 
   // Build query params
   const queryParams: PatientSearchRequest = useMemo(
@@ -133,16 +130,6 @@ export const PatientsPage = () => {
 
   const handleModalClose = () => {
     dispatch(closeFormModal())
-  }
-
-  const handleVerifyPatient = async (pesel: string, cartNumber: string) => {
-    try {
-      const result = await verifyPatient({ pesel, cart_number: cartNumber }).unwrap()
-      return result
-    } catch (err) {
-      console.error('Failed to verify patient:', err)
-      throw err
-    }
   }
 
   const handleFilterByStatus = (status: VerificationStatusType) => {

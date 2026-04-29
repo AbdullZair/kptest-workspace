@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { ComplianceReport, ComplianceTrendEntry } from '../types'
+import type { ComplianceTrendEntry } from '../types'
 
 export interface ComplianceChartProps {
   /**
@@ -55,9 +55,6 @@ export const ComplianceChart = memo(
     }
 
     const chartHeight = height
-    const chartWidth = 100 // percentage
-    const padding = 40
-    const chartAreaHeight = chartHeight - padding * 2
 
     // Get min and max values for scaling
     const values = data.map((d) => d.compliance_score)

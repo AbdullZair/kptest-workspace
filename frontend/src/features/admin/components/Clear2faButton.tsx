@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useClear2faMutation } from '../api/adminApi'
 
-interface Clear2faButtonProps {
+export interface Clear2faButtonProps {
   userId: string
   userEmail: string
   userRole: string

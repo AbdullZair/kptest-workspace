@@ -10,7 +10,7 @@ import {
   useDeleteProjectMutation,
   useAssignPatientsMutation,
 } from '../api/projectApi'
-import type { Project, ProjectFormData } from '../types'
+import type { ProjectFormData } from '../types'
 
 /**
  * ProjectDetailPage Component
@@ -38,7 +38,7 @@ export const ProjectDetailPage = () => {
     error: projectError,
     refetch,
   } = useGetProjectByIdQuery(id)
-  const { data: statistics, isLoading: isLoadingStats } = useGetProjectStatisticsQuery(id)
+  const { data: statistics } = useGetProjectStatisticsQuery(id)
   const { data: patients } = useGetProjectPatientsQuery({ projectId: id, activeOnly: true })
   const [updateProject, { isLoading: isUpdating }] = useUpdateProjectMutation()
   const [deleteProject] = useDeleteProjectMutation()

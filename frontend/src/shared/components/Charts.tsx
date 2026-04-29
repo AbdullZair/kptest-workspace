@@ -195,7 +195,7 @@ export function LineChart({
   // Generate area path
   const areaPath = `
     M ${getX(0)},${height - 20}
-    L ${getX(0)},${getY(data[0].value)}
+    L ${getX(0)},${getY(data[0]?.value ?? 0)}
     ${data.map((d, i) => `L ${getX(i)},${getY(d.value)}`).join(' ')}
     L ${getX(data.length - 1)},${height - 20}
     Z

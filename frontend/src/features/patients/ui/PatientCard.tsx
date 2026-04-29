@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Card, Button } from '@shared/components'
-import { VerificationStatus, type VerificationStatusType } from './VerificationStatus'
+import { VerificationStatus } from './VerificationStatus'
 import type { Patient } from '../types'
 
 /**

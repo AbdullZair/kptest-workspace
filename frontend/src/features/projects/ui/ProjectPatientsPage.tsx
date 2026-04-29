@@ -8,7 +8,7 @@ import {
   useRemovePatientsMutation,
   useAssignPatientsMutation,
 } from '../api/projectApi'
-import type { PatientProject, TherapyStage } from '../types'
+import type { TherapyStage } from '../types'
 
 /**
  * ProjectPatientsPage Component

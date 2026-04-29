@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { Card, Button, PageLoader } from '@shared/components'
+import { Card, Button } from '@shared/components'
 import { ProjectStatistics } from './ProjectStatistics'
 import type { ProjectStatistics as ProjectStatisticsType } from '../types'
 
@@ -7,6 +7,7 @@ import type { ProjectStatistics as ProjectStatisticsType } from '../types'
  * Mock data - in production this would come from API
  */
 const mockStatistics: ProjectStatisticsType = {
+  project_id: '00000000-0000-0000-0000-000000000000',
   project_name: 'Terapia Ślimakowa 2024',
   status: 'ACTIVE',
   total_patients: 156,
@@ -26,6 +27,7 @@ const mockStatistics: ProjectStatisticsType = {
     COMPLETED: 28,
     REMOVED: 4,
   },
+  recent_activity: [],
 }
 
 /**

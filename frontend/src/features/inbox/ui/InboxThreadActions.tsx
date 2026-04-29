@@ -56,7 +56,8 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
   const [updateThreadStatus] = useUpdateThreadStatusMutation()
   const [assignThread] = useAssignThreadMutation()
   const [setThreadPriority] = useSetThreadPriorityMutation()
-  const [isAssigneeOpen, setIsAssigneeOpen] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isAssigneeOpen, setIsAssigneeOpen] = useState(false)
 
   const handleStatusChange = async (status: ThreadStatus) => {
     try {

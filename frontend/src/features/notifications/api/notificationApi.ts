@@ -5,6 +5,7 @@ import type {
   NotificationFilters,
   NotificationPreferencesFormData,
   UnreadCountResponse,
+  SendNotificationRequest,
 } from '@entities/notification'
 
 /**

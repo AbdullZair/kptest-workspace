@@ -9,7 +9,6 @@ import {
   useSubmitQuizAnswersMutation,
   useGetAttemptsByPatientQuery,
 } from '../api/quizApi'
-import type { QuizAnswerSelection } from '../types/quiz.types'
 
 /**
  * QuizPage Component
@@ -163,12 +162,14 @@ export const QuizPage: React.FC = () => {
       {/* Questions */}
       {attemptId && quiz.questions.length > 0 ? (
         <>
-          <QuestionCard
-            question={quiz.questions[currentQuestionIndex]}
-            selectedAnswers={answers.get(quiz.questions[currentQuestionIndex].id) || []}
-            onAnswerSelect={handleAnswerSelect}
-            disabled={isSubmitting}
-          />
+          {quiz.questions[currentQuestionIndex] ? (
+            <QuestionCard
+              question={quiz.questions[currentQuestionIndex]!}
+              selectedAnswers={answers.get(quiz.questions[currentQuestionIndex]!.id) || []}
+              onAnswerSelect={handleAnswerSelect}
+              disabled={isSubmitting}
+            />
+          ) : null}
 
           {/* Navigation */}
           <div className="mt-6 flex items-center justify-between">
@@ -207,7 +208,7 @@ export const QuizPage: React.FC = () => {
                 className={`h-3 w-3 rounded-full ${
                   index === currentQuestionIndex
                     ? 'bg-blue-600'
-                    : answers.has(quiz.questions[index].id)
+                    : quiz.questions[index] && answers.has(quiz.questions[index]!.id)
                       ? 'bg-green-500'
                       : 'bg-gray-300'
                 }`}

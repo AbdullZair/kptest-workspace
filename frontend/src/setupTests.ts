@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom'
+import { vi } from 'vitest'
+
+// Alias `jest` to Vitest's `vi` so existing Jest-style tests work
+;(globalThis as unknown as { jest: typeof vi }).jest = vi
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {

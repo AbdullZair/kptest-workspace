@@ -66,3 +66,19 @@ declare module '*.module.scss' {
   const classes: { readonly [key: string]: string }
   export default classes
 }
+
+/**
+ * Global `jest` alias for Vitest's `vi`
+ * Allows existing Jest-style tests to work without rewriting.
+ */
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace, no-var
+  var jest: typeof import('vitest').vi
+  namespace jest {
+    type Mock<T = unknown, P extends unknown[] = unknown[]> = import('vitest').Mock<P, T>
+    type MockedFunction<T extends (...args: unknown[]) => unknown> =
+      import('vitest').MockedFunction<T>
+  }
+}
+
+export {}

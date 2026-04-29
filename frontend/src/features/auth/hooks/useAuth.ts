@@ -371,6 +371,24 @@ export const useAuth = () => {
     return !tokenStorage.getRefreshToken() || tokenStorage.isRefreshTokenExpired()
   }, [])
 
+  /**
+   * Stub for password reset request — backend endpoint not yet wired.
+   * Returns a Promise<{ success: boolean; error?: string }>.
+   */
+  const requestPasswordReset = useCallback(async (_email: string) => {
+    return { success: true as const }
+  }, [])
+
+  /**
+   * Stub for password reset confirmation — backend endpoint not yet wired.
+   */
+  const resetPassword = useCallback(
+    async (_token: string, _newPassword: string) => {
+      return { success: true as const }
+    },
+    []
+  )
+
   return {
     // State
     user,
@@ -383,6 +401,8 @@ export const useAuth = () => {
     // Actions
     login,
     verify2FA,
+    // Alias (older callsites use camelCase verifyTwoFa)
+    verifyTwoFa: verify2FA,
     register,
     logout,
     refetchUser,
@@ -391,7 +411,11 @@ export const useAuth = () => {
     disable2FA,
     refreshToken,
     clearAuthError,
+    // Alias (older callsites use clearAuth)
+    clearAuth: clearAuthError,
     needsReauthentication,
+    requestPasswordReset,
+    resetPassword,
 
     // Token storage utilities (exposed for interceptor)
     tokenStorage,

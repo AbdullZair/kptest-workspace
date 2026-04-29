@@ -188,19 +188,19 @@ export const projectApiSlice = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Project', id })),
-              { type: 'Project', id: 'MY_ACTIVE' },
+              ...result.map(({ id }) => ({ type: 'Project' as const, id })),
+              { type: 'Project' as const, id: 'MY_ACTIVE' },
             ]
-          : [{ type: 'Project', id: 'MY_ACTIVE' }],
+          : [{ type: 'Project' as const, id: 'MY_ACTIVE' }],
     }),
   }),
   overrideExisting: false,
 })
 
 /**
- * Add custom tag types for project-related entities
+ * Add custom tag types for project-related entities (no-op currently).
  */
-const enhancedApi = api.injectEndpoints({
+api.injectEndpoints({
   endpoints: () => ({}),
   overrideExisting: false,
 })

@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MessageDelegateModal } from '../MessageDelegateModal'
 import * as inboxApi from '../../api/inboxApi'

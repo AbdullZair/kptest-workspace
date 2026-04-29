@@ -1,6 +1,5 @@
 import { useGetDashboardKpisQuery } from '../api'
 import { DashboardKpiCard, ComplianceChart, ExportButton } from '../components'
-import type { DashboardComplianceTrendEntry } from '../types'
 
 /**
  * DashboardPage Component

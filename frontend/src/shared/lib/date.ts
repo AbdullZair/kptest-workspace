@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow, parseISO, isValid, type DateArg } from 'date-fns'
+import { format, formatDistanceToNow, parseISO, isValid } from 'date-fns'
 import { pl } from 'date-fns/locale'
 
 /**

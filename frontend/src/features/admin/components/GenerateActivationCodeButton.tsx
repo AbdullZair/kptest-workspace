@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useGenerateActivationCodeMutation } from '../api/adminApi'
 
-interface GenerateActivationCodeButtonProps {
+export interface GenerateActivationCodeButtonProps {
   patientId: string
   patientName: string
   patientPesel: string

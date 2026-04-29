@@ -163,6 +163,8 @@ export const calendarApiSlice = api.injectEndpoints({
             error: {
               status: 0,
               message: error instanceof Error ? error.message : 'Export failed',
+              code: 'EXPORT_FAILED',
+              timestamp: new Date().toISOString(),
             },
           }
         }

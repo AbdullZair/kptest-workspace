@@ -42,14 +42,6 @@ const formatViewCount = (count: number): string => {
 /**
  * Get difficulty label
  */
-const getDifficultyLabel = (difficulty: string): string => {
-  const labels: Record<string, string> = {
-    BASIC: 'Podstawowy',
-    INTERMEDIATE: 'Średniozaawansowany',
-    ADVANCED: 'Zaawansowany',
-  }
-  return labels[difficulty] || difficulty
-}
 
 /**
  * MaterialCard Component

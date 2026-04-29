@@ -1,5 +1,5 @@
-import { memo, useMemo } from 'react'
-import { VerificationStatus, type VerificationStatusType } from './VerificationStatus'
+import { memo } from 'react'
+import { VerificationStatus } from './VerificationStatus'
 import type { Patient } from '../types'
 import { clsx } from 'clsx'
 
@@ -112,7 +112,7 @@ const SortableHeader = ({
     >
       <span className="flex items-center">
         {children}
-        <SortIcon order={isActive ? order : 'asc'} active={isActive} />
+        <SortIcon order={isActive && order ? order : 'asc'} active={isActive} />
       </span>
     </th>
   )

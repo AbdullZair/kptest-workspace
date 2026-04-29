@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { Card, Button, PageLoader } from '@shared/components'
-import { VerificationStatus, type VerificationStatusType } from '../../features/patients/ui'
+import { VerificationStatus } from '../../features/patients/ui'
 import {
   useGetPatientByIdQuery,
   useUpdatePatientMutation,
@@ -9,7 +9,7 @@ import {
   openEditModal,
 } from '../../features/patients'
 import { useDispatch } from 'react-redux'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 /**
  * Format date for display

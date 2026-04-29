@@ -15,7 +15,7 @@ interface EventChangeRequestModalProps {
  * Modal for proposing an event date change
  */
 export function EventChangeRequestModal({
-  eventId,
+  eventId: _eventId,
   eventTitle,
   eventDate,
   isOpen,

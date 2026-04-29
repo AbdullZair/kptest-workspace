@@ -11,7 +11,9 @@ import { Button, Input, Card } from '@shared/components'
  * Password reset with token page
  */
 export const ResetPasswordPage = () => {
-  const navigate = useNavigate()
+  // navigate is currently unused but reserved for redirecting after successful reset
+  const _navigate = useNavigate()
+  void _navigate
   const { token } = useParams<{ token: string }>()
   const { resetPassword, error, clearAuthError } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)

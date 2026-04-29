@@ -15,7 +15,7 @@ export type InputSize = 'sm' | 'md' | 'lg'
 /**
  * Input props interface
  */
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Input label */
   label?: string
   /** Input placeholder */
@@ -28,6 +28,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   helperText?: string
   /** Error message */
   errorMessage?: string
+  /** Alias for errorMessage to keep older callsites compiling */
+  error?: string | boolean | undefined
   /** Left icon */
   leftIcon?: ReactNode
   /** Right icon */

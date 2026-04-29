@@ -264,7 +264,7 @@ export const MaterialViewer = memo(
         {/* Actions */}
         {!isCompleted && onComplete && material.type !== 'LINK' ? (
           <div className="flex justify-end">
-            <Button variant="default" size="md" onClick={handleComplete}>
+            <Button variant="primary" size="md" onClick={handleComplete}>
               <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"

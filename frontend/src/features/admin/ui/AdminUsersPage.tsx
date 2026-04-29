@@ -1,13 +1,12 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   useGetAdminUsersQuery,
-  useUpdateUserRoleMutation,
   useUpdateUserStatusMutation,
   useResetUserPasswordMutation,
   useDeleteUserMutation,
 } from '../api/adminApi'
-import { UserTable, UserRoleBadge, LogViewer } from '../components'
+import { UserTable } from '../components'
 import type { UserAdmin, UserFilters, UserRole, AccountStatus } from '../types'
 import { clsx } from 'clsx'
 
@@ -27,7 +26,6 @@ export function AdminUsersPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const { data, isLoading, error, refetch } = useGetAdminUsersQuery(filters)
-  const [updateUserRole] = useUpdateUserRoleMutation()
   const [updateUserStatus] = useUpdateUserStatusMutation()
   const [resetUserPassword] = useResetUserPasswordMutation()
   const [deleteUser] = useDeleteUserMutation()
@@ -37,7 +35,7 @@ export function AdminUsersPage() {
     temporaryPassword: string
   } | null>(null)
 
-  const handleSortChange = (field: string, order: 'asc' | 'desc') => {
+  const handleSortChange = (_field: string, _order: 'asc' | 'desc') => {
     setFilters((prev) => ({ ...prev, page: 0 }))
   }
 
@@ -74,10 +72,11 @@ export function AdminUsersPage() {
     setShowDeleteModal(true)
   }
 
-  const handleResetPassword = async (user: UserAdmin) => {
+  const _handleResetPassword = async (user: UserAdmin) => {
     setSelectedUser(user)
     setShowResetModal(true)
   }
+  void _handleResetPassword
 
   const confirmResetPassword = async () => {
     if (!selectedUser) return

@@ -5,7 +5,6 @@ import {
   type TherapyEvent,
   EVENT_TYPE_LABELS,
   EVENT_TYPE_COLORS,
-  EVENT_STATUS_LABELS,
 } from '@entities/event'
 import { EventStatusBadge } from './EventStatus'
 

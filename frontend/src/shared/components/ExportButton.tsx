@@ -124,7 +124,7 @@ export function ExportButton({
       <div className="flex items-center gap-2">
         <button
           type="button"
-          onClick={() => handleExport(formats[0])}
+          onClick={() => formats[0] && handleExport(formats[0])}
           disabled={disabled || isExporting}
           className={clsx(
             'inline-flex items-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
