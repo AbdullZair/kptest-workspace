@@ -104,8 +104,19 @@ export const ProjectFormModal = ({
       return
     }
 
+    // Backend wymaga Instant (ISO-8601) dla start_date / end_date.
+    // <input type="date"> daje 'YYYY-MM-DD' — dolepiamy T00:00:00Z.
+    const toInstant = (d: string | undefined): string | undefined =>
+      d ? (d.includes('T') ? d : `${d}T00:00:00Z`) : undefined
+
+    const payload = {
+      ...formData,
+      start_date: toInstant(formData.start_date) ?? '',
+      end_date: toInstant(formData.end_date),
+    }
+
     try {
-      await onSubmit(formData)
+      await onSubmit(payload)
     } catch (error) {
       console.error('Failed to save project:', error)
     }
