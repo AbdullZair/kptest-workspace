@@ -313,6 +313,7 @@ export const api = createApi({
     'SystemMetrics',
     'PatientData',
     'DataProcessingActivity',
+    'PendingVerification',
   ],
   endpoints: () => ({}),
 })

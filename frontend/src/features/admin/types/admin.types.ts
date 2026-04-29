@@ -460,6 +460,72 @@ export type LegalBasis =
   | 'PUBLIC_TASK'
   | 'LEGITIMATE_INTEREST'
 
+// ==================== US-NH-01: Patient verification by staff ====================
+
+/**
+ * Patient verification status returned by /admin/patients/pending and approve/reject endpoints.
+ */
+export type VerificationStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+
+/**
+ * Single entry in the pending-verifications list (US-NH-01).
+ *
+ * The PESEL is masked (last 4 digits only) for privacy.
+ */
+export interface PendingVerification {
+  patient_id: string
+  first_name: string
+  last_name: string
+  pesel_masked: string
+  email?: string
+  phone?: string
+  verification_status: VerificationStatus
+  his_patient_id?: string
+  created_at: string
+}
+
+/**
+ * Request body for POST /admin/patients/{id}/approve.
+ *
+ * - method = 'HIS': triggers HIS lookup; `his_cart_number` is required.
+ * - method = 'MANUAL': manual override; `reason` (min 10 chars) is required.
+ */
+export interface ApproveVerificationRequest {
+  method: 'HIS' | 'MANUAL'
+  reason?: string
+  his_cart_number?: string
+}
+
+/**
+ * Request body for POST /admin/patients/{id}/reject.
+ *
+ * Reason must be at least 10 characters; rejection is irreversible.
+ */
+export interface RejectVerificationRequest {
+  reason: string
+}
+
+/**
+ * Response returned by approve/reject endpoints.
+ */
+export interface VerificationDecisionResponse {
+  patient_id: string
+  verification_status: VerificationStatus
+  verification_method?: string
+  verified_at?: string
+  verified_by?: string
+  audit_log_id?: string
+  message: string
+}
+
+/**
+ * Pagination filters for the pending-verifications list endpoint.
+ */
+export interface PendingVerificationFilters {
+  page?: number
+  size?: number
+}
+
 /**
  * Data Processing Activity DTO
  */

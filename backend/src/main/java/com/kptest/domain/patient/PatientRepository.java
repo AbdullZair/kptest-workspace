@@ -2,6 +2,7 @@ package com.kptest.domain.patient;
 
 import com.kptest.domain.user.AccountStatus;
 import com.kptest.domain.user.VerificationStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -48,6 +49,16 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
      */
     @Query("SELECT COUNT(p) FROM Patient p WHERE p.verificationStatus = :status")
     long countByVerificationStatus(@Param("status") VerificationStatus status);
+
+    /**
+     * Find all patients with a given verification status (paginated).
+     * Used by US-NH-01 to list patients awaiting staff verification.
+     */
+    @Query("SELECT p FROM Patient p LEFT JOIN FETCH p.user WHERE p.verificationStatus = :status")
+    Page<Patient> findByVerificationStatus(
+        @Param("status") VerificationStatus status,
+        Pageable pageable
+    );
 
     /**
      * Find patients with filters.

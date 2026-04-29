@@ -36,12 +36,15 @@ class AdminControllerRodoTest {
     @Mock
     private AdminService adminService;
 
+    @Mock
+    private com.kptest.application.service.PatientService patientService;
+
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        AdminController adminController = new AdminController(adminService);
+        AdminController adminController = new AdminController(adminService, patientService);
         mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
         objectMapper = new ObjectMapper();
     }

@@ -23,6 +23,11 @@ import type {
   DataProcessingActivity,
   DataProcessingActivityFilters,
   DataProcessingActivityInput,
+  PendingVerification,
+  PendingVerificationFilters,
+  ApproveVerificationRequest,
+  RejectVerificationRequest,
+  VerificationDecisionResponse,
 } from '../types'
 
 /**
@@ -377,6 +382,56 @@ export const adminApiSlice = api.injectEndpoints({
       }),
       invalidatesTags: ['DataProcessingActivity'],
     }),
+
+    // ==================== US-NH-01: Staff verification ====================
+
+    /**
+     * List patients awaiting staff verification (US-NH-01).
+     */
+    getPendingVerifications: builder.query<
+      PageResponse<PendingVerification>,
+      PendingVerificationFilters | void
+    >({
+      query: (filters) => {
+        const params = new URLSearchParams()
+        const f = filters ?? {}
+        if (f.page !== undefined) params.append('page', f.page.toString())
+        if (f.size !== undefined) params.append('size', f.size.toString())
+        const qs = params.toString()
+        return `/admin/patients/pending${qs ? `?${qs}` : ''}`
+      },
+      providesTags: ['PendingVerification'],
+    }),
+
+    /**
+     * Approve a pending patient verification (US-NH-01).
+     */
+    approveVerification: builder.mutation<
+      VerificationDecisionResponse,
+      { patientId: string; body: ApproveVerificationRequest }
+    >({
+      query: ({ patientId, body }) => ({
+        url: `/admin/patients/${patientId}/approve`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['PendingVerification', 'AdminUser', 'AuditLog'],
+    }),
+
+    /**
+     * Reject a pending patient verification (US-NH-01).
+     */
+    rejectVerification: builder.mutation<
+      VerificationDecisionResponse,
+      { patientId: string; body: RejectVerificationRequest }
+    >({
+      query: ({ patientId, body }) => ({
+        url: `/admin/patients/${patientId}/reject`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['PendingVerification', 'AdminUser', 'AuditLog'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -414,6 +469,10 @@ export const {
   useCreateDataProcessingActivityMutation,
   useUpdateDataProcessingActivityMutation,
   useDeleteDataProcessingActivityMutation,
+  // US-NH-01 Patient verification
+  useGetPendingVerificationsQuery,
+  useApproveVerificationMutation,
+  useRejectVerificationMutation,
 } = adminApiSlice
 
 export default adminApiSlice
