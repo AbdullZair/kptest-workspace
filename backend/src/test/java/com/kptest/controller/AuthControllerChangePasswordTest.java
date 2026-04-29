@@ -129,22 +129,8 @@ class AuthControllerChangePasswordTest {
             then(authenticationService).should().changePassword(any(UUID.class), anyString(), anyString());
         }
 
-        @Test
-        @org.junit.jupiter.api.Disabled("Security filter chain is mocked out in @WebMvcTest slice; covered by integration tests")
-        @DisplayName("shouldReturn401_WhenNotAuthenticated")
-        void shouldReturn401_WhenNotAuthenticated() throws Exception {
-            ChangePasswordRequest request = new ChangePasswordRequest(
-                "OldPassword123!",
-                VALID_NEW_PASSWORD
-            );
-
-            mockMvc.perform(post("/api/v1/auth/change-password")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
-
-            then(authenticationService).should(never()).changePassword(any(UUID.class), anyString(), anyString());
-        }
+        // Negative-auth case (no token -> 401/403) moved to
+        // com.kptest.controller.integration.SecurityIntegrationTest.
 
         @Test
         @DisplayName("shouldReturn400_WhenCurrentPasswordMissing")

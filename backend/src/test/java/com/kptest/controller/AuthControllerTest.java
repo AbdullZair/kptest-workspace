@@ -422,23 +422,9 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.success").value(true));
         }
 
-        @Test
-        @org.junit.jupiter.api.Disabled("Security filter chain is mocked out in @WebMvcTest slice; covered by integration tests")
-        @DisplayName("shouldReturn401_When2faManagementWithoutAuthentication")
-        void shouldReturn401_When2faManagementWithoutAuthentication() throws Exception {
-            mockMvc.perform(post("/api/v1/auth/2fa/enable"))
-                .andExpect(status().isUnauthorized());
-
-            mockMvc.perform(post("/api/v1/auth/2fa/confirm")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{}"))
-                .andExpect(status().isUnauthorized());
-
-            mockMvc.perform(post("/api/v1/auth/2fa/disable")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{}"))
-                .andExpect(status().isUnauthorized());
-        }
+        // Negative-auth case (no token -> 401/403) moved to
+        // com.kptest.controller.integration.SecurityIntegrationTest
+        // because the SecurityFilterChain is disabled in this @WebMvcTest slice.
     }
 
     @Nested
@@ -535,13 +521,8 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.role").value("PATIENT"));
         }
 
-        @Test
-        @org.junit.jupiter.api.Disabled("Security filter chain is mocked out in @WebMvcTest slice; covered by integration tests")
-        @DisplayName("shouldReturn401_WhenGetUserProfileWithoutAuthentication")
-        void shouldReturn401_WhenGetUserProfileWithoutAuthentication() throws Exception {
-            mockMvc.perform(get("/api/v1/auth/me"))
-                .andExpect(status().isUnauthorized());
-        }
+        // Negative-auth case (no token -> 401/403) moved to
+        // com.kptest.controller.integration.SecurityIntegrationTest.
 
         @Test
         @DisplayName("shouldReturn404_WhenUserNotFound")

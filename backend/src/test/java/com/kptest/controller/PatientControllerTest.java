@@ -415,16 +415,9 @@ class PatientControllerTest {
                 .andExpect(jsonPath("$.id").value(testPatientId.toString()));
         }
 
-        @Test
-        @org.junit.jupiter.api.Disabled("Security filter chain is mocked out in @WebMvcTest slice; covered by integration tests")
-        @WithMockUser(roles = {"DOCTOR"})
-        @DisplayName("shouldReturnForbidden_WhenUserIsNotAdmin")
-        void shouldReturnForbidden_WhenUserIsNotAdmin() throws Exception {
-            // When & Then - DOCTOR role should not be able to delete
-            mockMvc.perform(delete("/api/v1/patients/{id}", testPatientId)
-                    .with(csrf()))
-                .andExpect(status().isForbidden());
-        }
+        // Role-based forbidden case (DOCTOR cannot delete) moved to
+        // com.kptest.controller.integration.SecurityIntegrationTest -
+        // requires the SecurityFilterChain + @PreAuthorize evaluation.
     }
 
     @Nested
