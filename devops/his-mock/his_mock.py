@@ -117,7 +117,7 @@ def verify_patient():
     return jsonify({
         "verified": True,
         "patient": {
-            "pesel": patient["pesel"],
+            "pesel": pesel,
             "first_name": patient["first_name"],
             "last_name": patient["last_name"],
             "date_of_birth": patient["date_of_birth"],
@@ -143,7 +143,7 @@ def get_patient(pesel):
         }), 404
     
     return jsonify({
-        "pesel": patient["pesel"],
+        "pesel": pesel,
         "first_name": patient["first_name"],
         "last_name": patient["last_name"],
         "date_of_birth": patient["date_of_birth"],

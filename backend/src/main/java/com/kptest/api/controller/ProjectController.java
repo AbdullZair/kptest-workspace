@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -83,12 +84,12 @@ public class ProjectController {
     @Operation(summary = "Create project", description = "Creates a new therapeutic project")
     public ResponseEntity<ProjectResponse> createProject(
         @Parameter(description = "Project data")
-        @Valid @RequestBody ProjectCreateRequest request
+        @Valid @RequestBody ProjectCreateRequest request,
+        @AuthenticationPrincipal String userIdStr
     ) {
         log.info("POST /api/v1/projects - name: {}", request.name());
 
-        // TODO: Get staff ID from security context (currently using a placeholder)
-        UUID staffId = getCurrentStaffId();
+        UUID staffId = userIdStr != null ? UUID.fromString(userIdStr) : null;
 
         ProjectResponse createdProject = projectService.create(request, staffId);
 

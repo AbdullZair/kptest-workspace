@@ -30,5 +30,7 @@ kptest:
     secret: dev-secret-key-for-development-only-not-for-production-use
 
   his:
-    base-url: http://localhost:8081
-    api-key: dev-api-key
+    # Wewnątrz docker-compose his-mock jest dostępny po nazwie usługi.
+    # Override przez HIS_BASE_URL=http://localhost:8081 dla lokalnego dev poza kontenerem.
+    base-url: ${HIS_BASE_URL:http://his-mock:8081}
+    api-key: ${HIS_API_KEY:dev-api-key}

@@ -1,0 +1,28 @@
+{
+  "name": "kptest-e2e-tests",
+  "version": "1.0.0",
+  "description": "KPTEST Portal E2E Tests",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:TC01": "playwright test --grep 'TC-01'",
+    "test:TC02": "playwright test --grep 'TC-02'",
+    "test:TC03": "playwright test --grep 'TC-03'",
+    "test:TC04": "playwright test --grep 'TC-04'",
+    "test:TC05": "playwright test --grep 'TC-05'",
+    "test:TC06": "playwright test --grep 'TC-06'",
+    "test:TC07": "playwright test --grep 'TC-07'",
+    "test:TC08": "playwright test --grep 'TC-08'",
+    "test:all-browsers": "playwright test --project=chromium --project=firefox --project=webkit"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.2",
+    "@playwright/test": "^1.43.0",
+    "@types/node": "^20.12.7"
+  },
+  "author": "KPTEST QA Team",
+  "license": "MIT"
+}
