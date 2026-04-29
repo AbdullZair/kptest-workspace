@@ -33,10 +33,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.textLight,
   },
   dot2: {
-    animationDelay: '0.2s',
+    // animation delays are handled via Animated API in RN, not CSS strings
+    opacity: 0.7,
   },
   dot3: {
-    animationDelay: '0.4s',
+    opacity: 0.5,
   },
 });
 

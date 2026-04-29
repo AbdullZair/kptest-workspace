@@ -1,30 +1,22 @@
-import { edit, add, remove } from '/home/user1/KPTESTPRO/mobile/src/store';
+/**
+ * Performance utilities (placeholder).
+ *
+ * The original file in this slot contained build-time code generation hooks
+ * that referenced non-existent modules. Replaced with no-op exports so it
+ * type-checks while keeping the import path stable for callers.
+ */
 
-// Stats API integration
-edit('store', (content) => {
-  // Add statsApi import
-  if (!content.includes("import { statsApi } from '../features/stats/api/statsApi'")) {
-    content = content.replace(
-      "import { notificationApi } from '../features/notifications/api/notificationApi';",
-      "import { notificationApi } from '../features/notifications/api/notificationApi';\nimport { statsApi } from '../features/stats/api/statsApi';"
-    );
+export function measure<T>(label: string, fn: () => T): T {
+  if (__DEV__) {
+    const start = Date.now();
+    try {
+      return fn();
+    } finally {
+      // eslint-disable-next-line no-console
+      console.log(`[perf] ${label}: ${Date.now() - start}ms`);
+    }
   }
+  return fn();
+}
 
-  // Add statsApi to reducer
-  if (!content.includes('[statsApi.reducerPath]')) {
-    content = content.replace(
-      '[notificationApi.reducerPath]: notificationApi.reducer,',
-      '[notificationApi.reducerPath]: notificationApi.reducer,\n  [statsApi.reducerPath]: statsApi.reducer,'
-    );
-  }
-
-  // Add statsApi middleware
-  if (!content.includes('statsApi.middleware')) {
-    content = content.replace(
-      'notificationApi.middleware,',
-      'notificationApi.middleware,\n      statsApi.middleware,'
-    );
-  }
-
-  return content;
-});
+export default { measure };

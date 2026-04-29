@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  StyleSheet,
 } from 'react-native'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import {
   useGetQuizForTakingQuery,
   useStartQuizAttemptMutation,
@@ -16,9 +18,9 @@ import {
 import { colors, spacing, typography, borderRadius } from '@app/theme'
 import type { QuizQuestion } from '../api/types'
 
-interface QuizScreenNavigationProps {
-  navigate: (screen: string, params?: { quizId: string; attemptId: string }) => void
-}
+type QuizScreenNavigationProps = NativeStackNavigationProp<
+  Record<string, object | undefined>
+>;
 
 interface QuizScreenRouteParams {
   quizId: string
@@ -226,7 +228,7 @@ export function QuizScreen(): JSX.Element {
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -389,4 +391,4 @@ const styles = {
     ...typography.button,
     color: colors.white,
   },
-}
+})

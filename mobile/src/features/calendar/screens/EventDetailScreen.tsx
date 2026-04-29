@@ -23,7 +23,7 @@ interface EventDetailRouteParams {
 
 interface EventDetailNavigationProps {
   goBack: () => void;
-  navigate: (screen: string, params?: { eventId: string }) => void;
+  navigate: (screen: string, params?: Record<string, unknown>) => void;
 }
 
 export function EventDetailScreen(): JSX.Element {
@@ -447,6 +447,11 @@ const styles = StyleSheet.create({
   },
   actions: {
     padding: spacing.lg,
+  },
+  actionButton: {
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
+    alignItems: 'center',
   },
   completeButton: {
     backgroundColor: colors.success,

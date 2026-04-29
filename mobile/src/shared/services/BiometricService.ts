@@ -63,12 +63,10 @@ class BiometricServiceClass {
     switch (type) {
       case LocalAuthentication.AuthenticationType.FINGERPRINT:
         return 'Touch ID';
-      case LocalAuthentication.AuthenticationType.FACE:
+      case LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION:
         return 'Face ID';
       case LocalAuthentication.AuthenticationType.IRIS:
         return 'Iris';
-      case LocalAuthentication.AuthenticationType.FINGERPRINT | LocalAuthentication.AuthenticationType.FACE:
-        return 'Biometric';
       default:
         return 'Biometric';
     }
@@ -99,7 +97,6 @@ class BiometricServiceClass {
       if (result.success) {
         return {
           success: true,
-          biometricType: result.authenticationType,
         };
       } else {
         return {
@@ -107,11 +104,12 @@ class BiometricServiceClass {
           error: this.getErrorMessage(result.error),
         };
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Biometric authentication error:', error);
+      const message = error instanceof Error ? error.message : 'Authentication failed';
       return {
         success: false,
-        error: error.message || 'Authentication failed',
+        error: message,
       };
     }
   }
@@ -195,29 +193,32 @@ class BiometricServiceClass {
   }
 
   /**
-   * Get error message from LocalAuthentication error code
+   * Map an expo-local-authentication error code (string) to a localized message.
+   * Codes are documented in the SDK docs (e.g. 'user_cancel', 'lockout', ...).
    */
-  private getErrorMessage(errorCode?: LocalAuthentication.LocalAuthenticationError): string {
+  private getErrorMessage(errorCode?: string): string {
     if (!errorCode) {
       return 'Authentication failed';
     }
 
     switch (errorCode) {
-      case LocalAuthentication.LocalAuthenticationError.USER_CANCEL:
+      case 'user_cancel':
         return 'Anulowano przez użytkownika';
-      case LocalAuthentication.LocalAuthenticationError.USER_FALLBACK:
+      case 'user_fallback':
         return 'Użyto metody zapasowej';
-      case LocalAuthentication.LocalAuthenticationError.SYSTEM_CANCEL:
+      case 'system_cancel':
         return 'Anulowano przez system';
-      case LocalAuthentication.LocalAuthenticationError.PASSWORD_CHANGE:
+      case 'passcode_not_set':
+      case 'password_change':
         return 'Hasło zostało zmienione';
-      case LocalAuthentication.LocalAuthenticationError.LOCKOUT:
+      case 'lockout':
         return 'Zbyt wiele nieudanych prób';
-      case LocalAuthentication.LocalAuthenticationError.LOCKOUT_PERMANENT:
+      case 'lockout_permanent':
         return 'Trwałe zablokowanie';
-      case LocalAuthentication.LocalAuthenticationError.OPERATOR_CANCEL:
+      case 'app_cancel':
+      case 'operator_cancel':
         return 'Operacja anulowana';
-      case LocalAuthentication.LocalAuthenticationError.USER_SWITCH:
+      case 'user_switch':
         return 'Zmieniono użytkownika';
       default:
         return 'Błąd autoryzacji';

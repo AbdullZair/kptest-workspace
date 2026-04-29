@@ -23,7 +23,7 @@ interface RegisterScreenNavigationProps {
 }
 
 export function RegisterScreen(): JSX.Element {
-  const navigation = useNavigation<RegisterScreenNavigationNavigationProps>();
+  const navigation = useNavigation<RegisterScreenNavigationProps>();
   const dispatch = useAppDispatch();
   const [register, { isLoading }] = useRegisterMutation();
 
@@ -129,7 +129,7 @@ export function RegisterScreen(): JSX.Element {
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Imię *</Text>
               <TextInput
-                style={[styles.input, errors.firstName && styles.inputError]}
+                style={[styles.input, errors.firstName ? styles.inputError : null]}
                 value={formData.firstName}
                 onChangeText={(text) => updateField('firstName', text)}
                 placeholder="Jan"
@@ -144,7 +144,7 @@ export function RegisterScreen(): JSX.Element {
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Nazwisko *</Text>
               <TextInput
-                style={[styles.input, errors.lastName && styles.inputError]}
+                style={[styles.input, errors.lastName ? styles.inputError : null]}
                 value={formData.lastName}
                 onChangeText={(text) => updateField('lastName', text)}
                 placeholder="Kowalski"
@@ -160,7 +160,7 @@ export function RegisterScreen(): JSX.Element {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email *</Text>
             <TextInput
-              style={[styles.input, errors.email && styles.inputError]}
+              style={[styles.input, errors.email ? styles.inputError : null]}
               value={formData.email}
               onChangeText={(text) => updateField('email', text)}
               placeholder="twoj@email.com"
@@ -202,7 +202,7 @@ export function RegisterScreen(): JSX.Element {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Hasło *</Text>
             <TextInput
-              style={[styles.input, errors.password && styles.inputError]}
+              style={[styles.input, errors.password ? styles.inputError : null]}
               value={formData.password}
               onChangeText={(text) => updateField('password', text)}
               placeholder="••••••••••••"
@@ -221,7 +221,7 @@ export function RegisterScreen(): JSX.Element {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Potwierdź hasło *</Text>
             <TextInput
-              style={[styles.input, errors.confirmPassword && styles.inputError]}
+              style={[styles.input, errors.confirmPassword ? styles.inputError : null]}
               value={formData.confirmPassword}
               onChangeText={(text) => updateField('confirmPassword', text)}
               placeholder="••••••••••••"

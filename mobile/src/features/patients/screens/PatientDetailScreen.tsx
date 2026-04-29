@@ -17,7 +17,7 @@ interface PatientDetailRouteParams {
 }
 
 interface PatientDetailNavigationProps {
-  navigate: (screen: string, params?: { patientId: string }) => void;
+  navigate: (screen: string, params?: Record<string, unknown>) => void;
   goBack: () => void;
 }
 

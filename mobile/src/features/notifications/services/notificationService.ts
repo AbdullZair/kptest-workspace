@@ -1,7 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
-import type { NotificationPermission, NotificationChannel } from './api/types';
+import type { NotificationPermission, NotificationChannel } from '../api/types';
 
 // Configure how notifications should be handled when app is in foreground
 Notifications.setNotificationHandler({
@@ -35,13 +35,17 @@ export async function requestNotificationPermissions(): Promise<NotificationPerm
   }
 
   const permissions = await Notifications.getPermissionsAsync();
+  // iOS exposes detailed flags under permissions.ios; Android grants implicitly
+  // when `granted`. Coalesce to a platform-agnostic shape.
+  const ios = permissions?.ios;
+  const granted = finalStatus === 'granted';
 
   return {
     status: finalStatus,
-    canShowBadge: permissions?.canShowBadge ?? false,
-    canPlaySound: permissions?.shouldPlaySound ?? false,
-    canAlert: permissions?.shouldShowAlert ?? false,
-    canShowBanner: permissions?.shouldShowBanner ?? false,
+    canShowBadge: ios?.allowsBadge ?? granted,
+    canPlaySound: ios?.allowsSound ?? granted,
+    canAlert: ios?.allowsAlert ?? granted,
+    canShowBanner: ios?.allowsAlert ?? granted,
   };
 }
 

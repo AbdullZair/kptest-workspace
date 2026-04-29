@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Image } from 'react-native';
+import { Image, type NativeSyntheticEvent, type ImageLoadEventData } from 'react-native';
 
 interface UseOptimizedImageOptions {
   initialWidth?: number;
@@ -12,7 +12,7 @@ interface UseOptimizedImageReturn {
   height: number;
   uri: string;
   isLoaded: boolean;
-  onLoad: () => void;
+  onLoad: (event: NativeSyntheticEvent<ImageLoadEventData>) => void;
   onError: () => void;
 }
 
@@ -51,8 +51,8 @@ export function useOptimizedImage(
     });
   }, [uri]);
 
-  const handleLoad = (event: any) => {
-    const { width, height } = event.nativeEvent;
+  const handleLoad = (event: NativeSyntheticEvent<ImageLoadEventData>): void => {
+    const { width, height } = event.nativeEvent.source;
 
     // Calculate aspect ratio with max size limit
     const aspectRatio = width / height;

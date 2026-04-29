@@ -50,6 +50,12 @@ export const quizzesApi = api.injectEndpoints({
             ]
           : [{ type: 'QuizAttempts' as const, id: 'LIST' }],
     }),
+
+    // Get a single attempt by id
+    getAttemptById: build.query<QuizAttempt, { id: string }>({
+      query: ({ id }) => `/api/v1/quizzes/attempts/${id}`,
+      providesTags: (_result, _error, { id }) => [{ type: 'QuizAttempts' as const, id }],
+    }),
   }),
   overrideExisting: false,
 })
@@ -60,4 +66,5 @@ export const {
   useStartQuizAttemptMutation,
   useSubmitQuizAnswersMutation,
   useGetAttemptsByPatientQuery,
+  useGetAttemptByIdQuery,
 } = quizzesApi

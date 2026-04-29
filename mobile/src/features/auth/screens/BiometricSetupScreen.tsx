@@ -152,7 +152,7 @@ export function BiometricSetupScreen(): JSX.Element {
           <View style={styles.cardHeader}>
             <View style={styles.iconContainer}>
               <Text style={styles.cardIcon}>
-                {biometricState.biometricType === LocalAuthentication.AuthenticationType.FACE ? '👤' : '👆'}
+                {biometricState.biometricType === LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION ? '👤' : '👆'}
               </Text>
             </View>
             <View style={styles.cardContent}>

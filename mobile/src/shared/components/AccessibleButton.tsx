@@ -4,7 +4,7 @@ import { colors, spacing, typography, borderRadius, shadows } from '@app/theme';
 import { MIN_TOUCH_TARGET } from '@shared/utils/accessibility';
 
 interface AccessibleButtonProps {
-  onPress: () => void;
+  onPress: () => void | Promise<void>;
   label: string;
   hint?: string;
   disabled?: boolean;
@@ -14,6 +14,7 @@ interface AccessibleButtonProps {
   style?: ViewStyle;
   textStyle?: TextStyle;
   testID?: string;
+  fullWidth?: boolean;
 }
 
 export function AccessibleButton({

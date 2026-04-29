@@ -15,7 +15,7 @@ import { ACCESSIBILITY_LABELS } from '@shared/utils/accessibility';
 import { AccessibleButton } from '@shared/components/AccessibleButton';
 
 interface DashboardScreenNavigationProps {
-  navigate: (screen: string) => void;
+  navigate: (screen: string, params?: Record<string, unknown>) => void;
 }
 
 export function DashboardScreen(): JSX.Element {

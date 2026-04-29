@@ -1,8 +1,7 @@
 import { Linking } from 'react-native';
-import type { RootStackParamList } from './AppNavigator';
 
 // Deep link prefix - configure in app.json as well
-const DEEP_LINK_PREFIX = 'kptest://';
+export const DEEP_LINK_PREFIX = 'kptest://';
 
 // Deep link paths
 export const DEEP_LINKS = {
@@ -144,11 +143,13 @@ export const linking = {
 };
 
 /**
- * Generate a deep link URL for a given screen
+ * Generate a deep link URL for a given screen.
+ * Accepts any string screen name (deep links target both root-level screens and
+ * nested tab/stack routes that aren't part of RootStackParamList directly).
  */
-export function generateDeepLink<RouteName extends keyof RootStackParamList>(
-  screen: RouteName,
-  params?: RootStackParamList[RouteName]
+export function generateDeepLink(
+  screen: string,
+  params?: Record<string, unknown>
 ): string {
   const screenPaths: Record<string, string> = {
     Login: `${DEEP_LINK_PREFIX}login`,
@@ -160,24 +161,24 @@ export function generateDeepLink<RouteName extends keyof RootStackParamList>(
   if (screen === 'PatientDetail' && params && 'patientId' in params) {
     return `${DEEP_LINK_PREFIX}patients/${params.patientId}`;
   }
-  
+
   if (screen === 'ProjectDetail' && params && 'projectId' in params) {
     return `${DEEP_LINK_PREFIX}projects/${params.projectId}`;
   }
-  
+
   if (screen === 'Conversation' && params && 'threadId' in params) {
     return `${DEEP_LINK_PREFIX}messages/${params.threadId}`;
   }
-  
+
   if (screen === 'EventDetail' && params && 'eventId' in params) {
     return `${DEEP_LINK_PREFIX}calendar/events/${params.eventId}`;
   }
-  
+
   if (screen === 'MaterialDetail' && params && 'materialId' in params) {
     return `${DEEP_LINK_PREFIX}materials/${params.materialId}`;
   }
 
-  return screenPaths[screen as string] || DEEP_LINK_PREFIX;
+  return screenPaths[screen] || DEEP_LINK_PREFIX;
 }
 
 /**

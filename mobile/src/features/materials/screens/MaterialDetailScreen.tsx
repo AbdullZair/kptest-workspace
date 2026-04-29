@@ -24,7 +24,7 @@ interface MaterialDetailRouteParams {
 
 interface MaterialDetailNavigationProps {
   goBack: () => void;
-  navigate: (screen: string, params?: { materialId: string; url?: string }) => void;
+  navigate: (screen: string, params?: Record<string, unknown>) => void;
 }
 
 export function MaterialDetailScreen(): JSX.Element {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle, TouchableOpacity } from 'react-native';
-import { simpleColors, simpleSpacing, simpleTypography, simpleBorderRadius, simpleShadows } from './SimpleTheme';
+import { simpleColors, simpleSpacing, simpleTypography, simpleBorderRadius, simpleShadows } from '@app/theme/SimpleTheme';
 
 interface SimpleCardProps {
   title?: string;
@@ -76,7 +76,7 @@ export function SimpleCard({
   return (
     <View
       style={cardStyle}
-      accessibilityRole="region"
+      accessibilityRole="summary"
       accessibilityLabel={accessibilityLabel || title}
       testID={testID}
     >

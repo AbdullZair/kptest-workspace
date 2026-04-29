@@ -64,8 +64,11 @@ class OfflineServiceClass {
       this.startSyncLoop();
     }
 
-    return () => unsubscribe();
+    // Store unsubscribe so callers can cancel the listener if needed.
+    this.unsubscribeNet = () => unsubscribe();
   }
+
+  private unsubscribeNet?: () => void;
 
   private handleNetworkChange(isConnected: boolean): void {
     const wasOnline = this.state.isOnline;

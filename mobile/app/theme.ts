@@ -43,9 +43,14 @@ export const colors = {
   
   // Biometric
   biometric: '#8B5CF6',
+
+  // Plain tokens used by quizzes / gamification screens
+  white: '#FFFFFF',
+  accent: '#F472B6',
 };
 
 export const spacing = {
+  xxs: 2,
   xs: 4,
   sm: 8,
   md: 16,
@@ -56,6 +61,7 @@ export const spacing = {
 
 export const typography = {
   fontSize: {
+    xxs: 10,
     xs: 12,
     sm: 14,
     md: 16,
@@ -76,7 +82,16 @@ export const typography = {
     semibold: 'Inter_600SemiBold',
     bold: 'Inter_700Bold',
   },
-};
+  // Predefined text style presets used by quizzes / gamification screens.
+  h1: { fontSize: 32, fontWeight: '700', fontFamily: 'Inter_700Bold' },
+  h2: { fontSize: 24, fontWeight: '700', fontFamily: 'Inter_700Bold' },
+  h3: { fontSize: 20, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
+  h4: { fontSize: 18, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
+  body: { fontSize: 16, fontWeight: '400', fontFamily: 'Inter_400Regular' },
+  small: { fontSize: 14, fontWeight: '400', fontFamily: 'Inter_400Regular' },
+  caption: { fontSize: 12, fontWeight: '400', fontFamily: 'Inter_400Regular' },
+  button: { fontSize: 16, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
+} as const;
 
 export const borderRadius = {
   sm: 4,

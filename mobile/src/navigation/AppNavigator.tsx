@@ -455,13 +455,19 @@ export function AppNavigator(): JSX.Element {
 }
 
 // Navigation ref for non-component navigation
-export const navigationRef = React.createRef<NavigationContainer>();
+import type { NavigationContainerRef } from '@react-navigation/native';
+export const navigationRef = React.createRef<NavigationContainerRef<RootStackParamList>>();
 
 export function navigate<RouteName extends keyof RootStackParamList>(
   name: RouteName,
   params?: RootStackParamList[RouteName]
 ) {
-  navigationRef.current?.navigate(name as string, params);
+  // The overloaded signature on `navigate` is hard to satisfy generically; the
+  // runtime call is identical so we cast through a narrow shape.
+  (navigationRef.current?.navigate as unknown as (n: string, p?: object) => void)(
+    name as string,
+    params as object | undefined,
+  );
 }
 
 export function goBack() {

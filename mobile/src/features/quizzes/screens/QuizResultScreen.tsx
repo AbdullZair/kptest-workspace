@@ -5,14 +5,16 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native'
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useGetAttemptByIdQuery } from '../api/quizApi'
 import { colors, spacing, typography, borderRadius } from '@app/theme'
 
-interface QuizResultScreenNavigationProps {
-  navigate: (screen: string) => void
-}
+type QuizResultScreenNavigationProps = NativeStackNavigationProp<
+  Record<string, object | undefined>
+>;
 
 interface QuizResultScreenRouteParams {
   quizId: string
@@ -138,7 +140,7 @@ export function QuizResultScreen(): JSX.Element {
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -294,4 +296,4 @@ const styles = {
     ...typography.button,
     color: colors.white,
   },
-}
+})

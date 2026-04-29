@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { BiometricService, BiometricState } from '@services/BiometricService';
+import { BiometricService, BiometricState } from '@shared/services/BiometricService';
 
 interface UseBiometricAuthReturn {
   biometricState: BiometricState;
