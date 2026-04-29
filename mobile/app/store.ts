@@ -13,9 +13,9 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Import APIs from features
-import { authApi } from '../features/auth/api/authApi';
-import authReducer from '../features/auth/slices/authSlice';
+// Import APIs from features (use src/ implementations for the up-to-date code)
+import { authApi } from '../src/features/auth/api/authApi';
+import authReducer from '../src/features/auth/slices/authSlice';
 
 import { patientApi } from '../src/features/patients/api/patientApi';
 import { projectApi } from '../src/features/projects/api/projectApi';

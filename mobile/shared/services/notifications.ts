@@ -68,7 +68,7 @@ export async function getPushToken(): Promise<string | null> {
 /**
  * Setup notification event listeners
  */
-function setupNotificationListeners(): void {
+function setupNotificationListeners(): () => void {
   // Listener for notifications received while app is foregrounded
   const subscription = Notifications.addNotificationReceivedListener((notification) => {
     console.log('Notification received:', notification);

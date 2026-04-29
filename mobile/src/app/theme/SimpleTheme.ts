@@ -1,4 +1,4 @@
-import { colors, spacing, typography, borderRadius, shadows } from './theme';
+import { typography } from '@app/theme';
 
 /**
  * Simple Theme - Accessibility-optimized theme with:
@@ -114,7 +114,7 @@ export const MIN_TOUCH_TARGET_SIMPLE = 48;
 
 export const simpleLightTheme = {
   dark: false,
-  colors: {
+  navColors: {
     primary: simpleColors.primary,
     background: simpleColors.background,
     card: simpleColors.surface,
@@ -132,7 +132,7 @@ export const simpleLightTheme = {
 
 export const simpleDarkTheme = {
   dark: true,
-  colors: {
+  navColors: {
     primary: simpleColors.primaryLight,
     background: simpleColors.backgroundDark,
     card: simpleColors.surfaceDark,

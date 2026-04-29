@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { simpleColors, simpleSpacing, simpleTypography, simpleBorderRadius, simpleShadows, MIN_TOUCH_TARGET_SIMPLE } from './SimpleTheme';
+import { simpleColors, simpleSpacing, simpleTypography, simpleBorderRadius, simpleShadows, MIN_TOUCH_TARGET_SIMPLE } from '@app/theme/SimpleTheme';
 
 interface SimpleButtonProps {
   onPress: () => void;

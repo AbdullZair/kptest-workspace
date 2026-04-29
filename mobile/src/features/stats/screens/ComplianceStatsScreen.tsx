@@ -189,7 +189,7 @@ export function ComplianceStatsScreen(): JSX.Element {
             <BarChart
               data={chartData.map((d) => ({
                 ...d,
-                label: d.label,
+                label: new Date(d.date).toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit' }),
               }))}
               height={220}
               barColor={colors.primary}

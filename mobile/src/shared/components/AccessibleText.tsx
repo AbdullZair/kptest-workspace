@@ -28,13 +28,16 @@ export function AccessibleText({
 }: AccessibleTextProps): JSX.Element {
   const { fontSizeMultiplier } = useAccessibility();
 
+  const sizeStyle = sizeStyles[size];
+  const weightStyle = weightStyles[weight];
+
   const baseStyle = [
     styles.base,
     styles[variant],
-    styles[size],
-    styles[weight],
+    sizeStyle,
+    weightStyle,
     {
-      fontSize: (styles[size].fontSize || 16) * fontSizeMultiplier,
+      fontSize: sizeStyle.fontSize * fontSizeMultiplier,
       color: color || styles.base.color,
     },
     style,
@@ -75,30 +78,20 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: 24,
   },
-  small: {
-    fontSize: typography.fontSize.sm,
-  },
-  medium: {
-    fontSize: typography.fontSize.md,
-  },
-  large: {
-    fontSize: typography.fontSize.lg,
-  },
-  xlarge: {
-    fontSize: typography.fontSize.xl,
-  },
-  regular: {
-    fontWeight: typography.fontWeight.regular,
-  },
-  medium: {
-    fontWeight: typography.fontWeight.medium,
-  },
-  semibold: {
-    fontWeight: typography.fontWeight.semibold,
-  },
-  bold: {
-    fontWeight: typography.fontWeight.bold,
-  },
+});
+
+const sizeStyles = StyleSheet.create({
+  small: { fontSize: typography.fontSize.sm },
+  medium: { fontSize: typography.fontSize.md },
+  large: { fontSize: typography.fontSize.lg },
+  xlarge: { fontSize: typography.fontSize.xl },
+});
+
+const weightStyles = StyleSheet.create({
+  regular: { fontWeight: typography.fontWeight.regular },
+  medium: { fontWeight: typography.fontWeight.medium },
+  semibold: { fontWeight: typography.fontWeight.semibold },
+  bold: { fontWeight: typography.fontWeight.bold },
 });
 
 export default AccessibleText;

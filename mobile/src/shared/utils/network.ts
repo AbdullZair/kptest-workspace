@@ -21,7 +21,8 @@ export async function checkNetworkConnectivity(): Promise<NetworkState> {
   return {
     isConnected: state.isConnected ?? false,
     isInternetReachable: state.isInternetReachable,
-    type: state.type,
+    // NetInfoStateType has the same string members as our NetworkStateType.
+    type: state.type as NetworkStateType,
   };
 }
 

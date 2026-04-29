@@ -33,8 +33,10 @@ export function useAccessibility(): AccessibilityState {
           AccessibilityInfo.isScreenReaderEnabled(),
           AccessibilityInfo.isBoldTextEnabled?.() ?? Promise.resolve(false),
           AccessibilityInfo.isReduceMotionEnabled?.() ?? Promise.resolve(false),
-          AccessibilityInfo.isHighContrastEnabled?.() ?? Promise.resolve(false),
-          AccessibilityInfo.reduceTransparencyEnabled?.() ?? Promise.resolve(false),
+          // High-contrast detection isn't part of RN's AccessibilityInfo API
+          // on either platform yet — fall back to false.
+          Promise.resolve(false),
+          AccessibilityInfo.isReduceTransparencyEnabled?.() ?? Promise.resolve(false),
         ]);
 
         setState((prev) => ({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, typography, borderRadius } from '@app/theme';
+import { colors, spacing, typography, borderRadius, shadows } from '@app/theme';
 import type { Message } from '../api/types';
 import { AttachmentView } from './AttachmentView';
 
@@ -176,16 +176,5 @@ const styles = StyleSheet.create({
     color: colors.primaryLight,
   },
 });
-
-// Add shadows type
-const shadows = {
-  sm: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-};
 
 export default MessageBubble;

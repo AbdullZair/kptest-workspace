@@ -6,20 +6,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  StyleSheet,
 } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useGetMyBadgesQuery, useGetBadgeStatsQuery } from './badgeApi'
+import { useGetMyBadgesQuery, useGetBadgeStatsQuery } from '../api/badgeApi'
+import type { PatientBadge } from '../api/types'
 import { colors, spacing, typography, borderRadius } from '@app/theme'
-
-interface MyBadgesScreenNavigationProps {
-  navigate: (screen: string) => void
-}
 
 type TabType = 'earned' | 'catalog'
 
 export function MyBadgesScreen(): JSX.Element {
-  const navigation = useNavigation<MyBadgesScreenNavigationProps>()
-
   // Mock patient ID - in real app, get from auth context
   const patientId = '00000000-0000-0000-0000-000000000000'
 
@@ -28,18 +23,15 @@ export function MyBadgesScreen(): JSX.Element {
   const { data: myBadges = [], isLoading: isLoadingMy } = useGetMyBadgesQuery({ patientId })
   const { data: stats } = useGetBadgeStatsQuery({ patientId })
 
-  // Create map of earned badge IDs
-  const earnedBadgeIds = new Set(myBadges.map((b) => b.badge_id))
-
   const getCategoryColor = (category: string): string => {
-    const colors: Record<string, string> = {
+    const categoryColors: Record<string, string> = {
       ENGAGEMENT: colors.primary,
       COMPLIANCE: colors.success,
       EDUCATION: colors.secondary,
       MILESTONE: colors.warning,
       STREAK: colors.accent,
     }
-    return colors[category] || colors.textLight
+    return categoryColors[category] || colors.textLight
   }
 
   const getCategoryLabel = (category: string): string => {
@@ -202,7 +194,7 @@ export function MyBadgesScreen(): JSX.Element {
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -336,4 +328,4 @@ const styles = {
     color: colors.textLight,
     textAlign: 'center',
   },
-}
+})

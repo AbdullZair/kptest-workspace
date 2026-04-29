@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
 import { colors, spacing, typography } from '@app/theme';
-import { ACCESSIBILITY_LABELS } from '@shared/utils/accessibility';
+import { ACCESSIBILITY_HINTS } from '@shared/utils/accessibility';
 
 interface LoadingSpinnerProps {
   size?: 'small' | 'large' | number;
@@ -22,7 +22,7 @@ export function LoadingSpinner({
     <View
       style={containerStyle}
       accessibilityRole="progressbar"
-      accessibilityLabel={ACCESSIBILITY_LABELS.LOADING}
+      accessibilityLabel={ACCESSIBILITY_HINTS.LOADING}
       accessibilityValue={{ text: text || 'Ładowanie...' }}
     >
       <ActivityIndicator size={size} color={color} />

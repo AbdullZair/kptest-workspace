@@ -109,7 +109,7 @@ export function TwoFaScreen(): JSX.Element {
               ref={(ref) => (inputRefs.current[index] = ref)}
               style={[
                 styles.codeInput,
-                digit && styles.codeInputFilled,
+                digit ? styles.codeInputFilled : null,
               ]}
               value={digit}
               onChangeText={(value) => handleCodeChange(value, index)}
