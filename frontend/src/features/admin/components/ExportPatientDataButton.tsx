@@ -56,19 +56,19 @@ export const ExportPatientDataButton: React.FC<ExportPatientDataButtonProps> = (
       {/* Button */}
       <Menu.Button as="div">
         <Button
-          variant="primary"
-          size="sm"
           loading={isLoading}
           rightIcon={
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M19 9l-7 7-7-7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M19 9l-7 7-7-7"
               />
             </svg>
           }
+          size="sm"
+          variant="primary"
         >
           Eksportuj dane
         </Button>
@@ -89,11 +89,11 @@ export const ExportPatientDataButton: React.FC<ExportPatientDataButtonProps> = (
               <Menu.Item key={option.value}>
                 {({ active }) => (
                   <button
-                    onClick={() => handleExport(option.value)}
-                    disabled={isLoading}
                     className={`flex w-full items-center gap-2 px-4 py-2 text-left text-sm ${
                       active ? 'bg-neutral-100' : ''
                     }`}
+                    disabled={isLoading}
+                    onClick={() => handleExport(option.value)}
                   >
                     <span>{option.icon}</span>
                     <span>{option.label}</span>

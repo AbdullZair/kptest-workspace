@@ -236,18 +236,18 @@ export const PatientDataAdminPage: React.FC = () => {
               </div>
               {patient.deleted_at ? (
                 <ErasePatientDialog
+                  deletedAt={patient.deleted_at}
                   isOpen={showEraseDialog}
-                  onClose={() => setShowEraseDialog(false)}
                   patientId={patient.patient_id}
                   patientName={`${patient.first_name} ${patient.last_name}`}
-                  deletedAt={patient.deleted_at}
+                  onClose={() => setShowEraseDialog(false)}
                   onSuccess={refetch}
                 />
               ) : null}
               <Button
+                disabled={!patient.deleted_at}
                 variant="danger"
                 onClick={() => setShowEraseDialog(true)}
-                disabled={!patient.deleted_at}
               >
                 {patient.deleted_at
                   ? 'Rozpocznij trwałe usunięcie'
@@ -275,9 +275,9 @@ export const PatientDataAdminPage: React.FC = () => {
               <div className="text-sm text-neutral-500">
                 <p>Audit log jest dostępny w panelu administracyjnym:</p>
                 <Button
-                  variant="outline"
-                  size="sm"
                   className="mt-2"
+                  size="sm"
+                  variant="outline"
                   onClick={() => navigate('/admin/audit-logs')}
                 >
                   Przejdź do Audit Logs
@@ -309,16 +309,16 @@ export const PatientDataAdminPage: React.FC = () => {
 
       {/* Tabs */}
       <div className="border-b border-neutral-200">
-        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+        <nav aria-label="Tabs" className="-mb-px flex space-x-8">
           {TABS.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 border-b-2 px-1 py-4 text-sm font-medium ${
                 activeTab === tab.id
                   ? 'border-primary-500 text-primary-600'
                   : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700'
               } `}
+              onClick={() => setActiveTab(tab.id)}
             >
               <span>{tab.icon}</span>
               <span>{tab.label}</span>
@@ -333,9 +333,9 @@ export const PatientDataAdminPage: React.FC = () => {
       {/* Anonymize Dialog */}
       <AnonymizePatientDialog
         isOpen={showAnonymizeDialog}
-        onClose={() => setShowAnonymizeDialog(false)}
         patientId={patient.patient_id}
         patientName={`${patient.first_name} ${patient.last_name}`}
+        onClose={() => setShowAnonymizeDialog(false)}
         onSuccess={refetch}
       />
     </div>

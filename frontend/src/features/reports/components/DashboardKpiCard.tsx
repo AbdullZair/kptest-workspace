@@ -47,33 +47,36 @@ export interface KpiMetricProps {
  */
 const KpiMetric = memo(
   ({ title, value, change, icon, variant = 'primary', testId }: KpiMetricProps) => {
-  const variantColors: Record<string, string> = {
-    primary: 'bg-primary-50 text-primary-600',
-    secondary: 'bg-secondary-50 text-secondary-600',
-    success: 'bg-emerald-50 text-emerald-600',
-    warning: 'bg-amber-50 text-amber-600',
-    danger: 'bg-red-50 text-red-600',
-  }
+    const variantColors: Record<string, string> = {
+      primary: 'bg-primary-50 text-primary-600',
+      secondary: 'bg-secondary-50 text-secondary-600',
+      success: 'bg-emerald-50 text-emerald-600',
+      warning: 'bg-amber-50 text-amber-600',
+      danger: 'bg-red-50 text-red-600',
+    }
 
-  return (
-    <div className="rounded-lg bg-white p-6 shadow" data-testid={testId}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-neutral-600">{title}</p>
-          <p className="mt-1 text-2xl font-bold text-neutral-900">{value}</p>
-          {change !== undefined && (
-            <p className={clsx('mt-1 text-sm', change >= 0 ? 'text-emerald-600' : 'text-red-600')}>
-              {change >= 0 ? '↑' : '↓'} {Math.abs(change).toFixed(1)}%
-            </p>
-          )}
+    return (
+      <div className="rounded-lg bg-white p-6 shadow" data-testid={testId}>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-neutral-600">{title}</p>
+            <p className="mt-1 text-2xl font-bold text-neutral-900">{value}</p>
+            {change !== undefined && (
+              <p
+                className={clsx('mt-1 text-sm', change >= 0 ? 'text-emerald-600' : 'text-red-600')}
+              >
+                {change >= 0 ? '↑' : '↓'} {Math.abs(change).toFixed(1)}%
+              </p>
+            )}
+          </div>
+          {icon ? (
+            <div className={clsx('rounded-full p-3', variantColors[variant])}>{icon}</div>
+          ) : null}
         </div>
-        {icon ? (
-          <div className={clsx('rounded-full p-3', variantColors[variant])}>{icon}</div>
-        ) : null}
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
 
 /**
  * DashboardKpiCard Component
@@ -94,67 +97,67 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
       {/* Main Metrics */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiMetric
+          icon={
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
+          }
           testId="dashboard-active-projects"
           title="Projekty"
           value={`${kpi.active_projects}/${kpi.total_projects}`}
-          icon={
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-              />
-            </svg>
-          }
           variant="primary"
         />
         <KpiMetric
+          icon={
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
+          }
           testId="dashboard-active-patients"
           title="Pacjenci"
           value={`${kpi.active_patients}/${kpi.total_patients}`}
-          icon={
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-          }
           variant="secondary"
         />
         <KpiMetric
+          icon={
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
+          }
           testId="dashboard-total-staff"
           title="Personel"
           value={kpi.total_staff}
-          icon={
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
-          }
           variant="success"
         />
         <KpiMetric
-          testId="dashboard-pending-messages"
-          title="Wiadomości"
-          value={kpi.pending_messages}
           icon={
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
           }
+          testId="dashboard-pending-messages"
+          title="Wiadomości"
+          value={kpi.pending_messages}
           variant="warning"
         />
       </div>
@@ -203,7 +206,10 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
           </div>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow" data-testid="dashboard-materials-completion">
+        <div
+          className="rounded-lg bg-white p-6 shadow"
+          data-testid="dashboard-materials-completion"
+        >
           <h4 className="mb-2 text-sm font-medium text-neutral-600">Ukończenie Materiałów</h4>
           <p className="text-3xl font-bold text-neutral-900">
             {kpi.materials_completion_rate.toFixed(1)}%

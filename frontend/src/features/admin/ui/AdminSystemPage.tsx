@@ -78,22 +78,22 @@ export function AdminSystemPage() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={handleRefresh}
             className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+            onClick={handleRefresh}
           >
             Odśwież
           </button>
           <button
-            onClick={() => setShowClearCacheConfirm(true)}
-            disabled={isClearingCache}
             className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
+            disabled={isClearingCache}
+            onClick={() => setShowClearCacheConfirm(true)}
           >
             {isClearingCache ? 'Czyszczenie...' : 'Wyczyść cache'}
           </button>
           <button
-            onClick={() => setShowBackupConfirm(true)}
-            disabled={isCreatingBackup}
             className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+            disabled={isCreatingBackup}
+            onClick={() => setShowBackupConfirm(true)}
           >
             {isCreatingBackup ? 'Tworzenie...' : 'Utwórz backup'}
           </button>
@@ -119,8 +119,8 @@ export function AdminSystemPage() {
             <div className="rounded-lg border border-neutral-200 bg-white p-6 text-center">
               <p className="text-red-600">Wystąpił błąd podczas ładowania statusu systemu</p>
               <button
-                onClick={refetchHealth}
                 className="mt-4 font-medium text-primary-600 hover:text-primary-700"
+                onClick={refetchHealth}
               >
                 Spróbuj ponownie
               </button>
@@ -147,8 +147,8 @@ export function AdminSystemPage() {
             <div className="rounded-lg border border-neutral-200 bg-white p-6 text-center">
               <p className="text-red-600">Wystąpił błąd podczas ładowania metryk</p>
               <button
-                onClick={refetchMetrics}
                 className="mt-4 font-medium text-primary-600 hover:text-primary-700"
+                onClick={refetchMetrics}
               >
                 Spróbuj ponownie
               </button>
@@ -173,14 +173,14 @@ export function AdminSystemPage() {
                   <svg
                     className="h-6 w-6 text-amber-600"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                     />
                   </svg>
                 </div>
@@ -190,8 +190,8 @@ export function AdminSystemPage() {
                 Czyści pamięć podręczną aplikacji. Może być przydatne po aktualizacjach.
               </p>
               <button
-                onClick={() => setShowClearCacheConfirm(true)}
                 className="w-full rounded-md border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-100"
+                onClick={() => setShowClearCacheConfirm(true)}
               >
                 Wyczyść cache
               </button>
@@ -204,14 +204,14 @@ export function AdminSystemPage() {
                   <svg
                     className="h-6 w-6 text-primary-600"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
                     />
                   </svg>
                 </div>
@@ -221,8 +221,8 @@ export function AdminSystemPage() {
                 Tworzy kopię zapasową bazy danych. Przydatne przed większymi zmianami.
               </p>
               <button
-                onClick={() => setShowBackupConfirm(true)}
                 className="w-full rounded-md border border-primary-200 bg-primary-50 px-4 py-2 text-sm font-medium text-primary-700 hover:bg-primary-100"
+                onClick={() => setShowBackupConfirm(true)}
               >
                 Utwórz backup
               </button>
@@ -235,14 +235,14 @@ export function AdminSystemPage() {
                   <svg
                     className="h-6 w-6 text-blue-600"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
                 </div>
@@ -284,15 +284,15 @@ export function AdminSystemPage() {
               </p>
               <div className="flex justify-end gap-3">
                 <button
-                  onClick={() => setShowClearCacheConfirm(false)}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                  onClick={() => setShowClearCacheConfirm(false)}
                 >
                   Anuluj
                 </button>
                 <button
-                  onClick={handleClearCache}
-                  disabled={isClearingCache}
                   className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
+                  disabled={isClearingCache}
+                  onClick={handleClearCache}
                 >
                   {isClearingCache ? 'Czyszczenie...' : 'Wyczyść'}
                 </button>
@@ -316,15 +316,15 @@ export function AdminSystemPage() {
               </p>
               <div className="flex justify-end gap-3">
                 <button
-                  onClick={() => setShowBackupConfirm(false)}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                  onClick={() => setShowBackupConfirm(false)}
                 >
                   Anuluj
                 </button>
                 <button
-                  onClick={handleCreateBackup}
-                  disabled={isCreatingBackup}
                   className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+                  disabled={isCreatingBackup}
+                  onClick={handleCreateBackup}
                 >
                   {isCreatingBackup ? 'Tworzenie...' : 'Utwórz backup'}
                 </button>
@@ -344,14 +344,14 @@ export function AdminSystemPage() {
                   <svg
                     className="h-6 w-6 text-green-600"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M5 13l4 4L19 7"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M5 13l4 4L19 7"
                     />
                   </svg>
                 </div>
@@ -376,8 +376,8 @@ export function AdminSystemPage() {
                 </div>
               </dl>
               <button
-                onClick={() => setBackupResult(null)}
                 className="w-full rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+                onClick={() => setBackupResult(null)}
               >
                 Zamknij
               </button>

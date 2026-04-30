@@ -382,12 +382,9 @@ export const useAuth = () => {
   /**
    * Stub for password reset confirmation — backend endpoint not yet wired.
    */
-  const resetPassword = useCallback(
-    async (_token: string, _newPassword: string) => {
-      return { success: true as const }
-    },
-    []
-  )
+  const resetPassword = useCallback(async (_token: string, _newPassword: string) => {
+    return { success: true as const }
+  }, [])
 
   return {
     // State

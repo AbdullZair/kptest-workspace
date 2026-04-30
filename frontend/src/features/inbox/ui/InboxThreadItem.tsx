@@ -157,8 +157,8 @@ export const InboxThreadItem: React.FC<InboxThreadItemProps> = ({
         <div className="flex items-center justify-end space-x-2">
           {onDelegateClick ? (
             <button
-              onClick={() => onDelegateClick(thread.id)}
               className="text-sm font-medium text-blue-600 hover:text-blue-900"
+              onClick={() => onDelegateClick(thread.id)}
             >
               Deleguj
             </button>

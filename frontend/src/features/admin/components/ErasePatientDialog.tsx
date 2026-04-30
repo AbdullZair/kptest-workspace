@@ -93,9 +93,9 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
   }
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
+    <Dialog className="relative z-50" open={isOpen} onClose={handleClose}>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+      <div aria-hidden="true" className="fixed inset-0 bg-black/50" />
 
       {/* Dialog container */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -161,17 +161,17 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
                   {/* Reason input */}
                   <div>
                     <label
-                      htmlFor="reason"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="reason"
                     >
                       Powód usunięcia *
                     </label>
                     <textarea
                       id="reason"
                       {...register('reason')}
-                      rows={3}
                       className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       placeholder="Podaj powód trwałego usunięcia danych..."
+                      rows={3}
                     />
                     {errors.reason ? (
                       <p className="mt-1 text-sm text-red-600">{errors.reason.message}</p>
@@ -181,12 +181,12 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
                   {/* Final confirmation checkbox */}
                   <div className="flex items-start gap-2">
                     <input
-                      type="checkbox"
                       id="confirm"
+                      type="checkbox"
                       {...register('confirm')}
                       className="mt-1 h-4 w-4 rounded border-neutral-300 text-red-600 focus:ring-red-500"
                     />
-                    <label htmlFor="confirm" className="text-sm text-neutral-700">
+                    <label className="text-sm text-neutral-700" htmlFor="confirm">
                       Rozumiem, że ta operacja jest nieodwracalna i wszystkie dane pacjenta zostaną
                       trwale usunięte
                     </label>
@@ -200,33 +200,33 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
 
             {/* Footer */}
             <div className="flex justify-end gap-3 rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-6 py-4">
-              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
+              <Button disabled={isLoading} type="button" variant="outline" onClick={handleClose}>
                 Anuluj
               </Button>
               {step === 1 ? (
                 <Button
+                  disabled={!canErase || isLoading}
                   type="button"
                   variant="danger"
                   onClick={handleFirstStep}
-                  disabled={!canErase || isLoading}
                 >
                   Kontynuuj
                 </Button>
               ) : (
                 <>
                   <Button
+                    disabled={isLoading}
                     type="button"
                     variant="outline"
                     onClick={() => setStep(1)}
-                    disabled={isLoading}
                   >
                     Wstecz
                   </Button>
                   <Button
+                    disabled={!confirmValue || isLoading}
+                    loading={isLoading}
                     type="submit"
                     variant="danger"
-                    loading={isLoading}
-                    disabled={!confirmValue || isLoading}
                   >
                     Usuń trwale
                   </Button>

@@ -37,7 +37,7 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   // their local state. Auth status comes from a synchronous selector.
   if (isAuthenticated) {
     const from = (location.state as { from?: Location })?.from || { pathname: '/dashboard' }
-    return <Navigate to={from} replace />
+    return <Navigate replace to={from} />
   }
 
   return <>{children}</>

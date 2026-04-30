@@ -57,14 +57,14 @@ export const ResetPasswordPage = () => {
               <svg
                 className="h-8 w-8 text-success-600"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M5 13l4 4L19 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
                 />
               </svg>
             </div>
@@ -75,7 +75,7 @@ export const ResetPasswordPage = () => {
             </p>
 
             <Link to="/login">
-              <Button variant="primary" fullWidth>
+              <Button fullWidth variant="primary">
                 Zaloguj się
               </Button>
             </Link>
@@ -94,14 +94,14 @@ export const ResetPasswordPage = () => {
             <svg
               className="h-7 w-7 text-white"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
               />
             </svg>
           </div>
@@ -118,34 +118,34 @@ export const ResetPasswordPage = () => {
         ) : null}
 
         {/* Reset form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <Input
-            label="Nowe hasło"
-            type="password"
-            placeholder="••••••••"
+            fullWidth
             error={errors.password?.message}
             helperText="Min. 8 znaków, wielka i mała litera, cyfra"
-            fullWidth
+            label="Nowe hasło"
+            placeholder="••••••••"
+            type="password"
             {...register('password')}
           />
 
           <Input
-            label="Potwierdź nowe hasło"
-            type="password"
-            placeholder="••••••••"
-            error={errors.confirmPassword?.message}
             fullWidth
+            error={errors.confirmPassword?.message}
+            label="Potwierdź nowe hasło"
+            placeholder="••••••••"
+            type="password"
             {...register('confirmPassword')}
           />
 
-          <Button type="submit" variant="primary" size="lg" fullWidth loading={isSubmitting}>
+          <Button fullWidth loading={isSubmitting} size="lg" type="submit" variant="primary">
             Zmień hasło
           </Button>
         </form>
 
         {/* Back to login */}
         <p className="mt-8 text-center text-sm text-neutral-600">
-          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700">
+          <Link className="font-medium text-primary-600 hover:text-primary-700" to="/login">
             Wróć do logowania
           </Link>
         </p>

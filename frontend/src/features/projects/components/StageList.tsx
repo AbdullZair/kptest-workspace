@@ -74,7 +74,7 @@ export const StageList: React.FC<StageListProps> = ({
 
   if (stages.length === 0) {
     return (
-      <Alert variant="info" title="Brak etapów">
+      <Alert title="Brak etapów" variant="info">
         Nie ma jeszcze żadnych etapów terapii dla tego projektu.
       </Alert>
     )
@@ -90,12 +90,12 @@ export const StageList: React.FC<StageListProps> = ({
         return (
           <div
             key={stage.id}
-            draggable={canDrag}
-            onDragStart={() => handleDragStart(index)}
-            onDragOver={(e) => handleDragOver(e, index)}
-            onDragLeave={handleDragLeave}
-            onDrop={(e) => handleDrop(e, index)}
             className={`relative transition-all duration-200 ${isDragging ? 'scale-95 opacity-50' : ''} ${isDragOver ? 'border-2 border-blue-500' : ''} ${canDrag ? 'cursor-grab active:cursor-grabbing' : ''} `}
+            draggable={canDrag}
+            onDragLeave={handleDragLeave}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDragStart={() => handleDragStart(index)}
+            onDrop={(e) => handleDrop(e, index)}
           >
             <Card className="p-4">
               <div className="flex items-center gap-4">
@@ -104,10 +104,10 @@ export const StageList: React.FC<StageListProps> = ({
                   <div className="flex-shrink-0 cursor-grab text-gray-400">
                     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
+                        d="M4 8h16M4 16h16"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M4 8h16M4 16h16"
                       />
                     </svg>
                   </div>
@@ -142,10 +142,10 @@ export const StageList: React.FC<StageListProps> = ({
                 {/* Actions */}
                 {isStaff ? (
                   <div className="flex flex-shrink-0 gap-2">
-                    <Button variant="secondary" size="sm" onClick={() => onEdit?.(stage)}>
+                    <Button size="sm" variant="secondary" onClick={() => onEdit?.(stage)}>
                       Edytuj
                     </Button>
-                    <Button variant="danger" size="sm" onClick={() => onDelete?.(stage)}>
+                    <Button size="sm" variant="danger" onClick={() => onDelete?.(stage)}>
                       Usuń
                     </Button>
                   </div>

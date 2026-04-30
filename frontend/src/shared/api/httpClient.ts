@@ -126,7 +126,12 @@ class HttpClient {
         console.error('[HTTP Error]', apiError)
     }
 
-    return Promise.reject(apiError)
+    // Wrap ApiError so it satisfies prefer-promise-reject-errors (Error instance);
+    // original payload is preserved on .cause for callers that inspect it.
+    const rejection = Object.assign(new Error(apiError.message ?? 'API error'), apiError, {
+      cause: apiError,
+    })
+    return Promise.reject(rejection)
   }
 
   /**

@@ -124,7 +124,7 @@ export const PatientDetailPage = () => {
     return (
       <div className="py-12 text-center">
         <p className="text-error-600">Nie znaleziono pacjenta</p>
-        <Button variant="primary" onClick={handleBack} className="mt-4">
+        <Button className="mt-4" variant="primary" onClick={handleBack}>
           Powrót do listy
         </Button>
       </div>
@@ -136,13 +136,13 @@ export const PatientDetailPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={handleBack}>
-            <svg className="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <Button size="sm" variant="ghost" onClick={handleBack}>
+            <svg className="mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M15 19l-7-7 7-7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 19l-7-7 7-7"
               />
             </svg>
             Powrót
@@ -156,39 +156,39 @@ export const PatientDetailPage = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <VerificationStatus status={patient.verification_status} size="lg" />
+          <VerificationStatus size="lg" status={patient.verification_status} />
 
           <Button variant="outline" onClick={dispatchEdit}>
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
               />
             </svg>
             Edytuj
           </Button>
 
           <Button variant="primary" onClick={() => setVerifyDialogOpen(true)}>
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
             Weryfikuj HIS
           </Button>
 
           <Button variant="danger" onClick={handleDelete}>
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
             Usuń
@@ -198,7 +198,7 @@ export const PatientDetailPage = () => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Patient Information */}
-        <Card variant="elevated" className="lg:col-span-2">
+        <Card className="lg:col-span-2" variant="elevated">
           <Card.Header>
             <h2 className="text-lg font-semibold text-neutral-900">Informacje o pacjencie</h2>
           </Card.Header>
@@ -284,7 +284,7 @@ export const PatientDetailPage = () => {
                   <div>
                     <p className="text-sm text-neutral-500">Status weryfikacji</p>
                     <div className="mt-1">
-                      <VerificationStatus status={patient.verification_status} showLabel />
+                      <VerificationStatus showLabel status={patient.verification_status} />
                     </div>
                   </div>
 
@@ -335,49 +335,49 @@ export const PatientDetailPage = () => {
           </Card.Header>
           <Card.Body>
             <div className="space-y-3">
-              <Button variant="outline" fullWidth>
-                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <Button fullWidth variant="outline">
+                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
                 Historia wizyt
               </Button>
 
-              <Button variant="outline" fullWidth>
-                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <Button fullWidth variant="outline">
+                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                   />
                 </svg>
                 Wyniki badań
               </Button>
 
-              <Button variant="outline" fullWidth>
-                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <Button fullWidth variant="outline">
+                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
                 Recepty
               </Button>
 
-              <Button variant="outline" fullWidth>
-                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <Button fullWidth variant="outline">
+                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                   />
                 </svg>
                 Dokumenty
@@ -393,7 +393,7 @@ export const PatientDetailPage = () => {
           <div className="fixed inset-0 bg-black/50" onClick={() => setVerifyDialogOpen(false)} />
 
           <div className="flex min-h-full items-center justify-center p-4">
-            <Card variant="elevated" className="relative z-10 w-full max-w-md">
+            <Card className="relative z-10 w-full max-w-md" variant="elevated">
               <Card.Header>
                 <h3 className="text-lg font-semibold text-neutral-900">Weryfikacja w HIS</h3>
               </Card.Header>
@@ -407,12 +407,12 @@ export const PatientDetailPage = () => {
                     Numer karty
                   </label>
                   <input
+                    autoFocus
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Wpisz numer karty..."
                     type="text"
                     value={cartNumber}
                     onChange={(e) => setCartNumber(e.target.value)}
-                    placeholder="Wpisz numer karty..."
-                    className="w-full rounded-md border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    autoFocus
                   />
                 </div>
 
@@ -421,10 +421,10 @@ export const PatientDetailPage = () => {
                     Anuluj
                   </Button>
                   <Button
+                    disabled={!cartNumber.trim()}
+                    loading={isVerifying}
                     variant="primary"
                     onClick={handleVerify}
-                    loading={isVerifying}
-                    disabled={!cartNumber.trim()}
                   >
                     Weryfikuj
                   </Button>

@@ -96,13 +96,13 @@ export const BadgesCatalogPage: React.FC = () => {
 
       {/* Tabs */}
       <Tabs
+        activeTab={activeTab}
+        className="mb-6"
         tabs={[
           { id: 'catalog', label: `Katalog (${allBadges.length})` },
           { id: 'my', label: `Moje (${myBadges.length})` },
         ]}
-        activeTab={activeTab}
         onTabChange={(tab) => setActiveTab(tab as 'catalog' | 'my')}
-        className="mb-6"
       />
 
       {/* Category Filter */}
@@ -110,10 +110,10 @@ export const BadgesCatalogPage: React.FC = () => {
         {categories.map((cat) => (
           <Button
             key={cat.value}
-            variant={selectedCategory === cat.value ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setSelectedCategory(cat.value)}
             className="whitespace-nowrap"
+            size="sm"
+            variant={selectedCategory === cat.value ? 'primary' : 'secondary'}
+            onClick={() => setSelectedCategory(cat.value)}
           >
             {cat.label} {activeTab === 'catalog' && `(${cat.count})`}
           </Button>
@@ -135,8 +135,8 @@ export const BadgesCatalogPage: React.FC = () => {
             <BadgeCard
               key={'badge_id' in badge ? badge.badge_id : badge.id}
               badge={badge}
-              isEarned={'badge_id' in badge ? true : earnedBadgeIds.has(badge.id)}
               earnedAt={'earned_at' in badge ? badge.earned_at : undefined}
+              isEarned={'badge_id' in badge ? true : earnedBadgeIds.has(badge.id)}
             />
           ))}
         </div>

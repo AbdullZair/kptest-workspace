@@ -61,7 +61,7 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
 
   const cooling = useMemo(() => evaluateCoolingOff(deletedAt), [deletedAt])
   const reasonValid = reason.trim().length >= 10
-  const errorMessage = error ? (error as ApiError)?.message ?? String(error) : null
+  const errorMessage = error ? ((error as ApiError)?.message ?? String(error)) : null
 
   const handleClose = (): void => {
     setReason('')
@@ -88,20 +88,18 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
 
   if (!isOpen) return null
 
-  const formattedDeletedAt = deletedAt
-    ? new Date(deletedAt).toLocaleDateString('pl-PL')
-    : null
+  const formattedDeletedAt = deletedAt ? new Date(deletedAt).toLocaleDateString('pl-PL') : null
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="erase-dialog-title"
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      role="dialog"
     >
       <div className="mx-4 w-full max-w-lg rounded-lg bg-white shadow-xl">
         <div className="border-b border-neutral-200 px-6 py-4">
-          <h3 id="erase-dialog-title" className="text-lg font-semibold text-neutral-900">
+          <h3 className="text-lg font-semibold text-neutral-900" id="erase-dialog-title">
             {step === 1
               ? 'Trwałe usunięcie danych pacjenta (RODO Art. 17)'
               : 'Potwierdź trwałe usunięcie'}
@@ -115,17 +113,16 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
               <p className="font-medium">Okres karencji 30 dni</p>
               <p className="mt-1">
                 Pacjent został oznaczony jako usunięty
-                {formattedDeletedAt ? ` ${formattedDeletedAt}` : ''}. Trwałe
-                usunięcie będzie możliwe za {cooling.daysRemaining}{' '}
-                {cooling.daysRemaining === 1 ? 'dzień' : 'dni'}.
+                {formattedDeletedAt ? ` ${formattedDeletedAt}` : ''}. Trwałe usunięcie będzie
+                możliwe za {cooling.daysRemaining} {cooling.daysRemaining === 1 ? 'dzień' : 'dni'}.
               </p>
             </div>
           ) : null}
 
           {!deletedAt ? (
             <div className="rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-              Pacjent nie został wcześniej miękko usunięty. Operacja trwałego
-              usunięcia jest zablokowana.
+              Pacjent nie został wcześniej miękko usunięty. Operacja trwałego usunięcia jest
+              zablokowana.
             </div>
           ) : null}
 
@@ -139,26 +136,26 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
             <>
               <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">
                 <p>
-                  <strong>Operacja nieodwracalna.</strong> Wszystkie dane osobowe
-                  pacjenta zostaną trwale usunięte z systemu.
+                  <strong>Operacja nieodwracalna.</strong> Wszystkie dane osobowe pacjenta zostaną
+                  trwale usunięte z systemu.
                 </p>
               </div>
 
               <div>
                 <label
-                  htmlFor="erase-reason"
                   className="mb-1 block text-sm font-medium text-neutral-700"
+                  htmlFor="erase-reason"
                 >
                   Powód usunięcia *
                 </label>
                 <textarea
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  disabled={cooling.blocked || !deletedAt}
                   id="erase-reason"
+                  placeholder="Podaj uzasadnienie (min. 10 znaków). Treść trafi do dziennika audytu."
+                  rows={4}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  rows={4}
-                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder="Podaj uzasadnienie (min. 10 znaków). Treść trafi do dziennika audytu."
-                  disabled={cooling.blocked || !deletedAt}
                 />
                 <p className="mt-1 text-xs text-neutral-500">
                   Minimum 10 znaków. Wymagane do audytu RODO.
@@ -167,20 +164,18 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
 
               <div className="flex justify-end gap-3 border-t border-neutral-200 pt-4">
                 <button
+                  className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+                  disabled={isLoading}
                   type="button"
                   onClick={handleClose}
-                  disabled={isLoading}
-                  className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
                 >
                   Anuluj
                 </button>
                 <button
+                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={cooling.blocked || !deletedAt || !reasonValid || isLoading}
                   type="button"
                   onClick={() => setStep(2)}
-                  disabled={
-                    cooling.blocked || !deletedAt || !reasonValid || isLoading
-                  }
-                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Dalej
                 </button>
@@ -213,18 +208,18 @@ export const ErasePatientDialog: React.FC<ErasePatientDialogProps> = ({
 
               <div className="flex justify-end gap-3 border-t border-neutral-200 pt-4">
                 <button
+                  className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+                  disabled={isLoading}
                   type="button"
                   onClick={() => setStep(1)}
-                  disabled={isLoading}
-                  className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
                 >
                   Wstecz
                 </button>
                 <button
+                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={isLoading}
                   type="button"
                   onClick={handleConfirm}
-                  disabled={isLoading}
-                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isLoading ? 'Usuwam...' : 'Usuń trwale'}
                 </button>

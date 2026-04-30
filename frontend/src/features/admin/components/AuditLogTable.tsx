@@ -81,9 +81,9 @@ const SortIcon = ({ order, active }: { order: SortOrder; active: boolean }) => (
       viewBox="0 0 20 20"
     >
       <path
-        fillRule="evenodd"
-        d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
         clipRule="evenodd"
+        d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+        fillRule="evenodd"
       />
     </svg>
     <svg
@@ -92,9 +92,9 @@ const SortIcon = ({ order, active }: { order: SortOrder; active: boolean }) => (
       viewBox="0 0 20 20"
     >
       <path
-        fillRule="evenodd"
-        d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
         clipRule="evenodd"
+        d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
+        fillRule="evenodd"
       />
     </svg>
   </span>
@@ -125,14 +125,14 @@ const SortableHeader = ({
 
   return (
     <th
-      className="cursor-pointer px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600 transition-colors hover:bg-neutral-50"
-      onClick={handleClick}
-      role="columnheader"
       aria-sort={isActive ? (order === 'asc' ? 'ascending' : 'descending') : 'none'}
+      className="cursor-pointer px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600 transition-colors hover:bg-neutral-50"
+      role="columnheader"
+      onClick={handleClick}
     >
       <span className="flex items-center">
         {children}
-        <SortIcon order={isActive && order ? order : 'asc'} active={isActive} />
+        <SortIcon active={isActive} order={isActive && order ? order : 'asc'} />
       </span>
     </th>
   )
@@ -190,14 +190,14 @@ export const AuditLogTable = memo(
             <svg
               className="mx-auto mb-4 h-16 w-16 text-neutral-300"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={1}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
             <p className="text-neutral-500">Brak logów audytu do wyświetlenia</p>
@@ -213,8 +213,8 @@ export const AuditLogTable = memo(
             <thead className="bg-neutral-50">
               <tr>
                 <SortableHeader
-                  field="action"
                   currentField={sortField}
+                  field="action"
                   order={sortOrder}
                   onSort={handleSort}
                 >
@@ -227,8 +227,8 @@ export const AuditLogTable = memo(
                   ID encji
                 </th>
                 <SortableHeader
-                  field="user_id"
                   currentField={sortField}
+                  field="user_id"
                   order={sortOrder}
                   onSort={handleSort}
                 >
@@ -238,8 +238,8 @@ export const AuditLogTable = memo(
                   IP
                 </th>
                 <SortableHeader
-                  field="created_at"
                   currentField={sortField}
+                  field="created_at"
                   order={sortOrder}
                   onSort={handleSort}
                 >
@@ -290,11 +290,11 @@ export const AuditLogTable = memo(
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <button
+                      className="text-sm font-medium text-primary-600 hover:text-primary-700"
                       onClick={(e) => {
                         e.stopPropagation()
                         onViewDetails?.(log)
                       }}
-                      className="text-sm font-medium text-primary-600 hover:text-primary-700"
                     >
                       Szczegóły
                     </button>

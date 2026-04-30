@@ -78,7 +78,7 @@ export const ReportDetailPage = () => {
             <h1 className="text-2xl font-bold text-neutral-900">Raport Compliance</h1>
             <p className="mt-1 text-neutral-600">{complianceReport.project_name}</p>
           </div>
-          <ExportButton reportType="COMPLIANCE" projectId={id} label="Eksportuj PDF" />
+          <ExportButton label="Eksportuj PDF" projectId={id} reportType="COMPLIANCE" />
         </div>
 
         {/* Summary Cards */}
@@ -114,9 +114,9 @@ export const ReportDetailPage = () => {
           <h2 className="mb-4 text-lg font-semibold">Trend Compliance</h2>
           <ComplianceChart
             data={complianceReport.compliance_trend}
+            height={300}
             overallCompliance={complianceReport.overall_compliance}
             threshold={complianceReport.compliance_threshold}
-            height={300}
           />
         </div>
 
@@ -150,7 +150,7 @@ export const ReportDetailPage = () => {
             <h1 className="text-2xl font-bold text-neutral-900">Statystyki Pacjenta</h1>
             <p className="mt-1 text-neutral-600">{patientStats.patient_name}</p>
           </div>
-          <ExportButton reportType="PATIENT_STATS" patientId={id} label="Eksportuj PDF" />
+          <ExportButton label="Eksportuj PDF" patientId={id} reportType="PATIENT_STATS" />
         </div>
 
         <PatientStatsCard stats={patientStats} />
@@ -193,7 +193,7 @@ export const ReportDetailPage = () => {
             <h1 className="text-2xl font-bold text-neutral-900">Statystyki Projektu</h1>
             <p className="mt-1 text-neutral-600">{projectStats.project_name}</p>
           </div>
-          <ExportButton reportType="PROJECT_STATS" projectId={id} label="Eksportuj PDF" />
+          <ExportButton label="Eksportuj PDF" projectId={id} reportType="PROJECT_STATS" />
         </div>
 
         <ProjectStatsCard stats={projectStats} />
@@ -211,7 +211,7 @@ export const ReportDetailPage = () => {
             <h1 className="text-2xl font-bold text-neutral-900">Statystyki Materiałów</h1>
             <p className="mt-1 text-neutral-600">{materialStats.project_name}</p>
           </div>
-          <ExportButton reportType="MATERIAL_STATS" projectId={id} label="Eksportuj PDF" />
+          <ExportButton label="Eksportuj PDF" projectId={id} reportType="MATERIAL_STATS" />
         </div>
 
         {/* Summary */}
@@ -274,11 +274,11 @@ export const ReportDetailPage = () => {
     <div className="space-y-6">
       {/* Back Button */}
       <button
-        onClick={() => navigate(-1)}
         className="flex items-center text-primary-600 hover:text-primary-700"
+        onClick={() => navigate(-1)}
       >
-        <svg className="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <svg className="mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
         </svg>
         Powrót
       </button>

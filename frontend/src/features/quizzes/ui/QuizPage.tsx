@@ -106,7 +106,7 @@ export const QuizPage: React.FC = () => {
 
   if (error || !quiz) {
     return (
-      <Alert variant="error" title="Błąd ładowania quizu">
+      <Alert title="Błąd ładowania quizu" variant="error">
         Nie udało się załadować quizu. Spróbuj ponownie później.
       </Alert>
     )
@@ -153,7 +153,7 @@ export const QuizPage: React.FC = () => {
       {!attemptId && (
         <Card className="mb-6 p-6 text-center">
           <p className="mb-4 text-gray-700">Rozpocznij quiz, aby sprawdzić swoją wiedzę.</p>
-          <Button variant="primary" onClick={handleStartQuiz} size="lg">
+          <Button size="lg" variant="primary" onClick={handleStartQuiz}>
             Rozpocznij Quiz
           </Button>
         </Card>
@@ -164,19 +164,19 @@ export const QuizPage: React.FC = () => {
         <>
           {quiz.questions[currentQuestionIndex] ? (
             <QuestionCard
-              question={quiz.questions[currentQuestionIndex]!}
-              selectedAnswers={answers.get(quiz.questions[currentQuestionIndex]!.id) || []}
-              onAnswerSelect={handleAnswerSelect}
               disabled={isSubmitting}
+              question={quiz.questions[currentQuestionIndex]}
+              selectedAnswers={answers.get(quiz.questions[currentQuestionIndex].id) || []}
+              onAnswerSelect={handleAnswerSelect}
             />
           ) : null}
 
           {/* Navigation */}
           <div className="mt-6 flex items-center justify-between">
             <Button
+              disabled={currentQuestionIndex === 0}
               variant="secondary"
               onClick={goToPrevious}
-              disabled={currentQuestionIndex === 0}
             >
               Poprzednie
             </Button>
@@ -187,9 +187,9 @@ export const QuizPage: React.FC = () => {
 
             {currentQuestionIndex === quiz.questions.length - 1 ? (
               <Button
+                disabled={!allQuestionsAnswered || isSubmitting}
                 variant="primary"
                 onClick={handleSubmitQuiz}
-                disabled={!allQuestionsAnswered || isSubmitting}
               >
                 {isSubmitting ? 'Wysyłanie...' : 'Zakończ i sprawdź'}
               </Button>
@@ -208,7 +208,7 @@ export const QuizPage: React.FC = () => {
                 className={`h-3 w-3 rounded-full ${
                   index === currentQuestionIndex
                     ? 'bg-blue-600'
-                    : quiz.questions[index] && answers.has(quiz.questions[index]!.id)
+                    : quiz.questions[index] && answers.has(quiz.questions[index].id)
                       ? 'bg-green-500'
                       : 'bg-gray-300'
                 }`}
@@ -220,7 +220,7 @@ export const QuizPage: React.FC = () => {
 
       {/* Result Modal */}
       {showResults && attemptId ? (
-        <QuizResultModal isOpen={showResults} onClose={() => navigate('/quizzes')} attempt={null} />
+        <QuizResultModal attempt={null} isOpen={showResults} onClose={() => navigate('/quizzes')} />
       ) : null}
     </div>
   )

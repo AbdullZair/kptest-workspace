@@ -230,66 +230,66 @@ export const ProjectFormModal = ({
 
   return (
     <div
+      aria-labelledby="modal-title"
+      aria-modal="true"
       className="fixed inset-0 z-50 overflow-y-auto"
       role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
     >
       {/* Backdrop */}
       <div
+        aria-hidden="true"
         className="fixed inset-0 bg-black/50 transition-opacity"
         onClick={onClose}
-        aria-hidden="true"
       />
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
         <div className="relative w-full max-w-2xl transform transition-all">
-          <Card variant="elevated" className="overflow-hidden">
+          <Card className="overflow-hidden" variant="elevated">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-neutral-200 bg-neutral-50 px-6 py-4">
-              <h2 id="modal-title" className="text-lg font-semibold text-neutral-900">
+              <h2 className="text-lg font-semibold text-neutral-900" id="modal-title">
                 {project ? 'Edytuj projekt' : 'Nowy projekt'}
               </h2>
               <button
-                onClick={onClose}
-                className="text-neutral-400 transition-colors hover:text-neutral-600"
                 aria-label="Zamknij"
+                className="text-neutral-400 transition-colors hover:text-neutral-600"
+                onClick={onClose}
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M6 18L18 6M6 6l12 12"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} data-testid="project-form">
+            <form data-testid="project-form" onSubmit={handleSubmit}>
               <Card.Body className="space-y-5">
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className="mb-1 block text-sm font-medium text-neutral-700">
+                  <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="name">
                     Nazwa projektu <span className="text-rose-500">*</span>
                   </label>
                   <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
                     className={clsx(
                       'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                       errors.name
                         ? 'border-rose-300 focus:border-rose-500'
                         : 'border-neutral-300 focus:border-primary-500'
                     )}
-                    placeholder="Wprowadź nazwę projektu"
-                    disabled={isLoading}
                     data-testid="project-name"
+                    disabled={isLoading}
+                    id="name"
+                    name="name"
+                    placeholder="Wprowadź nazwę projektu"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleChange}
                   />
                   {errors.name ? <p className="mt-1 text-sm text-rose-600">{errors.name}</p> : null}
                 </div>
@@ -297,26 +297,26 @@ export const ProjectFormModal = ({
                 {/* Description */}
                 <div>
                   <label
-                    htmlFor="description"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="description"
                   >
                     Opis
                   </label>
                   <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    rows={4}
                     className={clsx(
                       'w-full resize-none rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                       errors.description
                         ? 'border-rose-300 focus:border-rose-500'
                         : 'border-neutral-300 focus:border-primary-500'
                     )}
-                    placeholder="Opis projektu (opcjonalny)"
-                    disabled={isLoading}
                     data-testid="project-description"
+                    disabled={isLoading}
+                    id="description"
+                    name="description"
+                    placeholder="Opis projektu (opcjonalny)"
+                    rows={4}
+                    value={formData.description}
+                    onChange={handleChange}
                   />
                   {errors.description ? (
                     <p className="mt-1 text-sm text-rose-600">{errors.description}</p>
@@ -331,25 +331,25 @@ export const ProjectFormModal = ({
                   {/* Start Date */}
                   <div>
                     <label
-                      htmlFor="start_date"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="start_date"
                     >
                       Data rozpoczęcia <span className="text-rose-500">*</span>
                     </label>
                     <input
-                      type="date"
-                      id="start_date"
-                      name="start_date"
-                      value={formData.start_date}
-                      onChange={handleChange}
                       className={clsx(
                         'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                         errors.start_date
                           ? 'border-rose-300 focus:border-rose-500'
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
-                      disabled={isLoading}
                       data-testid="project-start-date"
+                      disabled={isLoading}
+                      id="start_date"
+                      name="start_date"
+                      type="date"
+                      value={formData.start_date}
+                      onChange={handleChange}
                     />
                     {errors.start_date ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.start_date}</p>
@@ -359,25 +359,25 @@ export const ProjectFormModal = ({
                   {/* End Date */}
                   <div>
                     <label
-                      htmlFor="end_date"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="end_date"
                     >
                       Data zakończenia
                     </label>
                     <input
-                      type="date"
-                      id="end_date"
-                      name="end_date"
-                      value={formData.end_date}
-                      onChange={handleChange}
                       className={clsx(
                         'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                         errors.end_date
                           ? 'border-rose-300 focus:border-rose-500'
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
-                      disabled={isLoading}
                       data-testid="project-end-date"
+                      disabled={isLoading}
+                      id="end_date"
+                      name="end_date"
+                      type="date"
+                      value={formData.end_date}
+                      onChange={handleChange}
                     />
                     {errors.end_date ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.end_date}</p>
@@ -390,19 +390,19 @@ export const ProjectFormModal = ({
                   {/* Status */}
                   <div>
                     <label
-                      htmlFor="status"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="status"
                     >
                       Status
                     </label>
                     <select
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      data-testid="project-status"
+                      disabled={isLoading}
                       id="status"
                       name="status"
                       value={formData.status}
                       onChange={handleChange}
-                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      disabled={isLoading}
-                      data-testid="project-status"
                     >
                       <option value="PLANNED">Planowany</option>
                       <option value="ACTIVE">Aktywny</option>
@@ -415,27 +415,27 @@ export const ProjectFormModal = ({
                   {/* Compliance Threshold */}
                   <div>
                     <label
-                      htmlFor="compliance_threshold"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="compliance_threshold"
                     >
                       Próg compliance (%)
                     </label>
                     <input
-                      type="number"
-                      id="compliance_threshold"
-                      name="compliance_threshold"
-                      value={formData.compliance_threshold}
-                      onChange={handleChange}
-                      min={0}
-                      max={100}
                       className={clsx(
                         'w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500',
                         errors.compliance_threshold
                           ? 'border-rose-300 focus:border-rose-500'
                           : 'border-neutral-300 focus:border-primary-500'
                       )}
-                      disabled={isLoading}
                       data-testid="project-compliance-threshold"
+                      disabled={isLoading}
+                      id="compliance_threshold"
+                      max={100}
+                      min={0}
+                      name="compliance_threshold"
+                      type="number"
+                      value={formData.compliance_threshold}
+                      onChange={handleChange}
                     />
                     {errors.compliance_threshold ? (
                       <p className="mt-1 text-sm text-rose-600">{errors.compliance_threshold}</p>
@@ -461,13 +461,13 @@ export const ProjectFormModal = ({
                         </span>
                       </div>
                       <input
+                        className="mb-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        data-testid="project-team-search"
+                        disabled={isLoading || isFetchingStaff}
+                        placeholder="Szukaj po e-mailu lub roli..."
                         type="search"
                         value={staffSearch}
                         onChange={(e) => setStaffSearch(e.target.value)}
-                        placeholder="Szukaj po e-mailu lub roli..."
-                        className="mb-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        disabled={isLoading || isFetchingStaff}
-                        data-testid="project-team-search"
                       />
                       <div className="max-h-48 overflow-y-auto rounded-lg border border-neutral-200">
                         {isFetchingStaff ? (
@@ -486,12 +486,12 @@ export const ProjectFormModal = ({
                                 <li key={user.user_id}>
                                   <label className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-neutral-50">
                                     <input
-                                      type="checkbox"
                                       checked={checked}
-                                      onChange={() => toggleTeamMember(user.user_id)}
-                                      disabled={isLoading}
                                       className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                                       data-testid={`team-checkbox-${user.user_id}`}
+                                      disabled={isLoading}
+                                      type="checkbox"
+                                      onChange={() => toggleTeamMember(user.user_id)}
                                     />
                                     <span className="flex-1 text-sm text-neutral-800">
                                       {user.email}
@@ -519,13 +519,13 @@ export const ProjectFormModal = ({
                         </span>
                       </div>
                       <input
+                        className="mb-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        data-testid="project-patients-search"
+                        disabled={isLoading || isFetchingPatients}
+                        placeholder="Szukaj po imieniu lub nazwisku (min. 2 znaki)..."
                         type="search"
                         value={patientSearch}
                         onChange={(e) => setPatientSearch(e.target.value)}
-                        placeholder="Szukaj po imieniu lub nazwisku (min. 2 znaki)..."
-                        className="mb-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        disabled={isLoading || isFetchingPatients}
-                        data-testid="project-patients-search"
                       />
                       <div className="max-h-48 overflow-y-auto rounded-lg border border-neutral-200">
                         {isFetchingPatients ? (
@@ -544,12 +544,12 @@ export const ProjectFormModal = ({
                                 <li key={p.id}>
                                   <label className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-neutral-50">
                                     <input
-                                      type="checkbox"
                                       checked={checked}
-                                      onChange={() => togglePatient(p.id)}
-                                      disabled={isLoading}
                                       className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                                       data-testid={`patient-checkbox-${p.id}`}
+                                      disabled={isLoading}
+                                      type="checkbox"
+                                      onChange={() => togglePatient(p.id)}
                                     />
                                     <span className="flex-1 text-sm text-neutral-800">
                                       {p.first_name} {p.last_name}
@@ -572,20 +572,20 @@ export const ProjectFormModal = ({
               {/* Footer */}
               <Card.Footer className="flex items-center justify-end gap-3 border-t border-neutral-200 bg-neutral-50 px-6 py-4">
                 <Button
+                  data-testid="project-cancel"
+                  disabled={isLoading}
                   type="button"
                   variant="outline"
                   onClick={onClose}
-                  disabled={isLoading}
-                  data-testid="project-cancel"
                 >
                   Anuluj
                 </Button>
                 <Button
-                  type="submit"
-                  variant="primary"
-                  disabled={isLoading}
                   className="min-w-[120px]"
                   data-testid="project-save"
+                  disabled={isLoading}
+                  type="submit"
+                  variant="primary"
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
@@ -600,8 +600,8 @@ export const ProjectFormModal = ({
                         />
                         <path
                           className="opacity-75"
-                          fill="currentColor"
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          fill="currentColor"
                         />
                       </svg>
                       Zapisywanie...

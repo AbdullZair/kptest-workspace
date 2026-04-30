@@ -30,10 +30,10 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({ isOpen, onClose }) => {
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="help-dialog-title"
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      role="dialog"
       onClick={onClose}
     >
       <div
@@ -42,7 +42,7 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({ isOpen, onClose }) => {
       >
         <div className="flex items-start justify-between border-b border-neutral-200 px-6 py-4">
           <div>
-            <h3 id="help-dialog-title" className="text-lg font-semibold text-neutral-900">
+            <h3 className="text-lg font-semibold text-neutral-900" id="help-dialog-title">
               {article.title}
             </h3>
             <p className="mt-1 text-xs text-neutral-500">
@@ -50,17 +50,17 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({ isOpen, onClose }) => {
             </p>
           </div>
           <button
+            aria-label="Zamknij pomoc"
+            className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600"
             type="button"
             onClick={onClose}
-            className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600"
-            aria-label="Zamknij pomoc"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M6 18L18 6M6 6l12 12"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
               />
             </svg>
           </button>
@@ -76,9 +76,9 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({ isOpen, onClose }) => {
                 {article.links.map((l) => (
                   <li key={l.href}>
                     <Link
+                      className="text-primary-600 hover:text-primary-700 hover:underline"
                       to={l.href}
                       onClick={onClose}
-                      className="text-primary-600 hover:text-primary-700 hover:underline"
                     >
                       {l.label}
                     </Link>
@@ -89,16 +89,16 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({ isOpen, onClose }) => {
           ) : null}
 
           <div className="rounded border border-neutral-200 bg-neutral-50 p-3 text-xs text-neutral-600">
-            Pełna dokumentacja użytkownika dostępna w portalu wsparcia placówki.
-            Skróty klawiaturowe: <kbd>Esc</kbd> zamyka pomoc, <kbd>?</kbd> otwiera.
+            Pełna dokumentacja użytkownika dostępna w portalu wsparcia placówki. Skróty
+            klawiaturowe: <kbd>Esc</kbd> zamyka pomoc, <kbd>?</kbd> otwiera.
           </div>
         </div>
 
         <div className="flex justify-end border-t border-neutral-200 px-6 py-3">
           <button
+            className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
             type="button"
             onClick={onClose}
-            className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
           >
             Zamknij
           </button>

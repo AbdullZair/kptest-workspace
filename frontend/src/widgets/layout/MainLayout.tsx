@@ -49,13 +49,13 @@ export const MainLayout = () => {
           <div className="flex flex-col items-center justify-between gap-2 text-sm text-neutral-500 sm:flex-row">
             <p>&copy; 2026 KPTEST Portal Medyczny. Wszelkie prawa zastrzeżone.</p>
             <div className="flex items-center gap-4">
-              <a href="/privacy" className="transition-colors hover:text-neutral-700">
+              <a className="transition-colors hover:text-neutral-700" href="/privacy">
                 Polityka prywatności
               </a>
-              <a href="/terms" className="transition-colors hover:text-neutral-700">
+              <a className="transition-colors hover:text-neutral-700" href="/terms">
                 Regulamin
               </a>
-              <a href="/help" className="transition-colors hover:text-neutral-700">
+              <a className="transition-colors hover:text-neutral-700" href="/help">
                 Pomoc
               </a>
             </div>

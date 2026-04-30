@@ -98,9 +98,9 @@ export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ isOp
   }
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
+    <Dialog className="relative z-50" open={isOpen} onClose={handleClose}>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+      <div aria-hidden="true" className="fixed inset-0 bg-black/50" />
 
       {/* Dialog panel */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -129,35 +129,35 @@ export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ isOp
 
               {/* Current password */}
               <Input
-                label="Obecne hasło"
-                type="password"
-                placeholder="Wpisz obecne hasło"
-                variant={errors.currentPassword ? 'error' : 'default'}
-                errorMessage={errors.currentPassword?.message}
                 fullWidth
+                errorMessage={errors.currentPassword?.message}
+                label="Obecne hasło"
+                placeholder="Wpisz obecne hasło"
+                type="password"
+                variant={errors.currentPassword ? 'error' : 'default'}
                 {...register('currentPassword')}
               />
 
               {/* New password */}
               <Input
-                label="Nowe hasło"
-                type="password"
-                placeholder="Wpisz nowe hasło"
-                variant={errors.newPassword ? 'error' : 'default'}
+                fullWidth
                 errorMessage={errors.newPassword?.message}
                 helperText="Min. 12 znaków, wielka i mała litera, cyfra i znak specjalny"
-                fullWidth
+                label="Nowe hasło"
+                placeholder="Wpisz nowe hasło"
+                type="password"
+                variant={errors.newPassword ? 'error' : 'default'}
                 {...register('newPassword')}
               />
 
               {/* Confirm new password */}
               <Input
-                label="Potwierdź nowe hasło"
-                type="password"
-                placeholder="Wpisz ponownie nowe hasło"
-                variant={errors.confirmNewPassword ? 'error' : 'default'}
-                errorMessage={errors.confirmNewPassword?.message}
                 fullWidth
+                errorMessage={errors.confirmNewPassword?.message}
+                label="Potwierdź nowe hasło"
+                placeholder="Wpisz ponownie nowe hasło"
+                type="password"
+                variant={errors.confirmNewPassword ? 'error' : 'default'}
                 {...register('confirmNewPassword')}
               />
             </div>
@@ -165,14 +165,14 @@ export const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ isOp
             {/* Footer */}
             <div className="flex justify-end space-x-3 border-t border-neutral-200 px-6 py-4">
               <Button
+                disabled={isSubmitting || isLoading}
                 type="button"
                 variant="outline"
                 onClick={handleClose}
-                disabled={isSubmitting || isLoading}
               >
                 Anuluj
               </Button>
-              <Button type="submit" variant="primary" loading={isSubmitting || isLoading}>
+              <Button loading={isSubmitting || isLoading} type="submit" variant="primary">
                 Zmień hasło
               </Button>
             </div>

@@ -134,13 +134,13 @@ export const PendingVerificationsPage = () => {
 
       {feedback ? (
         <div
-          role="status"
-          data-testid={`feedback-${feedback.kind}`}
           className={
             feedback.kind === 'ok'
               ? 'rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800'
               : 'rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800'
           }
+          data-testid={`feedback-${feedback.kind}`}
+          role="status"
         >
           {feedback.text}
         </div>
@@ -173,15 +173,15 @@ export const PendingVerificationsPage = () => {
           <tbody className="divide-y divide-neutral-200 bg-white">
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-sm text-neutral-500">
+                <td className="px-4 py-8 text-center text-sm text-neutral-500" colSpan={5}>
                   Ładowanie…
                 </td>
               </tr>
             ) : error ? (
               <tr>
                 <td
-                  colSpan={5}
                   className="px-4 py-8 text-center text-sm text-red-600"
+                  colSpan={5}
                   data-testid="pending-verifications-error"
                 >
                   Nie udało się pobrać listy oczekujących weryfikacji.
@@ -190,8 +190,8 @@ export const PendingVerificationsPage = () => {
             ) : items.length === 0 ? (
               <tr>
                 <td
-                  colSpan={5}
                   className="px-4 py-8 text-center text-sm text-neutral-500"
+                  colSpan={5}
                   data-testid="pending-verifications-empty"
                 >
                   Brak pacjentów oczekujących na weryfikację.
@@ -215,26 +215,26 @@ export const PendingVerificationsPage = () => {
                   <td className="whitespace-nowrap px-4 py-3 text-right text-sm">
                     <div className="inline-flex gap-2">
                       <button
-                        type="button"
-                        data-testid={`verify-his-${p.patient_id}`}
-                        onClick={() => openHis(p)}
                         className="rounded-md bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        data-testid={`verify-his-${p.patient_id}`}
+                        type="button"
+                        onClick={() => openHis(p)}
                       >
                         Zweryfikuj przez HIS
                       </button>
                       <button
-                        type="button"
-                        data-testid={`manual-approve-${p.patient_id}`}
-                        onClick={() => openManual(p)}
                         className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        data-testid={`manual-approve-${p.patient_id}`}
+                        type="button"
+                        onClick={() => openManual(p)}
                       >
                         Zatwierdź ręcznie
                       </button>
                       <button
-                        type="button"
-                        data-testid={`reject-${p.patient_id}`}
-                        onClick={() => openReject(p)}
                         className="rounded-md border border-red-300 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        data-testid={`reject-${p.patient_id}`}
+                        type="button"
+                        onClick={() => openReject(p)}
                       >
                         Odrzuć
                       </button>
@@ -249,11 +249,11 @@ export const PendingVerificationsPage = () => {
         {totalPages > 1 ? (
           <div className="flex items-center justify-between border-t border-neutral-200 bg-neutral-50 px-4 py-3 text-sm">
             <button
-              type="button"
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1 disabled:opacity-50"
               data-testid="page-prev"
               disabled={data?.isFirst ?? true}
+              type="button"
               onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1 disabled:opacity-50"
             >
               Poprzednia
             </button>
@@ -261,11 +261,11 @@ export const PendingVerificationsPage = () => {
               Strona {(data?.pageNumber ?? 0) + 1} z {totalPages}
             </span>
             <button
-              type="button"
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1 disabled:opacity-50"
               data-testid="page-next"
               disabled={data?.isLast ?? true}
+              type="button"
               onClick={() => setPage((p) => p + 1)}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1 disabled:opacity-50"
             >
               Następna
             </button>
@@ -276,39 +276,39 @@ export const PendingVerificationsPage = () => {
       {/* HIS verification modal */}
       {modal.kind === 'his' && modal.patient ? (
         <ModalShell
-          title="Weryfikacja przez HIS"
           subtitle={`Pacjent: ${modal.patient.first_name} ${modal.patient.last_name} (${modal.patient.pesel_masked})`}
-          onClose={closeModal}
           testId="his-modal"
+          title="Weryfikacja przez HIS"
+          onClose={closeModal}
         >
-          <label htmlFor="his-cart-input" className="block text-sm font-medium text-neutral-700">
+          <label className="block text-sm font-medium text-neutral-700" htmlFor="his-cart-input">
             Numer kartoteki HIS
           </label>
           <input
-            id="his-cart-input"
+            className="mt-1 block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
             data-testid="his-cart-input"
+            id="his-cart-input"
+            placeholder="np. CART-001"
             value={hisCart}
             onChange={(e) => setHisCart(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
-            placeholder="np. CART-001"
           />
           <p className="mt-2 text-xs text-neutral-500">
             System wykona dopasowanie po PESEL i numerze kartoteki w HIS.
           </p>
           <div className="mt-4 flex justify-end gap-2">
             <button
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700"
               type="button"
               onClick={closeModal}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700"
             >
               Anuluj
             </button>
             <button
-              type="button"
+              className="rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-50"
               data-testid="confirm-his"
               disabled={hisCart.trim().length === 0 || isApproving}
+              type="button"
               onClick={handleHisApprove}
-              className="rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-50"
             >
               {isApproving ? 'Weryfikacja…' : 'Zatwierdź przez HIS'}
             </button>
@@ -319,40 +319,43 @@ export const PendingVerificationsPage = () => {
       {/* Manual approve modal */}
       {modal.kind === 'manual' && modal.patient ? (
         <ModalShell
-          title="Zatwierdzenie ręczne"
           subtitle={`Pacjent: ${modal.patient.first_name} ${modal.patient.last_name} (${modal.patient.pesel_masked})`}
-          onClose={closeModal}
           testId="manual-modal"
+          title="Zatwierdzenie ręczne"
+          onClose={closeModal}
         >
-          <label htmlFor="manual-reason-input" className="block text-sm font-medium text-neutral-700">
+          <label
+            className="block text-sm font-medium text-neutral-700"
+            htmlFor="manual-reason-input"
+          >
             Uzasadnienie (min. 10 znaków)
           </label>
           <textarea
-            id="manual-reason-input"
+            className="mt-1 block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
             data-testid="manual-reason-input"
+            id="manual-reason-input"
+            placeholder="Opisz dlaczego zatwierdzasz ręcznie z pominięciem HIS"
+            rows={4}
             value={manualReason}
             onChange={(e) => setManualReason(e.target.value)}
-            rows={4}
-            className="mt-1 block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
-            placeholder="Opisz dlaczego zatwierdzasz ręcznie z pominięciem HIS"
           />
           <p className="mt-2 text-xs text-neutral-500">
             Uzasadnienie zostanie zapisane w logu audytowym.
           </p>
           <div className="mt-4 flex justify-end gap-2">
             <button
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700"
               type="button"
               onClick={closeModal}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700"
             >
               Anuluj
             </button>
             <button
-              type="button"
+              className="rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-50"
               data-testid="confirm-manual"
               disabled={manualReason.trim().length < 10 || isApproving}
+              type="button"
               onClick={handleManualApprove}
-              className="rounded-md bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-50"
             >
               {isApproving ? 'Zatwierdzanie…' : 'Zatwierdź ręcznie'}
             </button>
@@ -363,38 +366,41 @@ export const PendingVerificationsPage = () => {
       {/* Reject modal */}
       {modal.kind === 'reject' && modal.patient ? (
         <ModalShell
-          title="Odrzucenie weryfikacji"
           subtitle={`Pacjent: ${modal.patient.first_name} ${modal.patient.last_name} (${modal.patient.pesel_masked})`}
-          onClose={closeModal}
           testId="reject-modal"
+          title="Odrzucenie weryfikacji"
+          onClose={closeModal}
         >
-          <label htmlFor="reject-reason-input" className="block text-sm font-medium text-neutral-700">
+          <label
+            className="block text-sm font-medium text-neutral-700"
+            htmlFor="reject-reason-input"
+          >
             Powód odrzucenia (min. 10 znaków)
           </label>
           <textarea
-            id="reject-reason-input"
+            className="mt-1 block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none"
             data-testid="reject-reason-input"
+            id="reject-reason-input"
+            placeholder="Opisz powód odrzucenia"
+            rows={4}
             value={rejectReason}
             onChange={(e) => setRejectReason(e.target.value)}
-            rows={4}
-            className="mt-1 block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none"
-            placeholder="Opisz powód odrzucenia"
           />
           <p className="mt-2 text-xs text-red-600">Odrzucenie jest nieodwracalne.</p>
           <div className="mt-4 flex justify-end gap-2">
             <button
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700"
               type="button"
               onClick={closeModal}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-700"
             >
               Anuluj
             </button>
             <button
-              type="button"
+              className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-50"
               data-testid="confirm-reject"
               disabled={rejectReason.trim().length < 10 || isRejecting}
+              type="button"
               onClick={handleReject}
-              className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-50"
             >
               {isRejecting ? 'Odrzucanie…' : 'Odrzuć'}
             </button>
@@ -415,25 +421,25 @@ interface ModalShellProps {
 
 const ModalShell: React.FC<ModalShellProps> = ({ title, subtitle, testId, onClose, children }) => (
   <div
-    role="dialog"
-    aria-modal="true"
     aria-labelledby={`${testId}-title`}
-    data-testid={testId}
+    aria-modal="true"
     className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4"
+    data-testid={testId}
+    role="dialog"
   >
     <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h2 id={`${testId}-title`} className="text-lg font-semibold text-neutral-900">
+          <h2 className="text-lg font-semibold text-neutral-900" id={`${testId}-title`}>
             {title}
           </h2>
           <p className="mt-1 text-xs text-neutral-500">{subtitle}</p>
         </div>
         <button
-          type="button"
-          onClick={onClose}
           aria-label="Zamknij"
           className="text-neutral-400 hover:text-neutral-600"
+          type="button"
+          onClick={onClose}
         >
           ×
         </button>

@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,7 +22,6 @@ export const RegisterPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -75,25 +74,30 @@ export const RegisterPage = () => {
             <svg
               className="h-7 w-7 text-white"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
               />
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-neutral-900" data-testid="register-title">{t('auth.register.title')}</h1>
+          <h1 className="text-2xl font-bold text-neutral-900" data-testid="register-title">
+            {t('auth.register.title')}
+          </h1>
           <p className="mt-2 text-neutral-600">{t('auth.register.subtitle')}</p>
         </div>
 
         {/* Error message */}
         {error ? (
-          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4" data-testid="error-message">
+          <div
+            className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4"
+            data-testid="error-message"
+          >
             <p className="text-sm text-error-800">{error}</p>
           </div>
         ) : null}
@@ -107,116 +111,118 @@ export const RegisterPage = () => {
           >
             <p className="text-sm text-success-800">
               Rejestracja zakończona. Konto czeka na weryfikację przez personel medyczny —
-              zostaniesz poinformowany po jej zakończeniu. Za chwilę przekierujemy Cię na
-              stronę logowania.
+              zostaniesz poinformowany po jej zakończeniu. Za chwilę przekierujemy Cię na stronę
+              logowania.
             </p>
           </div>
         ) : null}
 
         {/* Register form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" data-testid="register-form">
+        <form className="space-y-5" data-testid="register-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label={t('auth.register.firstName')}
-              placeholder={t('auth.register.firstNamePlaceholder')}
-              error={errors.firstName?.message}
               fullWidth
               data-testid="firstName-input"
+              error={errors.firstName?.message}
+              label={t('auth.register.firstName')}
+              placeholder={t('auth.register.firstNamePlaceholder')}
               {...register('firstName')}
             />
 
             <Input
-              label={t('auth.register.lastName')}
-              placeholder={t('auth.register.lastNamePlaceholder')}
-              error={errors.lastName?.message}
               fullWidth
               data-testid="lastName-input"
+              error={errors.lastName?.message}
+              label={t('auth.register.lastName')}
+              placeholder={t('auth.register.lastNamePlaceholder')}
               {...register('lastName')}
             />
           </div>
 
           <Input
-            label={t('auth.register.email')}
-            type="email"
-            placeholder={t('auth.register.emailPlaceholder')}
-            error={errors.email?.message}
             fullWidth
             data-testid="email-input"
+            error={errors.email?.message}
+            label={t('auth.register.email')}
+            placeholder={t('auth.register.emailPlaceholder')}
+            type="email"
             {...register('email')}
           />
 
           <Input
-            label="PESEL"
-            type="text"
-            placeholder="00000000000"
-            error={errors.pesel?.message}
             fullWidth
             data-testid="pesel-input"
+            error={errors.pesel?.message}
+            label="PESEL"
             maxLength={11}
+            placeholder="00000000000"
+            type="text"
             {...register('pesel')}
           />
 
           <Input
-            label={t('auth.register.phone')}
-            type="tel"
-            placeholder={t('auth.register.phonePlaceholder')}
-            error={errors.phone?.message}
             fullWidth
             data-testid="phone-input"
+            error={errors.phone?.message}
+            label={t('auth.register.phone')}
+            placeholder={t('auth.register.phonePlaceholder')}
+            type="tel"
             {...register('phone')}
           />
 
           <Input
-            label={t('auth.register.password')}
-            type="password"
-            placeholder={t('auth.register.passwordPlaceholder')}
-            error={errors.password?.message}
-            helperText={t('auth.register.passwordHint')}
             fullWidth
             data-testid="password-input"
+            error={errors.password?.message}
+            helperText={t('auth.register.passwordHint')}
+            label={t('auth.register.password')}
+            placeholder={t('auth.register.passwordPlaceholder')}
+            type="password"
             {...register('password')}
           />
 
           <Input
-            label={t('auth.register.confirmPassword')}
-            type="password"
-            placeholder={t('auth.register.confirmPasswordPlaceholder')}
-            error={errors.confirmPassword?.message}
             fullWidth
             data-testid="confirmPassword-input"
+            error={errors.confirmPassword?.message}
+            label={t('auth.register.confirmPassword')}
+            placeholder={t('auth.register.confirmPasswordPlaceholder')}
+            type="password"
             {...register('confirmPassword')}
           />
 
           <div className="flex items-start">
             <input
-              type="checkbox"
-              id="acceptTerms"
               className="mt-1 h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
               data-testid="terms-checkbox"
+              id="acceptTerms"
+              type="checkbox"
               {...register('acceptTerms')}
             />
-            <label htmlFor="acceptTerms" className="ml-2 text-sm text-neutral-700">
+            <label className="ml-2 text-sm text-neutral-700" htmlFor="acceptTerms">
               {t('auth.register.acceptTerms')}{' '}
-              <a href="/regulamin" className="text-primary-600 hover:underline" target="_blank">
+              <a className="text-primary-600 hover:underline" href="/regulamin" target="_blank">
                 {t('auth.register.terms')}
               </a>{' '}
               {t('auth.register.and')}{' '}
-              <a href="/polityka" className="text-primary-600 hover:underline" target="_blank">
+              <a className="text-primary-600 hover:underline" href="/polityka" target="_blank">
                 {t('auth.register.privacyPolicy')}
               </a>
             </label>
           </div>
           {errors.acceptTerms ? (
-            <p className="text-sm text-error-600" data-testid="validation-error">{errors.acceptTerms.message}</p>
+            <p className="text-sm text-error-600" data-testid="validation-error">
+              {errors.acceptTerms.message}
+            </p>
           ) : null}
 
-          <Button 
-            type="submit" 
-            variant="primary" 
-            size="lg" 
-            fullWidth 
-            loading={isSubmitting}
+          <Button
+            fullWidth
             data-testid="submit-button"
+            loading={isSubmitting}
+            size="lg"
+            type="submit"
+            variant="primary"
           >
             {t('auth.register.submit')}
           </Button>
@@ -225,7 +231,11 @@ export const RegisterPage = () => {
         {/* Login link */}
         <p className="mt-8 text-center text-sm text-neutral-600">
           {t('auth.register.hasAccount')}{' '}
-          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700" data-testid="login-link">
+          <Link
+            className="font-medium text-primary-600 hover:text-primary-700"
+            data-testid="login-link"
+            to="/login"
+          >
             {t('auth.register.login')}
           </Link>
         </p>

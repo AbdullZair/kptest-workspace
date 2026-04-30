@@ -68,19 +68,19 @@ export const UserStatusToggle = memo(
     return (
       <div className={`relative inline-block text-left ${className}`}>
         <button
+          className={`inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium ${colorClass} transition-opacity hover:opacity-80 disabled:opacity-50`}
+          disabled={disabled}
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          disabled={disabled}
-          className={`inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium ${colorClass} transition-opacity hover:opacity-80 disabled:opacity-50`}
         >
           {getStatusLabel(selectedStatus)}
           <svg
             className={`ml-2 h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
-            viewBox="0 0 24 24"
             stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
           </svg>
         </button>
 
@@ -92,13 +92,13 @@ export const UserStatusToggle = memo(
                 {statusOptions.map((option) => (
                   <button
                     key={option}
-                    onClick={() => handleStatusSelect(option)}
                     className={`block w-full px-4 py-2 text-left text-sm ${
                       selectedStatus === option
                         ? 'bg-gray-100 text-gray-900'
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                     role="menuitem"
+                    onClick={() => handleStatusSelect(option)}
                   >
                     {getStatusLabel(option)}
                   </button>

@@ -76,9 +76,9 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
   const errorMessage = error ? (error as ApiError)?.message || String(error) : null
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
+    <Dialog className="relative z-50" open={isOpen} onClose={handleClose}>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+      <div aria-hidden="true" className="fixed inset-0 bg-black/50" />
 
       {/* Dialog container */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -113,7 +113,7 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
 
               {/* Reason dropdown */}
               <div>
-                <label htmlFor="reason" className="mb-1 block text-sm font-medium text-neutral-700">
+                <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="reason">
                   Powód anonimizacji *
                 </label>
                 <select
@@ -135,17 +135,17 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
               {/* Additional notes */}
               <div>
                 <label
-                  htmlFor="additional_notes"
                   className="mb-1 block text-sm font-medium text-neutral-700"
+                  htmlFor="additional_notes"
                 >
                   Notatki dodatkowe
                 </label>
                 <textarea
                   id="additional_notes"
                   {...register('additional_notes')}
-                  rows={3}
                   className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Opcjonalne notatki..."
+                  rows={3}
                 />
                 {errors.additional_notes ? (
                   <p className="mt-1 text-sm text-red-600">{errors.additional_notes.message}</p>
@@ -155,29 +155,29 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
               {/* Confirmation input */}
               <div>
                 <label
-                  htmlFor="confirmation"
                   className="mb-1 block text-sm font-medium text-neutral-700"
+                  htmlFor="confirmation"
                 >
                   Wpisz "ANONYMIZUJ" aby potwierdzić *
                 </label>
                 <Input
                   id="confirmation"
                   {...register('confirmation')}
-                  type="text"
-                  placeholder="ANONYMIZUJ"
-                  variant={errors.confirmation ? 'error' : 'default'}
-                  errorMessage={errors.confirmation?.message ?? ''}
                   fullWidth
+                  errorMessage={errors.confirmation?.message ?? ''}
+                  placeholder="ANONYMIZUJ"
+                  type="text"
+                  variant={errors.confirmation ? 'error' : 'default'}
                 />
               </div>
             </div>
 
             {/* Footer */}
             <div className="flex justify-end gap-3 rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-6 py-4">
-              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
+              <Button disabled={isLoading} type="button" variant="outline" onClick={handleClose}>
                 Anuluj
               </Button>
-              <Button type="submit" variant="danger" loading={isLoading}>
+              <Button loading={isLoading} type="submit" variant="danger">
                 Anonimizuj
               </Button>
             </div>

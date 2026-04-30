@@ -24,7 +24,6 @@ const formatTime = (dateString: string): string => {
   })
 }
 
-
 /**
  * Get priority badge color
  */
@@ -90,9 +89,9 @@ export const MessageBubble = memo(
           ) : null}
 
           <Card
-            variant={isOwn ? 'elevated' : 'default'}
-            size="md"
             className={`${isOwn ? 'border-blue-200 bg-blue-50' : 'bg-white'}`}
+            size="md"
+            variant={isOwn ? 'elevated' : 'default'}
           >
             <div className="flex flex-col gap-2">
               {/* Priority badge */}
@@ -116,21 +115,21 @@ export const MessageBubble = memo(
                   {message.attachments.map((attachment) => (
                     <a
                       key={attachment.id}
-                      href={`/api/v1/messages/messages/${attachment.message_id}/attachments/${attachment.id}`}
                       className="flex items-center gap-2 rounded-lg bg-neutral-100 px-3 py-2 text-sm transition-colors hover:bg-neutral-200"
                       download={attachment.file_name}
+                      href={`/api/v1/messages/messages/${attachment.message_id}/attachments/${attachment.id}`}
                     >
                       <svg
                         className="h-4 w-4 text-neutral-600"
                         fill="none"
-                        viewBox="0 0 24 24"
                         stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
                         <path
+                          d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
                         />
                       </svg>
                       <div className="flex flex-col">
@@ -160,10 +159,10 @@ export const MessageBubble = memo(
                 <div className="flex items-center gap-2">
                   {!isOwn && !isRead && onMarkRead ? (
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onMarkRead(message.id)}
                       className="text-xs text-blue-600 hover:text-blue-700"
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => onMarkRead(message.id)}
                     >
                       Oznacz jako przeczytane
                     </Button>
@@ -177,10 +176,10 @@ export const MessageBubble = memo(
 
                 {!isOwn && onReply ? (
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onReply(message)}
                     className="text-xs text-neutral-600 hover:text-neutral-800"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onReply(message)}
                   >
                     Odpowiedz
                   </Button>

@@ -69,6 +69,7 @@ export const ProjectStatus = memo(
 
     return (
       <span
+        aria-label={`Status: ${config.label}`}
         className={clsx(
           'inline-flex items-center gap-1.5 rounded-full border font-medium',
           sizeClasses,
@@ -76,7 +77,6 @@ export const ProjectStatus = memo(
           className
         )}
         role="status"
-        aria-label={`Status: ${config.label}`}
       >
         <svg
           className={clsx(
@@ -84,10 +84,10 @@ export const ProjectStatus = memo(
             size === 'sm' ? 'h-3 w-3' : size === 'md' ? 'h-4 w-4' : 'h-5 w-5'
           )}
           fill="none"
-          viewBox="0 0 24 24"
           stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={config.icon} />
+          <path d={config.icon} strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
         </svg>
         {showLabel ? <span>{config.label}</span> : null}
       </span>

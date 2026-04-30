@@ -21,10 +21,10 @@ describe('Clear2faButton', () => {
   it('renders the clear 2FA button', () => {
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 
@@ -34,10 +34,10 @@ describe('Clear2faButton', () => {
   it('is disabled when 2FA is not enabled', () => {
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="NURSE"
         twoFactorEnabled={false}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="NURSE"
       />
     )
 
@@ -47,10 +47,10 @@ describe('Clear2faButton', () => {
   it('opens modal when button is clicked', () => {
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 
@@ -65,10 +65,10 @@ describe('Clear2faButton', () => {
 
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 
@@ -90,10 +90,10 @@ describe('Clear2faButton', () => {
 
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="NURSE"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="NURSE"
         onSuccess={mockOnSuccess}
       />
     )
@@ -118,10 +118,10 @@ describe('Clear2faButton', () => {
   it('shows warning for roles requiring 2FA', () => {
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 
@@ -134,10 +134,10 @@ describe('Clear2faButton', () => {
   it('does not show 2FA warning for roles not requiring 2FA', () => {
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="NURSE"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="NURSE"
       />
     )
 
@@ -149,10 +149,10 @@ describe('Clear2faButton', () => {
   it('lists consequences of clearing 2FA', () => {
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 
@@ -172,10 +172,10 @@ describe('Clear2faButton', () => {
 
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 
@@ -192,10 +192,10 @@ describe('Clear2faButton', () => {
 
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 
@@ -214,10 +214,10 @@ describe('Clear2faButton', () => {
   it('closes modal and resets form on cancel', () => {
     render(
       <Clear2faButton
-        userId="user-123"
-        userEmail="test@example.com"
-        userRole="DOCTOR"
         twoFactorEnabled={true}
+        userEmail="test@example.com"
+        userId="user-123"
+        userRole="DOCTOR"
       />
     )
 

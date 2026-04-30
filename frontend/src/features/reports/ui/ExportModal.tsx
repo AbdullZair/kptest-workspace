@@ -114,13 +114,13 @@ export const ExportModal = ({
           {/* Header */}
           <div className="flex items-center justify-between border-b border-neutral-200 p-6">
             <h3 className="text-lg font-semibold text-neutral-900">Eksportuj raport</h3>
-            <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button className="text-neutral-400 hover:text-neutral-600" onClick={onClose}>
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M6 18L18 6M6 6l12 12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </button>
@@ -133,24 +133,24 @@ export const ExportModal = ({
               <label className="mb-2 block text-sm font-medium text-neutral-700">Format</label>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setFormat('PDF')}
                   className={clsx(
                     'flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors',
                     format === 'PDF'
                       ? 'border-primary-600 bg-primary-50 text-primary-700'
                       : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
                   )}
+                  onClick={() => setFormat('PDF')}
                 >
                   PDF
                 </button>
                 <button
-                  onClick={() => setFormat('EXCEL')}
                   className={clsx(
                     'flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors',
                     format === 'EXCEL'
                       ? 'border-primary-600 bg-primary-50 text-primary-700'
                       : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
                   )}
+                  onClick={() => setFormat('EXCEL')}
                 >
                   Excel
                 </button>
@@ -162,19 +162,19 @@ export const ExportModal = ({
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700">Data od</label>
                 <input
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
                 />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700">Data do</label>
                 <input
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
                 />
               </div>
             </div>
@@ -183,10 +183,10 @@ export const ExportModal = ({
             <div>
               <label className="flex cursor-pointer items-center gap-2">
                 <input
-                  type="checkbox"
                   checked={includeCharts}
-                  onChange={(e) => setIncludeCharts(e.target.checked)}
                   className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                  type="checkbox"
+                  onChange={(e) => setIncludeCharts(e.target.checked)}
                 />
                 <span className="text-sm text-neutral-700">Uwzględnij wykresy</span>
               </label>
@@ -196,21 +196,21 @@ export const ExportModal = ({
           {/* Footer */}
           <div className="flex gap-3 border-t border-neutral-200 p-6">
             <button
-              onClick={onClose}
               className="flex-1 rounded-md bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200"
               disabled={isExporting}
+              onClick={onClose}
             >
               Anuluj
             </button>
             <button
-              onClick={handleExport}
-              disabled={isExporting}
               className={clsx(
                 'flex-1 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors',
                 isExporting
                   ? 'cursor-not-allowed bg-primary-400'
                   : 'bg-primary-600 hover:bg-primary-700'
               )}
+              disabled={isExporting}
+              onClick={handleExport}
             >
               {isExporting ? 'Eksportowanie...' : 'Eksportuj'}
             </button>

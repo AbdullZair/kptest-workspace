@@ -19,13 +19,13 @@ describe('ForcePasswordResetButton', () => {
   })
 
   it('renders the reset button', () => {
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     expect(screen.getByText(/resetuj hasło/i)).toBeInTheDocument()
   })
 
   it('opens modal when button is clicked', () => {
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     fireEvent.click(screen.getByText(/resetuj hasło/i))
 
@@ -37,7 +37,7 @@ describe('ForcePasswordResetButton', () => {
     const originalAlert = window.alert
     window.alert = jest.fn()
 
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     fireEvent.click(screen.getByText(/resetuj hasło/i))
     fireEvent.click(screen.getByText(/resetuj hasło/i))
@@ -58,8 +58,8 @@ describe('ForcePasswordResetButton', () => {
 
     render(
       <ForcePasswordResetButton
-        userId="user-123"
         userEmail="test@example.com"
+        userId="user-123"
         onSuccess={mockOnSuccess}
       />
     )
@@ -91,7 +91,7 @@ describe('ForcePasswordResetButton', () => {
       temporary_password: 'TempPass123!',
     })
 
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     fireEvent.click(screen.getByText(/resetuj hasło/i))
 
@@ -110,7 +110,7 @@ describe('ForcePasswordResetButton', () => {
   it('shows error message on failure', async () => {
     mockForcePasswordReset.mockRejectedValue(new Error('Reset failed'))
 
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     fireEvent.click(screen.getByText(/resetuj hasło/i))
 
@@ -130,7 +130,7 @@ describe('ForcePasswordResetButton', () => {
       { isLoading: true, error: null },
     ])
 
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     fireEvent.click(screen.getByText(/resetuj hasło/i))
 
@@ -141,7 +141,7 @@ describe('ForcePasswordResetButton', () => {
   })
 
   it('displays warning about consequences', () => {
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     fireEvent.click(screen.getByText(/resetuj hasło/i))
 
@@ -152,7 +152,7 @@ describe('ForcePasswordResetButton', () => {
   })
 
   it('closes modal and resets form on cancel', () => {
-    render(<ForcePasswordResetButton userId="user-123" userEmail="test@example.com" />)
+    render(<ForcePasswordResetButton userEmail="test@example.com" userId="user-123" />)
 
     fireEvent.click(screen.getByText(/resetuj hasło/i))
 

@@ -29,7 +29,7 @@ export const isValidEmail = (email: string): boolean => {
  * ```
  */
 export const isValidPhone = (phone: string): boolean => {
-  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{3,6}$/
+  const phoneRegex = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{3,6}$/
   return phoneRegex.test(phone.replace(/\s/g, ''))
 }
 
@@ -152,7 +152,7 @@ export const capitalize = (text: string): string => {
  * @param prefix - Optional prefix
  * @returns Unique ID string
  */
-export const generateId = (prefix: string = ''): string => {
+export const generateId = (prefix = ''): string => {
   return `${prefix}${Date.now().toString(36)}${Math.random().toString(36).substring(2)}`
 }
 
@@ -169,7 +169,7 @@ export const generateId = (prefix: string = ''): string => {
  * formatFileSize(1048576) // "1 MB"
  * ```
  */
-export const formatFileSize = (bytes: number, decimals: number = 2): string => {
+export const formatFileSize = (bytes: number, decimals = 2): string => {
   if (bytes === 0) {
     return '0 B'
   }
@@ -218,7 +218,7 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): ((...args: Parameters<T>) => void) => {
-  let inThrottle: boolean = false
+  let inThrottle = false
 
   return (...args: Parameters<T>) => {
     if (!inThrottle) {

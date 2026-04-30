@@ -50,11 +50,11 @@ export const Clear2faButton: React.FC<Clear2faButtonProps> = ({
   return (
     <>
       <button
-        onClick={() => setShowModal(true)}
-        disabled={!twoFactorEnabled}
         className={`text-sm font-medium ${
           twoFactorEnabled ? 'text-red-600 hover:text-red-900' : 'cursor-not-allowed text-gray-400'
         }`}
+        disabled={!twoFactorEnabled}
+        onClick={() => setShowModal(true)}
       >
         Usuń 2FA
       </button>
@@ -67,7 +67,7 @@ export const Clear2faButton: React.FC<Clear2faButtonProps> = ({
               <p className="mt-1 text-sm text-gray-500">{userEmail}</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="px-6 py-4">
+            <form className="px-6 py-4" onSubmit={handleSubmit}>
               {error ? (
                 <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                   Błąd: {String(error)}
@@ -75,17 +75,17 @@ export const Clear2faButton: React.FC<Clear2faButtonProps> = ({
               ) : null}
 
               <div className="mb-4">
-                <label htmlFor="reason" className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="reason">
                   Powód *
                 </label>
                 <textarea
+                  required
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
                   id="reason"
+                  placeholder="Podaj powód usunięcia konfiguracji 2FA (wymagane do audytu)"
+                  rows={4}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  rows={4}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-                  placeholder="Podaj powód usunięcia konfiguracji 2FA (wymagane do audytu)"
-                  required
                 />
                 <p className="mt-1 text-xs text-gray-500">
                   Powód zostanie zapisany w dzienniku audytu.
@@ -118,19 +118,19 @@ export const Clear2faButton: React.FC<Clear2faButtonProps> = ({
 
               <div className="flex justify-end space-x-3">
                 <button
+                  className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                   type="button"
                   onClick={() => {
                     setShowModal(false)
                     setReason('')
                   }}
-                  className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   Anuluj
                 </button>
                 <button
-                  type="submit"
-                  disabled={isLoading || !twoFactorEnabled}
                   className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
+                  disabled={isLoading || !twoFactorEnabled}
+                  type="submit"
                 >
                   {isLoading ? 'Usuwanie...' : 'Usuń 2FA'}
                 </button>

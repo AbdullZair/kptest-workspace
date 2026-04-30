@@ -85,26 +85,26 @@ export const ReportsPage = () => {
       {/* Filters */}
       <div className="flex items-center gap-2 overflow-x-auto">
         <button
-          onClick={() => setSelectedType('ALL')}
           className={clsx(
             'whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors',
             selectedType === 'ALL'
               ? 'bg-primary-600 text-white'
               : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           )}
+          onClick={() => setSelectedType('ALL')}
         >
           Wszystkie
         </button>
         {(Object.keys(reportTypeLabels) as ReportType[]).map((type) => (
           <button
             key={type}
-            onClick={() => setSelectedType(type)}
             className={clsx(
               'whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors',
               selectedType === type
                 ? 'bg-primary-600 text-white'
                 : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             )}
+            onClick={() => setSelectedType(type)}
           >
             {reportTypeLabels[type]}
           </button>
@@ -171,8 +171,8 @@ export const ReportsPage = () => {
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                     <button
-                      onClick={() => handleDownload(report)}
                       className="mr-4 text-primary-600 hover:text-primary-900"
+                      onClick={() => handleDownload(report)}
                     >
                       Pobierz
                     </button>
@@ -181,7 +181,7 @@ export const ReportsPage = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-neutral-500">
+                <td className="px-6 py-12 text-center text-neutral-500" colSpan={6}>
                   Brak raportów do wyświetlenia
                 </td>
               </tr>

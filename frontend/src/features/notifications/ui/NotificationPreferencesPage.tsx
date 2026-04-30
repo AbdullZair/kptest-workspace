@@ -102,7 +102,7 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
                 <span className="text-sm font-medium text-green-600">Zapisano!</span>
               ) : null}
               {hasChanges ? (
-                <Button variant="primary" size="sm" onClick={handleSave} loading={isSaving}>
+                <Button loading={isSaving} size="sm" variant="primary" onClick={handleSave}>
                   Zapisz zmiany
                 </Button>
               ) : null}
@@ -124,27 +124,27 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
             </div>
             <div className="divide-y divide-neutral-100">
               <PreferenceToggle
-                label="Powiadomienia o wiadomościach"
-                description="Otrzymuj powiadomienia o nowych wiadomościach"
                 checked={currentPreferences.message_notifications ?? true}
+                description="Otrzymuj powiadomienia o nowych wiadomościach"
+                label="Powiadomienia o wiadomościach"
                 onChange={(checked) => handlePreferenceChange('message_notifications', checked)}
               />
               <PreferenceToggle
-                label="Powiadomienia o wydarzeniach"
-                description="Otrzymuj powiadomienia o wydarzeniach i zmianach w harmonogramie"
                 checked={currentPreferences.event_notifications ?? true}
+                description="Otrzymuj powiadomienia o wydarzeniach i zmianach w harmonogramie"
+                label="Powiadomienia o wydarzeniach"
                 onChange={(checked) => handlePreferenceChange('event_notifications', checked)}
               />
               <PreferenceToggle
-                label="Powiadomienia o materiałach"
-                description="Otrzymuj powiadomienia o nowych materiałach"
                 checked={currentPreferences.material_notifications ?? true}
+                description="Otrzymuj powiadomienia o nowych materiałach"
+                label="Powiadomienia o materiałach"
                 onChange={(checked) => handlePreferenceChange('material_notifications', checked)}
               />
               <PreferenceToggle
-                label="Przypomnienia"
-                description="Otrzymuj przypomnienia o nadchodzących wydarzeniach"
                 checked={currentPreferences.reminder_notifications ?? true}
+                description="Otrzymuj przypomnienia o nadchodzących wydarzeniach"
+                label="Przypomnienia"
                 onChange={(checked) => handlePreferenceChange('reminder_notifications', checked)}
               />
             </div>
@@ -160,21 +160,21 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
             </div>
             <div className="divide-y divide-neutral-100">
               <PreferenceToggle
-                label="Powiadomienia push"
-                description="Powiadomienia w przeglądarce i aplikacji mobilnej"
                 checked={currentPreferences.push_enabled ?? true}
+                description="Powiadomienia w przeglądarce i aplikacji mobilnej"
+                label="Powiadomienia push"
                 onChange={(checked) => handlePreferenceChange('push_enabled', checked)}
               />
               <PreferenceToggle
-                label="Powiadomienia email"
-                description="Powiadomienia wysyłane na adres email"
                 checked={currentPreferences.email_enabled ?? false}
+                description="Powiadomienia wysyłane na adres email"
+                label="Powiadomienia email"
                 onChange={(checked) => handlePreferenceChange('email_enabled', checked)}
               />
               <PreferenceToggle
-                label="Powiadomienia SMS"
-                description="Powiadomienia wysyłane jako wiadomości SMS"
                 checked={currentPreferences.sms_enabled ?? false}
+                description="Powiadomienia wysyłane jako wiadomości SMS"
+                label="Powiadomienia SMS"
                 onChange={(checked) => handlePreferenceChange('sms_enabled', checked)}
               />
             </div>
@@ -190,8 +190,8 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
             </div>
             <div className="p-6">
               <QuietHoursPicker
-                startTime={currentPreferences.quiet_hours_start ?? '22:00'}
                 endTime={currentPreferences.quiet_hours_end ?? '07:00'}
+                startTime={currentPreferences.quiet_hours_start ?? '22:00'}
                 onChange={handleQuietHoursChange}
               />
             </div>
@@ -199,7 +199,7 @@ export const NotificationPreferencesPage = function NotificationPreferencesPage(
 
           {/* Reset to defaults */}
           <div className="flex justify-end">
-            <Button variant="outline" size="sm" onClick={handleReset}>
+            <Button size="sm" variant="outline" onClick={handleReset}>
               Przywróć ustawienia domyślne
             </Button>
           </div>

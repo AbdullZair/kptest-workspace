@@ -40,8 +40,8 @@ export const MaterialViewer = memo(
         case 'ARTICLE':
           return (
             <div
-              className="prose prose-neutral max-w-none"
               dangerouslySetInnerHTML={{ __html: material.content }}
+              className="prose prose-neutral max-w-none"
             />
           )
 
@@ -50,34 +50,34 @@ export const MaterialViewer = memo(
             <div className="flex h-full min-h-[500px] w-full items-center justify-center rounded-lg bg-neutral-100">
               {material.file_url ? (
                 <iframe
-                  src={material.file_url}
                   className="h-full min-h-[500px] w-full rounded-lg"
+                  src={material.file_url}
                   title={material.title}
                   onLoad={() => setIsLoading(false)}
                 />
               ) : (
                 <div className="p-8 text-center">
-                  <MaterialTypeIcon type="PDF" size="lg" />
+                  <MaterialTypeIcon size="lg" type="PDF" />
                   <p className="mt-4 text-neutral-600">Podgląd PDF niedostępny</p>
                   {material.external_url ? (
                     <a
-                      href={material.external_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="mt-4 inline-flex items-center text-primary-600 hover:text-primary-700"
+                      href={material.external_url}
+                      rel="noopener noreferrer"
+                      target="_blank"
                     >
                       Otwórz w nowej karcie
                       <svg
                         className="ml-1 h-4 w-4"
                         fill="none"
-                        viewBox="0 0 24 24"
                         stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
                         <path
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                         />
                       </svg>
                     </a>
@@ -92,14 +92,14 @@ export const MaterialViewer = memo(
             <div className="flex h-full min-h-[400px] w-full items-center justify-center overflow-hidden rounded-lg bg-neutral-100">
               {material.file_url ? (
                 <img
-                  src={material.file_url}
                   alt={material.title}
                   className="max-h-[600px] max-w-full rounded-lg object-contain"
+                  src={material.file_url}
                   onLoad={() => setIsLoading(false)}
                 />
               ) : (
                 <div className="p-8 text-center">
-                  <MaterialTypeIcon type="IMAGE" size="lg" />
+                  <MaterialTypeIcon size="lg" type="IMAGE" />
                   <p className="mt-4 text-neutral-600">Podgląd obrazu niedostępny</p>
                 </div>
               )}
@@ -122,36 +122,36 @@ export const MaterialViewer = memo(
                 material.external_url?.includes('youtu.be') ||
                 material.external_url?.includes('vimeo.com') ? (
                 <iframe
-                  src={material.external_url}
-                  className="aspect-video max-h-[600px] w-full rounded-lg"
-                  title={material.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  className="aspect-video max-h-[600px] w-full rounded-lg"
+                  src={material.external_url}
+                  title={material.title}
                   onLoad={() => setIsLoading(false)}
                 />
               ) : (
                 <div className="p-8 text-center">
-                  <MaterialTypeIcon type="VIDEO" size="lg" />
+                  <MaterialTypeIcon size="lg" type="VIDEO" />
                   <p className="mt-4 text-neutral-600">Podgląd wideo niedostępny</p>
                   {material.external_url ? (
                     <a
-                      href={material.external_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="mt-4 inline-flex items-center text-primary-600 hover:text-primary-700"
+                      href={material.external_url}
+                      rel="noopener noreferrer"
+                      target="_blank"
                     >
                       Otwórz w nowej karcie
                       <svg
                         className="ml-1 h-4 w-4"
                         fill="none"
-                        viewBox="0 0 24 24"
                         stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
                         <path
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                         />
                       </svg>
                     </a>
@@ -171,7 +171,7 @@ export const MaterialViewer = memo(
                 </audio>
               ) : (
                 <div className="p-8 text-center">
-                  <MaterialTypeIcon type="AUDIO" size="lg" />
+                  <MaterialTypeIcon size="lg" type="AUDIO" />
                   <p className="mt-4 text-neutral-600">Odtwarzacz audio niedostępny</p>
                 </div>
               )}
@@ -181,30 +181,30 @@ export const MaterialViewer = memo(
         case 'LINK':
           return (
             <div className="p-8 text-center">
-              <MaterialTypeIcon type="LINK" size="lg" />
+              <MaterialTypeIcon size="lg" type="LINK" />
               <h3 className="mt-4 text-lg font-semibold text-neutral-900">Zasób zewnętrzny</h3>
               <p className="mt-2 text-neutral-600">
                 Ten materiał prowadzi do zewnętrznej strony internetowej.
               </p>
               {material.external_url ? (
                 <a
-                  href={material.external_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="mt-4 inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
+                  href={material.external_url}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   Otwórz link
                   <svg
                     className="ml-2 h-4 w-4"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                     />
                   </svg>
                 </a>
@@ -227,7 +227,7 @@ export const MaterialViewer = memo(
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <div className="mb-2 flex items-center gap-3">
-              <MaterialTypeIcon type={material.type} size="md" showLabel />
+              <MaterialTypeIcon showLabel size="md" type={material.type} />
               {material.category ? (
                 <span className="rounded bg-neutral-100 px-2 py-0.5 text-sm text-neutral-500">
                   {material.category}
@@ -238,13 +238,13 @@ export const MaterialViewer = memo(
           </div>
 
           {onClose ? (
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Button size="sm" variant="ghost" onClick={onClose}>
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M6 18L18 6M6 6l12 12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </Button>
@@ -264,13 +264,13 @@ export const MaterialViewer = memo(
         {/* Actions */}
         {!isCompleted && onComplete && material.type !== 'LINK' ? (
           <div className="flex justify-end">
-            <Button variant="primary" size="md" onClick={handleComplete}>
-              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Button size="md" variant="primary" onClick={handleComplete}>
+              <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M5 13l4 4L19 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
                 />
               </svg>
               Oznacz jako przeczytane
@@ -281,12 +281,12 @@ export const MaterialViewer = memo(
         {isCompleted ? (
           <div className="flex justify-end">
             <div className="inline-flex items-center gap-2 rounded-lg bg-green-50 px-4 py-2 text-green-700">
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M5 13l4 4L19 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
                 />
               </svg>
               <span className="font-medium">Materiał ukończony</span>

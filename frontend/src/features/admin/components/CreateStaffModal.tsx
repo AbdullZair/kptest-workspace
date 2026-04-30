@@ -98,8 +98,8 @@ export const CreateStaffModal: React.FC<CreateStaffModalProps> = ({
   const errorMessage = error ? (error as ApiError)?.message || String(error) : null
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+    <Dialog className="relative z-50" open={isOpen} onClose={handleClose}>
+      <div aria-hidden="true" className="fixed inset-0 bg-black/50" />
 
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel
@@ -127,98 +127,98 @@ export const CreateStaffModal: React.FC<CreateStaffModalProps> = ({
               ) : null}
 
               <div>
-                <label htmlFor="email" className="mb-1 block text-sm font-medium text-neutral-700">
+                <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="email">
                   Email *
                 </label>
                 <Input
                   id="email"
                   {...register('email')}
-                  type="email"
-                  placeholder="jan.kowalski@kptest.com"
-                  variant={errors.email ? 'error' : 'default'}
-                  errorMessage={errors.email?.message ?? ''}
                   fullWidth
+                  errorMessage={errors.email?.message ?? ''}
+                  placeholder="jan.kowalski@kptest.com"
+                  type="email"
+                  variant={errors.email ? 'error' : 'default'}
                 />
               </div>
 
               <div>
                 <label
-                  htmlFor="password"
                   className="mb-1 block text-sm font-medium text-neutral-700"
+                  htmlFor="password"
                 >
                   Hasło *
                 </label>
                 <Input
                   id="password"
                   {...register('password')}
-                  type="password"
-                  placeholder="Min. 10 znaków, A-z, 0-9, @$!%*?&"
-                  variant={errors.password ? 'error' : 'default'}
-                  errorMessage={errors.password?.message ?? ''}
                   fullWidth
+                  errorMessage={errors.password?.message ?? ''}
+                  placeholder="Min. 10 znaków, A-z, 0-9, @$!%*?&"
+                  type="password"
+                  variant={errors.password ? 'error' : 'default'}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label
-                    htmlFor="firstName"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="firstName"
                   >
                     Imię *
                   </label>
                   <Input
                     id="firstName"
                     {...register('firstName')}
+                    fullWidth
+                    errorMessage={errors.firstName?.message ?? ''}
                     type="text"
                     variant={errors.firstName ? 'error' : 'default'}
-                    errorMessage={errors.firstName?.message ?? ''}
-                    fullWidth
                   />
                 </div>
 
                 <div>
                   <label
-                    htmlFor="lastName"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="lastName"
                   >
                     Nazwisko *
                   </label>
                   <Input
                     id="lastName"
                     {...register('lastName')}
+                    fullWidth
+                    errorMessage={errors.lastName?.message ?? ''}
                     type="text"
                     variant={errors.lastName ? 'error' : 'default'}
-                    errorMessage={errors.lastName?.message ?? ''}
-                    fullWidth
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="phone" className="mb-1 block text-sm font-medium text-neutral-700">
+                <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="phone">
                   Telefon
                 </label>
                 <Input
                   id="phone"
                   {...register('phone')}
-                  type="text"
-                  placeholder="+48 ..."
-                  variant={errors.phone ? 'error' : 'default'}
-                  errorMessage={errors.phone?.message ?? ''}
                   fullWidth
+                  errorMessage={errors.phone?.message ?? ''}
+                  placeholder="+48 ..."
+                  type="text"
+                  variant={errors.phone ? 'error' : 'default'}
                 />
               </div>
 
               <div>
-                <label htmlFor="role" className="mb-1 block text-sm font-medium text-neutral-700">
+                <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="role">
                   Rola *
                 </label>
                 <select
                   id="role"
                   {...register('role')}
-                  data-testid="admin-create-staff-role"
                   className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  data-testid="admin-create-staff-role"
                 >
                   {STAFF_ROLES.map((role) => (
                     <option key={role.value} value={role.value}>
@@ -233,14 +233,14 @@ export const CreateStaffModal: React.FC<CreateStaffModalProps> = ({
             </div>
 
             <div className="flex justify-end gap-3 rounded-b-lg border-t border-neutral-200 bg-neutral-50 px-6 py-4">
-              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
+              <Button disabled={isLoading} type="button" variant="outline" onClick={handleClose}>
                 Anuluj
               </Button>
               <Button
+                data-testid="admin-create-staff-submit"
+                loading={isLoading}
                 type="submit"
                 variant="primary"
-                loading={isLoading}
-                data-testid="admin-create-staff-submit"
               >
                 Utwórz
               </Button>

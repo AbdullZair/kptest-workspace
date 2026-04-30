@@ -56,9 +56,9 @@ export function EventChangeRequestModal({
 
   return (
     <div
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       role="dialog"
-      aria-modal="true"
     >
       <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
         {/* Header */}
@@ -80,20 +80,20 @@ export function EventChangeRequestModal({
           {/* Proposed Date */}
           <div className="mb-4">
             <label
-              htmlFor="proposedDate"
               className="mb-1 block text-sm font-medium text-neutral-700"
+              htmlFor="proposedDate"
             >
               Proponowany nowy termin *
             </label>
             <input
-              type="datetime-local"
+              required
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+              disabled={isSubmitting}
               id="proposedDate"
+              min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+              type="datetime-local"
               value={proposedDate}
               onChange={(e) => setProposedDate(e.target.value)}
-              min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-              required
-              disabled={isSubmitting}
             />
             <p className="mt-1 text-xs text-neutral-500">
               Minimalnie 24 godziny przed obecnym terminem
@@ -102,18 +102,18 @@ export function EventChangeRequestModal({
 
           {/* Reason */}
           <div className="mb-4">
-            <label htmlFor="reason" className="mb-1 block text-sm font-medium text-neutral-700">
+            <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="reason">
               Powód zmiany *
             </label>
             <textarea
+              required
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+              disabled={isSubmitting}
               id="reason"
+              placeholder="Opisz powód prośby o zmianę terminu..."
+              rows={3}
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              rows={3}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-              placeholder="Opisz powód prośby o zmianę terminu..."
-              required
-              disabled={isSubmitting}
             />
           </div>
 
@@ -136,17 +136,17 @@ export function EventChangeRequestModal({
           {/* Actions */}
           <div className="flex gap-3">
             <button
+              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              disabled={isSubmitting}
               type="button"
               onClick={handleClose}
-              disabled={isSubmitting}
-              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             >
               Anuluj
             </button>
             <button
-              type="submit"
-              disabled={isSubmitting}
               className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              disabled={isSubmitting}
+              type="submit"
             >
               {isSubmitting ? 'Wysyłanie...' : 'Wyślij prośbę'}
             </button>

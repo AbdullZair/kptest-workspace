@@ -20,11 +20,7 @@ import type { ProjectFormData } from '../types'
 export const ProjectDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-
-  if (!id) {
-    navigate('/projects')
-    return null
-  }
+  const safeId = id ?? ''
 
   // Local state
   const [activeTab, setActiveTab] = useState<'overview' | 'patients' | 'statistics'>('overview')
@@ -37,12 +33,20 @@ export const ProjectDetailPage = () => {
     isLoading: isLoadingProject,
     error: projectError,
     refetch,
-  } = useGetProjectByIdQuery(id)
-  const { data: statistics } = useGetProjectStatisticsQuery(id)
-  const { data: patients } = useGetProjectPatientsQuery({ projectId: id, activeOnly: true })
+  } = useGetProjectByIdQuery(safeId, { skip: !id })
+  const { data: statistics } = useGetProjectStatisticsQuery(safeId, { skip: !id })
+  const { data: patients } = useGetProjectPatientsQuery(
+    { projectId: safeId, activeOnly: true },
+    { skip: !id }
+  )
   const [updateProject, { isLoading: isUpdating }] = useUpdateProjectMutation()
   const [deleteProject] = useDeleteProjectMutation()
   const [assignPatients] = useAssignPatientsMutation()
+
+  if (!id) {
+    navigate('/projects')
+    return null
+  }
 
   // Handlers
   const handleEditClick = () => {
@@ -105,7 +109,7 @@ export const ProjectDetailPage = () => {
     return (
       <div className="py-12 text-center">
         <p className="text-error-600">Nie znaleziono projektu</p>
-        <Button variant="primary" onClick={handleBackClick} className="mt-4">
+        <Button className="mt-4" variant="primary" onClick={handleBackClick}>
           Powrót do listy projektów
         </Button>
       </div>
@@ -117,20 +121,20 @@ export const ProjectDetailPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm" onClick={handleBackClick}>
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <Button size="sm" variant="outline" onClick={handleBackClick}>
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M15 19l-7-7 7-7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 19l-7-7 7-7"
               />
             </svg>
           </Button>
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-neutral-900">{project.name}</h1>
-              <ProjectStatus status={project.status} size="md" showLabel={true} />
+              <ProjectStatus showLabel={true} size="md" status={project.status} />
             </div>
             <p className="mt-1 text-neutral-600">
               Utworzony: {formatDate(project.created_at)}{' '}
@@ -140,27 +144,27 @@ export const ProjectDetailPage = () => {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={handleEditClick}>
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
               />
             </svg>
             Edytuj
           </Button>
           <Button
-            variant="outline"
             className="border-rose-200 text-rose-600"
+            variant="outline"
             onClick={handleDeleteClick}
           >
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
             Usuń
@@ -172,32 +176,32 @@ export const ProjectDetailPage = () => {
       <div className="border-b border-neutral-200">
         <nav className="flex gap-8">
           <button
-            onClick={() => setActiveTab('overview')}
             className={`border-b-2 pb-3 text-sm font-medium transition-colors ${
               activeTab === 'overview'
                 ? 'border-primary-500 text-primary-600'
                 : 'border-transparent text-neutral-500 hover:text-neutral-700'
             }`}
+            onClick={() => setActiveTab('overview')}
           >
             Przegląd
           </button>
           <button
-            onClick={() => setActiveTab('patients')}
             className={`border-b-2 pb-3 text-sm font-medium transition-colors ${
               activeTab === 'patients'
                 ? 'border-primary-500 text-primary-600'
                 : 'border-transparent text-neutral-500 hover:text-neutral-700'
             }`}
+            onClick={() => setActiveTab('patients')}
           >
             Pacjenci ({patients?.length || 0})
           </button>
           <button
-            onClick={() => setActiveTab('statistics')}
             className={`border-b-2 pb-3 text-sm font-medium transition-colors ${
               activeTab === 'statistics'
                 ? 'border-primary-500 text-primary-600'
                 : 'border-transparent text-neutral-500 hover:text-neutral-700'
             }`}
+            onClick={() => setActiveTab('statistics')}
           >
             Statystyki
           </button>
@@ -221,7 +225,7 @@ export const ProjectDetailPage = () => {
                 <div>
                   <label className="text-sm text-neutral-600">Status</label>
                   <p className="mt-1">
-                    <ProjectStatus status={project.status} size="sm" showLabel={true} />
+                    <ProjectStatus showLabel={true} size="sm" status={project.status} />
                   </p>
                 </div>
                 <div>
@@ -261,49 +265,49 @@ export const ProjectDetailPage = () => {
           {/* Quick Stats */}
           <div className="grid gap-4 md:grid-cols-3">
             <QuickStatCard
-              title="Pacjenci w projekcie"
-              value={project.active_patient_count || 0}
+              color="primary"
               icon={
                 <path
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                 />
               }
-              color="primary"
+              title="Pacjenci w projekcie"
+              value={project.active_patient_count || 0}
               onClick={() => setActiveTab('patients')}
             />
             <QuickStatCard
+              color="emerald"
+              icon={
+                <path
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                />
+              }
               title="Średni compliance"
               value={
                 project.average_compliance_score != null
                   ? `${Math.round(project.average_compliance_score)}%`
                   : '-'
               }
-              icon={
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              }
-              color="emerald"
               onClick={() => setActiveTab('statistics')}
             />
             <QuickStatCard
-              title="Członkowie zespołu"
-              value={project.team_member_count || 0}
+              color="secondary"
               icon={
                 <path
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                 />
               }
-              color="secondary"
+              title="Członkowie zespołu"
+              value={project.team_member_count || 0}
             />
           </div>
 
@@ -313,21 +317,21 @@ export const ProjectDetailPage = () => {
               <h2 className="mb-4 text-lg font-semibold text-neutral-900">Szybkie akcje</h2>
               <div className="flex flex-wrap gap-3">
                 <Button
+                  disabled={project.status !== 'ACTIVE'}
                   variant="primary"
                   onClick={() => setIsAssignmentModalOpen(true)}
-                  disabled={project.status !== 'ACTIVE'}
                 >
                   <svg
                     className="mr-2 h-4 w-4"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
                     />
                   </svg>
                   Dodaj pacjenta
@@ -336,14 +340,14 @@ export const ProjectDetailPage = () => {
                   <svg
                     className="mr-2 h-4 w-4"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                     />
                   </svg>
                   Zobacz statystyki
@@ -353,14 +357,14 @@ export const ProjectDetailPage = () => {
                     <svg
                       className="mr-2 h-4 w-4"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
                       <path
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                       />
                     </svg>
                     Zarządzaj pacjentami
@@ -384,10 +388,10 @@ export const ProjectDetailPage = () => {
               Pacjenci w projekcie ({patients?.length || 0})
             </h2>
             <Button
-              variant="primary"
-              size="sm"
-              onClick={() => setIsAssignmentModalOpen(true)}
               disabled={project.status !== 'ACTIVE'}
+              size="sm"
+              variant="primary"
+              onClick={() => setIsAssignmentModalOpen(true)}
             >
               Dodaj pacjenta
             </Button>
@@ -417,8 +421,8 @@ export const ProjectDetailPage = () => {
                       <tr key={pp.id} className="hover:bg-neutral-50">
                         <td className="whitespace-nowrap px-4 py-3">
                           <Link
-                            to={`/patients/${pp.patient_id}`}
                             className="font-medium text-primary-600 hover:text-primary-700"
+                            to={`/patients/${pp.patient_id}`}
                           >
                             {pp.patient_name}
                           </Link>
@@ -460,19 +464,19 @@ export const ProjectDetailPage = () => {
 
       {/* Modals */}
       <ProjectFormModal
+        isLoading={isUpdating}
         isOpen={isFormModalOpen}
+        project={project}
         onClose={handleModalClose}
         onSubmit={handleFormSubmit}
-        project={project}
-        isLoading={isUpdating}
       />
 
       <PatientAssignmentModal
+        existingPatientIds={patients?.map((p) => p.patient_id)}
         isOpen={isAssignmentModalOpen}
+        projectId={id}
         onClose={() => setIsAssignmentModalOpen(false)}
         onSubmit={handleAssignPatients}
-        projectId={id}
-        existingPatientIds={patients?.map((p) => p.patient_id)}
       />
     </div>
   )
@@ -504,13 +508,13 @@ const QuickStatCard = ({
 
   return (
     <Card
-      variant="outlined"
       className={`p-4 ${onClick ? 'cursor-pointer hover:shadow-md' : ''}`}
+      variant="outlined"
       onClick={onClick}
     >
       <div className="flex items-center gap-3">
         <div className={`rounded-lg p-3 ${colorClasses[color]}`}>
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {icon}
           </svg>
         </div>

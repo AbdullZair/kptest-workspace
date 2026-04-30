@@ -45,11 +45,11 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
   return (
     <>
       <button
+        className="text-sm font-medium text-blue-600 hover:text-blue-900"
         onClick={() => {
           setShowModal(true)
           setGeneratedCode(null)
         }}
-        className="text-sm font-medium text-blue-600 hover:text-blue-900"
       >
         Generuj kod aktywacyjny
       </button>
@@ -84,16 +84,16 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
 
                   <div className="flex justify-end space-x-3">
                     <button
+                      className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                       type="button"
                       onClick={() => setShowModal(false)}
-                      className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       Anuluj
                     </button>
                     <button
-                      onClick={handleGenerate}
-                      disabled={isLoading}
                       className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      disabled={isLoading}
+                      onClick={handleGenerate}
                     >
                       {isLoading ? 'Generowanie...' : 'Generuj kod'}
                     </button>
@@ -110,9 +110,9 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
                         </span>
                       </div>
                       <button
-                        onClick={handleCopyCode}
                         className="p-2 text-gray-600 hover:text-gray-900"
                         title="Kopiuj kod"
+                        onClick={handleCopyCode}
                       >
                         <svg
                           className="h-6 w-6"
@@ -121,10 +121,10 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
                           viewBox="0 0 24 24"
                         >
                           <path
+                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                           />
                         </svg>
                       </button>
@@ -140,14 +140,14 @@ export const GenerateActivationCodeButton: React.FC<GenerateActivationCodeButton
 
                   <div className="flex justify-end space-x-3">
                     <button
-                      onClick={handleDownloadPdf}
                       className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      onClick={handleDownloadPdf}
                     >
                       Pobierz PDF
                     </button>
                     <button
-                      onClick={() => setShowModal(false)}
                       className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onClick={() => setShowModal(false)}
                     >
                       Zamknij
                     </button>

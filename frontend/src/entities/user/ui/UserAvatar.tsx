@@ -51,9 +51,9 @@ export const UserAvatar = memo(
       <div className={twMerge(baseClasses)} title={user.fullName}>
         {user.avatarUrl ? (
           <img
-            src={user.avatarUrl}
             alt={user.fullName}
             className="h-full w-full rounded-full object-cover"
+            src={user.avatarUrl}
           />
         ) : (
           <span>{user.initials}</span>
@@ -61,12 +61,12 @@ export const UserAvatar = memo(
 
         {showStatus ? (
           <span
+            aria-label={user.isActive ? 'Online' : 'Offline'}
             className={clsx(
               'absolute bottom-0 right-0',
               'h-3 w-3 rounded-full border-2 border-white',
               user.isActive ? 'bg-success-500' : 'bg-neutral-400'
             )}
-            aria-label={user.isActive ? 'Online' : 'Offline'}
           />
         ) : null}
       </div>
@@ -105,8 +105,8 @@ export const UserCard = memo(({ user, onClick, className, children }: UserCardPr
   )
 
   return (
-    <div className={twMerge(baseClasses)} onClick={onClick} role={onClick ? 'button' : undefined}>
-      <UserAvatar user={user} size="md" />
+    <div className={twMerge(baseClasses)} role={onClick ? 'button' : undefined} onClick={onClick}>
+      <UserAvatar size="md" user={user} />
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-neutral-900">{user.fullName}</p>
@@ -152,7 +152,7 @@ export const UserBadge = memo(({ user, size = 'sm', className }: UserBadgeProps)
 
   return (
     <div className={twMerge(baseClasses)}>
-      <UserAvatar user={user} size={size} />
+      <UserAvatar size={size} user={user} />
       <span className={clsx('font-medium text-neutral-700', textClasses[size])}>
         {user.firstName}
       </span>

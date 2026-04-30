@@ -48,34 +48,34 @@ const getStatusIcon = (status: MaterialStatus): JSX.Element => {
   switch (status) {
     case 'PENDING':
       return (
-        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
       )
     case 'IN_PROGRESS':
       return (
-        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
       )
     case 'COMPLETED':
       return (
-        <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="h-full w-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
       )

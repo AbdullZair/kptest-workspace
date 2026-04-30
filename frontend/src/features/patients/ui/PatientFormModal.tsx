@@ -158,108 +158,108 @@ export const PatientFormModal = memo(
 
     return (
       <div
+        aria-labelledby="modal-title"
+        aria-modal="true"
         className="fixed inset-0 z-50 overflow-y-auto"
         role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
         onKeyDown={handleKeyDown}
       >
         {/* Backdrop */}
         <div
+          aria-hidden="true"
           className="fixed inset-0 bg-black/50 transition-opacity"
           onClick={onClose}
-          aria-hidden="true"
         />
 
         {/* Modal panel */}
         <div className="flex min-h-full items-center justify-center p-4">
-          <Card variant="elevated" size="lg" className="relative z-10 w-full max-w-2xl">
+          <Card className="relative z-10 w-full max-w-2xl" size="lg" variant="elevated">
             {/* Header */}
             <div className="mb-6 flex items-center justify-between border-b border-neutral-200 pb-4">
-              <h2 id="modal-title" className="text-xl font-semibold text-neutral-900">
+              <h2 className="text-xl font-semibold text-neutral-900" id="modal-title">
                 {isEditing ? 'Edytuj pacjenta' : 'Dodaj pacjenta'}
               </h2>
               <button
-                onClick={onClose}
-                className="text-neutral-400 transition-colors hover:text-neutral-600"
                 aria-label="Zamknij"
+                className="text-neutral-400 transition-colors hover:text-neutral-600"
+                onClick={onClose}
               >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M6 18L18 6M6 6l12 12"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4" data-testid="patient-form">
+            <form className="space-y-4" data-testid="patient-form" onSubmit={handleSubmit}>
               {/* Personal Information Section */}
               <div>
                 <h3 className="mb-3 text-sm font-medium text-neutral-900">Dane osobowe</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Input
-                    label="PESEL *"
-                    value={formData.pesel}
-                    onChange={(e) => handleChange('pesel', e.target.value)}
-                    placeholder="90010112345"
-                    error={errors.pesel}
-                    variant={errors.pesel ? 'error' : 'default'}
-                    disabled={isLoading}
                     required
                     data-testid="patient-pesel"
+                    disabled={isLoading}
+                    error={errors.pesel}
+                    label="PESEL *"
+                    placeholder="90010112345"
+                    value={formData.pesel}
+                    variant={errors.pesel ? 'error' : 'default'}
+                    onChange={(e) => handleChange('pesel', e.target.value)}
                   />
 
                   <Input
+                    disabled={isLoading}
                     label="HIS ID"
+                    placeholder="HIS-123456"
                     value={formData.his_patient_id}
                     onChange={(e) => handleChange('his_patient_id', e.target.value)}
-                    placeholder="HIS-123456"
-                    disabled={isLoading}
                   />
 
                   <Input
-                    label="Imię *"
-                    value={formData.first_name}
-                    onChange={(e) => handleChange('first_name', e.target.value)}
-                    placeholder="Jan"
-                    error={errors.first_name}
-                    variant={errors.first_name ? 'error' : 'default'}
-                    disabled={isLoading}
                     required
                     data-testid="patient-firstName"
+                    disabled={isLoading}
+                    error={errors.first_name}
+                    label="Imię *"
+                    placeholder="Jan"
+                    value={formData.first_name}
+                    variant={errors.first_name ? 'error' : 'default'}
+                    onChange={(e) => handleChange('first_name', e.target.value)}
                   />
 
                   <Input
-                    label="Nazwisko *"
-                    value={formData.last_name}
-                    onChange={(e) => handleChange('last_name', e.target.value)}
-                    placeholder="Kowalski"
-                    error={errors.last_name}
-                    variant={errors.last_name ? 'error' : 'default'}
-                    disabled={isLoading}
                     required
                     data-testid="patient-lastName"
+                    disabled={isLoading}
+                    error={errors.last_name}
+                    label="Nazwisko *"
+                    placeholder="Kowalski"
+                    value={formData.last_name}
+                    variant={errors.last_name ? 'error' : 'default'}
+                    onChange={(e) => handleChange('last_name', e.target.value)}
                   />
 
                   <Input
+                    disabled={isLoading}
                     label="Data urodzenia"
                     type="date"
                     value={formData.date_of_birth}
                     onChange={(e) => handleChange('date_of_birth', e.target.value)}
-                    disabled={isLoading}
                   />
 
                   <div>
                     <label className="mb-1 block text-sm font-medium text-neutral-700">Płeć</label>
                     <select
+                      className="w-full rounded-md border border-neutral-300 px-3 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-neutral-100"
+                      disabled={isLoading}
                       value={formData.gender || ''}
                       onChange={(e) => handleChange('gender', e.target.value)}
-                      disabled={isLoading}
-                      className="w-full rounded-md border border-neutral-300 px-3 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-neutral-100"
                     >
                       <option value="">Nieustalone</option>
                       {GENDER_OPTIONS.map((option) => (
@@ -277,27 +277,27 @@ export const PatientFormModal = memo(
                 <h3 className="mb-3 text-sm font-medium text-neutral-900">Dane kontaktowe</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Input
+                    data-testid="patient-email"
+                    disabled={isLoading}
+                    error={errors.email}
                     label="Email"
+                    placeholder="jan.kowalski@example.com"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
-                    placeholder="jan.kowalski@example.com"
-                    error={errors.email}
                     variant={errors.email ? 'error' : 'default'}
-                    disabled={isLoading}
-                    data-testid="patient-email"
+                    onChange={(e) => handleChange('email', e.target.value)}
                   />
 
                   <Input
+                    data-testid="patient-phone"
+                    disabled={isLoading}
+                    error={errors.phone}
                     label="Telefon"
+                    placeholder="+48 123 456 789"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => handleChange('phone', e.target.value)}
-                    placeholder="+48 123 456 789"
-                    error={errors.phone}
                     variant={errors.phone ? 'error' : 'default'}
-                    disabled={isLoading}
-                    data-testid="patient-phone"
+                    onChange={(e) => handleChange('phone', e.target.value)}
                   />
                 </div>
               </div>
@@ -307,28 +307,28 @@ export const PatientFormModal = memo(
                 <h3 className="mb-3 text-sm font-medium text-neutral-900">Adres</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Input
+                    disabled={isLoading}
                     label="Ulica i numer"
+                    placeholder="ul. Przykładowa 1/2"
                     value={formData.address_street}
                     onChange={(e) => handleChange('address_street', e.target.value)}
-                    placeholder="ul. Przykładowa 1/2"
-                    disabled={isLoading}
                   />
 
                   <div className="grid grid-cols-2 gap-2">
                     <Input
+                      disabled={isLoading}
                       label="Kod pocztowy"
+                      placeholder="00-001"
                       value={formData.address_postal_code}
                       onChange={(e) => handleChange('address_postal_code', e.target.value)}
-                      placeholder="00-001"
-                      disabled={isLoading}
                     />
 
                     <Input
+                      disabled={isLoading}
                       label="Miasto"
+                      placeholder="Warszawa"
                       value={formData.address_city}
                       onChange={(e) => handleChange('address_city', e.target.value)}
-                      placeholder="Warszawa"
-                      disabled={isLoading}
                     />
                   </div>
                 </div>
@@ -337,19 +337,19 @@ export const PatientFormModal = memo(
               {/* Actions */}
               <div className="mt-6 flex items-center justify-end gap-3 border-t border-neutral-200 pt-4">
                 <Button
+                  data-testid="patient-cancel"
+                  disabled={isLoading}
                   type="button"
                   variant="outline"
                   onClick={onClose}
-                  disabled={isLoading}
-                  data-testid="patient-cancel"
                 >
                   Anuluj
                 </Button>
                 <Button
+                  data-testid="patient-save"
+                  loading={isLoading}
                   type="submit"
                   variant="primary"
-                  loading={isLoading}
-                  data-testid="patient-save"
                 >
                   {isEditing ? 'Zapisz zmiany' : 'Dodaj pacjenta'}
                 </Button>

@@ -204,10 +204,10 @@ export const MaterialAdminPage = () => {
           <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
             <span>Projekt:</span>
             <select
-              value={selectedProjectId ?? ''}
-              onChange={(e) => setSelectedProjectId(e.target.value || undefined)}
               className="min-w-[14rem] rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               data-testid="material-project-select"
+              value={selectedProjectId ?? ''}
+              onChange={(e) => setSelectedProjectId(e.target.value || undefined)}
             >
               <option value="">(wybierz projekt)</option>
               {eligibleProjects.map((project) => (
@@ -218,13 +218,18 @@ export const MaterialAdminPage = () => {
             </select>
           </label>
           <Button
+            data-testid="material-add-button"
+            disabled={!selectedProjectId}
             variant="primary"
             onClick={handleCreateClick}
-            disabled={!selectedProjectId}
-            data-testid="material-add-button"
           >
-            <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 4v16m8-8H4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
             </svg>
             Dodaj materiał
           </Button>
@@ -249,55 +254,55 @@ export const MaterialAdminPage = () => {
             <Card.Body>
               <MaterialFiltersComponent
                 categories={categories}
+                searchQuery={searchQuery}
                 selectedCategory={selectedCategory}
                 selectedDifficulty={selectedDifficulty}
                 selectedType={selectedType}
-                searchQuery={searchQuery}
                 onCategoryChange={setSelectedCategory}
-                onDifficultyChange={setSelectedDifficulty}
-                onTypeChange={setSelectedType}
-                onSearchChange={setSearchQuery}
                 onClearFilters={handleClearFilters}
+                onDifficultyChange={setSelectedDifficulty}
+                onSearchChange={setSearchQuery}
+                onTypeChange={setSelectedType}
               />
 
               {/* Published filter */}
               <div className="mt-4 flex items-center gap-2">
                 <span className="text-sm text-neutral-600">Status publikacji:</span>
                 <button
-                  onClick={() => setShowPublished(undefined)}
                   className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                     showPublished === undefined
                       ? 'border-primary-200 bg-primary-50 text-primary-700'
                       : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                   }`}
+                  onClick={() => setShowPublished(undefined)}
                 >
                   Wszystkie
                 </button>
                 <button
-                  onClick={() => setShowPublished(true)}
                   className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                     showPublished === true
                       ? 'border-green-200 bg-green-50 text-green-700'
                       : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                   }`}
+                  onClick={() => setShowPublished(true)}
                 >
                   Opublikowane
                 </button>
                 <button
-                  onClick={() => setShowPublished(false)}
                   className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                     showPublished === false
                       ? 'border-amber-200 bg-amber-50 text-amber-700'
                       : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                   }`}
+                  onClick={() => setShowPublished(false)}
                 >
                   Nieopublikowane
                 </button>
 
                 {hasActiveFilters ? (
                   <button
-                    onClick={handleClearFilters}
                     className="ml-auto text-sm font-medium text-primary-600 hover:text-primary-700"
+                    onClick={handleClearFilters}
                   >
                     Wyczyść filtry
                   </button>
@@ -314,14 +319,14 @@ export const MaterialAdminPage = () => {
                   <svg
                     className="mx-auto mb-4 h-16 w-16 text-neutral-300"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={1.5}
-                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                     />
                   </svg>
                   <h3 className="text-lg font-semibold text-neutral-900">Brak materiałów</h3>
@@ -330,7 +335,7 @@ export const MaterialAdminPage = () => {
                       ? 'Nie znaleziono materiałów pasujących do wybranych filtrów'
                       : 'Nie masz jeszcze żadnych materiałów edukacyjnych'}
                   </p>
-                  <Button variant="primary" onClick={handleCreateClick} className="mt-4">
+                  <Button className="mt-4" variant="primary" onClick={handleCreateClick}>
                     Dodaj pierwszy materiał
                   </Button>
                 </div>
@@ -341,12 +346,12 @@ export const MaterialAdminPage = () => {
               {filteredMaterials.map((material) => (
                 <MaterialCard
                   key={material.id}
-                  material={material}
-                  onEdit={handleEditClick}
-                  onDelete={handleDeleteClick}
-                  onPublish={handlePublishClick}
-                  showStats
                   isStaff
+                  showStats
+                  material={material}
+                  onDelete={handleDeleteClick}
+                  onEdit={handleEditClick}
+                  onPublish={handlePublishClick}
                 />
               ))}
             </div>
@@ -358,12 +363,12 @@ export const MaterialAdminPage = () => {
       {isFormModalOpen && selectedProjectId ? (
         <MaterialFormModal
           isOpen={isFormModalOpen}
-          onClose={handleModalClose}
-          onSubmit={handleFormSubmit}
+          isSubmitting={isSubmitting}
           material={editingMaterial}
           projectId={selectedProjectId}
           submitError={submitError}
-          isSubmitting={isSubmitting}
+          onClose={handleModalClose}
+          onSubmit={handleFormSubmit}
         />
       ) : null}
     </div>
@@ -408,10 +413,7 @@ const MaterialFormModal = ({
     data: projectPatients = [],
     isLoading: isLoadingPatients,
     isError: isPatientsError,
-  } = useGetProjectPatientSummariesQuery(
-    { projectId, activeOnly: true },
-    { skip: !projectId }
-  )
+  } = useGetProjectPatientSummariesQuery({ projectId, activeOnly: true }, { skip: !projectId })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -441,13 +443,13 @@ const MaterialFormModal = ({
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 p-6" data-testid="material-form">
+        <form className="space-y-4 p-6" data-testid="material-form" onSubmit={handleSubmit}>
           {/* Error banner */}
           {submitError ? (
             <div
               className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-              role="alert"
               data-testid="material-form-error"
+              role="alert"
             >
               <strong className="font-semibold">Nie udało się zapisać materiału.</strong>{' '}
               {submitError}
@@ -458,12 +460,12 @@ const MaterialFormModal = ({
           <div>
             <label className="mb-1 block text-sm font-medium text-neutral-700">Tytuł *</label>
             <Input
+              fullWidth
+              required
+              data-testid="material-title"
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
-              fullWidth
-              data-testid="material-title"
             />
           </div>
 
@@ -473,10 +475,10 @@ const MaterialFormModal = ({
               Typ materiału *
             </label>
             <select
-              value={formData.type}
-              onChange={(e) => setFormData({ ...formData, type: e.target.value as MaterialType })}
               className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               data-testid="material-type-select"
+              value={formData.type}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value as MaterialType })}
             >
               <option value="ARTICLE">Artykuł</option>
               <option value="PDF">PDF</option>
@@ -491,12 +493,12 @@ const MaterialFormModal = ({
           <div>
             <label className="mb-1 block text-sm font-medium text-neutral-700">Kategoria</label>
             <Input
+              fullWidth
+              data-testid="material-category"
+              placeholder="np. Cukrzyca, Nadciśnienie"
               type="text"
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              placeholder="np. Cukrzyca, Nadciśnienie"
-              fullWidth
-              data-testid="material-category"
             />
           </div>
 
@@ -506,11 +508,11 @@ const MaterialFormModal = ({
               Poziom trudności *
             </label>
             <select
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               value={formData.difficulty}
               onChange={(e) =>
                 setFormData({ ...formData, difficulty: e.target.value as DifficultyLevel })
               }
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
             >
               <option value="BASIC">Podstawowy</option>
               <option value="INTERMEDIATE">Średniozaawansowany</option>
@@ -523,13 +525,13 @@ const MaterialFormModal = ({
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700">Treść *</label>
               <textarea
+                required
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                data-testid="material-content"
+                placeholder="Treść artykułu w formacie HTML..."
+                rows={8}
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                required
-                rows={8}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-                placeholder="Treść artykułu w formacie HTML..."
-                data-testid="material-content"
               />
             </div>
           )}
@@ -539,12 +541,12 @@ const MaterialFormModal = ({
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700">URL pliku *</label>
               <Input
+                fullWidth
+                required
+                placeholder="https://..."
                 type="url"
                 value={formData.file_url}
                 onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
-                required
-                placeholder="https://..."
-                fullWidth
               />
             </div>
           )}
@@ -554,12 +556,12 @@ const MaterialFormModal = ({
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700">URL linku *</label>
               <Input
+                fullWidth
+                required
+                placeholder="https://..."
                 type="url"
                 value={formData.external_url}
                 onChange={(e) => setFormData({ ...formData, external_url: e.target.value })}
-                required
-                placeholder="https://..."
-                fullWidth
               />
             </div>
           )}
@@ -592,11 +594,11 @@ const MaterialFormModal = ({
                       className="flex items-center gap-2 text-sm text-neutral-700"
                     >
                       <input
-                        type="checkbox"
                         checked={checked}
-                        onChange={(e) => handleTogglePatient(patient.patient_id, e.target.checked)}
                         className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                         data-testid={`material-patient-${patient.patient_id}`}
+                        type="checkbox"
+                        onChange={(e) => handleTogglePatient(patient.patient_id, e.target.checked)}
                       />
                       <span>
                         {patient.first_name} {patient.last_name}
@@ -611,13 +613,13 @@ const MaterialFormModal = ({
           {/* Published */}
           <div className="flex items-center gap-2">
             <input
-              type="checkbox"
-              id="published"
               checked={formData.published}
-              onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
               className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+              id="published"
+              type="checkbox"
+              onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
             />
-            <label htmlFor="published" className="text-sm text-neutral-700">
+            <label className="text-sm text-neutral-700" htmlFor="published">
               Opublikuj materiał
             </label>
           </div>
@@ -625,25 +627,21 @@ const MaterialFormModal = ({
           {/* Actions */}
           <div className="flex justify-end gap-3 border-t border-neutral-200 pt-4">
             <Button
+              data-testid="material-cancel"
+              disabled={isSubmitting}
               type="button"
               variant="ghost"
               onClick={onClose}
-              disabled={isSubmitting}
-              data-testid="material-cancel"
             >
               Anuluj
             </Button>
             <Button
+              data-testid="material-save"
+              disabled={isSubmitting}
               type="submit"
               variant="primary"
-              disabled={isSubmitting}
-              data-testid="material-save"
             >
-              {isSubmitting
-                ? 'Zapisywanie...'
-                : material
-                  ? 'Zapisz zmiany'
-                  : 'Dodaj materiał'}
+              {isSubmitting ? 'Zapisywanie...' : material ? 'Zapisz zmiany' : 'Dodaj materiał'}
             </Button>
           </div>
         </form>

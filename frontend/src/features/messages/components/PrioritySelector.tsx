@@ -72,28 +72,28 @@ export function PrioritySelector({
           return (
             <button
               key={option.value}
+              aria-label={`Wybierz priorytet: ${option.label}`}
+              aria-pressed={isSelected}
+              className={`relative flex flex-col items-center rounded-lg border-2 p-4 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${colorClass} ${isSelected ? 'scale-105 transform shadow-lg' : 'shadow-sm hover:shadow-md'} `}
+              disabled={disabled}
               type="button"
               onClick={() => onChange(option.value)}
-              disabled={disabled}
-              className={`relative flex flex-col items-center rounded-lg border-2 p-4 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${colorClass} ${isSelected ? 'scale-105 transform shadow-lg' : 'shadow-sm hover:shadow-md'} `}
-              aria-pressed={isSelected}
-              aria-label={`Wybierz priorytet: ${option.label}`}
             >
-              <span className="mb-2 text-2xl" aria-hidden="true">
+              <span aria-hidden="true" className="mb-2 text-2xl">
                 {option.icon}
               </span>
               <span className="mb-1 text-sm font-semibold">{option.label}</span>
               <span className="text-center text-xs opacity-80">{option.description}</span>
               {isSelected ? (
                 <span
-                  className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-white"
                   aria-hidden="true"
+                  className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-white"
                 >
                   <svg className="h-3 w-3 text-current" fill="currentColor" viewBox="0 0 20 20">
                     <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                       clipRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      fillRule="evenodd"
                     />
                   </svg>
                 </span>

@@ -76,7 +76,11 @@ export const InboxPage: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <InboxFiltersComponent {...filters} onFilterChange={handleFilterChange} onReset={handleResetFilters} />
+      <InboxFiltersComponent
+        {...filters}
+        onFilterChange={handleFilterChange}
+        onReset={handleResetFilters}
+      />
 
       {/* Thread list */}
       <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
@@ -169,8 +173,8 @@ export const InboxPage: React.FC = () => {
                 <td className="whitespace-nowrap px-4 py-3 text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">
                     <button
-                      onClick={() => handleDelegateClick(thread.id)}
                       className="text-blue-600 hover:text-blue-900"
+                      onClick={() => handleDelegateClick(thread.id)}
                     >
                       Deleguj
                     </button>
@@ -198,18 +202,18 @@ export const InboxPage: React.FC = () => {
           </div>
           <div className="flex space-x-2">
             <button
-              onClick={() => handleFilterChange({ page: Math.max(0, (filters.page || 0) - 1) })}
-              disabled={data.first}
               className="rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={data.first}
+              onClick={() => handleFilterChange({ page: Math.max(0, (filters.page || 0) - 1) })}
             >
               Poprzednia
             </button>
             <button
+              className="rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={data.last}
               onClick={() =>
                 handleFilterChange({ page: Math.min(data.totalPages - 1, (filters.page || 0) + 1) })
               }
-              disabled={data.last}
-              className="rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Następna
             </button>
@@ -221,12 +225,12 @@ export const InboxPage: React.FC = () => {
       {selectedThreadId ? (
         <MessageDelegateModal
           isOpen={isDelegateModalOpen}
+          threadId={selectedThreadId}
+          threadTitle={data?.content.find((t) => t.id === selectedThreadId)?.title || ''}
           onClose={() => {
             setIsDelegateModalOpen(false)
             setSelectedThreadId(null)
           }}
-          threadId={selectedThreadId}
-          threadTitle={data?.content.find((t) => t.id === selectedThreadId)?.title || ''}
         />
       ) : null}
     </div>

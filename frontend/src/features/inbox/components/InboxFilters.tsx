@@ -91,8 +91,8 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
         <h3 className="text-sm font-semibold text-gray-900">Filtry</h3>
         {hasActiveFilters ? (
           <button
-            onClick={onReset}
             className="text-sm font-medium text-blue-600 hover:text-blue-800"
+            onClick={onReset}
           >
             Resetuj filtry
           </button>
@@ -102,14 +102,14 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
         {/* Project filter */}
         <div>
-          <label htmlFor="project-filter" className="mb-1 block text-xs font-medium text-gray-500">
+          <label className="mb-1 block text-xs font-medium text-gray-500" htmlFor="project-filter">
             Projekt
           </label>
           <select
+            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="project-filter"
             value={projectId || ''}
             onChange={handleProjectChange}
-            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Wszystkie projekty</option>
             {PROJECTS.map((project) => (
@@ -122,14 +122,14 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
 
         {/* Status filter */}
         <div>
-          <label htmlFor="status-filter" className="mb-1 block text-xs font-medium text-gray-500">
+          <label className="mb-1 block text-xs font-medium text-gray-500" htmlFor="status-filter">
             Status
           </label>
           <select
+            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="status-filter"
             value={status || ''}
             onChange={handleStatusChange}
-            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Wszystkie statusy</option>
             {STATUS_OPTIONS.map((option) => (
@@ -142,14 +142,14 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
 
         {/* Assignee filter */}
         <div>
-          <label htmlFor="assignee-filter" className="mb-1 block text-xs font-medium text-gray-500">
+          <label className="mb-1 block text-xs font-medium text-gray-500" htmlFor="assignee-filter">
             Przypisany do
           </label>
           <select
+            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="assignee-filter"
             value={assignedTo || ''}
             onChange={handleAssigneeChange}
-            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Wszyscy</option>
             {TEAM_MEMBERS.map((member) => (
@@ -162,14 +162,14 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
 
         {/* Priority filter */}
         <div>
-          <label htmlFor="priority-filter" className="mb-1 block text-xs font-medium text-gray-500">
+          <label className="mb-1 block text-xs font-medium text-gray-500" htmlFor="priority-filter">
             Priorytet
           </label>
           <select
+            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="priority-filter"
             value={priority || ''}
             onChange={handlePriorityChange}
-            className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Wszystkie priorytety</option>
             {PRIORITY_OPTIONS.map((option) => (
@@ -184,10 +184,10 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
         <div className="flex items-end">
           <label className="flex cursor-pointer items-center space-x-2">
             <input
-              type="checkbox"
               checked={isUnread || false}
-              onChange={handleUnreadChange}
               className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              type="checkbox"
+              onChange={handleUnreadChange}
             />
             <span className="text-sm text-gray-700">Tylko nieprzeczytane</span>
           </label>

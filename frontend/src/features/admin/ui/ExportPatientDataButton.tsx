@@ -81,18 +81,15 @@ export const ExportPatientDataButton: React.FC<ExportPatientDataButtonProps> = (
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center gap-3">
-        <label
-          htmlFor="export-format"
-          className="text-sm font-medium text-neutral-700"
-        >
+        <label className="text-sm font-medium text-neutral-700" htmlFor="export-format">
           Format eksportu
         </label>
         <select
+          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50"
+          disabled={isLoading}
           id="export-format"
           value={format}
           onChange={(e) => setFormat(e.target.value as ExportFormat)}
-          disabled={isLoading}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50"
         >
           {FORMATS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -102,11 +99,11 @@ export const ExportPatientDataButton: React.FC<ExportPatientDataButtonProps> = (
         </select>
 
         <button
+          aria-busy={isLoading}
+          className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={isLoading}
           type="button"
           onClick={handleExport}
-          disabled={isLoading}
-          className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          aria-busy={isLoading}
         >
           {isLoading ? 'Eksportuję...' : 'Eksportuj dane (RODO)'}
         </button>
@@ -114,13 +111,13 @@ export const ExportPatientDataButton: React.FC<ExportPatientDataButtonProps> = (
 
       {feedback ? (
         <div
-          role="status"
           aria-live="polite"
           className={
             feedback.kind === 'success'
               ? 'rounded border border-green-200 bg-green-50 p-2 text-sm text-green-700'
               : 'rounded border border-red-200 bg-red-50 p-2 text-sm text-red-700'
           }
+          role="status"
         >
           {feedback.message}
         </div>

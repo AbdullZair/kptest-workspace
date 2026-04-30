@@ -36,14 +36,8 @@ vi.mock('../../api/adminApi', () => ({
     error: null,
     refetch: refetchMock,
   }),
-  useApproveVerificationMutation: () => [
-    approveMock,
-    { isLoading: false, error: null },
-  ],
-  useRejectVerificationMutation: () => [
-    rejectMock,
-    { isLoading: false, error: null },
-  ],
+  useApproveVerificationMutation: () => [approveMock, { isLoading: false, error: null }],
+  useRejectVerificationMutation: () => [rejectMock, { isLoading: false, error: null }],
 }))
 
 const createMockStore = () =>
@@ -91,7 +85,7 @@ describe('PendingVerificationsPage (US-NH-01)', () => {
     fireEvent.click(screen.getByTestId('verify-his-p-1'))
     expect(screen.getByTestId('his-modal')).toBeInTheDocument()
 
-    const cartInput = screen.getByTestId('his-cart-input') as HTMLInputElement
+    const cartInput = screen.getByTestId('his-cart-input')
     fireEvent.change(cartInput, { target: { value: 'CART-001' } })
     fireEvent.click(screen.getByTestId('confirm-his'))
 
@@ -106,7 +100,7 @@ describe('PendingVerificationsPage (US-NH-01)', () => {
   it('disables HIS confirm when cart number is empty', () => {
     setup()
     fireEvent.click(screen.getByTestId('verify-his-p-1'))
-    const confirm = screen.getByTestId('confirm-his') as HTMLButtonElement
+    const confirm = screen.getByTestId('confirm-his')
     expect(confirm).toBeDisabled()
   })
 
@@ -115,7 +109,7 @@ describe('PendingVerificationsPage (US-NH-01)', () => {
     fireEvent.click(screen.getByTestId('manual-approve-p-1'))
     expect(screen.getByTestId('manual-modal')).toBeInTheDocument()
 
-    const reason = screen.getByTestId('manual-reason-input') as HTMLTextAreaElement
+    const reason = screen.getByTestId('manual-reason-input')
     fireEvent.change(reason, { target: { value: 'too short' } })
     expect(screen.getByTestId('confirm-manual')).toBeDisabled()
   })
@@ -123,7 +117,7 @@ describe('PendingVerificationsPage (US-NH-01)', () => {
   it('submits manual approval with valid reason', async () => {
     setup()
     fireEvent.click(screen.getByTestId('manual-approve-p-1'))
-    const reason = screen.getByTestId('manual-reason-input') as HTMLTextAreaElement
+    const reason = screen.getByTestId('manual-reason-input')
     fireEvent.change(reason, {
       target: { value: 'On-site identity verified with passport' },
     })
@@ -140,7 +134,7 @@ describe('PendingVerificationsPage (US-NH-01)', () => {
   it('submits rejection with valid reason', async () => {
     setup()
     fireEvent.click(screen.getByTestId('reject-p-1'))
-    const reason = screen.getByTestId('reject-reason-input') as HTMLTextAreaElement
+    const reason = screen.getByTestId('reject-reason-input')
     fireEvent.change(reason, {
       target: { value: 'PESEL does not match HIS records' },
     })
@@ -157,7 +151,7 @@ describe('PendingVerificationsPage (US-NH-01)', () => {
   it('disables reject confirm when reason is too short', () => {
     setup()
     fireEvent.click(screen.getByTestId('reject-p-1'))
-    const reason = screen.getByTestId('reject-reason-input') as HTMLTextAreaElement
+    const reason = screen.getByTestId('reject-reason-input')
     fireEvent.change(reason, { target: { value: 'short' } })
     expect(screen.getByTestId('confirm-reject')).toBeDisabled()
   })

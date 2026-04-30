@@ -72,9 +72,7 @@ const RodoPanelPage = lazy(() => import('@features/admin/ui/RodoPanelPage'))
 const DataProcessingActivitiesPage = lazy(
   () => import('@features/admin/ui/DataProcessingActivitiesPage')
 )
-const PendingVerificationsPage = lazy(
-  () => import('@features/admin/ui/PendingVerificationsPage')
-)
+const PendingVerificationsPage = lazy(() => import('@features/admin/ui/PendingVerificationsPage'))
 const AdminAccessReviewPage = lazy(() => import('@features/admin/ui/AdminAccessReviewPage'))
 const AdminSystemConfigPage = lazy(() => import('@features/admin/ui/AdminSystemConfigPage'))
 
@@ -93,7 +91,7 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <Navigate to="/dashboard" replace />,
+        element: <Navigate replace to="/dashboard" />,
       },
       {
         path: 'login',
@@ -413,7 +411,7 @@ export const routes: RouteObject[] = [
   // 404 route
   {
     path: '*',
-    element: <Navigate to="/dashboard" replace />,
+    element: <Navigate replace to="/dashboard" />,
   },
 ]
 

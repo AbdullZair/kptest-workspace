@@ -4,8152 +4,8170 @@
  */
 
 export interface paths {
-    "/api/v1/therapy-stages/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get stage by ID
-         * @description Returns detailed information about a therapy stage
-         */
-        get: operations["getStageById"];
-        /**
-         * Update therapy stage
-         * @description Updates an existing therapy stage
-         */
-        put: operations["updateStage"];
-        post?: never;
-        /**
-         * Delete therapy stage
-         * @description Deletes a therapy stage
-         */
-        delete: operations["deleteStage"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get quiz by ID
-         * @description Returns detailed information about a quiz
-         */
-        get: operations["getQuizById"];
-        /**
-         * Update quiz
-         * @description Updates an existing quiz
-         */
-        put: operations["updateQuiz"];
-        post?: never;
-        /**
-         * Delete quiz
-         * @description Deletes a quiz
-         */
-        delete: operations["deleteQuiz"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get project by ID
-         * @description Returns detailed information about a specific project
-         */
-        get: operations["getProjectById"];
-        /**
-         * Update project
-         * @description Updates an existing project
-         */
-        put: operations["updateProject"];
-        post?: never;
-        /**
-         * Delete project
-         * @description Deletes a project and removes all associations
-         */
-        delete: operations["deleteProject"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patients/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get patient by ID
-         * @description Returns detailed information about a specific patient
-         */
-        get: operations["getPatientById"];
-        /**
-         * Update patient
-         * @description Updates an existing patient record
-         */
-        put: operations["updatePatient"];
-        post?: never;
-        /**
-         * Delete patient
-         * @description Soft deletes a patient record
-         */
-        delete: operations["deletePatient"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/me/notification-preferences": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get my notification preferences
-         * @description US-K-26: Returns the current user's notification preferences (creates defaults on first access).
-         */
-        get: operations["getMyPreferences"];
-        /**
-         * Update my notification preferences
-         * @description US-K-26: Upserts the current user's notification channel toggles and quiet hours.
-         */
-        put: operations["updateMyPreferences"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get material by ID
-         * @description Returns detailed information about a specific material
-         */
-        get: operations["getMaterialById"];
-        /**
-         * Update material
-         * @description Updates an existing educational material
-         */
-        put: operations["updateMaterial"];
-        post?: never;
-        /**
-         * Delete material
-         * @description Deletes an educational material
-         */
-        delete: operations["deleteMaterial"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/calendar/events/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get event by ID
-         * @description Returns details of a specific therapy event
-         */
-        get: operations["getEventById"];
-        /**
-         * Update event
-         * @description Updates an existing therapy event
-         */
-        put: operations["updateEvent"];
-        post?: never;
-        /**
-         * Delete event
-         * @description Deletes a therapy event
-         */
-        delete: operations["deleteEvent"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get badge by ID
-         * @description Returns detailed information about a badge
-         */
-        get: operations["getBadgeById"];
-        /**
-         * Update badge
-         * @description Updates an existing badge
-         */
-        put: operations["updateBadge"];
-        post?: never;
-        /**
-         * Delete badge
-         * @description Deletes a badge
-         */
-        delete: operations["deleteBadge"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/users/{id}/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Update user status
-         * @description Changes the status of a specific user
-         */
-        put: operations["updateUserStatus"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/users/{id}/role": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Update user role
-         * @description Changes the role of a specific user
-         */
-        put: operations["updateUserRole"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/users/{id}/reset-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Reset user password
-         * @description Resets the password for a specific user and generates a temporary password
-         */
-        put: operations["resetPassword"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system/config": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get system configuration
-         * @description US-A-05: Returns global system configuration (compliance threshold, language, notifications). Placeholder backed by hardcoded defaults until a feature-flag store is implemented.
-         */
-        get: operations["getSystemConfig"];
-        /**
-         * Update system configuration
-         * @description US-A-05: Accepts a key/value map of settings. Currently logs requested updates but does not persist them (placeholder for feature-flag store).
-         */
-        put: operations["updateSystemConfig"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/data-processing-activities/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get data processing activity by ID
-         * @description Returns detailed information about a specific data processing activity
-         */
-        get: operations["getActivityById"];
-        /**
-         * Update data processing activity
-         * @description Updates an existing data processing activity record
-         */
-        put: operations["updateActivity"];
-        post?: never;
-        /**
-         * Delete data processing activity
-         * @description Deletes a data processing activity record
-         */
-        delete: operations["deleteActivity"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/therapy-stages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get stages by project
-         * @description Returns all therapy stages for a project
-         */
-        get: operations["getStagesByProject"];
-        put?: never;
-        /**
-         * Create therapy stage
-         * @description Creates a new therapy stage
-         */
-        post: operations["createStage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/therapy-stages/reorder": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Reorder stages
-         * @description Reorders therapy stages using drag & drop
-         */
-        post: operations["reorderStages"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/therapy-stages/progress/unlock": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Unlock stage
-         * @description Manually unlocks a stage for a patient
-         */
-        post: operations["unlockStage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/therapy-stages/progress/complete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Complete stage
-         * @description Marks a stage as completed for a patient
-         */
-        post: operations["completeStage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/reports/export": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Export report
-         * @description Exports a report to PDF or Excel format
-         */
-        post: operations["exportReport"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get quizzes by project
-         * @description Returns all quizzes for a project
-         */
-        get: operations["getQuizzesByProject"];
-        put?: never;
-        /**
-         * Create quiz
-         * @description Creates a new educational quiz
-         */
-        post: operations["createQuiz"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/{id}/deactivate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Deactivate quiz
-         * @description Deactivates a quiz
-         */
-        post: operations["deactivateQuiz"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/{id}/attempts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Start quiz attempt
-         * @description Starts a new quiz attempt for a patient
-         */
-        post: operations["startAttempt"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/{id}/activate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Activate quiz
-         * @description Activates a quiz for patients
-         */
-        post: operations["activateQuiz"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/attempts/submit": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Submit quiz answers
-         * @description Submits answers and completes a quiz attempt
-         */
-        post: operations["submitAnswers"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all projects
-         * @description Returns a list of projects with optional filtering by status or name
-         */
-        get: operations["getProjects"];
-        put?: never;
-        /**
-         * Create project
-         * @description Creates a new therapeutic project
-         */
-        post: operations["createProject"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/{id}/patients": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get project patients
-         * @description Returns patients enrolled in a project
-         */
-        get: operations["getProjectPatients"];
-        put?: never;
-        /**
-         * Assign patients to project
-         * @description Assigns one or more patients to a project
-         */
-        post: operations["assignPatients"];
-        /**
-         * Remove patients from project
-         * @description Removes one or more patients from a project
-         */
-        delete: operations["removePatients"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/{fromProjectId}/patients/{patientId}/transfer/{toProjectId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Transfer patient between projects
-         * @description Removes the patient from the source project (with audit reason) and enrolls them into the target project in a single transaction
-         */
-        post: operations["transferPatient"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patients": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all patients
-         * @description Returns a paginated list of patients with optional filtering
-         */
-        get: operations["getPatients"];
-        put?: never;
-        /**
-         * Create patient
-         * @description Creates a new patient record
-         */
-        post: operations["createPatient"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patients/verify": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Verify patient with HIS
-         * @description Verifies patient data against Hospital Information System
-         */
-        post: operations["verifyPatient"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patients/verify-his": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Verify patient identity via HIS
-         * @description Calls the HIS to confirm the patient's identity from PESEL + cart number
-         */
-        post: operations["verifyPatientWithHis"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patients/bulk/{operation}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Bulk patient operation
-         * @description Executes a bulk operation (assign-to-project|update-status|anonymize) on a list of patients
-         */
-        post: operations["bulkOperation"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/notifications/devices/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["registerDevice"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/threads": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all threads
-         * @description Returns a list of message threads with optional filtering
-         */
-        get: operations["getThreads"];
-        put?: never;
-        /**
-         * Create thread
-         * @description Creates a new message thread
-         */
-        post: operations["createThread"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/threads/{id}/messages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get thread messages
-         * @description Returns messages in a specific thread
-         */
-        get: operations["getThreadMessages"];
-        put?: never;
-        /**
-         * Send message
-         * @description Sends a new message to a thread
-         */
-        post: operations["sendMessage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/threads/{id}/export": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Export thread as PDF
-         * @description Exports a conversation thread as PDF document
-         */
-        post: operations["exportThreadAsPdf"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/messages/{id}/read": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Mark message as read
-         * @description Marks a message as read by the current user
-         */
-        post: operations["markAsRead"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/messages/{id}/attachments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Upload attachment
-         * @description Uploads a file attachment to a message
-         */
-        post: operations["uploadAttachment"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all materials
-         * @description Returns a list of materials with optional filtering
-         */
-        get: operations["getMaterials"];
-        put?: never;
-        /**
-         * Create material
-         * @description Creates a new educational material
-         */
-        post: operations["createMaterial"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials/{id}/view": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Record view
-         * @description Records a view for an educational material
-         */
-        post: operations["recordView"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials/{id}/unpublish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Unpublish material
-         * @description Unpublishes an educational material
-         */
-        post: operations["unpublishMaterial"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials/{id}/publish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Publish material
-         * @description Publishes an educational material
-         */
-        post: operations["publishMaterial"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials/{id}/complete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Mark as complete
-         * @description Marks an educational material as completed
-         */
-        post: operations["markAsComplete"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/inbox/threads/{threadId}/mark-as-read": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Mark thread as read
-         * @description Marks all messages in a thread as read
-         */
-        post: operations["markThreadAsRead"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/inbox/threads/{threadId}/delegate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Delegate thread
-         * @description Delegates a thread to a team member with status update
-         */
-        post: operations["delegateThread"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["createChangeRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests/{requestId}/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["rejectChangeRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests/{requestId}/cancel": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["cancelChangeRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests/{requestId}/accept": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["acceptChangeRequest"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/calendar/events": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all events
-         * @description Returns a list of therapy events with optional filters
-         */
-        get: operations["getEvents"];
-        put?: never;
-        /**
-         * Create event
-         * @description Creates a new therapy event
-         */
-        post: operations["createEvent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/calendar/events/{id}/ics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Export event to iCal
-         * @description Exports a therapy event to iCal format
-         */
-        post: operations["exportToIcs"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/calendar/events/{id}/complete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Complete event
-         * @description Marks a therapy event as completed
-         */
-        post: operations["completeEvent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all badges
-         * @description Returns all active badges
-         */
-        get: operations["getAllBadges"];
-        put?: never;
-        /**
-         * Create badge
-         * @description Creates a new gamification badge
-         */
-        post: operations["createBadge"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges/{patientBadgeId}/notify": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Mark badge as notified
-         * @description Marks a badge as notified
-         */
-        post: operations["markBadgeAsNotified"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/reset-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["resetPassword_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["register"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["refreshToken"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["login"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/forgot-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["forgotPassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/change-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["changePassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/2fa/verify": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["verify2fa"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/2fa/enable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["enable2fa"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/2fa/disable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["disable2fa"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/2fa/confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["confirm2fa"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all users
-         * @description Returns a paginated list of all users with optional filters
-         */
-        get: operations["getAllUsers"];
-        put?: never;
-        /**
-         * Create staff user
-         * @description US-A-01: Creates a new staff user account (ADMIN/DOCTOR/COORDINATOR/NURSE/THERAPIST) with hashed password and Staff profile.
-         */
-        post: operations["createStaff"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/users/{id}/force-password-reset": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Force password reset
-         * @description Forces a password reset for a staff user, invalidates all sessions
-         */
-        post: operations["forcePasswordReset"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/users/{id}/clear-2fa": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Clear 2FA configuration
-         * @description Clears 2FA secret and backup codes for a user
-         */
-        post: operations["clear2fa"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system/notifications/run-reminders": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Run event reminders manually
-         * @description US-K-25: Triggers the event reminder scan for the 24h-ahead window. Returns count + event IDs that matched.
-         */
-        post: operations["runEventReminders"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system/cache/clear": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Clear cache
-         * @description Clears the system cache
-         */
-        post: operations["clearCache"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system/backup": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create backup
-         * @description Creates a system backup
-         */
-        post: operations["createBackup"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system-logs/export": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Export system logs
-         * @description Exports system logs to CSV or JSON format
-         */
-        post: operations["exportSystemLogs"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/{id}/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Reject patient verification
-         * @description US-NH-01: Rejects a pending patient verification with a mandatory justification (min 10 characters).
-         */
-        post: operations["rejectVerification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/{id}/generate-activation-code": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Generate activation code
-         * @description Generates an 8-character activation code valid for 72 hours
-         */
-        post: operations["generateActivationCode"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/{id}/approve": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Approve patient verification
-         * @description US-NH-01: Approves a pending patient verification using HIS lookup or manual override with justification.
-         */
-        post: operations["approveVerification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/{id}/anonymize": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Anonymize patient data
-         * @description US-A-10: Anonymizes patient personal data (RODO Art. 17). Replaces PESEL, name, email, phone, date of birth, and address with anonymized values.
-         */
-        post: operations["anonymizePatient"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/data-processing-activities": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all data processing activities
-         * @description Returns a paginated list of all data processing activities (RODO Art. 30)
-         */
-        get: operations["getAllActivities"];
-        put?: never;
-        /**
-         * Create data processing activity
-         * @description Creates a new data processing activity record (RODO Art. 30)
-         */
-        post: operations["createActivity"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/backup/restore/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Restore from backup
-         * @description Restores system from a specific backup. Implements ww.68
-         */
-        post: operations["restoreBackup"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/backup/create": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create backup
-         * @description Creates a new system backup. Implements ww.68
-         */
-        post: operations["createBackup_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/audit-logs/export": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Export audit logs
-         * @description Exports audit logs to CSV or JSON format
-         */
-        post: operations["exportAuditLogs"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/inbox/threads/{threadId}/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Update thread status
-         * @description Updates the status of a thread
-         */
-        patch: operations["updateThreadStatus"];
-        trace?: never;
-    };
-    "/api/v1/therapy-stages/progress": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get patient stage progress
-         * @description Returns stage progress for a patient project
-         */
-        get: operations["getPatientStageProgress"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/therapy-stages/progress/current": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get current stage
-         * @description Returns the current stage for a patient project
-         */
-        get: operations["getCurrentStage"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/reports/projects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Generate project statistics report
-         * @description Generates statistics report for a project
-         */
-        get: operations["getProjectStatsReport"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/reports/patients": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Generate patient statistics report
-         * @description Generates statistics report for a patient
-         */
-        get: operations["getPatientStatsReport"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/reports/materials": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Generate material statistics report
-         * @description Generates statistics report for materials in a project
-         */
-        get: operations["getMaterialStatsReport"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/reports/history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get report history
-         * @description Returns history of generated reports
-         */
-        get: operations["getReportHistory"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/reports/dashboard": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get dashboard KPIs
-         * @description Returns key performance indicators for the dashboard
-         */
-        get: operations["getDashboardKpis"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/reports/compliance": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Generate compliance report
-         * @description Generates a compliance report for a project
-         */
-        get: operations["getComplianceReport"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/{quizId}/attempts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get quiz attempts
-         * @description Returns all attempts for a quiz
-         */
-        get: operations["getAttemptsByQuiz"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/{id}/take": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get quiz for taking
-         * @description Returns quiz for patient to take (answers hidden)
-         */
-        get: operations["getQuizForTaking"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/{id}/stats": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get quiz statistics
-         * @description Returns statistics for a quiz
-         */
-        get: operations["getQuizStats"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/attempts/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get attempt details
-         * @description Returns detailed information about a quiz attempt
-         */
-        get: operations["getAttemptById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/attempts/patient/{patientId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get patient attempts
-         * @description Returns all quiz attempts for a patient
-         */
-        get: operations["getAttemptsByPatient"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/quizzes/active": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get active quizzes
-         * @description Returns all active quizzes for a project
-         */
-        get: operations["getActiveQuizzesByProject"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/{id}/team": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get project team
-         * @description Returns team members assigned to a project
-         */
-        get: operations["getProjectTeam"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/{id}/statistics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get project statistics
-         * @description Returns statistics for a specific project
-         */
-        get: operations["getProjectStatistics"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/my/active": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get my active projects
-         * @description Returns active projects where current user is a team member
-         */
-        get: operations["getMyActiveProjects"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patients/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Search patients
-         * @description Searches for patients by PESEL, name, or HIS ID
-         */
-        get: operations["searchPatients"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/unread": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get unread messages
-         * @description Returns unread messages for the current user
-         */
-        get: operations["getUnreadMessages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/unread/count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get unread count
-         * @description Returns the count of unread messages for the current user
-         */
-        get: operations["getUnreadCount"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/messages/threads/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get thread by ID
-         * @description Returns detailed information about a specific thread
-         */
-        get: operations["getThreadById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials/progress": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get progress
-         * @description Returns progress for all materials for a patient
-         */
-        get: operations["getProgress"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/materials/my": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get my materials
-         * @description Returns materials assigned to the current patient
-         */
-        get: operations["getMyMaterials"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/inbox/unread-count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get unread count
-         * @description Returns the count of unread threads for the current user
-         */
-        get: operations["getUnreadCount_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/inbox/threads": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get inbox threads
-         * @description Returns paginated list of inbox threads with filters
-         */
-        get: operations["getInboxThreads"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/inbox/messages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get inbox messages
-         * @description Returns paginated list of inbox messages with filters
-         */
-        get: operations["getInboxMessages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["health"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests/{requestId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getChangeRequest"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests/project/{projectId}/pending": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getPendingChangeRequestsForProject"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests/my-requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getMyChangeRequests"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/event-change-requests/event/{eventId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getChangeRequestsForEvent"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/calendar/upcoming": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get upcoming events
-         * @description Returns upcoming therapy events for the current user
-         */
-        get: operations["getUpcomingEvents"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges/visible": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get visible badges
-         * @description Returns all visible badges for patients
-         */
-        get: operations["getVisibleBadges"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges/stats": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get badge stats
-         * @description Returns badge statistics for a patient
-         */
-        get: operations["getBadgeStats"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges/patient/{patientId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get patient badges
-         * @description Returns all badges earned by a patient
-         */
-        get: operations["getPatientBadges"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges/my": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get my badges
-         * @description Returns all badges earned by the current patient
-         */
-        get: operations["getMyBadges"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/badges/my/unnotified": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get unnotified badges
-         * @description Returns badges not yet notified to the patient
-         */
-        get: operations["getUnnotifiedBadges"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getCurrentUserProfile"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/users/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get user by ID
-         * @description Returns detailed information about a specific user
-         */
-        get: operations["getUserById"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete user
-         * @description Soft deletes a specific user
-         */
-        delete: operations["deleteUser"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system/metrics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get system metrics
-         * @description Returns system metrics including memory, CPU, and database statistics
-         */
-        get: operations["getSystemMetrics"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get system health
-         * @description Returns the health status of the system
-         */
-        get: operations["getSystemHealth"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/system-logs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get system logs
-         * @description Returns a paginated list of system logs with optional filters
-         */
-        get: operations["getSystemLogs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/{id}/export-data": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Export patient data
-         * @description US-A-11: Exports all patient data (RODO Art. 20 - right to data portability). Includes personal data, projects, messages, materials, events, quiz attempts, badges, and audit logs.
-         */
-        get: operations["exportPatientData"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/{id}/erasure-logs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get patient erasure logs
-         * @description Returns erasure audit trail for a patient.
-         */
-        get: operations["getErasureLogs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/pending": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List pending verifications
-         * @description US-NH-01: Returns patients with verification_status = PENDING, sorted by created_at DESC.
-         */
-        get: operations["getPendingVerifications"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/backup/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get backup by ID
-         * @description Returns detailed information about a specific backup
-         */
-        get: operations["getBackupById"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete backup
-         * @description Deletes an old backup to free up storage space
-         */
-        delete: operations["deleteBackup"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/backup/{id}/download": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Download backup
-         * @description Downloads backup file for offline storage
-         */
-        get: operations["downloadBackup"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/backup/history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get backup history
-         * @description Returns list of all backups with their status. Implements ww.68
-         */
-        get: operations["getBackupHistory"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/audit-logs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get audit logs
-         * @description Returns a paginated list of audit logs with optional filters
-         */
-        get: operations["getAuditLogs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/audit-logs/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get audit log by ID
-         * @description Returns detailed information about a specific audit log
-         */
-        get: operations["getAuditLogById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/patients/{id}/erase": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Erase patient data
-         * @description US-A-12: Hard-deletes patient data (RODO Art. 17 - right to be forgotten). Requires patient to be in deleted state for at least 30 days (cooling period).
-         */
-        delete: operations["erasePatient"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+  '/api/v1/therapy-stages/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get stage by ID
+     * @description Returns detailed information about a therapy stage
+     */
+    get: operations['getStageById']
+    /**
+     * Update therapy stage
+     * @description Updates an existing therapy stage
+     */
+    put: operations['updateStage']
+    post?: never
+    /**
+     * Delete therapy stage
+     * @description Deletes a therapy stage
+     */
+    delete: operations['deleteStage']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get quiz by ID
+     * @description Returns detailed information about a quiz
+     */
+    get: operations['getQuizById']
+    /**
+     * Update quiz
+     * @description Updates an existing quiz
+     */
+    put: operations['updateQuiz']
+    post?: never
+    /**
+     * Delete quiz
+     * @description Deletes a quiz
+     */
+    delete: operations['deleteQuiz']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/projects/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get project by ID
+     * @description Returns detailed information about a specific project
+     */
+    get: operations['getProjectById']
+    /**
+     * Update project
+     * @description Updates an existing project
+     */
+    put: operations['updateProject']
+    post?: never
+    /**
+     * Delete project
+     * @description Deletes a project and removes all associations
+     */
+    delete: operations['deleteProject']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/patients/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get patient by ID
+     * @description Returns detailed information about a specific patient
+     */
+    get: operations['getPatientById']
+    /**
+     * Update patient
+     * @description Updates an existing patient record
+     */
+    put: operations['updatePatient']
+    post?: never
+    /**
+     * Delete patient
+     * @description Soft deletes a patient record
+     */
+    delete: operations['deletePatient']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/me/notification-preferences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get my notification preferences
+     * @description US-K-26: Returns the current user's notification preferences (creates defaults on first access).
+     */
+    get: operations['getMyPreferences']
+    /**
+     * Update my notification preferences
+     * @description US-K-26: Upserts the current user's notification channel toggles and quiet hours.
+     */
+    put: operations['updateMyPreferences']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get material by ID
+     * @description Returns detailed information about a specific material
+     */
+    get: operations['getMaterialById']
+    /**
+     * Update material
+     * @description Updates an existing educational material
+     */
+    put: operations['updateMaterial']
+    post?: never
+    /**
+     * Delete material
+     * @description Deletes an educational material
+     */
+    delete: operations['deleteMaterial']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/calendar/events/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get event by ID
+     * @description Returns details of a specific therapy event
+     */
+    get: operations['getEventById']
+    /**
+     * Update event
+     * @description Updates an existing therapy event
+     */
+    put: operations['updateEvent']
+    post?: never
+    /**
+     * Delete event
+     * @description Deletes a therapy event
+     */
+    delete: operations['deleteEvent']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get badge by ID
+     * @description Returns detailed information about a badge
+     */
+    get: operations['getBadgeById']
+    /**
+     * Update badge
+     * @description Updates an existing badge
+     */
+    put: operations['updateBadge']
+    post?: never
+    /**
+     * Delete badge
+     * @description Deletes a badge
+     */
+    delete: operations['deleteBadge']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/users/{id}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update user status
+     * @description Changes the status of a specific user
+     */
+    put: operations['updateUserStatus']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/users/{id}/role': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update user role
+     * @description Changes the role of a specific user
+     */
+    put: operations['updateUserRole']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/users/{id}/reset-password': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Reset user password
+     * @description Resets the password for a specific user and generates a temporary password
+     */
+    put: operations['resetPassword']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system/config': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get system configuration
+     * @description US-A-05: Returns global system configuration (compliance threshold, language, notifications). Placeholder backed by hardcoded defaults until a feature-flag store is implemented.
+     */
+    get: operations['getSystemConfig']
+    /**
+     * Update system configuration
+     * @description US-A-05: Accepts a key/value map of settings. Currently logs requested updates but does not persist them (placeholder for feature-flag store).
+     */
+    put: operations['updateSystemConfig']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/data-processing-activities/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get data processing activity by ID
+     * @description Returns detailed information about a specific data processing activity
+     */
+    get: operations['getActivityById']
+    /**
+     * Update data processing activity
+     * @description Updates an existing data processing activity record
+     */
+    put: operations['updateActivity']
+    post?: never
+    /**
+     * Delete data processing activity
+     * @description Deletes a data processing activity record
+     */
+    delete: operations['deleteActivity']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/therapy-stages': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get stages by project
+     * @description Returns all therapy stages for a project
+     */
+    get: operations['getStagesByProject']
+    put?: never
+    /**
+     * Create therapy stage
+     * @description Creates a new therapy stage
+     */
+    post: operations['createStage']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/therapy-stages/reorder': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Reorder stages
+     * @description Reorders therapy stages using drag & drop
+     */
+    post: operations['reorderStages']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/therapy-stages/progress/unlock': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Unlock stage
+     * @description Manually unlocks a stage for a patient
+     */
+    post: operations['unlockStage']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/therapy-stages/progress/complete': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Complete stage
+     * @description Marks a stage as completed for a patient
+     */
+    post: operations['completeStage']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reports/export': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Export report
+     * @description Exports a report to PDF or Excel format
+     */
+    post: operations['exportReport']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get quizzes by project
+     * @description Returns all quizzes for a project
+     */
+    get: operations['getQuizzesByProject']
+    put?: never
+    /**
+     * Create quiz
+     * @description Creates a new educational quiz
+     */
+    post: operations['createQuiz']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/{id}/deactivate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Deactivate quiz
+     * @description Deactivates a quiz
+     */
+    post: operations['deactivateQuiz']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/{id}/attempts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Start quiz attempt
+     * @description Starts a new quiz attempt for a patient
+     */
+    post: operations['startAttempt']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/{id}/activate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Activate quiz
+     * @description Activates a quiz for patients
+     */
+    post: operations['activateQuiz']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/attempts/submit': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Submit quiz answers
+     * @description Submits answers and completes a quiz attempt
+     */
+    post: operations['submitAnswers']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/projects': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all projects
+     * @description Returns a list of projects with optional filtering by status or name
+     */
+    get: operations['getProjects']
+    put?: never
+    /**
+     * Create project
+     * @description Creates a new therapeutic project
+     */
+    post: operations['createProject']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/projects/{id}/patients': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get project patients
+     * @description Returns patients enrolled in a project
+     */
+    get: operations['getProjectPatients']
+    put?: never
+    /**
+     * Assign patients to project
+     * @description Assigns one or more patients to a project
+     */
+    post: operations['assignPatients']
+    /**
+     * Remove patients from project
+     * @description Removes one or more patients from a project
+     */
+    delete: operations['removePatients']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/projects/{fromProjectId}/patients/{patientId}/transfer/{toProjectId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Transfer patient between projects
+     * @description Removes the patient from the source project (with audit reason) and enrolls them into the target project in a single transaction
+     */
+    post: operations['transferPatient']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/patients': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all patients
+     * @description Returns a paginated list of patients with optional filtering
+     */
+    get: operations['getPatients']
+    put?: never
+    /**
+     * Create patient
+     * @description Creates a new patient record
+     */
+    post: operations['createPatient']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/patients/verify': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Verify patient with HIS
+     * @description Verifies patient data against Hospital Information System
+     */
+    post: operations['verifyPatient']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/patients/verify-his': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Verify patient identity via HIS
+     * @description Calls the HIS to confirm the patient's identity from PESEL + cart number
+     */
+    post: operations['verifyPatientWithHis']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/patients/bulk/{operation}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Bulk patient operation
+     * @description Executes a bulk operation (assign-to-project|update-status|anonymize) on a list of patients
+     */
+    post: operations['bulkOperation']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/notifications/devices/register': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['registerDevice']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/threads': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all threads
+     * @description Returns a list of message threads with optional filtering
+     */
+    get: operations['getThreads']
+    put?: never
+    /**
+     * Create thread
+     * @description Creates a new message thread
+     */
+    post: operations['createThread']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/threads/{id}/messages': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get thread messages
+     * @description Returns messages in a specific thread
+     */
+    get: operations['getThreadMessages']
+    put?: never
+    /**
+     * Send message
+     * @description Sends a new message to a thread
+     */
+    post: operations['sendMessage']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/threads/{id}/export': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Export thread as PDF
+     * @description Exports a conversation thread as PDF document
+     */
+    post: operations['exportThreadAsPdf']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/messages/{id}/read': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Mark message as read
+     * @description Marks a message as read by the current user
+     */
+    post: operations['markAsRead']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/messages/{id}/attachments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Upload attachment
+     * @description Uploads a file attachment to a message
+     */
+    post: operations['uploadAttachment']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all materials
+     * @description Returns a list of materials with optional filtering
+     */
+    get: operations['getMaterials']
+    put?: never
+    /**
+     * Create material
+     * @description Creates a new educational material
+     */
+    post: operations['createMaterial']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials/{id}/view': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Record view
+     * @description Records a view for an educational material
+     */
+    post: operations['recordView']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials/{id}/unpublish': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Unpublish material
+     * @description Unpublishes an educational material
+     */
+    post: operations['unpublishMaterial']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials/{id}/publish': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Publish material
+     * @description Publishes an educational material
+     */
+    post: operations['publishMaterial']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials/{id}/complete': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Mark as complete
+     * @description Marks an educational material as completed
+     */
+    post: operations['markAsComplete']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/inbox/threads/{threadId}/mark-as-read': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Mark thread as read
+     * @description Marks all messages in a thread as read
+     */
+    post: operations['markThreadAsRead']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/inbox/threads/{threadId}/delegate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Delegate thread
+     * @description Delegates a thread to a team member with status update
+     */
+    post: operations['delegateThread']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['createChangeRequest']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests/{requestId}/reject': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['rejectChangeRequest']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests/{requestId}/cancel': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['cancelChangeRequest']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests/{requestId}/accept': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['acceptChangeRequest']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/calendar/events': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all events
+     * @description Returns a list of therapy events with optional filters
+     */
+    get: operations['getEvents']
+    put?: never
+    /**
+     * Create event
+     * @description Creates a new therapy event
+     */
+    post: operations['createEvent']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/calendar/events/{id}/ics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Export event to iCal
+     * @description Exports a therapy event to iCal format
+     */
+    post: operations['exportToIcs']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/calendar/events/{id}/complete': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Complete event
+     * @description Marks a therapy event as completed
+     */
+    post: operations['completeEvent']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all badges
+     * @description Returns all active badges
+     */
+    get: operations['getAllBadges']
+    put?: never
+    /**
+     * Create badge
+     * @description Creates a new gamification badge
+     */
+    post: operations['createBadge']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges/{patientBadgeId}/notify': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Mark badge as notified
+     * @description Marks a badge as notified
+     */
+    post: operations['markBadgeAsNotified']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/reset-password': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['resetPassword_1']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/register': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['register']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/refresh': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['refreshToken']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/login': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['login']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/forgot-password': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['forgotPassword']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/change-password': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['changePassword']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/2fa/verify': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['verify2fa']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/2fa/enable': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['enable2fa']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/2fa/disable': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['disable2fa']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/2fa/confirm': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['confirm2fa']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/users': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all users
+     * @description Returns a paginated list of all users with optional filters
+     */
+    get: operations['getAllUsers']
+    put?: never
+    /**
+     * Create staff user
+     * @description US-A-01: Creates a new staff user account (ADMIN/DOCTOR/COORDINATOR/NURSE/THERAPIST) with hashed password and Staff profile.
+     */
+    post: operations['createStaff']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/users/{id}/force-password-reset': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Force password reset
+     * @description Forces a password reset for a staff user, invalidates all sessions
+     */
+    post: operations['forcePasswordReset']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/users/{id}/clear-2fa': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Clear 2FA configuration
+     * @description Clears 2FA secret and backup codes for a user
+     */
+    post: operations['clear2fa']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system/notifications/run-reminders': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Run event reminders manually
+     * @description US-K-25: Triggers the event reminder scan for the 24h-ahead window. Returns count + event IDs that matched.
+     */
+    post: operations['runEventReminders']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system/cache/clear': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Clear cache
+     * @description Clears the system cache
+     */
+    post: operations['clearCache']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system/backup': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create backup
+     * @description Creates a system backup
+     */
+    post: operations['createBackup']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system-logs/export': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Export system logs
+     * @description Exports system logs to CSV or JSON format
+     */
+    post: operations['exportSystemLogs']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/{id}/reject': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Reject patient verification
+     * @description US-NH-01: Rejects a pending patient verification with a mandatory justification (min 10 characters).
+     */
+    post: operations['rejectVerification']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/{id}/generate-activation-code': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Generate activation code
+     * @description Generates an 8-character activation code valid for 72 hours
+     */
+    post: operations['generateActivationCode']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/{id}/approve': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Approve patient verification
+     * @description US-NH-01: Approves a pending patient verification using HIS lookup or manual override with justification.
+     */
+    post: operations['approveVerification']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/{id}/anonymize': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Anonymize patient data
+     * @description US-A-10: Anonymizes patient personal data (RODO Art. 17). Replaces PESEL, name, email, phone, date of birth, and address with anonymized values.
+     */
+    post: operations['anonymizePatient']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/data-processing-activities': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all data processing activities
+     * @description Returns a paginated list of all data processing activities (RODO Art. 30)
+     */
+    get: operations['getAllActivities']
+    put?: never
+    /**
+     * Create data processing activity
+     * @description Creates a new data processing activity record (RODO Art. 30)
+     */
+    post: operations['createActivity']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/backup/restore/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Restore from backup
+     * @description Restores system from a specific backup. Implements ww.68
+     */
+    post: operations['restoreBackup']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/backup/create': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create backup
+     * @description Creates a new system backup. Implements ww.68
+     */
+    post: operations['createBackup_1']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/audit-logs/export': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Export audit logs
+     * @description Exports audit logs to CSV or JSON format
+     */
+    post: operations['exportAuditLogs']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/inbox/threads/{threadId}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /**
+     * Update thread status
+     * @description Updates the status of a thread
+     */
+    patch: operations['updateThreadStatus']
+    trace?: never
+  }
+  '/api/v1/therapy-stages/progress': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get patient stage progress
+     * @description Returns stage progress for a patient project
+     */
+    get: operations['getPatientStageProgress']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/therapy-stages/progress/current': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get current stage
+     * @description Returns the current stage for a patient project
+     */
+    get: operations['getCurrentStage']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reports/projects': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Generate project statistics report
+     * @description Generates statistics report for a project
+     */
+    get: operations['getProjectStatsReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reports/patients': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Generate patient statistics report
+     * @description Generates statistics report for a patient
+     */
+    get: operations['getPatientStatsReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reports/materials': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Generate material statistics report
+     * @description Generates statistics report for materials in a project
+     */
+    get: operations['getMaterialStatsReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reports/history': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get report history
+     * @description Returns history of generated reports
+     */
+    get: operations['getReportHistory']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reports/dashboard': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get dashboard KPIs
+     * @description Returns key performance indicators for the dashboard
+     */
+    get: operations['getDashboardKpis']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reports/compliance': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Generate compliance report
+     * @description Generates a compliance report for a project
+     */
+    get: operations['getComplianceReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/{quizId}/attempts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get quiz attempts
+     * @description Returns all attempts for a quiz
+     */
+    get: operations['getAttemptsByQuiz']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/{id}/take': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get quiz for taking
+     * @description Returns quiz for patient to take (answers hidden)
+     */
+    get: operations['getQuizForTaking']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/{id}/stats': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get quiz statistics
+     * @description Returns statistics for a quiz
+     */
+    get: operations['getQuizStats']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/attempts/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get attempt details
+     * @description Returns detailed information about a quiz attempt
+     */
+    get: operations['getAttemptById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/attempts/patient/{patientId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get patient attempts
+     * @description Returns all quiz attempts for a patient
+     */
+    get: operations['getAttemptsByPatient']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/quizzes/active': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get active quizzes
+     * @description Returns all active quizzes for a project
+     */
+    get: operations['getActiveQuizzesByProject']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/projects/{id}/team': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get project team
+     * @description Returns team members assigned to a project
+     */
+    get: operations['getProjectTeam']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/projects/{id}/statistics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get project statistics
+     * @description Returns statistics for a specific project
+     */
+    get: operations['getProjectStatistics']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/projects/my/active': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get my active projects
+     * @description Returns active projects where current user is a team member
+     */
+    get: operations['getMyActiveProjects']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/patients/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Search patients
+     * @description Searches for patients by PESEL, name, or HIS ID
+     */
+    get: operations['searchPatients']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/unread': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get unread messages
+     * @description Returns unread messages for the current user
+     */
+    get: operations['getUnreadMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/unread/count': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get unread count
+     * @description Returns the count of unread messages for the current user
+     */
+    get: operations['getUnreadCount']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/messages/threads/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get thread by ID
+     * @description Returns detailed information about a specific thread
+     */
+    get: operations['getThreadById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials/progress': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get progress
+     * @description Returns progress for all materials for a patient
+     */
+    get: operations['getProgress']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/materials/my': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get my materials
+     * @description Returns materials assigned to the current patient
+     */
+    get: operations['getMyMaterials']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/inbox/unread-count': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get unread count
+     * @description Returns the count of unread threads for the current user
+     */
+    get: operations['getUnreadCount_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/inbox/threads': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get inbox threads
+     * @description Returns paginated list of inbox threads with filters
+     */
+    get: operations['getInboxThreads']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/inbox/messages': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get inbox messages
+     * @description Returns paginated list of inbox messages with filters
+     */
+    get: operations['getInboxMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['health']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests/{requestId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getChangeRequest']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests/project/{projectId}/pending': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getPendingChangeRequestsForProject']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests/my-requests': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getMyChangeRequests']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/event-change-requests/event/{eventId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getChangeRequestsForEvent']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/calendar/upcoming': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get upcoming events
+     * @description Returns upcoming therapy events for the current user
+     */
+    get: operations['getUpcomingEvents']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges/visible': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get visible badges
+     * @description Returns all visible badges for patients
+     */
+    get: operations['getVisibleBadges']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges/stats': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get badge stats
+     * @description Returns badge statistics for a patient
+     */
+    get: operations['getBadgeStats']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges/patient/{patientId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get patient badges
+     * @description Returns all badges earned by a patient
+     */
+    get: operations['getPatientBadges']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges/my': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get my badges
+     * @description Returns all badges earned by the current patient
+     */
+    get: operations['getMyBadges']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/badges/my/unnotified': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get unnotified badges
+     * @description Returns badges not yet notified to the patient
+     */
+    get: operations['getUnnotifiedBadges']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/auth/me': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getCurrentUserProfile']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/users/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get user by ID
+     * @description Returns detailed information about a specific user
+     */
+    get: operations['getUserById']
+    put?: never
+    post?: never
+    /**
+     * Delete user
+     * @description Soft deletes a specific user
+     */
+    delete: operations['deleteUser']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system/metrics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get system metrics
+     * @description Returns system metrics including memory, CPU, and database statistics
+     */
+    get: operations['getSystemMetrics']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get system health
+     * @description Returns the health status of the system
+     */
+    get: operations['getSystemHealth']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/system-logs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get system logs
+     * @description Returns a paginated list of system logs with optional filters
+     */
+    get: operations['getSystemLogs']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/{id}/export-data': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Export patient data
+     * @description US-A-11: Exports all patient data (RODO Art. 20 - right to data portability). Includes personal data, projects, messages, materials, events, quiz attempts, badges, and audit logs.
+     */
+    get: operations['exportPatientData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/{id}/erasure-logs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get patient erasure logs
+     * @description Returns erasure audit trail for a patient.
+     */
+    get: operations['getErasureLogs']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/pending': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List pending verifications
+     * @description US-NH-01: Returns patients with verification_status = PENDING, sorted by created_at DESC.
+     */
+    get: operations['getPendingVerifications']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/backup/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get backup by ID
+     * @description Returns detailed information about a specific backup
+     */
+    get: operations['getBackupById']
+    put?: never
+    post?: never
+    /**
+     * Delete backup
+     * @description Deletes an old backup to free up storage space
+     */
+    delete: operations['deleteBackup']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/backup/{id}/download': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Download backup
+     * @description Downloads backup file for offline storage
+     */
+    get: operations['downloadBackup']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/backup/history': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get backup history
+     * @description Returns list of all backups with their status. Implements ww.68
+     */
+    get: operations['getBackupHistory']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/audit-logs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get audit logs
+     * @description Returns a paginated list of audit logs with optional filters
+     */
+    get: operations['getAuditLogs']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/audit-logs/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get audit log by ID
+     * @description Returns detailed information about a specific audit log
+     */
+    get: operations['getAuditLogById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/admin/patients/{id}/erase': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Erase patient data
+     * @description US-A-12: Hard-deletes patient data (RODO Art. 17 - right to be forgotten). Requires patient to be in deleted state for at least 30 days (cooling period).
+     */
+    delete: operations['erasePatient']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
-    schemas: {
-        /** @description Stage data */
-        TherapyStageDto: {
-            /** Format: uuid */
-            id?: string;
-            name: string;
-            description?: string;
-            /** Format: uuid */
-            project_id: string;
-            /** Format: int32 */
-            order_index: number;
-            /** @enum {string} */
-            unlock_mode: "MANUAL" | "AUTO_QUIZ";
-            /** Format: uuid */
-            required_quiz_id?: string;
-            required_quiz_title?: string;
-            is_active?: boolean;
-            /** Format: uuid */
-            created_by?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        QuizAnswerDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            question_id?: string;
-            /** Format: int32 */
-            order_index: number;
-            answer: string;
-            correct: boolean;
-            explanation?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        /** @description Quiz data */
-        QuizDto: {
-            /** Format: uuid */
-            id?: string;
-            title: string;
-            description?: string;
-            /** Format: uuid */
-            project_id: string;
-            /** Format: int32 */
-            pass_threshold: number;
-            /** Format: int32 */
-            time_limit_seconds?: number;
-            active?: boolean;
-            /** Format: uuid */
-            created_by?: string;
-            questions?: components["schemas"]["QuizQuestionDto"][];
-            /** Format: int32 */
-            max_score?: number;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        QuizQuestionDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            quiz_id?: string;
-            /** Format: int32 */
-            order_index: number;
-            question: string;
-            /** @enum {string} */
-            type: "SINGLE_CHOICE" | "MULTI_CHOICE" | "TRUE_FALSE";
-            /** Format: int32 */
-            points: number;
-            explanation?: string;
-            answers?: components["schemas"]["QuizAnswerDto"][];
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        /** @description Updated project data */
-        ProjectUpdateRequest: {
-            name?: string;
-            description?: string;
-            /** Format: date-time */
-            start_date?: string;
-            /** Format: date-time */
-            end_date?: string;
-            /** @enum {string} */
-            status?: "PLANNED" | "ACTIVE" | "COMPLETED" | "ARCHIVED" | "CANCELLED";
-            /** Format: int32 */
-            compliance_threshold?: number;
-            config?: string;
-        };
-        ProjectResponse: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            description?: string;
-            /** Format: date-time */
-            start_date?: string;
-            /** Format: date-time */
-            end_date?: string;
-            /** @enum {string} */
-            status?: "PLANNED" | "ACTIVE" | "COMPLETED" | "ARCHIVED" | "CANCELLED";
-            /** Format: uuid */
-            created_by?: string;
-            created_by_name?: string;
-            /** Format: int32 */
-            compliance_threshold?: number;
-            config?: string;
-            /** Format: int64 */
-            active_patient_count?: number;
-            /** Format: int64 */
-            team_member_count?: number;
-            /** Format: double */
-            average_compliance_score?: number;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        /** @description Patient data */
-        PatientDto: {
-            /** Format: uuid */
-            id?: string;
-            pesel: string;
-            first_name: string;
-            last_name: string;
-            /** Format: date */
-            date_of_birth?: string;
-            /** @enum {string} */
-            gender?: "MALE" | "FEMALE" | "OTHER" | "UNKNOWN";
-            email?: string;
-            phone?: string;
-            address_street?: string;
-            address_city?: string;
-            address_postal_code?: string;
-            his_patient_id?: string;
-            /** @enum {string} */
-            verification_status?: "PENDING" | "APPROVED" | "REJECTED";
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        UpdateNotificationPreferencesRequest: {
-            messageNotifications?: boolean;
-            eventNotifications?: boolean;
-            materialNotifications?: boolean;
-            reminderNotifications?: boolean;
-            emailEnabled?: boolean;
-            smsEnabled?: boolean;
-            pushEnabled?: boolean;
-            quietHoursStart?: string;
-            quietHoursEnd?: string;
-        };
-        NotificationPreferenceDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            userId?: string;
-            messageNotifications?: boolean;
-            eventNotifications?: boolean;
-            materialNotifications?: boolean;
-            reminderNotifications?: boolean;
-            emailEnabled?: boolean;
-            smsEnabled?: boolean;
-            pushEnabled?: boolean;
-            quietHoursStart?: string;
-            quietHoursEnd?: string;
-        };
-        /** @description Material data */
-        EducationalMaterialDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            project_id: string;
-            title: string;
-            content: string;
-            /** @enum {string} */
-            type: "ARTICLE" | "PDF" | "IMAGE" | "VIDEO" | "LINK" | "AUDIO";
-            file_url?: string;
-            external_url?: string;
-            category?: string;
-            /** @enum {string} */
-            difficulty: "BASIC" | "INTERMEDIATE" | "ADVANCED";
-            assigned_to_patients?: string[];
-            assigned_to_stages?: string[];
-            /** Format: int32 */
-            view_count?: number;
-            /** Format: int32 */
-            completion_count?: number;
-            published?: boolean;
-            /** Format: uuid */
-            created_by?: string;
-            /** Format: date-time */
-            published_at?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        RemindersRequest: {
-            reminder_24h?: boolean;
-            reminder_2h?: boolean;
-            reminder_30min?: boolean;
-        };
-        /** @description Updated event data */
-        UpdateTherapyEventRequest: {
-            title?: string;
-            description?: string;
-            /** @enum {string} */
-            type?: "VISIT" | "SESSION" | "MEDICATION" | "EXERCISE" | "MEASUREMENT" | "OTHER";
-            /** Format: date-time */
-            scheduled_at?: string;
-            /** Format: date-time */
-            ends_at?: string;
-            location?: string;
-            is_cyclic?: boolean;
-            recurrence_rule?: string;
-            reminders?: components["schemas"]["RemindersRequest"];
-        };
-        RemindersDto: {
-            reminder_24h?: boolean;
-            reminder_2h?: boolean;
-            reminder_30min?: boolean;
-        };
-        TherapyEventDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            project_id?: string;
-            /** Format: uuid */
-            patient_id?: string;
-            title?: string;
-            description?: string;
-            /** @enum {string} */
-            type?: "VISIT" | "SESSION" | "MEDICATION" | "EXERCISE" | "MEASUREMENT" | "OTHER";
-            /** Format: date-time */
-            scheduled_at?: string;
-            /** Format: date-time */
-            ends_at?: string;
-            location?: string;
-            /** @enum {string} */
-            status?: "SCHEDULED" | "COMPLETED" | "MISSED" | "CANCELLED";
-            is_cyclic?: boolean;
-            recurrence_rule?: string;
-            /** Format: date-time */
-            completed_at?: string;
-            patient_notes?: string;
-            reminders?: components["schemas"]["RemindersDto"];
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        /** @description Badge data */
-        BadgeDto: {
-            /** Format: uuid */
-            id?: string;
-            name: string;
-            description: string;
-            icon_url?: string;
-            color?: string;
-            /** @enum {string} */
-            category: "ENGAGEMENT" | "COMPLIANCE" | "EDUCATION" | "MILESTONE" | "STREAK";
-            is_active?: boolean;
-            is_hidden?: boolean;
-            rules?: components["schemas"]["BadgeRuleDto"][];
-            /** Format: uuid */
-            created_by?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        BadgeRuleDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            badge_id?: string;
-            /** @enum {string} */
-            rule_type: "EVENTS_COMPLETED" | "COMPLIANCE_THRESHOLD" | "MATERIALS_READ" | "QUIZ_PASSED" | "DAYS_STREAK" | "STAGE_COMPLETED";
-            /** Format: int32 */
-            threshold: number;
-            event_type?: string;
-            category_filter?: string;
-            /** Format: int32 */
-            period_days?: number;
-            /** Format: uuid */
-            quiz_id?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        /** @description New status */
-        UpdateUserStatusRequest: {
-            /** @enum {string} */
-            new_status?: "PENDING_VERIFICATION" | "ACTIVE" | "BLOCKED" | "REJECTED" | "DEACTIVATED";
-        };
-        UserAdminDto: {
-            user_id?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-            /** Format: date-time */
-            last_login_at?: string;
-            two_factor_enabled?: boolean;
-            /** Format: int32 */
-            failed_login_attempts?: number;
-            email?: string;
-            phone?: string;
-            role?: string;
-            status?: string;
-        };
-        /** @description New role */
-        UpdateUserRoleRequest: {
-            /** @enum {string} */
-            new_role?: "ADMIN" | "COORDINATOR" | "DOCTOR" | "THERAPIST" | "NURSE" | "PATIENT";
-        };
-        ResetPasswordResponse: {
-            user_id?: string;
-            temporary_password?: string;
-            message?: string;
-        };
-        /** @description Updated activity details */
-        UpdateDataProcessingActivityRequest: {
-            name?: string;
-            purpose?: string;
-            /** @enum {string} */
-            legalBasis?: "CONSENT" | "CONTRACT" | "LEGAL_OBLIGATION" | "VITAL_INTEREST" | "PUBLIC_TASK" | "LEGITIMATE_INTEREST";
-            categories?: string[];
-            recipients?: string[];
-            retentionPeriod?: string;
-            securityMeasures?: string;
-            dataController?: string;
-            dataProcessor?: string;
-        };
-        DataProcessingActivityDto: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            purpose?: string;
-            legalBasis?: string;
-            categories?: string[];
-            recipients?: string[];
-            retentionPeriod?: string;
-            securityMeasures?: string;
-            dataController?: string;
-            dataProcessor?: string;
-            /** Format: uuid */
-            createdBy?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-        };
-        PatientStageProgressDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            patient_project_id?: string;
-            /** Format: uuid */
-            stage_id?: string;
-            stage_name?: string;
-            /** Format: date-time */
-            started_at?: string;
-            /** Format: date-time */
-            completed_at?: string;
-            /** Format: date-time */
-            unlocked_at?: string;
-            /** @enum {string} */
-            status?: "LOCKED" | "AVAILABLE" | "COMPLETED";
-            /** Format: uuid */
-            completed_by?: string;
-            completion_reason?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        /** @description Export request */
-        ExportRequest: {
-            /** @enum {string} */
-            report_type?: "COMPLIANCE" | "PATIENT_STATS" | "PROJECT_STATS" | "MATERIAL_STATS";
-            /** Format: uuid */
-            project_id?: string;
-            /** Format: uuid */
-            patient_id?: string;
-            /** Format: date */
-            date_from?: string;
-            /** Format: date */
-            date_to?: string;
-            format?: string;
-            include_charts?: boolean;
-            sections?: string[];
-        };
-        QuizAnswerSelectionDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            question_id?: string;
-            question_text?: string;
-            selected_answer_ids?: string[];
-            is_correct?: boolean;
-            /** Format: int32 */
-            points_earned?: number;
-            correct_answers?: components["schemas"]["QuizAnswerDto"][];
-            /** Format: date-time */
-            created_at?: string;
-        };
-        QuizAttemptDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            quiz_id?: string;
-            quiz_title?: string;
-            /** Format: uuid */
-            patient_id?: string;
-            patient_name?: string;
-            /** Format: date-time */
-            started_at?: string;
-            /** Format: date-time */
-            completed_at?: string;
-            /** Format: int32 */
-            score?: number;
-            /** Format: int32 */
-            max_score?: number;
-            /** Format: double */
-            percentage?: number;
-            passed?: boolean;
-            /** Format: int32 */
-            time_spent_seconds?: number;
-            answer_selections?: components["schemas"]["QuizAnswerSelectionDto"][];
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        QuestionAnswerRequest: {
-            /** Format: uuid */
-            question_id: string;
-            selected_answer_ids: string[];
-        };
-        /** @description Quiz answers */
-        SubmitQuizRequest: {
-            /** Format: uuid */
-            quiz_id: string;
-            /** Format: uuid */
-            patient_id: string;
-            answers: components["schemas"]["QuestionAnswerRequest"][];
-        };
-        /** @description Project data */
-        ProjectCreateRequest: {
-            name: string;
-            description?: string;
-            /** Format: date-time */
-            start_date: string;
-            /** Format: date-time */
-            end_date?: string;
-            /** @enum {string} */
-            status?: "PLANNED" | "ACTIVE" | "COMPLETED" | "ARCHIVED" | "CANCELLED";
-            /** Format: int32 */
-            compliance_threshold?: number;
-            config?: string;
-            team_member_ids?: string[];
-            patient_ids?: string[];
-        };
-        /** @description Patient IDs to assign */
-        AssignPatientsRequest: {
-            patient_ids: string[];
-        };
-        /** @description Transfer payload (reason) */
-        TransferPatientRequest: {
-            reason: string;
-        };
-        /** @description HIS verification request */
-        PatientVerifyRequest: {
-            pesel: string;
-            cart_number: string;
-        };
-        PatientVerifyResponse: {
-            verified?: boolean;
-            his_patient_id?: string;
-            pesel?: string;
-            first_name?: string;
-            last_name?: string;
-            date_of_birth?: string;
-            message?: string;
-        };
-        HisDemographicsDto: {
-            first_name?: string;
-            last_name?: string;
-            pesel?: string;
-            /** Format: date */
-            date_of_birth?: string;
-        };
-        HisVerificationResult: {
-            /** @enum {string} */
-            status?: "MATCHED" | "NOT_FOUND" | "MISMATCH";
-            demographics?: components["schemas"]["HisDemographicsDto"];
-        };
-        /** @description Bulk operation request */
-        BulkPatientRequest: {
-            patient_ids: string[];
-            /** Format: uuid */
-            target_project_id?: string;
-            new_status?: string;
-        };
-        BulkItemResult: {
-            /** Format: uuid */
-            patient_id?: string;
-            status?: string;
-            error?: string;
-        };
-        BulkOperationResponse: {
-            /** Format: int32 */
-            total?: number;
-            /** Format: int32 */
-            succeeded?: number;
-            /** Format: int32 */
-            failed?: number;
-            results?: components["schemas"]["BulkItemResult"][];
-        };
-        RegisterDeviceRequest: {
-            token: string;
-            /** @enum {string} */
-            platform: "IOS" | "ANDROID";
-        };
-        /** @description Thread data */
-        CreateThreadRequest: {
-            /** Format: uuid */
-            projectId: string;
-            title: string;
-            /** @enum {string} */
-            type: "INDIVIDUAL" | "GROUP";
-        };
-        MessageThreadDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            projectId?: string;
-            title?: string;
-            /** @enum {string} */
-            type?: "INDIVIDUAL" | "GROUP";
-            /** Format: uuid */
-            createdBy?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            lastMessageAt?: string;
-            /** Format: int32 */
-            messageCount?: number;
-            /** Format: int32 */
-            unreadCount?: number;
-        };
-        /** @description Message data */
-        SendMessageRequest: {
-            content: string;
-            /** @enum {string} */
-            priority: "INFO" | "QUESTION" | "URGENT";
-            /** Format: uuid */
-            parentMessageId?: string;
-            internalNote?: string;
-        };
-        MessageAttachmentDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            messageId?: string;
-            fileName?: string;
-            fileType?: string;
-            /** Format: int64 */
-            fileSize?: number;
-            storagePath?: string;
-            /** Format: date-time */
-            uploadedAt?: string;
-        };
-        MessageDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            threadId?: string;
-            /** Format: uuid */
-            senderId?: string;
-            content?: string;
-            /** @enum {string} */
-            priority?: "INFO" | "QUESTION" | "URGENT";
-            /** Format: date-time */
-            sentAt?: string;
-            /** Format: date-time */
-            readAt?: string;
-            readBy?: string[];
-            /** Format: uuid */
-            parentMessageId?: string;
-            internalNote?: string;
-            attachments?: components["schemas"]["MessageAttachmentDto"][];
-        };
-        /** @description Delegation request */
-        DelegateMessageRequest: {
-            /** Format: uuid */
-            assigneeId: string;
-            status: string;
-            comment?: string;
-        };
-        InboxThreadDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            projectId?: string;
-            projectName?: string;
-            title?: string;
-            /** @enum {string} */
-            type?: "INDIVIDUAL" | "GROUP";
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            lastMessageAt?: string;
-            /** Format: int32 */
-            messageCount?: number;
-            /** Format: int32 */
-            unreadCount?: number;
-            /** @enum {string} */
-            status?: "NEW" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
-            /** Format: uuid */
-            assignedTo?: string;
-            assignedToName?: string;
-            /** Format: uuid */
-            createdBy?: string;
-            createdByNames?: string;
-            participants?: string[];
-        };
-        CreateEventChangeRequestRequest: {
-            /** Format: uuid */
-            eventId: string;
-            /** Format: date-time */
-            proposedDate: string;
-            reason: string;
-        };
-        EventChangeRequestDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            eventId?: string;
-            /** Format: uuid */
-            patientId?: string;
-            /** Format: date-time */
-            proposedDate?: string;
-            reason?: string;
-            /** @enum {string} */
-            status?: "PENDING" | "ACCEPTED" | "REJECTED" | "CANCELLED";
-            /** Format: uuid */
-            reviewedBy?: string;
-            /** Format: date-time */
-            reviewedAt?: string;
-            rejectionReason?: string;
-            acceptanceComment?: string;
-            /** Format: int32 */
-            attemptNumber?: number;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-        };
-        RejectEventChangeRequestRequest: {
-            reason: string;
-        };
-        AcceptEventChangeRequestRequest: {
-            comment: string;
-        };
-        /** @description Event data */
-        CreateTherapyEventRequest: {
-            /** Format: uuid */
-            project_id: string;
-            /** Format: uuid */
-            patient_id?: string;
-            title: string;
-            description?: string;
-            /** @enum {string} */
-            type: "VISIT" | "SESSION" | "MEDICATION" | "EXERCISE" | "MEASUREMENT" | "OTHER";
-            /** Format: date-time */
-            scheduled_at: string;
-            /** Format: date-time */
-            ends_at?: string;
-            location?: string;
-            is_cyclic?: boolean;
-            recurrence_rule?: string;
-            reminders?: components["schemas"]["RemindersRequest"];
-        };
-        /** @description Completion data with optional patient notes */
-        CompleteEventRequest: {
-            patient_notes?: string;
-        };
-        ResetPasswordRequest: {
-            token: string;
-            newPassword: string;
-        };
-        RegisterRequest: {
-            identifier: string;
-            password: string;
-            pesel: string;
-            firstName: string;
-            lastName: string;
-            email?: string;
-            phone?: string;
-            termsAccepted: string;
-        };
-        UserProfileResponse: {
-            user_id?: string;
-            first_name?: string;
-            last_name?: string;
-            date_of_birth?: string;
-            /** Format: date-time */
-            created_at?: string;
-            two_factor_enabled?: boolean;
-            email?: string;
-            phone?: string;
-            role?: string;
-            status?: string;
-            pesel?: string;
-        };
-        RefreshTokenRequest: {
-            refresh_token: string;
-        };
-        AuthResponse: {
-            access_token?: string;
-            refresh_token?: string;
-            token_type?: string;
-            /** Format: int64 */
-            expires_in?: number;
-            requires_2fa?: boolean;
-            temp_token?: string;
-        };
-        LoginRequest: {
-            identifier: string;
-            password: string;
-            totpCode?: string;
-        };
-        ForgotPasswordRequest: {
-            identifier?: string;
-            channel?: string;
-        };
-        ChangePasswordRequest: {
-            currentPassword: string;
-            newPassword: string;
-        };
-        Enable2faResponse: {
-            qr_code_url?: string;
-            secret_key?: string;
-            backup_codes?: string[];
-            enabled?: boolean;
-        };
-        CreateStaffRequest: {
-            email: string;
-            password: string;
-            firstName: string;
-            lastName: string;
-            phone?: string;
-            role: string;
-        };
-        /** @description Reset request with reason */
-        ForcePasswordResetRequest: {
-            reason: string;
-        };
-        Clear2faResponse: {
-            success?: boolean;
-            message?: string;
-        };
-        BackupResponse: {
-            backup_id?: string;
-            file_name?: string;
-            /** Format: double */
-            file_size_mb?: number;
-            /** Format: date-time */
-            created_at?: string;
-            status?: string;
-            message?: string;
-        };
-        /** @description Export request */
-        ExportLogsRequest: {
-            format?: string;
-            log_ids?: string[];
-        };
-        RejectVerificationRequest: {
-            reason: string;
-        };
-        VerificationDecisionResponse: {
-            /** Format: uuid */
-            patient_id?: string;
-            /** @enum {string} */
-            verification_status?: "PENDING" | "APPROVED" | "REJECTED";
-            verification_method?: string;
-            /** Format: date-time */
-            verified_at?: string;
-            /** Format: uuid */
-            verified_by?: string;
-            /** Format: uuid */
-            audit_log_id?: string;
-            message?: string;
-        };
-        ActivationCodeResponse: {
-            patientId?: string;
-            activationCode?: string;
-            /** Format: date-time */
-            expiresAt?: string;
-            pdfUrl?: string;
-            message?: string;
-        };
-        ApproveVerificationRequest: {
-            method: string;
-            reason?: string;
-            his_cart_number?: string;
-        };
-        AnonymizationResponse: {
-            /** Format: uuid */
-            patient_id?: string;
-            /** Format: date-time */
-            anonymized_at?: string;
-            /** Format: uuid */
-            audit_log_id?: string;
-        };
-        /** @description Activity details */
-        CreateDataProcessingActivityRequest: {
-            name: string;
-            purpose: string;
-            /** @enum {string} */
-            legalBasis: "CONSENT" | "CONTRACT" | "LEGAL_OBLIGATION" | "VITAL_INTEREST" | "PUBLIC_TASK" | "LEGITIMATE_INTEREST";
-            categories?: string[];
-            recipients?: string[];
-            retentionPeriod?: string;
-            securityMeasures?: string;
-            dataController?: string;
-            dataProcessor?: string;
-        };
-        /** @description Restore confirmation */
-        RestoreBackupRequest: {
-            confirm?: boolean;
-            notes?: string;
-        };
-        PatientComplianceEntry: {
-            /** Format: uuid */
-            patient_id?: string;
-            patient_name?: string;
-            /** Format: double */
-            compliance_score?: number;
-            /** @enum {string} */
-            current_stage?: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED" | "REMOVED";
-        };
-        ProjectStatsDto: {
-            /** Format: uuid */
-            project_id?: string;
-            project_name?: string;
-            /** @enum {string} */
-            status?: "PLANNED" | "ACTIVE" | "COMPLETED" | "ARCHIVED" | "CANCELLED";
-            start_date?: string;
-            end_date?: string;
-            /** Format: int32 */
-            total_patients?: number;
-            /** Format: int32 */
-            active_patients?: number;
-            /** Format: int32 */
-            completed_patients?: number;
-            /** Format: int32 */
-            removed_patients?: number;
-            /** Format: double */
-            average_compliance?: number;
-            /** Format: int32 */
-            compliance_threshold?: number;
-            is_compliant?: boolean;
-            /** Format: int32 */
-            team_size?: number;
-            stage_distribution?: {
-                [key: string]: number;
-            };
-            compliance_by_patient?: components["schemas"]["PatientComplianceEntry"][];
-            recent_events?: components["schemas"]["RecentEventEntry"][];
-        };
-        RecentEventEntry: {
-            /** Format: uuid */
-            event_id?: string;
-            event_type?: string;
-            description?: string;
-            scheduled_date?: string;
-            status?: string;
-        };
-        ComplianceHistoryEntry: {
-            date?: string;
-            /** Format: double */
-            compliance_score?: number;
-        };
-        PatientStatsDto: {
-            /** Format: uuid */
-            patient_id?: string;
-            patient_name?: string;
-            pesel?: string;
-            /** Format: int32 */
-            total_projects?: number;
-            /** Format: int32 */
-            active_projects?: number;
-            /** Format: int32 */
-            completed_projects?: number;
-            /** Format: double */
-            overall_compliance?: number;
-            /** Format: int32 */
-            total_sessions?: number;
-            /** Format: int32 */
-            attended_sessions?: number;
-            /** Format: int32 */
-            missed_sessions?: number;
-            /** Format: double */
-            session_attendance_rate?: number;
-            /** Format: int32 */
-            materials_completed?: number;
-            /** Format: int32 */
-            materials_in_progress?: number;
-            /** Format: int32 */
-            messages_sent?: number;
-            /** Format: int32 */
-            messages_received?: number;
-            project_stats?: components["schemas"]["ProjectStatEntry"][];
-            compliance_history?: components["schemas"]["ComplianceHistoryEntry"][];
-        };
-        ProjectStatEntry: {
-            /** Format: uuid */
-            project_id?: string;
-            project_name?: string;
-            status?: string;
-            /** Format: double */
-            compliance_score?: number;
-            current_stage?: string;
-            enrollment_date?: string;
-        };
-        MaterialEntry: {
-            /** Format: uuid */
-            material_id?: string;
-            title?: string;
-            category?: string;
-            /** Format: int32 */
-            assigned_count?: number;
-            /** Format: int32 */
-            completed_count?: number;
-            /** Format: double */
-            completion_rate?: number;
-        };
-        MaterialStatsDto: {
-            /** Format: uuid */
-            project_id?: string;
-            project_name?: string;
-            /** Format: int32 */
-            total_materials?: number;
-            /** Format: int32 */
-            materials_assigned?: number;
-            /** Format: int32 */
-            materials_completed?: number;
-            /** Format: int32 */
-            materials_in_progress?: number;
-            /** Format: int32 */
-            materials_not_started?: number;
-            /** Format: double */
-            completion_rate?: number;
-            /** Format: double */
-            average_completion_time_days?: number;
-            materials_by_category?: {
-                [key: string]: number;
-            };
-            materials_list?: components["schemas"]["MaterialEntry"][];
-            patient_progress?: components["schemas"]["PatientMaterialProgress"][];
-        };
-        PatientMaterialProgress: {
-            /** Format: uuid */
-            patient_id?: string;
-            patient_name?: string;
-            /** Format: int32 */
-            materials_assigned?: number;
-            /** Format: int32 */
-            materials_completed?: number;
-            /** Format: double */
-            progress_percentage?: number;
-        };
-        ReportHistoryResponse: {
-            /** Format: uuid */
-            id?: string;
-            /** @enum {string} */
-            type?: "COMPLIANCE" | "PATIENT_STATS" | "PROJECT_STATS" | "MATERIAL_STATS";
-            /** Format: uuid */
-            project_id?: string;
-            project_name?: string;
-            /** Format: uuid */
-            patient_id?: string;
-            patient_name?: string;
-            /** Format: date */
-            date_from?: string;
-            /** Format: date */
-            date_to?: string;
-            /** Format: date-time */
-            generated_at?: string;
-            /** Format: uuid */
-            generated_by?: string;
-            generated_by_name?: string;
-        };
-        AlertEntry: {
-            type?: string;
-            severity?: string;
-            message?: string;
-            created_at?: string;
-            entity_id?: string;
-        };
-        ComplianceTrendEntry: {
-            date?: string;
-            /** Format: double */
-            compliance_score?: number;
-        };
-        DashboardKpiDto: {
-            /** Format: int32 */
-            total_projects?: number;
-            /** Format: int32 */
-            active_projects?: number;
-            /** Format: int32 */
-            total_patients?: number;
-            /** Format: int32 */
-            active_patients?: number;
-            /** Format: int32 */
-            total_staff?: number;
-            /** Format: double */
-            average_compliance?: number;
-            /** Format: double */
-            overall_session_attendance?: number;
-            /** Format: double */
-            materials_completion_rate?: number;
-            /** Format: int32 */
-            pending_messages?: number;
-            /** Format: int32 */
-            upcoming_sessions?: number;
-            /** Format: int32 */
-            projects_at_risk?: number;
-            compliance_trend?: components["schemas"]["ComplianceTrendEntry"][];
-            project_status_summary?: {
-                [key: string]: number;
-            };
-            patient_stage_summary?: {
-                [key: string]: number;
-            };
-            recent_alerts?: components["schemas"]["AlertEntry"][];
-        };
-        ComplianceReportDto: {
-            /** Format: uuid */
-            project_id?: string;
-            project_name?: string;
-            date_from?: string;
-            date_to?: string;
-            /** Format: double */
-            overall_compliance?: number;
-            /** Format: int32 */
-            compliance_threshold?: number;
-            is_compliant?: boolean;
-            /** Format: int32 */
-            total_tasks?: number;
-            /** Format: int32 */
-            completed_tasks?: number;
-            /** Format: int32 */
-            overdue_tasks?: number;
-            compliance_by_stage?: {
-                [key: string]: number;
-            };
-            compliance_trend?: components["schemas"]["ComplianceTrendEntry"][];
-            non_compliant_items?: components["schemas"]["NonCompliantItem"][];
-        };
-        NonCompliantItem: {
-            /** Format: uuid */
-            item_id?: string;
-            item_type?: string;
-            description?: string;
-            due_date?: string;
-            /** Format: int32 */
-            days_overdue?: number;
-            assigned_to?: string;
-        };
-        QuizStatsDto: {
-            /** Format: int64 */
-            totalAttempts?: number;
-            /** Format: double */
-            averageScore?: number;
-        };
-        ProjectTeamMemberDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            user_id?: string;
-            email?: string;
-            /** @enum {string} */
-            role?: "COORDINATOR" | "DOCTOR" | "THERAPIST" | "NURSE" | "CONSULTANT";
-            /** Format: date-time */
-            assigned_at?: string;
-        };
-        ActivityEntry: {
-            type?: string;
-            description?: string;
-            timestamp?: string;
-            user_name?: string;
-        };
-        ProjectStatisticsResponse: {
-            /** Format: uuid */
-            project_id?: string;
-            project_name?: string;
-            /** @enum {string} */
-            status?: "PLANNED" | "ACTIVE" | "COMPLETED" | "ARCHIVED" | "CANCELLED";
-            /** Format: int64 */
-            total_patients?: number;
-            /** Format: int64 */
-            active_patients?: number;
-            /** Format: int64 */
-            completed_patients?: number;
-            /** Format: int64 */
-            removed_patients?: number;
-            /** Format: int64 */
-            team_members?: number;
-            /** Format: double */
-            average_compliance_score?: number;
-            compliance_distribution?: {
-                [key: string]: number;
-            };
-            stage_distribution?: {
-                [key: string]: number;
-            };
-            recent_activity?: components["schemas"]["ActivityEntry"][];
-        };
-        ProjectPatientSummaryDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            patient_id?: string;
-            first_name?: string;
-            last_name?: string;
-            /** @enum {string} */
-            current_stage?: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED" | "REMOVED";
-            compliance_score?: number;
-            /** Format: date-time */
-            enrolled_at?: string;
-            active?: boolean;
-        };
-        PatientSearchResponse: {
-            data?: components["schemas"]["PatientDto"][];
-            /** Format: int64 */
-            total?: number;
-            /** Format: int32 */
-            page?: number;
-            /** Format: int32 */
-            size?: number;
-            /** Format: int32 */
-            total_pages?: number;
-            has_next?: boolean;
-            has_previous?: boolean;
-        };
-        MaterialProgressDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            material_id?: string;
-            /** Format: uuid */
-            patient_id?: string;
-            /** @enum {string} */
-            status?: "PENDING" | "IN_PROGRESS" | "COMPLETED";
-            /** Format: date-time */
-            started_at?: string;
-            /** Format: date-time */
-            completed_at?: string;
-            /** Format: int32 */
-            time_spent_seconds?: number;
-            /** Format: int32 */
-            quiz_score?: number;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
-        };
-        PageResponseInboxThreadDto: {
-            content?: components["schemas"]["InboxThreadDto"][];
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
-            pageSize?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            totalPages?: number;
-            isFirst?: boolean;
-            isLast?: boolean;
-        };
-        InboxMessageDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            threadId?: string;
-            threadTitle?: string;
-            /** Format: uuid */
-            projectId?: string;
-            projectName?: string;
-            /** Format: uuid */
-            senderId?: string;
-            senderName?: string;
-            content?: string;
-            /** @enum {string} */
-            priority?: "INFO" | "QUESTION" | "URGENT";
-            /** Format: date-time */
-            sentAt?: string;
-            /** Format: date-time */
-            readAt?: string;
-            readBy?: string[];
-            /** @enum {string} */
-            status?: "NEW" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
-            /** Format: uuid */
-            assignedTo?: string;
-            assignedToName?: string;
-            isUnread?: boolean;
-        };
-        PageResponseInboxMessageDto: {
-            content?: components["schemas"]["InboxMessageDto"][];
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
-            pageSize?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            totalPages?: number;
-            isFirst?: boolean;
-            isLast?: boolean;
-        };
-        BadgeStatsDto: {
-            /** Format: int64 */
-            totalBadges?: number;
-            /** Format: int64 */
-            engagementBadges?: number;
-            /** Format: int64 */
-            complianceBadges?: number;
-            /** Format: int64 */
-            educationBadges?: number;
-            /** Format: int64 */
-            milestoneBadges?: number;
-        };
-        PatientBadgeDto: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            patient_id?: string;
-            /** Format: uuid */
-            badge_id?: string;
-            badge_name?: string;
-            badge_description?: string;
-            badge_icon_url?: string;
-            badge_color?: string;
-            badge_category?: string;
-            /** Format: date-time */
-            earned_at?: string;
-            notified?: boolean;
-            /** Format: date-time */
-            created_at?: string;
-        };
-        PageResponseUserAdminDto: {
-            content?: components["schemas"]["UserAdminDto"][];
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
-            pageSize?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            totalPages?: number;
-            isFirst?: boolean;
-            isLast?: boolean;
-        };
-        CacheMetrics: {
-            connected?: boolean;
-            /** Format: int64 */
-            keys_count?: number;
-            /** Format: double */
-            memory_usage_mb?: number;
-        };
-        CpuMetrics: {
-            /** Format: int32 */
-            available_processors?: number;
-            /** Format: double */
-            system_load_percent?: number;
-        };
-        DatabaseMetrics: {
-            /** Format: int32 */
-            active_connections?: number;
-            /** Format: int32 */
-            max_connections?: number;
-            /** Format: int64 */
-            total_records?: number;
-        };
-        MemoryMetrics: {
-            /** Format: int64 */
-            total_mb?: number;
-            /** Format: int64 */
-            used_mb?: number;
-            /** Format: int64 */
-            free_mb?: number;
-            /** Format: double */
-            usage_percent?: number;
-        };
-        SystemMetricsResponse: {
-            memory_usage?: components["schemas"]["MemoryMetrics"];
-            cpu_usage?: components["schemas"]["CpuMetrics"];
-            database_metrics?: components["schemas"]["DatabaseMetrics"];
-            cache_metrics?: components["schemas"]["CacheMetrics"];
-            user_metrics?: components["schemas"]["UserMetrics"];
-            timestamp?: string;
-        };
-        UserMetrics: {
-            /** Format: int64 */
-            total_users?: number;
-            /** Format: int64 */
-            active_users?: number;
-            /** Format: int64 */
-            online_users?: number;
-        };
-        HealthCheckDetail: {
-            /** Format: int64 */
-            response_time_ms?: number;
-            status?: string;
-            message?: string;
-        };
-        SystemHealthResponse: {
-            database_status?: string;
-            cache_status?: string;
-            timestamp?: string;
-            /** Format: int64 */
-            uptime_seconds?: number;
-            version?: string;
-            status?: string;
-            details?: {
-                [key: string]: components["schemas"]["HealthCheckDetail"];
-            };
-        };
-        PageResponseSystemLogResponse: {
-            content?: components["schemas"]["SystemLogResponse"][];
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
-            pageSize?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            totalPages?: number;
-            isFirst?: boolean;
-            isLast?: boolean;
-        };
-        SystemLogResponse: {
-            log_id?: string;
-            stack_trace?: string;
-            source_class?: string;
-            source_method?: string;
-            /** Format: date-time */
-            created_at?: string;
-            level?: string;
-            message?: string;
-        };
-        ErasureLogResponse: {
-            /** Format: uuid */
-            id?: string;
-            /** Format: uuid */
-            patientId?: string;
-            reason?: string;
-            /** Format: uuid */
-            erasedBy?: string;
-            /** Format: date-time */
-            erasedAt?: string;
-        };
-        PageResponsePendingVerificationDto: {
-            content?: components["schemas"]["PendingVerificationDto"][];
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
-            pageSize?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            totalPages?: number;
-            isFirst?: boolean;
-            isLast?: boolean;
-        };
-        PendingVerificationDto: {
-            /** Format: uuid */
-            patient_id?: string;
-            first_name?: string;
-            last_name?: string;
-            pesel_masked?: string;
-            email?: string;
-            phone?: string;
-            /** @enum {string} */
-            verification_status?: "PENDING" | "APPROVED" | "REJECTED";
-            his_patient_id?: string;
-            /** Format: date-time */
-            created_at?: string;
-        };
-        PageDataProcessingActivityDto: {
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            totalPages?: number;
-            /** Format: int32 */
-            size?: number;
-            content?: components["schemas"]["DataProcessingActivityDto"][];
-            /** Format: int32 */
-            number?: number;
-            sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
-            pageable?: components["schemas"]["PageableObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
-            empty?: boolean;
-        };
-        PageableObject: {
-            /** Format: int64 */
-            offset?: number;
-            sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            pageNumber?: number;
-            paged?: boolean;
-            unpaged?: boolean;
-            /** Format: int32 */
-            pageSize?: number;
-        };
-        SortObject: {
-            empty?: boolean;
-            unsorted?: boolean;
-            sorted?: boolean;
-        };
-        BackupHistoryResponse: {
-            backupId?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            createdBy?: string;
-            /** Format: int64 */
-            sizeBytes?: number;
-            status?: string;
-            databaseVersion?: string;
-            notes?: string;
-            isDownloadable?: boolean;
-            isRestorable?: boolean;
-        };
-        AuditLogResponse: {
-            log_id?: string;
-            user_id?: string;
-            entity_type?: string;
-            entity_id?: string;
-            old_value?: string;
-            new_value?: string;
-            ip_address?: string;
-            user_agent?: string;
-            /** Format: date-time */
-            created_at?: string;
-            action?: string;
-        };
-        PageResponseAuditLogResponse: {
-            content?: components["schemas"]["AuditLogResponse"][];
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
-            pageSize?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            totalPages?: number;
-            isFirst?: boolean;
-            isLast?: boolean;
-        };
-        /** @description Patient IDs and removal reason */
-        RemovePatientsRequest: {
-            patient_ids: string[];
-            reason: string;
-        };
-        /** @description Erasure request with reason */
-        ErasureRequest: {
-            reason: string;
-            confirmationToken?: string;
-        };
-    };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+  schemas: {
+    /** @description Stage data */
+    TherapyStageDto: {
+      /** Format: uuid */
+      id?: string
+      name: string
+      description?: string
+      /** Format: uuid */
+      project_id: string
+      /** Format: int32 */
+      order_index: number
+      /** @enum {string} */
+      unlock_mode: 'MANUAL' | 'AUTO_QUIZ'
+      /** Format: uuid */
+      required_quiz_id?: string
+      required_quiz_title?: string
+      is_active?: boolean
+      /** Format: uuid */
+      created_by?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    QuizAnswerDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      question_id?: string
+      /** Format: int32 */
+      order_index: number
+      answer: string
+      correct: boolean
+      explanation?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    /** @description Quiz data */
+    QuizDto: {
+      /** Format: uuid */
+      id?: string
+      title: string
+      description?: string
+      /** Format: uuid */
+      project_id: string
+      /** Format: int32 */
+      pass_threshold: number
+      /** Format: int32 */
+      time_limit_seconds?: number
+      active?: boolean
+      /** Format: uuid */
+      created_by?: string
+      questions?: components['schemas']['QuizQuestionDto'][]
+      /** Format: int32 */
+      max_score?: number
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    QuizQuestionDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      quiz_id?: string
+      /** Format: int32 */
+      order_index: number
+      question: string
+      /** @enum {string} */
+      type: 'SINGLE_CHOICE' | 'MULTI_CHOICE' | 'TRUE_FALSE'
+      /** Format: int32 */
+      points: number
+      explanation?: string
+      answers?: components['schemas']['QuizAnswerDto'][]
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    /** @description Updated project data */
+    ProjectUpdateRequest: {
+      name?: string
+      description?: string
+      /** Format: date-time */
+      start_date?: string
+      /** Format: date-time */
+      end_date?: string
+      /** @enum {string} */
+      status?: 'PLANNED' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED'
+      /** Format: int32 */
+      compliance_threshold?: number
+      config?: string
+    }
+    ProjectResponse: {
+      /** Format: uuid */
+      id?: string
+      name?: string
+      description?: string
+      /** Format: date-time */
+      start_date?: string
+      /** Format: date-time */
+      end_date?: string
+      /** @enum {string} */
+      status?: 'PLANNED' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED'
+      /** Format: uuid */
+      created_by?: string
+      created_by_name?: string
+      /** Format: int32 */
+      compliance_threshold?: number
+      config?: string
+      /** Format: int64 */
+      active_patient_count?: number
+      /** Format: int64 */
+      team_member_count?: number
+      /** Format: double */
+      average_compliance_score?: number
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    /** @description Patient data */
+    PatientDto: {
+      /** Format: uuid */
+      id?: string
+      pesel: string
+      first_name: string
+      last_name: string
+      /** Format: date */
+      date_of_birth?: string
+      /** @enum {string} */
+      gender?: 'MALE' | 'FEMALE' | 'OTHER' | 'UNKNOWN'
+      email?: string
+      phone?: string
+      address_street?: string
+      address_city?: string
+      address_postal_code?: string
+      his_patient_id?: string
+      /** @enum {string} */
+      verification_status?: 'PENDING' | 'APPROVED' | 'REJECTED'
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    UpdateNotificationPreferencesRequest: {
+      messageNotifications?: boolean
+      eventNotifications?: boolean
+      materialNotifications?: boolean
+      reminderNotifications?: boolean
+      emailEnabled?: boolean
+      smsEnabled?: boolean
+      pushEnabled?: boolean
+      quietHoursStart?: string
+      quietHoursEnd?: string
+    }
+    NotificationPreferenceDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      userId?: string
+      messageNotifications?: boolean
+      eventNotifications?: boolean
+      materialNotifications?: boolean
+      reminderNotifications?: boolean
+      emailEnabled?: boolean
+      smsEnabled?: boolean
+      pushEnabled?: boolean
+      quietHoursStart?: string
+      quietHoursEnd?: string
+    }
+    /** @description Material data */
+    EducationalMaterialDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      project_id: string
+      title: string
+      content: string
+      /** @enum {string} */
+      type: 'ARTICLE' | 'PDF' | 'IMAGE' | 'VIDEO' | 'LINK' | 'AUDIO'
+      file_url?: string
+      external_url?: string
+      category?: string
+      /** @enum {string} */
+      difficulty: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED'
+      assigned_to_patients?: string[]
+      assigned_to_stages?: string[]
+      /** Format: int32 */
+      view_count?: number
+      /** Format: int32 */
+      completion_count?: number
+      published?: boolean
+      /** Format: uuid */
+      created_by?: string
+      /** Format: date-time */
+      published_at?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    RemindersRequest: {
+      reminder_24h?: boolean
+      reminder_2h?: boolean
+      reminder_30min?: boolean
+    }
+    /** @description Updated event data */
+    UpdateTherapyEventRequest: {
+      title?: string
+      description?: string
+      /** @enum {string} */
+      type?: 'VISIT' | 'SESSION' | 'MEDICATION' | 'EXERCISE' | 'MEASUREMENT' | 'OTHER'
+      /** Format: date-time */
+      scheduled_at?: string
+      /** Format: date-time */
+      ends_at?: string
+      location?: string
+      is_cyclic?: boolean
+      recurrence_rule?: string
+      reminders?: components['schemas']['RemindersRequest']
+    }
+    RemindersDto: {
+      reminder_24h?: boolean
+      reminder_2h?: boolean
+      reminder_30min?: boolean
+    }
+    TherapyEventDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      project_id?: string
+      /** Format: uuid */
+      patient_id?: string
+      title?: string
+      description?: string
+      /** @enum {string} */
+      type?: 'VISIT' | 'SESSION' | 'MEDICATION' | 'EXERCISE' | 'MEASUREMENT' | 'OTHER'
+      /** Format: date-time */
+      scheduled_at?: string
+      /** Format: date-time */
+      ends_at?: string
+      location?: string
+      /** @enum {string} */
+      status?: 'SCHEDULED' | 'COMPLETED' | 'MISSED' | 'CANCELLED'
+      is_cyclic?: boolean
+      recurrence_rule?: string
+      /** Format: date-time */
+      completed_at?: string
+      patient_notes?: string
+      reminders?: components['schemas']['RemindersDto']
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    /** @description Badge data */
+    BadgeDto: {
+      /** Format: uuid */
+      id?: string
+      name: string
+      description: string
+      icon_url?: string
+      color?: string
+      /** @enum {string} */
+      category: 'ENGAGEMENT' | 'COMPLIANCE' | 'EDUCATION' | 'MILESTONE' | 'STREAK'
+      is_active?: boolean
+      is_hidden?: boolean
+      rules?: components['schemas']['BadgeRuleDto'][]
+      /** Format: uuid */
+      created_by?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    BadgeRuleDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      badge_id?: string
+      /** @enum {string} */
+      rule_type:
+        | 'EVENTS_COMPLETED'
+        | 'COMPLIANCE_THRESHOLD'
+        | 'MATERIALS_READ'
+        | 'QUIZ_PASSED'
+        | 'DAYS_STREAK'
+        | 'STAGE_COMPLETED'
+      /** Format: int32 */
+      threshold: number
+      event_type?: string
+      category_filter?: string
+      /** Format: int32 */
+      period_days?: number
+      /** Format: uuid */
+      quiz_id?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    /** @description New status */
+    UpdateUserStatusRequest: {
+      /** @enum {string} */
+      new_status?: 'PENDING_VERIFICATION' | 'ACTIVE' | 'BLOCKED' | 'REJECTED' | 'DEACTIVATED'
+    }
+    UserAdminDto: {
+      user_id?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+      /** Format: date-time */
+      last_login_at?: string
+      two_factor_enabled?: boolean
+      /** Format: int32 */
+      failed_login_attempts?: number
+      email?: string
+      phone?: string
+      role?: string
+      status?: string
+    }
+    /** @description New role */
+    UpdateUserRoleRequest: {
+      /** @enum {string} */
+      new_role?: 'ADMIN' | 'COORDINATOR' | 'DOCTOR' | 'THERAPIST' | 'NURSE' | 'PATIENT'
+    }
+    ResetPasswordResponse: {
+      user_id?: string
+      temporary_password?: string
+      message?: string
+    }
+    /** @description Updated activity details */
+    UpdateDataProcessingActivityRequest: {
+      name?: string
+      purpose?: string
+      /** @enum {string} */
+      legalBasis?:
+        | 'CONSENT'
+        | 'CONTRACT'
+        | 'LEGAL_OBLIGATION'
+        | 'VITAL_INTEREST'
+        | 'PUBLIC_TASK'
+        | 'LEGITIMATE_INTEREST'
+      categories?: string[]
+      recipients?: string[]
+      retentionPeriod?: string
+      securityMeasures?: string
+      dataController?: string
+      dataProcessor?: string
+    }
+    DataProcessingActivityDto: {
+      /** Format: uuid */
+      id?: string
+      name?: string
+      purpose?: string
+      legalBasis?: string
+      categories?: string[]
+      recipients?: string[]
+      retentionPeriod?: string
+      securityMeasures?: string
+      dataController?: string
+      dataProcessor?: string
+      /** Format: uuid */
+      createdBy?: string
+      /** Format: date-time */
+      createdAt?: string
+      /** Format: date-time */
+      updatedAt?: string
+    }
+    PatientStageProgressDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      patient_project_id?: string
+      /** Format: uuid */
+      stage_id?: string
+      stage_name?: string
+      /** Format: date-time */
+      started_at?: string
+      /** Format: date-time */
+      completed_at?: string
+      /** Format: date-time */
+      unlocked_at?: string
+      /** @enum {string} */
+      status?: 'LOCKED' | 'AVAILABLE' | 'COMPLETED'
+      /** Format: uuid */
+      completed_by?: string
+      completion_reason?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    /** @description Export request */
+    ExportRequest: {
+      /** @enum {string} */
+      report_type?: 'COMPLIANCE' | 'PATIENT_STATS' | 'PROJECT_STATS' | 'MATERIAL_STATS'
+      /** Format: uuid */
+      project_id?: string
+      /** Format: uuid */
+      patient_id?: string
+      /** Format: date */
+      date_from?: string
+      /** Format: date */
+      date_to?: string
+      format?: string
+      include_charts?: boolean
+      sections?: string[]
+    }
+    QuizAnswerSelectionDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      question_id?: string
+      question_text?: string
+      selected_answer_ids?: string[]
+      is_correct?: boolean
+      /** Format: int32 */
+      points_earned?: number
+      correct_answers?: components['schemas']['QuizAnswerDto'][]
+      /** Format: date-time */
+      created_at?: string
+    }
+    QuizAttemptDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      quiz_id?: string
+      quiz_title?: string
+      /** Format: uuid */
+      patient_id?: string
+      patient_name?: string
+      /** Format: date-time */
+      started_at?: string
+      /** Format: date-time */
+      completed_at?: string
+      /** Format: int32 */
+      score?: number
+      /** Format: int32 */
+      max_score?: number
+      /** Format: double */
+      percentage?: number
+      passed?: boolean
+      /** Format: int32 */
+      time_spent_seconds?: number
+      answer_selections?: components['schemas']['QuizAnswerSelectionDto'][]
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    QuestionAnswerRequest: {
+      /** Format: uuid */
+      question_id: string
+      selected_answer_ids: string[]
+    }
+    /** @description Quiz answers */
+    SubmitQuizRequest: {
+      /** Format: uuid */
+      quiz_id: string
+      /** Format: uuid */
+      patient_id: string
+      answers: components['schemas']['QuestionAnswerRequest'][]
+    }
+    /** @description Project data */
+    ProjectCreateRequest: {
+      name: string
+      description?: string
+      /** Format: date-time */
+      start_date: string
+      /** Format: date-time */
+      end_date?: string
+      /** @enum {string} */
+      status?: 'PLANNED' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED'
+      /** Format: int32 */
+      compliance_threshold?: number
+      config?: string
+      team_member_ids?: string[]
+      patient_ids?: string[]
+    }
+    /** @description Patient IDs to assign */
+    AssignPatientsRequest: {
+      patient_ids: string[]
+    }
+    /** @description Transfer payload (reason) */
+    TransferPatientRequest: {
+      reason: string
+    }
+    /** @description HIS verification request */
+    PatientVerifyRequest: {
+      pesel: string
+      cart_number: string
+    }
+    PatientVerifyResponse: {
+      verified?: boolean
+      his_patient_id?: string
+      pesel?: string
+      first_name?: string
+      last_name?: string
+      date_of_birth?: string
+      message?: string
+    }
+    HisDemographicsDto: {
+      first_name?: string
+      last_name?: string
+      pesel?: string
+      /** Format: date */
+      date_of_birth?: string
+    }
+    HisVerificationResult: {
+      /** @enum {string} */
+      status?: 'MATCHED' | 'NOT_FOUND' | 'MISMATCH'
+      demographics?: components['schemas']['HisDemographicsDto']
+    }
+    /** @description Bulk operation request */
+    BulkPatientRequest: {
+      patient_ids: string[]
+      /** Format: uuid */
+      target_project_id?: string
+      new_status?: string
+    }
+    BulkItemResult: {
+      /** Format: uuid */
+      patient_id?: string
+      status?: string
+      error?: string
+    }
+    BulkOperationResponse: {
+      /** Format: int32 */
+      total?: number
+      /** Format: int32 */
+      succeeded?: number
+      /** Format: int32 */
+      failed?: number
+      results?: components['schemas']['BulkItemResult'][]
+    }
+    RegisterDeviceRequest: {
+      token: string
+      /** @enum {string} */
+      platform: 'IOS' | 'ANDROID'
+    }
+    /** @description Thread data */
+    CreateThreadRequest: {
+      /** Format: uuid */
+      projectId: string
+      title: string
+      /** @enum {string} */
+      type: 'INDIVIDUAL' | 'GROUP'
+    }
+    MessageThreadDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      projectId?: string
+      title?: string
+      /** @enum {string} */
+      type?: 'INDIVIDUAL' | 'GROUP'
+      /** Format: uuid */
+      createdBy?: string
+      /** Format: date-time */
+      createdAt?: string
+      /** Format: date-time */
+      lastMessageAt?: string
+      /** Format: int32 */
+      messageCount?: number
+      /** Format: int32 */
+      unreadCount?: number
+    }
+    /** @description Message data */
+    SendMessageRequest: {
+      content: string
+      /** @enum {string} */
+      priority: 'INFO' | 'QUESTION' | 'URGENT'
+      /** Format: uuid */
+      parentMessageId?: string
+      internalNote?: string
+    }
+    MessageAttachmentDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      messageId?: string
+      fileName?: string
+      fileType?: string
+      /** Format: int64 */
+      fileSize?: number
+      storagePath?: string
+      /** Format: date-time */
+      uploadedAt?: string
+    }
+    MessageDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      threadId?: string
+      /** Format: uuid */
+      senderId?: string
+      content?: string
+      /** @enum {string} */
+      priority?: 'INFO' | 'QUESTION' | 'URGENT'
+      /** Format: date-time */
+      sentAt?: string
+      /** Format: date-time */
+      readAt?: string
+      readBy?: string[]
+      /** Format: uuid */
+      parentMessageId?: string
+      internalNote?: string
+      attachments?: components['schemas']['MessageAttachmentDto'][]
+    }
+    /** @description Delegation request */
+    DelegateMessageRequest: {
+      /** Format: uuid */
+      assigneeId: string
+      status: string
+      comment?: string
+    }
+    InboxThreadDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      projectId?: string
+      projectName?: string
+      title?: string
+      /** @enum {string} */
+      type?: 'INDIVIDUAL' | 'GROUP'
+      /** Format: date-time */
+      createdAt?: string
+      /** Format: date-time */
+      lastMessageAt?: string
+      /** Format: int32 */
+      messageCount?: number
+      /** Format: int32 */
+      unreadCount?: number
+      /** @enum {string} */
+      status?: 'NEW' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'
+      /** Format: uuid */
+      assignedTo?: string
+      assignedToName?: string
+      /** Format: uuid */
+      createdBy?: string
+      createdByNames?: string
+      participants?: string[]
+    }
+    CreateEventChangeRequestRequest: {
+      /** Format: uuid */
+      eventId: string
+      /** Format: date-time */
+      proposedDate: string
+      reason: string
+    }
+    EventChangeRequestDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      eventId?: string
+      /** Format: uuid */
+      patientId?: string
+      /** Format: date-time */
+      proposedDate?: string
+      reason?: string
+      /** @enum {string} */
+      status?: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED'
+      /** Format: uuid */
+      reviewedBy?: string
+      /** Format: date-time */
+      reviewedAt?: string
+      rejectionReason?: string
+      acceptanceComment?: string
+      /** Format: int32 */
+      attemptNumber?: number
+      /** Format: date-time */
+      createdAt?: string
+      /** Format: date-time */
+      updatedAt?: string
+    }
+    RejectEventChangeRequestRequest: {
+      reason: string
+    }
+    AcceptEventChangeRequestRequest: {
+      comment: string
+    }
+    /** @description Event data */
+    CreateTherapyEventRequest: {
+      /** Format: uuid */
+      project_id: string
+      /** Format: uuid */
+      patient_id?: string
+      title: string
+      description?: string
+      /** @enum {string} */
+      type: 'VISIT' | 'SESSION' | 'MEDICATION' | 'EXERCISE' | 'MEASUREMENT' | 'OTHER'
+      /** Format: date-time */
+      scheduled_at: string
+      /** Format: date-time */
+      ends_at?: string
+      location?: string
+      is_cyclic?: boolean
+      recurrence_rule?: string
+      reminders?: components['schemas']['RemindersRequest']
+    }
+    /** @description Completion data with optional patient notes */
+    CompleteEventRequest: {
+      patient_notes?: string
+    }
+    ResetPasswordRequest: {
+      token: string
+      newPassword: string
+    }
+    RegisterRequest: {
+      identifier: string
+      password: string
+      pesel: string
+      firstName: string
+      lastName: string
+      email?: string
+      phone?: string
+      termsAccepted: string
+    }
+    UserProfileResponse: {
+      user_id?: string
+      first_name?: string
+      last_name?: string
+      date_of_birth?: string
+      /** Format: date-time */
+      created_at?: string
+      two_factor_enabled?: boolean
+      email?: string
+      phone?: string
+      role?: string
+      status?: string
+      pesel?: string
+    }
+    RefreshTokenRequest: {
+      refresh_token: string
+    }
+    AuthResponse: {
+      access_token?: string
+      refresh_token?: string
+      token_type?: string
+      /** Format: int64 */
+      expires_in?: number
+      requires_2fa?: boolean
+      temp_token?: string
+    }
+    LoginRequest: {
+      identifier: string
+      password: string
+      totpCode?: string
+    }
+    ForgotPasswordRequest: {
+      identifier?: string
+      channel?: string
+    }
+    ChangePasswordRequest: {
+      currentPassword: string
+      newPassword: string
+    }
+    Enable2faResponse: {
+      qr_code_url?: string
+      secret_key?: string
+      backup_codes?: string[]
+      enabled?: boolean
+    }
+    CreateStaffRequest: {
+      email: string
+      password: string
+      firstName: string
+      lastName: string
+      phone?: string
+      role: string
+    }
+    /** @description Reset request with reason */
+    ForcePasswordResetRequest: {
+      reason: string
+    }
+    Clear2faResponse: {
+      success?: boolean
+      message?: string
+    }
+    BackupResponse: {
+      backup_id?: string
+      file_name?: string
+      /** Format: double */
+      file_size_mb?: number
+      /** Format: date-time */
+      created_at?: string
+      status?: string
+      message?: string
+    }
+    /** @description Export request */
+    ExportLogsRequest: {
+      format?: string
+      log_ids?: string[]
+    }
+    RejectVerificationRequest: {
+      reason: string
+    }
+    VerificationDecisionResponse: {
+      /** Format: uuid */
+      patient_id?: string
+      /** @enum {string} */
+      verification_status?: 'PENDING' | 'APPROVED' | 'REJECTED'
+      verification_method?: string
+      /** Format: date-time */
+      verified_at?: string
+      /** Format: uuid */
+      verified_by?: string
+      /** Format: uuid */
+      audit_log_id?: string
+      message?: string
+    }
+    ActivationCodeResponse: {
+      patientId?: string
+      activationCode?: string
+      /** Format: date-time */
+      expiresAt?: string
+      pdfUrl?: string
+      message?: string
+    }
+    ApproveVerificationRequest: {
+      method: string
+      reason?: string
+      his_cart_number?: string
+    }
+    AnonymizationResponse: {
+      /** Format: uuid */
+      patient_id?: string
+      /** Format: date-time */
+      anonymized_at?: string
+      /** Format: uuid */
+      audit_log_id?: string
+    }
+    /** @description Activity details */
+    CreateDataProcessingActivityRequest: {
+      name: string
+      purpose: string
+      /** @enum {string} */
+      legalBasis:
+        | 'CONSENT'
+        | 'CONTRACT'
+        | 'LEGAL_OBLIGATION'
+        | 'VITAL_INTEREST'
+        | 'PUBLIC_TASK'
+        | 'LEGITIMATE_INTEREST'
+      categories?: string[]
+      recipients?: string[]
+      retentionPeriod?: string
+      securityMeasures?: string
+      dataController?: string
+      dataProcessor?: string
+    }
+    /** @description Restore confirmation */
+    RestoreBackupRequest: {
+      confirm?: boolean
+      notes?: string
+    }
+    PatientComplianceEntry: {
+      /** Format: uuid */
+      patient_id?: string
+      patient_name?: string
+      /** Format: double */
+      compliance_score?: number
+      /** @enum {string} */
+      current_stage?: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'REMOVED'
+    }
+    ProjectStatsDto: {
+      /** Format: uuid */
+      project_id?: string
+      project_name?: string
+      /** @enum {string} */
+      status?: 'PLANNED' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED'
+      start_date?: string
+      end_date?: string
+      /** Format: int32 */
+      total_patients?: number
+      /** Format: int32 */
+      active_patients?: number
+      /** Format: int32 */
+      completed_patients?: number
+      /** Format: int32 */
+      removed_patients?: number
+      /** Format: double */
+      average_compliance?: number
+      /** Format: int32 */
+      compliance_threshold?: number
+      is_compliant?: boolean
+      /** Format: int32 */
+      team_size?: number
+      stage_distribution?: {
+        [key: string]: number
+      }
+      compliance_by_patient?: components['schemas']['PatientComplianceEntry'][]
+      recent_events?: components['schemas']['RecentEventEntry'][]
+    }
+    RecentEventEntry: {
+      /** Format: uuid */
+      event_id?: string
+      event_type?: string
+      description?: string
+      scheduled_date?: string
+      status?: string
+    }
+    ComplianceHistoryEntry: {
+      date?: string
+      /** Format: double */
+      compliance_score?: number
+    }
+    PatientStatsDto: {
+      /** Format: uuid */
+      patient_id?: string
+      patient_name?: string
+      pesel?: string
+      /** Format: int32 */
+      total_projects?: number
+      /** Format: int32 */
+      active_projects?: number
+      /** Format: int32 */
+      completed_projects?: number
+      /** Format: double */
+      overall_compliance?: number
+      /** Format: int32 */
+      total_sessions?: number
+      /** Format: int32 */
+      attended_sessions?: number
+      /** Format: int32 */
+      missed_sessions?: number
+      /** Format: double */
+      session_attendance_rate?: number
+      /** Format: int32 */
+      materials_completed?: number
+      /** Format: int32 */
+      materials_in_progress?: number
+      /** Format: int32 */
+      messages_sent?: number
+      /** Format: int32 */
+      messages_received?: number
+      project_stats?: components['schemas']['ProjectStatEntry'][]
+      compliance_history?: components['schemas']['ComplianceHistoryEntry'][]
+    }
+    ProjectStatEntry: {
+      /** Format: uuid */
+      project_id?: string
+      project_name?: string
+      status?: string
+      /** Format: double */
+      compliance_score?: number
+      current_stage?: string
+      enrollment_date?: string
+    }
+    MaterialEntry: {
+      /** Format: uuid */
+      material_id?: string
+      title?: string
+      category?: string
+      /** Format: int32 */
+      assigned_count?: number
+      /** Format: int32 */
+      completed_count?: number
+      /** Format: double */
+      completion_rate?: number
+    }
+    MaterialStatsDto: {
+      /** Format: uuid */
+      project_id?: string
+      project_name?: string
+      /** Format: int32 */
+      total_materials?: number
+      /** Format: int32 */
+      materials_assigned?: number
+      /** Format: int32 */
+      materials_completed?: number
+      /** Format: int32 */
+      materials_in_progress?: number
+      /** Format: int32 */
+      materials_not_started?: number
+      /** Format: double */
+      completion_rate?: number
+      /** Format: double */
+      average_completion_time_days?: number
+      materials_by_category?: {
+        [key: string]: number
+      }
+      materials_list?: components['schemas']['MaterialEntry'][]
+      patient_progress?: components['schemas']['PatientMaterialProgress'][]
+    }
+    PatientMaterialProgress: {
+      /** Format: uuid */
+      patient_id?: string
+      patient_name?: string
+      /** Format: int32 */
+      materials_assigned?: number
+      /** Format: int32 */
+      materials_completed?: number
+      /** Format: double */
+      progress_percentage?: number
+    }
+    ReportHistoryResponse: {
+      /** Format: uuid */
+      id?: string
+      /** @enum {string} */
+      type?: 'COMPLIANCE' | 'PATIENT_STATS' | 'PROJECT_STATS' | 'MATERIAL_STATS'
+      /** Format: uuid */
+      project_id?: string
+      project_name?: string
+      /** Format: uuid */
+      patient_id?: string
+      patient_name?: string
+      /** Format: date */
+      date_from?: string
+      /** Format: date */
+      date_to?: string
+      /** Format: date-time */
+      generated_at?: string
+      /** Format: uuid */
+      generated_by?: string
+      generated_by_name?: string
+    }
+    AlertEntry: {
+      type?: string
+      severity?: string
+      message?: string
+      created_at?: string
+      entity_id?: string
+    }
+    ComplianceTrendEntry: {
+      date?: string
+      /** Format: double */
+      compliance_score?: number
+    }
+    DashboardKpiDto: {
+      /** Format: int32 */
+      total_projects?: number
+      /** Format: int32 */
+      active_projects?: number
+      /** Format: int32 */
+      total_patients?: number
+      /** Format: int32 */
+      active_patients?: number
+      /** Format: int32 */
+      total_staff?: number
+      /** Format: double */
+      average_compliance?: number
+      /** Format: double */
+      overall_session_attendance?: number
+      /** Format: double */
+      materials_completion_rate?: number
+      /** Format: int32 */
+      pending_messages?: number
+      /** Format: int32 */
+      upcoming_sessions?: number
+      /** Format: int32 */
+      projects_at_risk?: number
+      compliance_trend?: components['schemas']['ComplianceTrendEntry'][]
+      project_status_summary?: {
+        [key: string]: number
+      }
+      patient_stage_summary?: {
+        [key: string]: number
+      }
+      recent_alerts?: components['schemas']['AlertEntry'][]
+    }
+    ComplianceReportDto: {
+      /** Format: uuid */
+      project_id?: string
+      project_name?: string
+      date_from?: string
+      date_to?: string
+      /** Format: double */
+      overall_compliance?: number
+      /** Format: int32 */
+      compliance_threshold?: number
+      is_compliant?: boolean
+      /** Format: int32 */
+      total_tasks?: number
+      /** Format: int32 */
+      completed_tasks?: number
+      /** Format: int32 */
+      overdue_tasks?: number
+      compliance_by_stage?: {
+        [key: string]: number
+      }
+      compliance_trend?: components['schemas']['ComplianceTrendEntry'][]
+      non_compliant_items?: components['schemas']['NonCompliantItem'][]
+    }
+    NonCompliantItem: {
+      /** Format: uuid */
+      item_id?: string
+      item_type?: string
+      description?: string
+      due_date?: string
+      /** Format: int32 */
+      days_overdue?: number
+      assigned_to?: string
+    }
+    QuizStatsDto: {
+      /** Format: int64 */
+      totalAttempts?: number
+      /** Format: double */
+      averageScore?: number
+    }
+    ProjectTeamMemberDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      user_id?: string
+      email?: string
+      /** @enum {string} */
+      role?: 'COORDINATOR' | 'DOCTOR' | 'THERAPIST' | 'NURSE' | 'CONSULTANT'
+      /** Format: date-time */
+      assigned_at?: string
+    }
+    ActivityEntry: {
+      type?: string
+      description?: string
+      timestamp?: string
+      user_name?: string
+    }
+    ProjectStatisticsResponse: {
+      /** Format: uuid */
+      project_id?: string
+      project_name?: string
+      /** @enum {string} */
+      status?: 'PLANNED' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED'
+      /** Format: int64 */
+      total_patients?: number
+      /** Format: int64 */
+      active_patients?: number
+      /** Format: int64 */
+      completed_patients?: number
+      /** Format: int64 */
+      removed_patients?: number
+      /** Format: int64 */
+      team_members?: number
+      /** Format: double */
+      average_compliance_score?: number
+      compliance_distribution?: {
+        [key: string]: number
+      }
+      stage_distribution?: {
+        [key: string]: number
+      }
+      recent_activity?: components['schemas']['ActivityEntry'][]
+    }
+    ProjectPatientSummaryDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      patient_id?: string
+      first_name?: string
+      last_name?: string
+      /** @enum {string} */
+      current_stage?: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'REMOVED'
+      compliance_score?: number
+      /** Format: date-time */
+      enrolled_at?: string
+      active?: boolean
+    }
+    PatientSearchResponse: {
+      data?: components['schemas']['PatientDto'][]
+      /** Format: int64 */
+      total?: number
+      /** Format: int32 */
+      page?: number
+      /** Format: int32 */
+      size?: number
+      /** Format: int32 */
+      total_pages?: number
+      has_next?: boolean
+      has_previous?: boolean
+    }
+    MaterialProgressDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      material_id?: string
+      /** Format: uuid */
+      patient_id?: string
+      /** @enum {string} */
+      status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED'
+      /** Format: date-time */
+      started_at?: string
+      /** Format: date-time */
+      completed_at?: string
+      /** Format: int32 */
+      time_spent_seconds?: number
+      /** Format: int32 */
+      quiz_score?: number
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string
+    }
+    PageResponseInboxThreadDto: {
+      content?: components['schemas']['InboxThreadDto'][]
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      isFirst?: boolean
+      isLast?: boolean
+    }
+    InboxMessageDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      threadId?: string
+      threadTitle?: string
+      /** Format: uuid */
+      projectId?: string
+      projectName?: string
+      /** Format: uuid */
+      senderId?: string
+      senderName?: string
+      content?: string
+      /** @enum {string} */
+      priority?: 'INFO' | 'QUESTION' | 'URGENT'
+      /** Format: date-time */
+      sentAt?: string
+      /** Format: date-time */
+      readAt?: string
+      readBy?: string[]
+      /** @enum {string} */
+      status?: 'NEW' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'
+      /** Format: uuid */
+      assignedTo?: string
+      assignedToName?: string
+      isUnread?: boolean
+    }
+    PageResponseInboxMessageDto: {
+      content?: components['schemas']['InboxMessageDto'][]
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      isFirst?: boolean
+      isLast?: boolean
+    }
+    BadgeStatsDto: {
+      /** Format: int64 */
+      totalBadges?: number
+      /** Format: int64 */
+      engagementBadges?: number
+      /** Format: int64 */
+      complianceBadges?: number
+      /** Format: int64 */
+      educationBadges?: number
+      /** Format: int64 */
+      milestoneBadges?: number
+    }
+    PatientBadgeDto: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      patient_id?: string
+      /** Format: uuid */
+      badge_id?: string
+      badge_name?: string
+      badge_description?: string
+      badge_icon_url?: string
+      badge_color?: string
+      badge_category?: string
+      /** Format: date-time */
+      earned_at?: string
+      notified?: boolean
+      /** Format: date-time */
+      created_at?: string
+    }
+    PageResponseUserAdminDto: {
+      content?: components['schemas']['UserAdminDto'][]
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      isFirst?: boolean
+      isLast?: boolean
+    }
+    CacheMetrics: {
+      connected?: boolean
+      /** Format: int64 */
+      keys_count?: number
+      /** Format: double */
+      memory_usage_mb?: number
+    }
+    CpuMetrics: {
+      /** Format: int32 */
+      available_processors?: number
+      /** Format: double */
+      system_load_percent?: number
+    }
+    DatabaseMetrics: {
+      /** Format: int32 */
+      active_connections?: number
+      /** Format: int32 */
+      max_connections?: number
+      /** Format: int64 */
+      total_records?: number
+    }
+    MemoryMetrics: {
+      /** Format: int64 */
+      total_mb?: number
+      /** Format: int64 */
+      used_mb?: number
+      /** Format: int64 */
+      free_mb?: number
+      /** Format: double */
+      usage_percent?: number
+    }
+    SystemMetricsResponse: {
+      memory_usage?: components['schemas']['MemoryMetrics']
+      cpu_usage?: components['schemas']['CpuMetrics']
+      database_metrics?: components['schemas']['DatabaseMetrics']
+      cache_metrics?: components['schemas']['CacheMetrics']
+      user_metrics?: components['schemas']['UserMetrics']
+      timestamp?: string
+    }
+    UserMetrics: {
+      /** Format: int64 */
+      total_users?: number
+      /** Format: int64 */
+      active_users?: number
+      /** Format: int64 */
+      online_users?: number
+    }
+    HealthCheckDetail: {
+      /** Format: int64 */
+      response_time_ms?: number
+      status?: string
+      message?: string
+    }
+    SystemHealthResponse: {
+      database_status?: string
+      cache_status?: string
+      timestamp?: string
+      /** Format: int64 */
+      uptime_seconds?: number
+      version?: string
+      status?: string
+      details?: {
+        [key: string]: components['schemas']['HealthCheckDetail']
+      }
+    }
+    PageResponseSystemLogResponse: {
+      content?: components['schemas']['SystemLogResponse'][]
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      isFirst?: boolean
+      isLast?: boolean
+    }
+    SystemLogResponse: {
+      log_id?: string
+      stack_trace?: string
+      source_class?: string
+      source_method?: string
+      /** Format: date-time */
+      created_at?: string
+      level?: string
+      message?: string
+    }
+    ErasureLogResponse: {
+      /** Format: uuid */
+      id?: string
+      /** Format: uuid */
+      patientId?: string
+      reason?: string
+      /** Format: uuid */
+      erasedBy?: string
+      /** Format: date-time */
+      erasedAt?: string
+    }
+    PageResponsePendingVerificationDto: {
+      content?: components['schemas']['PendingVerificationDto'][]
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      isFirst?: boolean
+      isLast?: boolean
+    }
+    PendingVerificationDto: {
+      /** Format: uuid */
+      patient_id?: string
+      first_name?: string
+      last_name?: string
+      pesel_masked?: string
+      email?: string
+      phone?: string
+      /** @enum {string} */
+      verification_status?: 'PENDING' | 'APPROVED' | 'REJECTED'
+      his_patient_id?: string
+      /** Format: date-time */
+      created_at?: string
+    }
+    PageDataProcessingActivityDto: {
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      /** Format: int32 */
+      size?: number
+      content?: components['schemas']['DataProcessingActivityDto'][]
+      /** Format: int32 */
+      number?: number
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      empty?: boolean
+    }
+    PageableObject: {
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageNumber?: number
+      paged?: boolean
+      unpaged?: boolean
+      /** Format: int32 */
+      pageSize?: number
+    }
+    SortObject: {
+      empty?: boolean
+      unsorted?: boolean
+      sorted?: boolean
+    }
+    BackupHistoryResponse: {
+      backupId?: string
+      /** Format: date-time */
+      createdAt?: string
+      createdBy?: string
+      /** Format: int64 */
+      sizeBytes?: number
+      status?: string
+      databaseVersion?: string
+      notes?: string
+      isDownloadable?: boolean
+      isRestorable?: boolean
+    }
+    AuditLogResponse: {
+      log_id?: string
+      user_id?: string
+      entity_type?: string
+      entity_id?: string
+      old_value?: string
+      new_value?: string
+      ip_address?: string
+      user_agent?: string
+      /** Format: date-time */
+      created_at?: string
+      action?: string
+    }
+    PageResponseAuditLogResponse: {
+      content?: components['schemas']['AuditLogResponse'][]
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      isFirst?: boolean
+      isLast?: boolean
+    }
+    /** @description Patient IDs and removal reason */
+    RemovePatientsRequest: {
+      patient_ids: string[]
+      reason: string
+    }
+    /** @description Erasure request with reason */
+    ErasureRequest: {
+      reason: string
+      confirmationToken?: string
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
-export type $defs = Record<string, never>;
+export type $defs = Record<string, never>
 export interface operations {
-    getStageById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Stage ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyStageDto"];
-                };
-            };
-        };
-    };
-    updateStage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Stage ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TherapyStageDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyStageDto"];
-                };
-            };
-        };
-    };
-    deleteStage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Stage ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    getQuizById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"];
-                };
-            };
-        };
-    };
-    updateQuiz: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["QuizDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"];
-                };
-            };
-        };
-    };
-    deleteQuiz: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    getProjectById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectResponse"];
-                };
-            };
-        };
-    };
-    updateProject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProjectUpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectResponse"];
-                };
-            };
-        };
-    };
-    deleteProject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    getPatientById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientDto"];
-                };
-            };
-        };
-    };
-    updatePatient: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientDto"];
-                };
-            };
-        };
-    };
-    deletePatient: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    getMyPreferences: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NotificationPreferenceDto"];
-                };
-            };
-        };
-    };
-    updateMyPreferences: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateNotificationPreferencesRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NotificationPreferenceDto"];
-                };
-            };
-        };
-    };
-    getMaterialById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Material ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"];
-                };
-            };
-        };
-    };
-    updateMaterial: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Material ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EducationalMaterialDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"];
-                };
-            };
-        };
-    };
-    deleteMaterial: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Material ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    getEventById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Event ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyEventDto"];
-                };
-            };
-        };
-    };
-    updateEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Event ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTherapyEventRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyEventDto"];
-                };
-            };
-        };
-    };
-    deleteEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Event ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getBadgeById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Badge ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BadgeDto"];
-                };
-            };
-        };
-    };
-    updateBadge: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Badge ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BadgeDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BadgeDto"];
-                };
-            };
-        };
-    };
-    deleteBadge: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Badge ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    updateUserStatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description User ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateUserStatusRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserAdminDto"];
-                };
-            };
-        };
-    };
-    updateUserRole: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description User ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateUserRoleRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserAdminDto"];
-                };
-            };
-        };
-    };
-    resetPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description User ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResetPasswordResponse"];
-                };
-            };
-        };
-    };
-    getSystemConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    updateSystemConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    [key: string]: string;
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    getActivityById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Activity ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataProcessingActivityDto"];
-                };
-            };
-        };
-    };
-    updateActivity: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Activity ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateDataProcessingActivityRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataProcessingActivityDto"];
-                };
-            };
-        };
-    };
-    deleteActivity: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Activity ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getStagesByProject: {
-        parameters: {
-            query: {
-                /** @description Project ID */
-                projectId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyStageDto"][];
-                };
-            };
-        };
-    };
-    createStage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TherapyStageDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyStageDto"];
-                };
-            };
-        };
-    };
-    reorderStages: {
-        parameters: {
-            query: {
-                /** @description Project ID */
-                projectId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": string[];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyStageDto"][];
-                };
-            };
-        };
-    };
-    unlockStage: {
-        parameters: {
-            query: {
-                /** @description Patient project ID */
-                patientProjectId: string;
-                /** @description Stage ID */
-                stageId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientStageProgressDto"];
-                };
-            };
-        };
-    };
-    completeStage: {
-        parameters: {
-            query: {
-                /** @description Patient project ID */
-                patientProjectId: string;
-                /** @description Stage ID */
-                stageId: string;
-                /** @description Completion reason */
-                reason?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientStageProgressDto"];
-                };
-            };
-        };
-    };
-    exportReport: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ExportRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    getQuizzesByProject: {
-        parameters: {
-            query: {
-                /** @description Project ID */
-                projectId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"][];
-                };
-            };
-        };
-    };
-    createQuiz: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["QuizDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"];
-                };
-            };
-        };
-    };
-    deactivateQuiz: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"];
-                };
-            };
-        };
-    };
-    startAttempt: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizAttemptDto"];
-                };
-            };
-        };
-    };
-    activateQuiz: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"];
-                };
-            };
-        };
-    };
-    submitAnswers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SubmitQuizRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizAttemptDto"];
-                };
-            };
-        };
-    };
-    getProjects: {
-        parameters: {
-            query?: {
-                /** @description Filter by project status */
-                status?: "PLANNED" | "ACTIVE" | "COMPLETED" | "ARCHIVED" | "CANCELLED";
-                /** @description Filter by project name (partial match) */
-                name?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectResponse"][];
-                };
-            };
-        };
-    };
-    createProject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProjectCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectResponse"];
-                };
-            };
-        };
-    };
-    getProjectPatients: {
-        parameters: {
-            query?: {
-                /** @description Only return active enrollments */
-                activeOnly?: boolean;
-            };
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectPatientSummaryDto"][];
-                };
-            };
-        };
-    };
-    assignPatients: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AssignPatientsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: Record<string, never>;
-                    };
-                };
-            };
-        };
-    };
-    removePatients: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RemovePatientsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: Record<string, never>;
-                    };
-                };
-            };
-        };
-    };
-    transferPatient: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Source project ID */
-                fromProjectId: string;
-                /** @description Patient ID */
-                patientId: string;
-                /** @description Target project ID */
-                toProjectId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TransferPatientRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: Record<string, never>;
-                    };
-                };
-            };
-        };
-    };
-    getPatients: {
-        parameters: {
-            query?: {
-                /** @description PESEL number to filter by */
-                pesel?: string;
-                /** @description Name to search for (first or last name) */
-                name?: string;
-                /** @description HIS patient ID to filter by */
-                hisPatientId?: string;
-                /** @description User status to filter by (ACTIVE, BLOCKED, etc.) */
-                status?: string[];
-                /** @description Verification status to filter by (PENDING, APPROVED, REJECTED) */
-                verificationStatus?: ("PENDING" | "APPROVED" | "REJECTED")[];
-                /** @description Project to filter by */
-                project?: string;
-                /** @description Page number (0-indexed) */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-                /** @description Sort field (name, created_at, status) */
-                sort?: string;
-                /** @description Sort order (asc, desc) */
-                sortOrder?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientSearchResponse"];
-                };
-            };
-        };
-    };
-    createPatient: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientDto"];
-                };
-            };
-        };
-    };
-    verifyPatient: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientVerifyRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientVerifyResponse"];
-                };
-            };
-        };
-    };
-    verifyPatientWithHis: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientVerifyRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HisVerificationResult"];
-                };
-            };
-        };
-    };
-    bulkOperation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Operation key */
-                operation: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BulkPatientRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BulkOperationResponse"];
-                };
-            };
-        };
-    };
-    registerDevice: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegisterDeviceRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    getThreads: {
-        parameters: {
-            query?: {
-                /** @description Project ID to filter by */
-                projectId?: string;
-                /** @description Thread type to filter by (INDIVIDUAL, GROUP) */
-                type?: "INDIVIDUAL" | "GROUP";
-                /** @description Page number (0-indexed) */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MessageThreadDto"][];
-                };
-            };
-        };
-    };
-    createThread: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateThreadRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MessageThreadDto"];
-                };
-            };
-        };
-    };
-    getThreadMessages: {
-        parameters: {
-            query?: {
-                /** @description Page number (0-indexed) */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /** @description Thread ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MessageDto"][];
-                };
-            };
-        };
-    };
-    sendMessage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Thread ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SendMessageRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MessageDto"];
-                };
-            };
-        };
-    };
-    exportThreadAsPdf: {
-        parameters: {
-            query?: {
-                /** @description Export format (pdf) */
-                format?: string;
-            };
-            header?: never;
-            path: {
-                /** @description Thread ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string[];
-                };
-            };
-        };
-    };
-    markAsRead: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Message ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MessageDto"];
-                };
-            };
-        };
-    };
-    uploadAttachment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Message ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /**
-                     * Format: binary
-                     * @description File to upload
-                     */
-                    file: string;
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MessageAttachmentDto"];
-                };
-            };
-        };
-    };
-    getMaterials: {
-        parameters: {
-            query?: {
-                /** @description Project ID to filter by */
-                projectId?: string;
-                /** @description Category to filter by */
-                category?: string;
-                /** @description Difficulty level to filter by */
-                difficulty?: "BASIC" | "INTERMEDIATE" | "ADVANCED";
-                /** @description Material type to filter by */
-                type?: "ARTICLE" | "PDF" | "IMAGE" | "VIDEO" | "LINK" | "AUDIO";
-                /** @description Published status to filter by */
-                published?: boolean;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"][];
-                };
-            };
-        };
-    };
-    createMaterial: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EducationalMaterialDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"];
-                };
-            };
-        };
-    };
-    recordView: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            header?: never;
-            path: {
-                /** @description Material ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"];
-                };
-            };
-        };
-    };
-    unpublishMaterial: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Material ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"];
-                };
-            };
-        };
-    };
-    publishMaterial: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Material ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"];
-                };
-            };
-        };
-    };
-    markAsComplete: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-                /** @description Quiz score (optional) */
-                quizScore?: number;
-            };
-            header?: never;
-            path: {
-                /** @description Material ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"];
-                };
-            };
-        };
-    };
-    markThreadAsRead: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Thread ID */
-                threadId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    delegateThread: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Thread ID */
-                threadId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DelegateMessageRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["InboxThreadDto"];
-                };
-            };
-        };
-    };
-    createChangeRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateEventChangeRequestRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"];
-                };
-            };
-        };
-    };
-    rejectChangeRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                requestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RejectEventChangeRequestRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"];
-                };
-            };
-        };
-    };
-    cancelChangeRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                requestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"];
-                };
-            };
-        };
-    };
-    acceptChangeRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                requestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AcceptEventChangeRequestRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"];
-                };
-            };
-        };
-    };
-    getEvents: {
-        parameters: {
-            query?: {
-                /** @description Filter by patient ID */
-                patientId?: string;
-                /** @description Filter by project ID */
-                projectId?: string;
-                /** @description Filter by event type */
-                type?: "VISIT" | "SESSION" | "MEDICATION" | "EXERCISE" | "MEASUREMENT" | "OTHER";
-                /** @description Filter by event status */
-                status?: "SCHEDULED" | "COMPLETED" | "MISSED" | "CANCELLED";
-                /** @description Filter by start date (ISO-8601) */
-                startDate?: string;
-                /** @description Filter by end date (ISO-8601) */
-                endDate?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyEventDto"][];
-                };
-            };
-        };
-    };
-    createEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateTherapyEventRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyEventDto"];
-                };
-            };
-        };
-    };
-    exportToIcs: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Event ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    completeEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Event ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["CompleteEventRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyEventDto"];
-                };
-            };
-        };
-    };
-    getAllBadges: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BadgeDto"][];
-                };
-            };
-        };
-    };
-    createBadge: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BadgeDto"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BadgeDto"];
-                };
-            };
-        };
-    };
-    markBadgeAsNotified: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient Badge ID */
-                patientBadgeId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    resetPassword_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResetPasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: boolean;
-                    };
-                };
-            };
-        };
-    };
-    register: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegisterRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserProfileResponse"];
-                };
-            };
-        };
-    };
-    refreshToken: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RefreshTokenRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    login: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    forgotPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ForgotPasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    changePassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChangePasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    verify2fa: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    [key: string]: string;
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponse"];
-                };
-            };
-        };
-    };
-    enable2fa: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Enable2faResponse"];
-                };
-            };
-        };
-    };
-    disable2fa: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    [key: string]: string;
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: boolean;
-                    };
-                };
-            };
-        };
-    };
-    confirm2fa: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    [key: string]: string;
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: boolean;
-                    };
-                };
-            };
-        };
-    };
-    getAllUsers: {
-        parameters: {
-            query?: {
-                /** @description Filter by role */
-                role?: string;
-                /** @description Filter by status */
-                status?: string;
-                /** @description Search by email or phone */
-                search?: string;
-                /** @description Page number */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PageResponseUserAdminDto"];
-                };
-            };
-        };
-    };
-    createStaff: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateStaffRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserAdminDto"];
-                };
-            };
-        };
-    };
-    forcePasswordReset: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description User ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ForcePasswordResetRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResetPasswordResponse"];
-                };
-            };
-        };
-    };
-    clear2fa: {
-        parameters: {
-            query: {
-                /** @description Clear request with reason */
-                reason: string;
-                temporaryPassword: string;
-            };
-            header?: never;
-            path: {
-                /** @description User ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Clear2faResponse"];
-                };
-            };
-        };
-    };
-    runEventReminders: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: Record<string, never>;
-                    };
-                };
-            };
-        };
-    };
-    clearCache: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    createBackup: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BackupResponse"];
-                };
-            };
-        };
-    };
-    exportSystemLogs: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ExportLogsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    rejectVerification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RejectVerificationRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["VerificationDecisionResponse"];
-                };
-            };
-        };
-    };
-    generateActivationCode: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ActivationCodeResponse"];
-                };
-            };
-        };
-    };
-    approveVerification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ApproveVerificationRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["VerificationDecisionResponse"];
-                };
-            };
-        };
-    };
-    anonymizePatient: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AnonymizationResponse"];
-                };
-            };
-        };
-    };
-    getAllActivities: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-                /** @description Sort by field */
-                sortBy?: string;
-                /** @description Sort direction */
-                sortDir?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PageDataProcessingActivityDto"];
-                };
-            };
-        };
-    };
-    createActivity: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateDataProcessingActivityRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DataProcessingActivityDto"];
-                };
-            };
-        };
-    };
-    restoreBackup: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Backup ID to restore from */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RestoreBackupRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BackupResponse"];
-                };
-            };
-        };
-    };
-    createBackup_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BackupResponse"];
-                };
-            };
-        };
-    };
-    exportAuditLogs: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ExportLogsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    updateThreadStatus: {
-        parameters: {
-            query: {
-                /** @description New status */
-                status: string;
-            };
-            header?: never;
-            path: {
-                /** @description Thread ID */
-                threadId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["InboxThreadDto"];
-                };
-            };
-        };
-    };
-    getPatientStageProgress: {
-        parameters: {
-            query: {
-                /** @description Patient project ID */
-                patientProjectId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientStageProgressDto"][];
-                };
-            };
-        };
-    };
-    getCurrentStage: {
-        parameters: {
-            query: {
-                /** @description Patient project ID */
-                patientProjectId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientStageProgressDto"];
-                };
-            };
-        };
-    };
-    getProjectStatsReport: {
-        parameters: {
-            query: {
-                /** @description Project ID */
-                projectId: string;
-                /** @description Date from */
-                dateFrom?: string;
-                /** @description Date to */
-                dateTo?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectStatsDto"];
-                };
-            };
-        };
-    };
-    getPatientStatsReport: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-                /** @description Date from */
-                dateFrom?: string;
-                /** @description Date to */
-                dateTo?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientStatsDto"];
-                };
-            };
-        };
-    };
-    getMaterialStatsReport: {
-        parameters: {
-            query: {
-                /** @description Project ID */
-                projectId: string;
-                /** @description Date from */
-                dateFrom?: string;
-                /** @description Date to */
-                dateTo?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MaterialStatsDto"];
-                };
-            };
-        };
-    };
-    getReportHistory: {
-        parameters: {
-            query?: {
-                /** @description Filter by report type */
-                type?: "COMPLIANCE" | "PATIENT_STATS" | "PROJECT_STATS" | "MATERIAL_STATS";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ReportHistoryResponse"][];
-                };
-            };
-        };
-    };
-    getDashboardKpis: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DashboardKpiDto"];
-                };
-            };
-        };
-    };
-    getComplianceReport: {
-        parameters: {
-            query: {
-                /** @description Project ID */
-                projectId: string;
-                /** @description Date from */
-                dateFrom: string;
-                /** @description Date to */
-                dateTo: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ComplianceReportDto"];
-                };
-            };
-        };
-    };
-    getAttemptsByQuiz: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                quizId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizAttemptDto"][];
-                };
-            };
-        };
-    };
-    getQuizForTaking: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"];
-                };
-            };
-        };
-    };
-    getQuizStats: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Quiz ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizStatsDto"];
-                };
-            };
-        };
-    };
-    getAttemptById: {
-        parameters: {
-            query?: {
-                /** @description Include detailed answer information */
-                includeDetails?: boolean;
-            };
-            header?: never;
-            path: {
-                /** @description Attempt ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizAttemptDto"];
-                };
-            };
-        };
-    };
-    getAttemptsByPatient: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizAttemptDto"][];
-                };
-            };
-        };
-    };
-    getActiveQuizzesByProject: {
-        parameters: {
-            query: {
-                /** @description Project ID */
-                projectId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["QuizDto"][];
-                };
-            };
-        };
-    };
-    getProjectTeam: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectTeamMemberDto"][];
-                };
-            };
-        };
-    };
-    getProjectStatistics: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Project ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectStatisticsResponse"];
-                };
-            };
-        };
-    };
-    getMyActiveProjects: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProjectResponse"][];
-                };
-            };
-        };
-    };
-    searchPatients: {
-        parameters: {
-            query: {
-                /** @description Search query */
-                query: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientDto"][];
-                };
-            };
-        };
-    };
-    getUnreadMessages: {
-        parameters: {
-            query?: {
-                /** @description Project ID to filter by */
-                projectId?: string;
-                /** @description Page number (0-indexed) */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: Record<string, never>;
-                    };
-                };
-            };
-        };
-    };
-    getUnreadCount: {
-        parameters: {
-            query?: {
-                /** @description Project ID to filter by */
-                projectId?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: number;
-                    };
-                };
-            };
-        };
-    };
-    getThreadById: {
-        parameters: {
-            query?: {
-                /** @description Project ID for validation */
-                projectId?: string;
-            };
-            header?: never;
-            path: {
-                /** @description Thread ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MessageThreadDto"];
-                };
-            };
-        };
-    };
-    getProgress: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MaterialProgressDto"][];
-                };
-            };
-        };
-    };
-    getMyMaterials: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EducationalMaterialDto"][];
-                };
-            };
-        };
-    };
-    getUnreadCount_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: number;
-                    };
-                };
-            };
-        };
-    };
-    getInboxThreads: {
-        parameters: {
-            query?: {
-                /** @description Filter by project ID */
-                projectId?: string;
-                /** @description Filter by status (NEW, IN_PROGRESS, RESOLVED, CLOSED) */
-                status?: string;
-                /** @description Filter by assigned user ID */
-                assignedTo?: string;
-                /** @description Filter by unread status */
-                isUnread?: boolean;
-                /** @description Page number */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PageResponseInboxThreadDto"];
-                };
-            };
-        };
-    };
-    getInboxMessages: {
-        parameters: {
-            query?: {
-                /** @description Filter by thread ID */
-                threadId?: string;
-                /** @description Filter by priority (LOW, MEDIUM, HIGH, URGENT) */
-                priority?: string;
-                /** @description Filter by status */
-                status?: string;
-                /** @description Filter by assigned user ID */
-                assignedTo?: string;
-                /** @description Page number */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PageResponseInboxMessageDto"];
-                };
-            };
-        };
-    };
-    health: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: Record<string, never>;
-                    };
-                };
-            };
-        };
-    };
-    getChangeRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                requestId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"];
-                };
-            };
-        };
-    };
-    getPendingChangeRequestsForProject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"][];
-                };
-            };
-        };
-    };
-    getMyChangeRequests: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"][];
-                };
-            };
-        };
-    };
-    getChangeRequestsForEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eventId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventChangeRequestDto"][];
-                };
-            };
-        };
-    };
-    getUpcomingEvents: {
-        parameters: {
-            query?: {
-                /** @description Patient ID (required for staff roles) */
-                patientId?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyEventDto"][];
-                };
-            };
-        };
-    };
-    getVisibleBadges: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BadgeDto"][];
-                };
-            };
-        };
-    };
-    getBadgeStats: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BadgeStatsDto"];
-                };
-            };
-        };
-    };
-    getPatientBadges: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientBadgeDto"][];
-                };
-            };
-        };
-    };
-    getMyBadges: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientBadgeDto"][];
-                };
-            };
-        };
-    };
-    getUnnotifiedBadges: {
-        parameters: {
-            query: {
-                /** @description Patient ID */
-                patientId: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientBadgeDto"][];
-                };
-            };
-        };
-    };
-    getCurrentUserProfile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserProfileResponse"];
-                };
-            };
-        };
-    };
-    getUserById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description User ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserAdminDto"];
-                };
-            };
-        };
-    };
-    deleteUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description User ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getSystemMetrics: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SystemMetricsResponse"];
-                };
-            };
-        };
-    };
-    getSystemHealth: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SystemHealthResponse"];
-                };
-            };
-        };
-    };
-    getSystemLogs: {
-        parameters: {
-            query?: {
-                /** @description Filter by log level */
-                level?: string;
-                /** @description Filter by date from */
-                dateFrom?: string;
-                /** @description Filter by date to */
-                dateTo?: string;
-                /** @description Search in message */
-                search?: string;
-                /** @description Page number */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PageResponseSystemLogResponse"];
-                };
-            };
-        };
-    };
-    exportPatientData: {
-        parameters: {
-            query?: {
-                /** @description Export format: json or pdf */
-                format?: string;
-            };
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string[];
-                };
-            };
-        };
-    };
-    getErasureLogs: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErasureLogResponse"][];
-                };
-            };
-        };
-    };
-    getPendingVerifications: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PageResponsePendingVerificationDto"];
-                };
-            };
-        };
-    };
-    getBackupById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Backup ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BackupHistoryResponse"];
-                };
-            };
-        };
-    };
-    deleteBackup: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Backup ID to delete */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    downloadBackup: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Backup ID to download */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string[];
-                };
-            };
-        };
-    };
-    getBackupHistory: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BackupHistoryResponse"][];
-                };
-            };
-        };
-    };
-    getAuditLogs: {
-        parameters: {
-            query?: {
-                /** @description Filter by user ID */
-                userId?: string;
-                /** @description Filter by action */
-                action?: string;
-                /** @description Filter by entity type */
-                entityType?: string;
-                /** @description Filter by entity ID */
-                entityId?: string;
-                /** @description Filter by date from */
-                dateFrom?: string;
-                /** @description Filter by date to */
-                dateTo?: string;
-                /** @description Page number */
-                page?: number;
-                /** @description Page size */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PageResponseAuditLogResponse"];
-                };
-            };
-        };
-    };
-    getAuditLogById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Audit log ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuditLogResponse"];
-                };
-            };
-        };
-    };
-    erasePatient: {
-        parameters: {
-            query?: {
-                /** @description Force erasure without cooling period (requires super-admin) */
-                force?: boolean;
-            };
-            header?: never;
-            path: {
-                /** @description Patient ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ErasureRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
+  getStageById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Stage ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyStageDto']
+        }
+      }
+    }
+  }
+  updateStage: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Stage ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TherapyStageDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyStageDto']
+        }
+      }
+    }
+  }
+  deleteStage: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Stage ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  getQuizById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto']
+        }
+      }
+    }
+  }
+  updateQuiz: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['QuizDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto']
+        }
+      }
+    }
+  }
+  deleteQuiz: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  getProjectById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectResponse']
+        }
+      }
+    }
+  }
+  updateProject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProjectUpdateRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectResponse']
+        }
+      }
+    }
+  }
+  deleteProject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  getPatientById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientDto']
+        }
+      }
+    }
+  }
+  updatePatient: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PatientDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientDto']
+        }
+      }
+    }
+  }
+  deletePatient: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  getMyPreferences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NotificationPreferenceDto']
+        }
+      }
+    }
+  }
+  updateMyPreferences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateNotificationPreferencesRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NotificationPreferenceDto']
+        }
+      }
+    }
+  }
+  getMaterialById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Material ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto']
+        }
+      }
+    }
+  }
+  updateMaterial: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Material ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EducationalMaterialDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto']
+        }
+      }
+    }
+  }
+  deleteMaterial: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Material ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  getEventById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Event ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyEventDto']
+        }
+      }
+    }
+  }
+  updateEvent: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Event ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateTherapyEventRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyEventDto']
+        }
+      }
+    }
+  }
+  deleteEvent: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Event ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getBadgeById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Badge ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BadgeDto']
+        }
+      }
+    }
+  }
+  updateBadge: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Badge ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BadgeDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BadgeDto']
+        }
+      }
+    }
+  }
+  deleteBadge: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Badge ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  updateUserStatus: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description User ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateUserStatusRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UserAdminDto']
+        }
+      }
+    }
+  }
+  updateUserRole: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description User ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateUserRoleRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UserAdminDto']
+        }
+      }
+    }
+  }
+  resetPassword: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description User ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ResetPasswordResponse']
+        }
+      }
+    }
+  }
+  getSystemConfig: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  updateSystemConfig: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          [key: string]: string
+        }
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  getActivityById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Activity ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DataProcessingActivityDto']
+        }
+      }
+    }
+  }
+  updateActivity: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Activity ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateDataProcessingActivityRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DataProcessingActivityDto']
+        }
+      }
+    }
+  }
+  deleteActivity: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Activity ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getStagesByProject: {
+    parameters: {
+      query: {
+        /** @description Project ID */
+        projectId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyStageDto'][]
+        }
+      }
+    }
+  }
+  createStage: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TherapyStageDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyStageDto']
+        }
+      }
+    }
+  }
+  reorderStages: {
+    parameters: {
+      query: {
+        /** @description Project ID */
+        projectId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': string[]
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyStageDto'][]
+        }
+      }
+    }
+  }
+  unlockStage: {
+    parameters: {
+      query: {
+        /** @description Patient project ID */
+        patientProjectId: string
+        /** @description Stage ID */
+        stageId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientStageProgressDto']
+        }
+      }
+    }
+  }
+  completeStage: {
+    parameters: {
+      query: {
+        /** @description Patient project ID */
+        patientProjectId: string
+        /** @description Stage ID */
+        stageId: string
+        /** @description Completion reason */
+        reason?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientStageProgressDto']
+        }
+      }
+    }
+  }
+  exportReport: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExportRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+    }
+  }
+  getQuizzesByProject: {
+    parameters: {
+      query: {
+        /** @description Project ID */
+        projectId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto'][]
+        }
+      }
+    }
+  }
+  createQuiz: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['QuizDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto']
+        }
+      }
+    }
+  }
+  deactivateQuiz: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto']
+        }
+      }
+    }
+  }
+  startAttempt: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizAttemptDto']
+        }
+      }
+    }
+  }
+  activateQuiz: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto']
+        }
+      }
+    }
+  }
+  submitAnswers: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SubmitQuizRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizAttemptDto']
+        }
+      }
+    }
+  }
+  getProjects: {
+    parameters: {
+      query?: {
+        /** @description Filter by project status */
+        status?: 'PLANNED' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED' | 'CANCELLED'
+        /** @description Filter by project name (partial match) */
+        name?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectResponse'][]
+        }
+      }
+    }
+  }
+  createProject: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProjectCreateRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectResponse']
+        }
+      }
+    }
+  }
+  getProjectPatients: {
+    parameters: {
+      query?: {
+        /** @description Only return active enrollments */
+        activeOnly?: boolean
+      }
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectPatientSummaryDto'][]
+        }
+      }
+    }
+  }
+  assignPatients: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AssignPatientsRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: Record<string, never>
+          }
+        }
+      }
+    }
+  }
+  removePatients: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RemovePatientsRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: Record<string, never>
+          }
+        }
+      }
+    }
+  }
+  transferPatient: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Source project ID */
+        fromProjectId: string
+        /** @description Patient ID */
+        patientId: string
+        /** @description Target project ID */
+        toProjectId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TransferPatientRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: Record<string, never>
+          }
+        }
+      }
+    }
+  }
+  getPatients: {
+    parameters: {
+      query?: {
+        /** @description PESEL number to filter by */
+        pesel?: string
+        /** @description Name to search for (first or last name) */
+        name?: string
+        /** @description HIS patient ID to filter by */
+        hisPatientId?: string
+        /** @description User status to filter by (ACTIVE, BLOCKED, etc.) */
+        status?: string[]
+        /** @description Verification status to filter by (PENDING, APPROVED, REJECTED) */
+        verificationStatus?: ('PENDING' | 'APPROVED' | 'REJECTED')[]
+        /** @description Project to filter by */
+        project?: string
+        /** @description Page number (0-indexed) */
+        page?: number
+        /** @description Page size */
+        size?: number
+        /** @description Sort field (name, created_at, status) */
+        sort?: string
+        /** @description Sort order (asc, desc) */
+        sortOrder?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientSearchResponse']
+        }
+      }
+    }
+  }
+  createPatient: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PatientDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientDto']
+        }
+      }
+    }
+  }
+  verifyPatient: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PatientVerifyRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientVerifyResponse']
+        }
+      }
+    }
+  }
+  verifyPatientWithHis: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PatientVerifyRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HisVerificationResult']
+        }
+      }
+    }
+  }
+  bulkOperation: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Operation key */
+        operation: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BulkPatientRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BulkOperationResponse']
+        }
+      }
+    }
+  }
+  registerDevice: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RegisterDeviceRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  getThreads: {
+    parameters: {
+      query?: {
+        /** @description Project ID to filter by */
+        projectId?: string
+        /** @description Thread type to filter by (INDIVIDUAL, GROUP) */
+        type?: 'INDIVIDUAL' | 'GROUP'
+        /** @description Page number (0-indexed) */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MessageThreadDto'][]
+        }
+      }
+    }
+  }
+  createThread: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateThreadRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MessageThreadDto']
+        }
+      }
+    }
+  }
+  getThreadMessages: {
+    parameters: {
+      query?: {
+        /** @description Page number (0-indexed) */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path: {
+        /** @description Thread ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MessageDto'][]
+        }
+      }
+    }
+  }
+  sendMessage: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Thread ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SendMessageRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MessageDto']
+        }
+      }
+    }
+  }
+  exportThreadAsPdf: {
+    parameters: {
+      query?: {
+        /** @description Export format (pdf) */
+        format?: string
+      }
+      header?: never
+      path: {
+        /** @description Thread ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string[]
+        }
+      }
+    }
+  }
+  markAsRead: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Message ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MessageDto']
+        }
+      }
+    }
+  }
+  uploadAttachment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Message ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': {
+          /**
+           * Format: binary
+           * @description File to upload
+           */
+          file: string
+        }
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MessageAttachmentDto']
+        }
+      }
+    }
+  }
+  getMaterials: {
+    parameters: {
+      query?: {
+        /** @description Project ID to filter by */
+        projectId?: string
+        /** @description Category to filter by */
+        category?: string
+        /** @description Difficulty level to filter by */
+        difficulty?: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED'
+        /** @description Material type to filter by */
+        type?: 'ARTICLE' | 'PDF' | 'IMAGE' | 'VIDEO' | 'LINK' | 'AUDIO'
+        /** @description Published status to filter by */
+        published?: boolean
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto'][]
+        }
+      }
+    }
+  }
+  createMaterial: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EducationalMaterialDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto']
+        }
+      }
+    }
+  }
+  recordView: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      header?: never
+      path: {
+        /** @description Material ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto']
+        }
+      }
+    }
+  }
+  unpublishMaterial: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Material ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto']
+        }
+      }
+    }
+  }
+  publishMaterial: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Material ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto']
+        }
+      }
+    }
+  }
+  markAsComplete: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+        /** @description Quiz score (optional) */
+        quizScore?: number
+      }
+      header?: never
+      path: {
+        /** @description Material ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto']
+        }
+      }
+    }
+  }
+  markThreadAsRead: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Thread ID */
+        threadId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  delegateThread: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Thread ID */
+        threadId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DelegateMessageRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['InboxThreadDto']
+        }
+      }
+    }
+  }
+  createChangeRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateEventChangeRequestRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto']
+        }
+      }
+    }
+  }
+  rejectChangeRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        requestId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RejectEventChangeRequestRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto']
+        }
+      }
+    }
+  }
+  cancelChangeRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        requestId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto']
+        }
+      }
+    }
+  }
+  acceptChangeRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        requestId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AcceptEventChangeRequestRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto']
+        }
+      }
+    }
+  }
+  getEvents: {
+    parameters: {
+      query?: {
+        /** @description Filter by patient ID */
+        patientId?: string
+        /** @description Filter by project ID */
+        projectId?: string
+        /** @description Filter by event type */
+        type?: 'VISIT' | 'SESSION' | 'MEDICATION' | 'EXERCISE' | 'MEASUREMENT' | 'OTHER'
+        /** @description Filter by event status */
+        status?: 'SCHEDULED' | 'COMPLETED' | 'MISSED' | 'CANCELLED'
+        /** @description Filter by start date (ISO-8601) */
+        startDate?: string
+        /** @description Filter by end date (ISO-8601) */
+        endDate?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyEventDto'][]
+        }
+      }
+    }
+  }
+  createEvent: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateTherapyEventRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyEventDto']
+        }
+      }
+    }
+  }
+  exportToIcs: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Event ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+    }
+  }
+  completeEvent: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Event ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['CompleteEventRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyEventDto']
+        }
+      }
+    }
+  }
+  getAllBadges: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BadgeDto'][]
+        }
+      }
+    }
+  }
+  createBadge: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BadgeDto']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BadgeDto']
+        }
+      }
+    }
+  }
+  markBadgeAsNotified: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient Badge ID */
+        patientBadgeId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  resetPassword_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ResetPasswordRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: boolean
+          }
+        }
+      }
+    }
+  }
+  register: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RegisterRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UserProfileResponse']
+        }
+      }
+    }
+  }
+  refreshToken: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RefreshTokenRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AuthResponse']
+        }
+      }
+    }
+  }
+  login: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['LoginRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AuthResponse']
+        }
+      }
+    }
+  }
+  forgotPassword: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ForgotPasswordRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  changePassword: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ChangePasswordRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  verify2fa: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          [key: string]: string
+        }
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AuthResponse']
+        }
+      }
+    }
+  }
+  enable2fa: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Enable2faResponse']
+        }
+      }
+    }
+  }
+  disable2fa: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          [key: string]: string
+        }
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: boolean
+          }
+        }
+      }
+    }
+  }
+  confirm2fa: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          [key: string]: string
+        }
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: boolean
+          }
+        }
+      }
+    }
+  }
+  getAllUsers: {
+    parameters: {
+      query?: {
+        /** @description Filter by role */
+        role?: string
+        /** @description Filter by status */
+        status?: string
+        /** @description Search by email or phone */
+        search?: string
+        /** @description Page number */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PageResponseUserAdminDto']
+        }
+      }
+    }
+  }
+  createStaff: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateStaffRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UserAdminDto']
+        }
+      }
+    }
+  }
+  forcePasswordReset: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description User ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ForcePasswordResetRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ResetPasswordResponse']
+        }
+      }
+    }
+  }
+  clear2fa: {
+    parameters: {
+      query: {
+        /** @description Clear request with reason */
+        reason: string
+        temporaryPassword: string
+      }
+      header?: never
+      path: {
+        /** @description User ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Clear2faResponse']
+        }
+      }
+    }
+  }
+  runEventReminders: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: Record<string, never>
+          }
+        }
+      }
+    }
+  }
+  clearCache: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: string
+          }
+        }
+      }
+    }
+  }
+  createBackup: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackupResponse']
+        }
+      }
+    }
+  }
+  exportSystemLogs: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExportLogsRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+    }
+  }
+  rejectVerification: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RejectVerificationRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VerificationDecisionResponse']
+        }
+      }
+    }
+  }
+  generateActivationCode: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ActivationCodeResponse']
+        }
+      }
+    }
+  }
+  approveVerification: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ApproveVerificationRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VerificationDecisionResponse']
+        }
+      }
+    }
+  }
+  anonymizePatient: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AnonymizationResponse']
+        }
+      }
+    }
+  }
+  getAllActivities: {
+    parameters: {
+      query?: {
+        /** @description Page number */
+        page?: number
+        /** @description Page size */
+        size?: number
+        /** @description Sort by field */
+        sortBy?: string
+        /** @description Sort direction */
+        sortDir?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PageDataProcessingActivityDto']
+        }
+      }
+    }
+  }
+  createActivity: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateDataProcessingActivityRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DataProcessingActivityDto']
+        }
+      }
+    }
+  }
+  restoreBackup: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Backup ID to restore from */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RestoreBackupRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackupResponse']
+        }
+      }
+    }
+  }
+  createBackup_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackupResponse']
+        }
+      }
+    }
+  }
+  exportAuditLogs: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExportLogsRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+    }
+  }
+  updateThreadStatus: {
+    parameters: {
+      query: {
+        /** @description New status */
+        status: string
+      }
+      header?: never
+      path: {
+        /** @description Thread ID */
+        threadId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['InboxThreadDto']
+        }
+      }
+    }
+  }
+  getPatientStageProgress: {
+    parameters: {
+      query: {
+        /** @description Patient project ID */
+        patientProjectId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientStageProgressDto'][]
+        }
+      }
+    }
+  }
+  getCurrentStage: {
+    parameters: {
+      query: {
+        /** @description Patient project ID */
+        patientProjectId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientStageProgressDto']
+        }
+      }
+    }
+  }
+  getProjectStatsReport: {
+    parameters: {
+      query: {
+        /** @description Project ID */
+        projectId: string
+        /** @description Date from */
+        dateFrom?: string
+        /** @description Date to */
+        dateTo?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectStatsDto']
+        }
+      }
+    }
+  }
+  getPatientStatsReport: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+        /** @description Date from */
+        dateFrom?: string
+        /** @description Date to */
+        dateTo?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientStatsDto']
+        }
+      }
+    }
+  }
+  getMaterialStatsReport: {
+    parameters: {
+      query: {
+        /** @description Project ID */
+        projectId: string
+        /** @description Date from */
+        dateFrom?: string
+        /** @description Date to */
+        dateTo?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MaterialStatsDto']
+        }
+      }
+    }
+  }
+  getReportHistory: {
+    parameters: {
+      query?: {
+        /** @description Filter by report type */
+        type?: 'COMPLIANCE' | 'PATIENT_STATS' | 'PROJECT_STATS' | 'MATERIAL_STATS'
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReportHistoryResponse'][]
+        }
+      }
+    }
+  }
+  getDashboardKpis: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DashboardKpiDto']
+        }
+      }
+    }
+  }
+  getComplianceReport: {
+    parameters: {
+      query: {
+        /** @description Project ID */
+        projectId: string
+        /** @description Date from */
+        dateFrom: string
+        /** @description Date to */
+        dateTo: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ComplianceReportDto']
+        }
+      }
+    }
+  }
+  getAttemptsByQuiz: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        quizId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizAttemptDto'][]
+        }
+      }
+    }
+  }
+  getQuizForTaking: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto']
+        }
+      }
+    }
+  }
+  getQuizStats: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Quiz ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizStatsDto']
+        }
+      }
+    }
+  }
+  getAttemptById: {
+    parameters: {
+      query?: {
+        /** @description Include detailed answer information */
+        includeDetails?: boolean
+      }
+      header?: never
+      path: {
+        /** @description Attempt ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizAttemptDto']
+        }
+      }
+    }
+  }
+  getAttemptsByPatient: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizAttemptDto'][]
+        }
+      }
+    }
+  }
+  getActiveQuizzesByProject: {
+    parameters: {
+      query: {
+        /** @description Project ID */
+        projectId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['QuizDto'][]
+        }
+      }
+    }
+  }
+  getProjectTeam: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectTeamMemberDto'][]
+        }
+      }
+    }
+  }
+  getProjectStatistics: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Project ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectStatisticsResponse']
+        }
+      }
+    }
+  }
+  getMyActiveProjects: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProjectResponse'][]
+        }
+      }
+    }
+  }
+  searchPatients: {
+    parameters: {
+      query: {
+        /** @description Search query */
+        query: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientDto'][]
+        }
+      }
+    }
+  }
+  getUnreadMessages: {
+    parameters: {
+      query?: {
+        /** @description Project ID to filter by */
+        projectId?: string
+        /** @description Page number (0-indexed) */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: Record<string, never>
+          }
+        }
+      }
+    }
+  }
+  getUnreadCount: {
+    parameters: {
+      query?: {
+        /** @description Project ID to filter by */
+        projectId?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: number
+          }
+        }
+      }
+    }
+  }
+  getThreadById: {
+    parameters: {
+      query?: {
+        /** @description Project ID for validation */
+        projectId?: string
+      }
+      header?: never
+      path: {
+        /** @description Thread ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MessageThreadDto']
+        }
+      }
+    }
+  }
+  getProgress: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MaterialProgressDto'][]
+        }
+      }
+    }
+  }
+  getMyMaterials: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationalMaterialDto'][]
+        }
+      }
+    }
+  }
+  getUnreadCount_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: number
+          }
+        }
+      }
+    }
+  }
+  getInboxThreads: {
+    parameters: {
+      query?: {
+        /** @description Filter by project ID */
+        projectId?: string
+        /** @description Filter by status (NEW, IN_PROGRESS, RESOLVED, CLOSED) */
+        status?: string
+        /** @description Filter by assigned user ID */
+        assignedTo?: string
+        /** @description Filter by unread status */
+        isUnread?: boolean
+        /** @description Page number */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PageResponseInboxThreadDto']
+        }
+      }
+    }
+  }
+  getInboxMessages: {
+    parameters: {
+      query?: {
+        /** @description Filter by thread ID */
+        threadId?: string
+        /** @description Filter by priority (LOW, MEDIUM, HIGH, URGENT) */
+        priority?: string
+        /** @description Filter by status */
+        status?: string
+        /** @description Filter by assigned user ID */
+        assignedTo?: string
+        /** @description Page number */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PageResponseInboxMessageDto']
+        }
+      }
+    }
+  }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            [key: string]: Record<string, never>
+          }
+        }
+      }
+    }
+  }
+  getChangeRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        requestId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto']
+        }
+      }
+    }
+  }
+  getPendingChangeRequestsForProject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        projectId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto'][]
+        }
+      }
+    }
+  }
+  getMyChangeRequests: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto'][]
+        }
+      }
+    }
+  }
+  getChangeRequestsForEvent: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        eventId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EventChangeRequestDto'][]
+        }
+      }
+    }
+  }
+  getUpcomingEvents: {
+    parameters: {
+      query?: {
+        /** @description Patient ID (required for staff roles) */
+        patientId?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TherapyEventDto'][]
+        }
+      }
+    }
+  }
+  getVisibleBadges: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BadgeDto'][]
+        }
+      }
+    }
+  }
+  getBadgeStats: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BadgeStatsDto']
+        }
+      }
+    }
+  }
+  getPatientBadges: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientBadgeDto'][]
+        }
+      }
+    }
+  }
+  getMyBadges: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientBadgeDto'][]
+        }
+      }
+    }
+  }
+  getUnnotifiedBadges: {
+    parameters: {
+      query: {
+        /** @description Patient ID */
+        patientId: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PatientBadgeDto'][]
+        }
+      }
+    }
+  }
+  getCurrentUserProfile: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UserProfileResponse']
+        }
+      }
+    }
+  }
+  getUserById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description User ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UserAdminDto']
+        }
+      }
+    }
+  }
+  deleteUser: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description User ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getSystemMetrics: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SystemMetricsResponse']
+        }
+      }
+    }
+  }
+  getSystemHealth: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SystemHealthResponse']
+        }
+      }
+    }
+  }
+  getSystemLogs: {
+    parameters: {
+      query?: {
+        /** @description Filter by log level */
+        level?: string
+        /** @description Filter by date from */
+        dateFrom?: string
+        /** @description Filter by date to */
+        dateTo?: string
+        /** @description Search in message */
+        search?: string
+        /** @description Page number */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PageResponseSystemLogResponse']
+        }
+      }
+    }
+  }
+  exportPatientData: {
+    parameters: {
+      query?: {
+        /** @description Export format: json or pdf */
+        format?: string
+      }
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string[]
+        }
+      }
+    }
+  }
+  getErasureLogs: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErasureLogResponse'][]
+        }
+      }
+    }
+  }
+  getPendingVerifications: {
+    parameters: {
+      query?: {
+        /** @description Page number */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PageResponsePendingVerificationDto']
+        }
+      }
+    }
+  }
+  getBackupById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Backup ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackupHistoryResponse']
+        }
+      }
+    }
+  }
+  deleteBackup: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Backup ID to delete */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  downloadBackup: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Backup ID to download */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string[]
+        }
+      }
+    }
+  }
+  getBackupHistory: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackupHistoryResponse'][]
+        }
+      }
+    }
+  }
+  getAuditLogs: {
+    parameters: {
+      query?: {
+        /** @description Filter by user ID */
+        userId?: string
+        /** @description Filter by action */
+        action?: string
+        /** @description Filter by entity type */
+        entityType?: string
+        /** @description Filter by entity ID */
+        entityId?: string
+        /** @description Filter by date from */
+        dateFrom?: string
+        /** @description Filter by date to */
+        dateTo?: string
+        /** @description Page number */
+        page?: number
+        /** @description Page size */
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PageResponseAuditLogResponse']
+        }
+      }
+    }
+  }
+  getAuditLogById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Audit log ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AuditLogResponse']
+        }
+      }
+    }
+  }
+  erasePatient: {
+    parameters: {
+      query?: {
+        /** @description Force erasure without cooling period (requires super-admin) */
+        force?: boolean
+      }
+      header?: never
+      path: {
+        /** @description Patient ID */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ErasureRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
 }

@@ -86,7 +86,7 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
           <p className="mt-1 truncate text-sm text-gray-500">{threadTitle}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="px-6 py-4">
+        <form className="px-6 py-4" onSubmit={handleSubmit}>
           {error ? (
             <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
               Błąd: {String(error)}
@@ -94,15 +94,15 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
           ) : null}
 
           <div className="mb-4">
-            <label htmlFor="assignee" className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="assignee">
               Przypisz do *
             </label>
             <select
+              required
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="assignee"
               value={assigneeId}
               onChange={(e) => setAssigneeId(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             >
               <option value="">Wybierz członka zespołu</option>
               {MOCK_TEAM_MEMBERS.map((member) => (
@@ -114,14 +114,14 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
           </div>
 
           <div className="mb-4">
-            <label htmlFor="status" className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="status">
               Status *
             </label>
             <select
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="status"
               value={status}
               onChange={(e) => setStatus(e.target.value as ThreadStatus)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {STATUS_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -132,31 +132,31 @@ export const MessageDelegateModal: React.FC<MessageDelegateModalProps> = ({
           </div>
 
           <div className="mb-6">
-            <label htmlFor="comment" className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="comment">
               Komentarz
             </label>
             <textarea
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="comment"
+              placeholder="Dodaj komentarz (opcjonalnie)"
+              rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              rows={3}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Dodaj komentarz (opcjonalnie)"
             />
           </div>
 
           <div className="flex justify-end space-x-3">
             <button
+              className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
               type="button"
               onClick={handleClose}
-              className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Anuluj
             </button>
             <button
-              type="submit"
-              disabled={isLoading}
               className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              disabled={isLoading}
+              type="submit"
             >
               {isLoading ? 'Delegowanie...' : 'Deleguj'}
             </button>

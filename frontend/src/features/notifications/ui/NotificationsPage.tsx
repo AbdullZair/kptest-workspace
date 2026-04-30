@@ -90,7 +90,7 @@ export const NotificationsPage = function NotificationsPage() {
             </div>
 
             {unreadCount > 0 && (
-              <Button variant="outline" size="sm" onClick={handleMarkAllAsRead}>
+              <Button size="sm" variant="outline" onClick={handleMarkAllAsRead}>
                 Oznacz wszystkie jako przeczytane
               </Button>
             )}
@@ -105,12 +105,12 @@ export const NotificationsPage = function NotificationsPage() {
               ).map((type) => (
                 <button
                   key={type}
-                  onClick={() => setSelectedType(type)}
                   className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                     selectedType === type
                       ? 'bg-white text-neutral-900 shadow-sm'
                       : 'text-neutral-600 hover:text-neutral-900'
                   }`}
+                  onClick={() => setSelectedType(type)}
                 >
                   {type === 'ALL' ? 'Wszystkie' : type.replace(/_/g, ' ')}
                 </button>
@@ -120,22 +120,22 @@ export const NotificationsPage = function NotificationsPage() {
             {/* Read filter */}
             <div className="ml-auto flex gap-1 rounded-lg bg-neutral-100 p-1">
               <button
-                onClick={() => setShowRead(false)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   !showRead
                     ? 'bg-white text-neutral-900 shadow-sm'
                     : 'text-neutral-600 hover:text-neutral-900'
                 }`}
+                onClick={() => setShowRead(false)}
               >
                 Nieprzeczytane
               </button>
               <button
-                onClick={() => setShowRead(true)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   showRead
                     ? 'bg-white text-neutral-900 shadow-sm'
                     : 'text-neutral-600 hover:text-neutral-900'
                 }`}
+                onClick={() => setShowRead(true)}
               >
                 Wszystkie
               </button>
@@ -159,8 +159,8 @@ export const NotificationsPage = function NotificationsPage() {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
-                onMarkAsRead={handleMarkAsRead}
                 onDelete={handleDelete}
+                onMarkAsRead={handleMarkAsRead}
               />
             ))}
           </div>
@@ -169,14 +169,14 @@ export const NotificationsPage = function NotificationsPage() {
             <svg
               className="mx-auto h-16 w-16 text-neutral-400"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={1}
-                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
               />
             </svg>
             <h3 className="mt-4 text-lg font-medium text-neutral-900">Brak powiadomień</h3>

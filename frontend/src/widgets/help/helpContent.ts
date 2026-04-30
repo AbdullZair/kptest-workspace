@@ -27,9 +27,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       'Lista pacjentów obsługiwanych przez placówkę. Możesz wyszukiwać po PESEL/nazwisku, ' +
       'dodawać pacjenta ręcznie lub zaimportować z HIS, generować kody aktywacyjne. ' +
       'Funkcje RODO (eksport, anonimizacja, usunięcie) dostępne dla administratora.',
-    links: [
-      { label: 'Polityka RODO (Art. 17, 20)', href: '/admin/audit-logs' },
-    ],
+    links: [{ label: 'Polityka RODO (Art. 17, 20)', href: '/admin/audit-logs' }],
   },
   {
     pattern: /^\/admin\/system/,

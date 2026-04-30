@@ -44,18 +44,15 @@ export const ProjectCard = memo(
     }
 
     return (
-      <Card
-        variant="elevated"
-        className={clsx('transition-shadow hover:shadow-lg', className)}
-      >
+      <Card className={clsx('transition-shadow hover:shadow-lg', className)} variant="elevated">
         <Card.Body>
           {/* Header */}
           <div className="mb-4 flex items-start justify-between">
             <div className="min-w-0 flex-1">
               <button
+                className="block w-full truncate rounded text-left text-lg font-semibold text-neutral-900 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 type="button"
                 onClick={handleClick}
-                className="block w-full truncate text-left text-lg font-semibold text-neutral-900 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
               >
                 {project.name}
               </button>
@@ -64,7 +61,7 @@ export const ProjectCard = memo(
               ) : null}
             </div>
             <div className="ml-4 flex-shrink-0">
-              <ProjectStatus status={project.status} size="sm" showLabel={true} />
+              <ProjectStatus showLabel={true} size="sm" status={project.status} />
             </div>
           </div>
 
@@ -95,24 +92,24 @@ export const ProjectCard = memo(
           {/* Dates */}
           <div className="mb-4 flex items-center justify-between text-xs text-neutral-500">
             <div className="flex items-center gap-1">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
               <span>Start: {formatDate(project.start_date)}</span>
             </div>
             {project.end_date ? (
               <div className="flex items-center gap-1">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
                 <span>Koniec: {formatDate(project.end_date)}</span>
@@ -130,49 +127,49 @@ export const ProjectCard = memo(
             </div>
             <div className="flex items-center gap-2">
               <Button
-                variant="outline"
-                size="sm"
-                onClick={handleEditClick}
+                aria-label={`Edytuj projekt ${project.name}`}
                 className="border-primary-200 text-primary-600 hover:bg-primary-50"
                 data-testid="project-edit-button"
-                aria-label={`Edytuj projekt ${project.name}`}
+                size="sm"
                 title="Edytuj projekt"
+                variant="outline"
+                onClick={handleEditClick}
               >
                 <svg
+                  aria-hidden="true"
                   className="h-4 w-4"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
-                  aria-hidden="true"
+                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                   />
                 </svg>
               </Button>
               <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDeleteClick}
-                className="border-rose-200 text-rose-600 hover:bg-rose-50"
                 aria-label={`Usuń projekt ${project.name}`}
+                className="border-rose-200 text-rose-600 hover:bg-rose-50"
+                size="sm"
                 title="Usuń projekt"
+                variant="outline"
+                onClick={handleDeleteClick}
               >
                 <svg
+                  aria-hidden="true"
                   className="h-4 w-4"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
-                  aria-hidden="true"
+                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
               </Button>

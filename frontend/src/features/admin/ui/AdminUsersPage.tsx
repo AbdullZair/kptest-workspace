@@ -135,10 +135,10 @@ export function AdminUsersPage() {
           <p className="mt-1 text-sm text-neutral-500">{t('admin.users.subtitle')}</p>
         </div>
         <button
-          type="button"
-          data-testid="admin-add-staff-button"
-          onClick={() => setShowCreateStaffModal(true)}
           className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          data-testid="admin-add-staff-button"
+          type="button"
+          onClick={() => setShowCreateStaffModal(true)}
         >
           Dodaj pracownika
         </button>
@@ -147,9 +147,9 @@ export function AdminUsersPage() {
       {/* Create staff success banner */}
       {createStaffSuccess ? (
         <div
-          role="status"
-          data-testid="admin-create-staff-success"
           className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800"
+          data-testid="admin-create-staff-success"
+          role="status"
         >
           Pracownik dodany
         </div>
@@ -163,13 +163,13 @@ export function AdminUsersPage() {
             {roles.map((role) => (
               <button
                 key={role}
-                onClick={() => handleRoleFilter(role)}
                 className={clsx(
                   'rounded-full px-3 py-1 text-sm transition-colors',
                   filters.role === role || (role === 'ALL' && !filters.role)
                     ? 'bg-primary-600 text-white'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 )}
+                onClick={() => handleRoleFilter(role)}
               >
                 {role === 'ALL' ? t('admin.users.allRoles') : t(`roles.${role}`)}
               </button>
@@ -183,13 +183,13 @@ export function AdminUsersPage() {
             {statuses.map((status) => (
               <button
                 key={status}
-                onClick={() => handleStatusFilter(status)}
                 className={clsx(
                   'rounded-full px-3 py-1 text-sm transition-colors',
                   filters.status === status || (status === 'ALL' && !filters.status)
                     ? 'bg-primary-600 text-white'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 )}
+                onClick={() => handleStatusFilter(status)}
               >
                 {status === 'ALL' ? t('admin.users.all') : t(`accountStatus.${status}`)}
               </button>
@@ -203,8 +203,8 @@ export function AdminUsersPage() {
         <div className="py-12 text-center">
           <p className="text-red-600">{t('admin.users.errorLoading')}</p>
           <button
-            onClick={() => refetch()}
             className="mt-4 font-medium text-primary-600 hover:text-primary-700"
+            onClick={() => refetch()}
           >
             {t('admin.users.retry')}
           </button>
@@ -212,15 +212,15 @@ export function AdminUsersPage() {
       ) : (
         <>
           <UserTable
-            users={data?.content || []}
             isLoading={isLoading}
-            onUserClick={setSelectedUser}
-            onEdit={handleEditUser}
-            onDelete={handleDeleteUser}
-            onStatusChange={handleStatusChange}
             sortField="email"
             sortOrder="asc"
+            users={data?.content || []}
+            onDelete={handleDeleteUser}
+            onEdit={handleEditUser}
             onSortChange={handleSortChange}
+            onStatusChange={handleStatusChange}
+            onUserClick={setSelectedUser}
           />
 
           {/* Pagination */}
@@ -232,18 +232,18 @@ export function AdminUsersPage() {
               </div>
               <div className="flex gap-2">
                 <button
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isFirst}
                   onClick={() =>
                     setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page! - 1) }))
                   }
-                  disabled={data.isFirst}
-                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {t('admin.users.previous')}
                 </button>
                 <button
-                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
-                  disabled={data.isLast}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isLast}
+                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
                 >
                   {t('admin.users.next')}
                 </button>
@@ -280,14 +280,14 @@ export function AdminUsersPage() {
               </p>
               <div className="flex justify-end gap-3">
                 <button
-                  onClick={() => setShowResetModal(false)}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                  onClick={() => setShowResetModal(false)}
                 >
                   {t('common.cancel')}
                 </button>
                 <button
-                  onClick={confirmResetPassword}
                   className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+                  onClick={confirmResetPassword}
                 >
                   {t('admin.users.resetPassword.submit')}
                 </button>
@@ -313,14 +313,14 @@ export function AdminUsersPage() {
               </p>
               <div className="flex justify-end gap-3">
                 <button
-                  onClick={() => setShowDeleteModal(false)}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                  onClick={() => setShowDeleteModal(false)}
                 >
                   {t('common.cancel')}
                 </button>
                 <button
-                  onClick={confirmDeleteUser}
                   className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                  onClick={confirmDeleteUser}
                 >
                   {t('admin.users.deleteUser.submit')}
                 </button>
@@ -348,8 +348,8 @@ export function AdminUsersPage() {
                 {t('admin.users.tempPasswordWarning')}
               </p>
               <button
-                onClick={() => setResetPasswordResult(null)}
                 className="w-full rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+                onClick={() => setResetPasswordResult(null)}
               >
                 {t('common.close')}
               </button>

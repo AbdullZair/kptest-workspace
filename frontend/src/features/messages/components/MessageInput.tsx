@@ -92,19 +92,19 @@ export const MessageInput = function MessageInput({
   }, [])
 
   return (
-    <Card variant="default" size="md" className="rounded-none border-t border-neutral-200">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <Card className="rounded-none border-t border-neutral-200" size="md" variant="default">
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         {/* Message content */}
         <div className="flex-1">
           <textarea
             ref={textareaRef}
+            className="w-full resize-none rounded-lg border border-neutral-300 px-4 py-3 text-neutral-900 placeholder-neutral-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder={placeholder}
+            rows={1}
+            style={{ minHeight: '44px' }}
             value={content}
             onChange={handleTextareaInput}
             onKeyDown={handleKeyDown}
-            placeholder={placeholder}
-            rows={1}
-            className="w-full resize-none rounded-lg border border-neutral-300 px-4 py-3 text-neutral-900 placeholder-neutral-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{ minHeight: '44px' }}
           />
           <div className="mt-1 text-xs text-neutral-500">Ctrl/Cmd + Enter aby wysłać</div>
         </div>
@@ -113,16 +113,16 @@ export const MessageInput = function MessageInput({
         {enableInternalNote ? (
           <div>
             <button
+              className="flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-800"
               type="button"
               onClick={() => setShowInternalNote(!showInternalNote)}
-              className="flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-800"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                 />
               </svg>
               {showInternalNote ? 'Ukryj notatkę wewnętrzną' : 'Dodaj notatkę wewnętrzną'}
@@ -130,11 +130,11 @@ export const MessageInput = function MessageInput({
 
             {showInternalNote ? (
               <input
+                className="mt-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Notatka widoczna tylko dla personelu"
                 type="text"
                 value={internalNote}
                 onChange={(e) => setInternalNote(e.target.value)}
-                placeholder="Notatka widoczna tylko dla personelu"
-                className="mt-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : null}
           </div>
@@ -149,14 +149,14 @@ export const MessageInput = function MessageInput({
               {PRIORITY_OPTIONS.map((option) => (
                 <button
                   key={option.value}
-                  type="button"
-                  onClick={() => setPriority(option.value)}
                   className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                     priority === option.value
                       ? 'border-2 border-blue-300 bg-blue-100 text-blue-800'
                       : 'border-2 border-transparent bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                   }`}
                   title={option.label}
+                  type="button"
+                  onClick={() => setPriority(option.value)}
                 >
                   <span className="mr-1">{option.icon}</span>
                   {option.label}
@@ -167,18 +167,18 @@ export const MessageInput = function MessageInput({
 
           {/* Send button */}
           <Button
+            className="flex items-center gap-2"
+            disabled={!content.trim() || isLoading}
+            size="md"
             type="submit"
             variant="primary"
-            size="md"
-            disabled={!content.trim() || isLoading}
-            className="flex items-center gap-2"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
               />
             </svg>
             {isLoading ? 'Wysyłanie...' : 'Wyślij'}

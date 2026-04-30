@@ -84,12 +84,12 @@ export const PreferenceToggle = memo(
       <div className={twMerge(baseStyles)}>
         <div className="min-w-0 flex-1">
           <label
-            htmlFor={label}
             className={clsx(
               'font-medium',
               disabled ? 'text-gray-400' : 'text-gray-900',
               size === 'lg' ? 'text-base' : 'text-sm'
             )}
+            htmlFor={label}
           >
             {label}
           </label>
@@ -108,17 +108,19 @@ export const PreferenceToggle = memo(
 
         <label className="relative inline-flex cursor-pointer items-center">
           <input
+            aria-describedby={description ? `${label}-description` : undefined}
+            checked={checked}
+            className="peer sr-only"
+            disabled={disabled || loading}
             id={label}
             type="checkbox"
-            className="peer sr-only"
-            checked={checked}
             onChange={handleChange}
-            disabled={disabled || loading}
-            aria-describedby={description ? `${label}-description` : undefined}
           />
 
           {/* Toggle track */}
           <div
+            aria-checked={checked}
+            aria-disabled={disabled || loading}
             className={clsx(
               'relative rounded-full transition-colors duration-200 ease-in-out',
               'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
@@ -127,8 +129,6 @@ export const PreferenceToggle = memo(
               (disabled || loading) && 'cursor-not-allowed opacity-50'
             )}
             role="switch"
-            aria-checked={checked}
-            aria-disabled={disabled || loading}
           >
             {/* Toggle knob */}
             <div
@@ -147,15 +147,15 @@ export const PreferenceToggle = memo(
                       className="opacity-25"
                       cx="12"
                       cy="12"
+                      fill="none"
                       r="10"
                       stroke="currentColor"
                       strokeWidth="4"
-                      fill="none"
                     />
                     <path
                       className="opacity-75"
-                      fill="currentColor"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      fill="currentColor"
                     />
                   </svg>
                 </div>

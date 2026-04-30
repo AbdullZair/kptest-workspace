@@ -82,43 +82,43 @@ export const ComplianceChart = memo(
     return (
       <div className={`relative ${className}`} style={{ height: `${chartHeight}px` }}>
         <svg
-          viewBox={`0 0 100 ${chartHeight}`}
           className="h-full w-full"
           preserveAspectRatio="none"
+          viewBox={`0 0 100 ${chartHeight}`}
         >
           {/* Grid lines */}
           {[0, 25, 50, 75, 100].map((y) => (
             <line
               key={y}
-              x1="0"
-              y1={y}
-              x2="100"
-              y2={y}
               stroke="#e5e7eb"
               strokeWidth="0.5"
               vectorEffect="non-scaling-stroke"
+              x1="0"
+              x2="100"
+              y1={y}
+              y2={y}
             />
           ))}
 
           {/* Threshold line */}
           <line
-            x1="0"
-            y1={thresholdY}
-            x2="100"
-            y2={thresholdY}
             stroke="#f59e0b"
-            strokeWidth="2"
             strokeDasharray="4,4"
+            strokeWidth="2"
             vectorEffect="non-scaling-stroke"
+            x1="0"
+            x2="100"
+            y1={thresholdY}
+            y2={thresholdY}
           />
 
           {/* Area fill */}
-          <polygon points={`0,${chartHeight} ${points} 100,${chartHeight}`} fill={fillColor} />
+          <polygon fill={fillColor} points={`0,${chartHeight} ${points} 100,${chartHeight}`} />
 
           {/* Line */}
           <polyline
-            points={points}
             fill="none"
+            points={points}
             stroke={lineColor}
             strokeWidth="2"
             vectorEffect="non-scaling-stroke"
@@ -133,8 +133,8 @@ export const ComplianceChart = memo(
                 key={index}
                 cx={x}
                 cy={y}
-                r="4"
                 fill={lineColor}
+                r="4"
                 stroke="#fff"
                 strokeWidth="2"
                 vectorEffect="non-scaling-stroke"

@@ -175,25 +175,25 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
               {isEditing ? 'Edytuj wydarzenie' : 'Nowe wydarzenie'}
             </h3>
             <button
-              onClick={onClose}
               className="text-gray-400 hover:text-gray-600"
               disabled={isLoading}
+              onClick={onClose}
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M6 18L18 6M6 6l12 12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </button>
           </div>
 
           <form
-            onSubmit={handleSubmit(handleFormSubmit)}
             className="space-y-4"
             data-testid="event-form"
+            onSubmit={handleSubmit(handleFormSubmit)}
           >
             {/* Title */}
             <div>
@@ -204,8 +204,8 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
                 className={`mt-1 block w-full rounded-md border ${
                   errors.title ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
-                disabled={isLoading}
                 data-testid="event-title"
+                disabled={isLoading}
               />
               {errors.title ? (
                 <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
@@ -218,8 +218,8 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
               <select
                 {...register('type', { required: true })}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                disabled={isLoading}
                 data-testid="event-type-select"
+                disabled={isLoading}
               >
                 <option value="VISIT">Wizyta kontrolna</option>
                 <option value="SESSION">Sesja terapeutyczna</option>
@@ -235,10 +235,10 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
               <label className="block text-sm font-medium text-gray-700">Opis</label>
               <textarea
                 {...register('description')}
-                rows={3}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                disabled={isLoading}
                 data-testid="event-description"
+                disabled={isLoading}
+                rows={3}
               />
             </div>
 
@@ -254,8 +254,8 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
                   className={`mt-1 block w-full rounded-md border ${
                     errors.scheduled_at ? 'border-red-500' : 'border-gray-300'
                   } px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
-                  disabled={isLoading}
                   data-testid="event-scheduled-at"
+                  disabled={isLoading}
                 />
                 {errors.scheduled_at ? (
                   <p className="mt-1 text-sm text-red-600">{errors.scheduled_at.message}</p>
@@ -272,8 +272,8 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
                   className={`mt-1 block w-full rounded-md border ${
                     errors.scheduled_time ? 'border-red-500' : 'border-gray-300'
                   } px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
-                  disabled={isLoading}
                   data-testid="event-scheduled-time"
+                  disabled={isLoading}
                 />
                 {errors.scheduled_time ? (
                   <p className="mt-1 text-sm text-red-600">{errors.scheduled_time.message}</p>
@@ -289,8 +289,8 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
                   type="date"
                   {...register('ends_at')}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  disabled={isLoading}
                   data-testid="event-ends-at"
+                  disabled={isLoading}
                 />
               </div>
 
@@ -313,22 +313,22 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
               <input
                 type="text"
                 {...register('location')}
-                placeholder="np. Gabinet 123, Telewizyta"
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                disabled={isLoading}
                 data-testid="event-location"
+                disabled={isLoading}
+                placeholder="np. Gabinet 123, Telewizyta"
               />
             </div>
 
             {/* Reminders */}
             <Controller
-              name="reminders"
               control={control}
+              name="reminders"
               render={({ field }) => (
                 <ReminderConfig
+                  disabled={isLoading}
                   value={field.value}
                   onChange={field.onChange}
-                  disabled={isLoading}
                 />
               )}
             />
@@ -336,10 +336,10 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
             {/* Advanced Options Toggle */}
             <div>
               <button
-                type="button"
-                onClick={() => setShowAdvanced(!showAdvanced)}
                 className="text-sm font-medium text-blue-600 hover:text-blue-800"
                 disabled={isLoading}
+                type="button"
+                onClick={() => setShowAdvanced(!showAdvanced)}
               >
                 {showAdvanced ? 'Ukryj opcje zaawansowane' : 'Pokaż opcje zaawansowane'}
               </button>
@@ -368,9 +368,9 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
                     <input
                       type="text"
                       {...register('recurrence_rule')}
-                      placeholder="np. FREQ=WEEKLY;INTERVAL=1;BYDAY=MO"
                       className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                       disabled={isLoading}
+                      placeholder="np. FREQ=WEEKLY;INTERVAL=1;BYDAY=MO"
                     />
                     <p className="mt-1 text-xs text-gray-500">
                       Format iCalendar RRULE (np. FREQ=WEEKLY;INTERVAL=1 dla cotygodniowego)
@@ -383,19 +383,19 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
             {/* Actions */}
             <div className="flex justify-end gap-3 border-t pt-4">
               <button
+                className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                data-testid="event-cancel"
+                disabled={isLoading}
                 type="button"
                 onClick={onClose}
-                className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                disabled={isLoading}
-                data-testid="event-cancel"
               >
                 Anuluj
               </button>
               <button
-                type="submit"
                 className="rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={isLoading}
                 data-testid="event-save"
+                disabled={isLoading}
+                type="submit"
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">
@@ -404,15 +404,15 @@ export const EventFormModal: React.FC<EventFormModalProps> = ({
                         className="opacity-25"
                         cx="12"
                         cy="12"
+                        fill="none"
                         r="10"
                         stroke="currentColor"
                         strokeWidth="4"
-                        fill="none"
                       />
                       <path
                         className="opacity-75"
-                        fill="currentColor"
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        fill="currentColor"
                       />
                     </svg>
                     Zapisywanie...

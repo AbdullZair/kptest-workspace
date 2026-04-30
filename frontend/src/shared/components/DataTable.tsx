@@ -145,13 +145,13 @@ export function DataTable<T extends Record<string, any>>({
               {selectable ? (
                 <th className="px-6 py-3 text-left">
                   <input
-                    type="checkbox"
-                    checked={isAllSelected}
                     ref={(input) => {
                       if (input) input.indeterminate = isSomeSelected
                     }}
-                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    checked={isAllSelected}
                     className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                    type="checkbox"
+                    onChange={(e) => handleSelectAll(e.target.checked)}
                   />
                 </th>
               ) : null}
@@ -175,14 +175,14 @@ export function DataTable<T extends Record<string, any>>({
                           sortOrder === 'desc' && 'rotate-180 transform'
                         )}
                         fill="none"
-                        viewBox="0 0 24 24"
                         stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
                         <path
+                          d="M5 15l7-7 7 7"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M5 15l7-7 7 7"
                         />
                       </svg>
                     ) : null}
@@ -195,8 +195,8 @@ export function DataTable<T extends Record<string, any>>({
             {sortedData.length === 0 ? (
               <tr>
                 <td
-                  colSpan={columns.length + (selectable ? 1 : 0)}
                   className="px-6 py-12 text-center text-neutral-500"
+                  colSpan={columns.length + (selectable ? 1 : 0)}
                 >
                   {emptyMessage}
                 </td>
@@ -215,10 +215,10 @@ export function DataTable<T extends Record<string, any>>({
                   {selectable ? (
                     <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                       <input
-                        type="checkbox"
                         checked={localSelectedRows.includes(item)}
-                        onChange={(e) => handleSelectRow(item, e.target.checked)}
                         className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                        type="checkbox"
+                        onChange={(e) => handleSelectRow(item, e.target.checked)}
                       />
                     </td>
                   ) : null}
@@ -250,9 +250,9 @@ export function DataTable<T extends Record<string, any>>({
             </div>
             {pagination.onSizeChange ? (
               <select
+                className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                 value={pagination.size}
                 onChange={(e) => pagination.onSizeChange?.(Number(e.target.value))}
-                className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {(pagination.sizeOptions || [10, 20, 50, 100]).map((size) => (
                   <option key={size} value={size}>
@@ -264,16 +264,16 @@ export function DataTable<T extends Record<string, any>>({
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => pagination.onPageChange(pagination.page - 1)}
-              disabled={pagination.page === 0}
               className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={pagination.page === 0}
+              onClick={() => pagination.onPageChange(pagination.page - 1)}
             >
               Poprzednia
             </button>
             <button
-              onClick={() => pagination.onPageChange(pagination.page + 1)}
-              disabled={pagination.page >= Math.ceil(pagination.total / pagination.size) - 1}
               className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={pagination.page >= Math.ceil(pagination.total / pagination.size) - 1}
+              onClick={() => pagination.onPageChange(pagination.page + 1)}
             >
               Następna
             </button>

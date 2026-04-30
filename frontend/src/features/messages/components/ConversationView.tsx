@@ -78,7 +78,7 @@ export const ConversationView = memo(
 
     if (isLoading) {
       return (
-        <Card variant="default" size="md" className="flex flex-1 items-center justify-center">
+        <Card className="flex flex-1 items-center justify-center" size="md" variant="default">
           <div className="flex flex-col items-center gap-4">
             <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-blue-500" />
             <p className="text-neutral-600">Ładowanie konwersacji...</p>
@@ -88,17 +88,17 @@ export const ConversationView = memo(
     }
 
     return (
-      <Card variant="default" size="md" className="flex h-full flex-1 flex-col overflow-hidden">
+      <Card className="flex h-full flex-1 flex-col overflow-hidden" size="md" variant="default">
         {/* Header */}
         <div className="flex items-center gap-4 border-b border-neutral-200 px-6 py-4">
           {onBack ? (
-            <Button variant="ghost" size="sm" onClick={onBack} className="md:hidden">
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Button className="md:hidden" size="sm" variant="ghost" onClick={onBack}>
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M15 19l-7-7 7-7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
                 />
               </svg>
             </Button>
@@ -127,14 +127,14 @@ export const ConversationView = memo(
               <svg
                 className="mb-4 h-16 w-16 opacity-50"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 />
               </svg>
               <p className="font-medium">Brak wiadomości w tym wątku</p>
@@ -145,11 +145,11 @@ export const ConversationView = memo(
               {messages.map((message) => (
                 <MessageBubble
                   key={message.id}
-                  message={message}
                   isOwn={message.sender_id === currentUserId}
+                  message={message}
                   showSender={isGroup}
-                  onReply={handleReply}
                   onMarkRead={handleMarkRead}
+                  onReply={handleReply}
                 />
               ))}
               <div ref={messagesEndRef} />
@@ -165,15 +165,15 @@ export const ConversationView = memo(
               <p className="truncate text-sm text-neutral-700">{replyTo.content}</p>
             </div>
             <button
-              onClick={() => setReplyTo(null)}
               className="text-neutral-400 hover:text-neutral-600"
+              onClick={() => setReplyTo(null)}
             >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M6 18L18 6M6 6l12 12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </button>
@@ -182,7 +182,7 @@ export const ConversationView = memo(
 
         {/* Message input */}
         <div className="bg-white px-6 py-4">
-          <MessageInput onSubmit={handleSendMessage} isLoading={isSending} enableInternalNote />
+          <MessageInput enableInternalNote isLoading={isSending} onSubmit={handleSendMessage} />
         </div>
       </Card>
     )

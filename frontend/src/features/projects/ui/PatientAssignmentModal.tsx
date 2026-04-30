@@ -96,38 +96,38 @@ export const PatientAssignmentModal = ({
 
   return (
     <div
+      aria-labelledby="modal-title"
+      aria-modal="true"
       className="fixed inset-0 z-50 overflow-y-auto"
       role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
     >
       {/* Backdrop */}
       <div
+        aria-hidden="true"
         className="fixed inset-0 bg-black/50 transition-opacity"
         onClick={onClose}
-        aria-hidden="true"
       />
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
         <div className="relative w-full max-w-3xl transform transition-all">
-          <Card variant="elevated" className="overflow-hidden">
+          <Card className="overflow-hidden" variant="elevated">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-neutral-200 bg-neutral-50 px-6 py-4">
-              <h2 id="modal-title" className="text-lg font-semibold text-neutral-900">
+              <h2 className="text-lg font-semibold text-neutral-900" id="modal-title">
                 Przypisz pacjentów do projektu
               </h2>
               <button
-                onClick={onClose}
-                className="text-neutral-400 transition-colors hover:text-neutral-600"
                 aria-label="Zamknij"
+                className="text-neutral-400 transition-colors hover:text-neutral-600"
+                onClick={onClose}
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M6 18L18 6M6 6l12 12"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
@@ -138,32 +138,32 @@ export const PatientAssignmentModal = ({
                 {/* Search */}
                 <div>
                   <label
-                    htmlFor="search"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="search"
                   >
                     Szukaj pacjenta
                   </label>
                   <div className="relative">
                     <input
-                      type="text"
+                      className="w-full rounded-lg border border-neutral-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      disabled={isLoading || isLoadingPatients}
                       id="search"
+                      placeholder="PESEL, imię, nazwisko..."
+                      type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full rounded-lg border border-neutral-300 py-2 pl-10 pr-4 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      placeholder="PESEL, imię, nazwisko..."
-                      disabled={isLoading || isLoadingPatients}
                     />
                     <svg
                       className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
                       <path
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
                     </svg>
                   </div>
@@ -184,14 +184,14 @@ export const PatientAssignmentModal = ({
                       <svg
                         className="mx-auto mb-3 h-12 w-12 text-neutral-300"
                         fill="none"
-                        viewBox="0 0 24 24"
                         stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
                         <path
+                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={1}
-                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                         />
                       </svg>
                       <p>Brak dostępnych pacjentów</p>
@@ -206,18 +206,18 @@ export const PatientAssignmentModal = ({
                       {/* Select All Header */}
                       <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 px-4 py-3">
                         <input
-                          type="checkbox"
-                          id="select-all"
                           checked={
                             availablePatients.length > 0 &&
                             selectedPatientIds.length === availablePatients.length
                           }
-                          onChange={handleSelectAll}
                           className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                          id="select-all"
+                          type="checkbox"
+                          onChange={handleSelectAll}
                         />
                         <label
-                          htmlFor="select-all"
                           className="cursor-pointer select-none text-sm font-medium text-neutral-700"
+                          htmlFor="select-all"
                         >
                           Zaznacz wszystkich ({availablePatients.length})
                         </label>
@@ -241,10 +241,10 @@ export const PatientAssignmentModal = ({
                             )}
                           >
                             <input
-                              type="checkbox"
                               checked={selectedPatientIds.includes(patient.id)}
-                              onChange={() => handleTogglePatient(patient.id)}
                               className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                              type="checkbox"
+                              onChange={() => handleTogglePatient(patient.id)}
                             />
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-medium text-neutral-900">
@@ -276,14 +276,14 @@ export const PatientAssignmentModal = ({
                     <svg
                       className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
                       <path
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
                     <p className="text-sm text-blue-700">
@@ -296,14 +296,14 @@ export const PatientAssignmentModal = ({
 
               {/* Footer */}
               <Card.Footer className="flex items-center justify-end gap-3 border-t border-neutral-200 bg-neutral-50 px-6 py-4">
-                <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+                <Button disabled={isLoading} type="button" variant="outline" onClick={onClose}>
                   Anuluj
                 </Button>
                 <Button
+                  className="min-w-[120px]"
+                  disabled={isLoading || selectedPatientIds.length === 0}
                   type="submit"
                   variant="primary"
-                  disabled={isLoading || selectedPatientIds.length === 0}
-                  className="min-w-[120px]"
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
@@ -318,8 +318,8 @@ export const PatientAssignmentModal = ({
                         />
                         <path
                           className="opacity-75"
-                          fill="currentColor"
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          fill="currentColor"
                         />
                       </svg>
                       Przypisywanie...

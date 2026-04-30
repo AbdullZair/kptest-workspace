@@ -116,21 +116,21 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
       // Render default error UI
       return (
-        <Card variant="outlined" className="mx-auto my-8 max-w-md">
+        <Card className="mx-auto my-8 max-w-md" variant="outlined">
           <div className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-error-100">
               <svg
+                aria-hidden="true"
                 className="h-6 w-6 text-error-600"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
-                aria-hidden="true"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M6 18L18 6M6 6l12 12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </div>
@@ -145,7 +145,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
             {showResetButton ? (
               <div className="mt-6">
-                <Button onClick={this.resetError} variant="primary">
+                <Button variant="primary" onClick={this.resetError}>
                   {resetButtonText}
                 </Button>
               </div>

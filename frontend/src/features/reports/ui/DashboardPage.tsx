@@ -33,7 +33,7 @@ export const DashboardPage = () => {
           <h1 className="text-2xl font-bold text-neutral-900">Dashboard</h1>
           <p className="mt-1 text-neutral-600">Przegląd kluczowych wskaźników wydajności</p>
         </div>
-        <ExportButton reportType="COMPLIANCE" label="Eksportuj dashboard" includeCharts={true} />
+        <ExportButton includeCharts={true} label="Eksportuj dashboard" reportType="COMPLIANCE" />
       </div>
 
       {/* KPI Cards */}
@@ -47,9 +47,9 @@ export const DashboardPage = () => {
           </div>
           <ComplianceChart
             data={kpis.compliance_trend}
+            height={250}
             overallCompliance={kpis.average_compliance}
             threshold={80}
-            height={250}
           />
         </div>
       ) : null}

@@ -1,10 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { Card, Button, PageLoader } from '@shared/components'
 import { MaterialViewer, MaterialTypeIcon, ProgressTracker } from '../components'
-import {
-  useGetMaterialByIdQuery,
-  useMarkAsCompleteMutation,
-} from '../api/materialApi'
+import { useGetMaterialByIdQuery, useMarkAsCompleteMutation } from '../api/materialApi'
 import { useMemo } from 'react'
 
 /**
@@ -60,7 +57,7 @@ export const MaterialDetailPage = () => {
     return (
       <div className="py-12 text-center">
         <p className="text-neutral-600">Brak ID materiału</p>
-        <Button variant="primary" onClick={handleBack} className="mt-4">
+        <Button className="mt-4" variant="primary" onClick={handleBack}>
           Powrót do materiałów
         </Button>
       </div>
@@ -77,19 +74,19 @@ export const MaterialDetailPage = () => {
         <svg
           className="mx-auto mb-4 h-16 w-16 text-error-300"
           fill="none"
-          viewBox="0 0 24 24"
           stroke="currentColor"
+          viewBox="0 0 24 24"
         >
           <path
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={1.5}
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
           />
         </svg>
         <h3 className="text-lg font-semibold text-error-900">Błąd ładowania materiału</h3>
         <p className="mt-2 text-error-600">Materiał nie został znaleziony lub wystąpił błąd</p>
-        <Button variant="primary" onClick={handleBack} className="mt-4">
+        <Button className="mt-4" variant="primary" onClick={handleBack}>
           Powrót do materiałów
         </Button>
       </div>
@@ -100,37 +97,37 @@ export const MaterialDetailPage = () => {
     <div className="space-y-6">
       {/* Header with back button */}
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={handleBack}>
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <Button size="sm" variant="ghost" onClick={handleBack}>
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
+              d="M15 19l-7-7 7-7"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M15 19l-7-7 7-7"
             />
           </svg>
         </Button>
         <div className="flex-1">
           <div className="mb-1 flex items-center gap-3">
-            <MaterialTypeIcon type={material.type} size="sm" showLabel />
+            <MaterialTypeIcon showLabel size="sm" type={material.type} />
             {material.category ? (
               <span className="rounded bg-neutral-100 px-2 py-0.5 text-sm text-neutral-500">
                 {material.category}
               </span>
             ) : null}
             {isCompleted ? (
-              <ProgressTracker status="COMPLETED" size="sm" showLabel={false} />
+              <ProgressTracker showLabel={false} size="sm" status="COMPLETED" />
             ) : null}
           </div>
           <h1 className="text-2xl font-bold text-neutral-900">{material.title}</h1>
         </div>
-        <Button variant="outline" size="sm" onClick={handleEdit}>
-          <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <Button size="sm" variant="outline" onClick={handleEdit}>
+          <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
             />
           </svg>
           Edytuj
@@ -141,10 +138,10 @@ export const MaterialDetailPage = () => {
       <Card variant="elevated">
         <Card.Body>
           <MaterialViewer
-            material={material}
             isCompleted={isCompleted}
-            onComplete={handleComplete}
+            material={material}
             onClose={handleBack}
+            onComplete={handleComplete}
           />
         </Card.Body>
       </Card>

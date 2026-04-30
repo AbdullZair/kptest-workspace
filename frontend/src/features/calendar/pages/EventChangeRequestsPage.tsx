@@ -134,16 +134,16 @@ export function EventChangeRequestsPage({
 
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setShowAcceptModal(request.id)}
-                    disabled={processingId === request.id}
                     className="flex-1 rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
+                    disabled={processingId === request.id}
+                    onClick={() => setShowAcceptModal(request.id)}
                   >
                     ✓ Zaakceptuj
                   </button>
                   <button
-                    onClick={() => setShowRejectModal(request.id)}
-                    disabled={processingId === request.id}
                     className="flex-1 rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+                    disabled={processingId === request.id}
+                    onClick={() => setShowRejectModal(request.id)}
                   >
                     ✗ Odrzuć
                   </button>
@@ -222,27 +222,27 @@ export function EventChangeRequestsPage({
           <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6">
             <h3 className="mb-4 text-lg font-bold">Zaakceptuj zmianę terminu</h3>
             <textarea
+              className="mb-4 w-full rounded-lg border border-neutral-300 px-3 py-2"
+              placeholder="Dodatkowy komentarz (opcjonalny)"
+              rows={3}
               value={acceptComment[showAcceptModal] || ''}
               onChange={(e) =>
                 setAcceptComment({ ...acceptComment, [showAcceptModal]: e.target.value })
               }
-              placeholder="Dodatkowy komentarz (opcjonalny)"
-              rows={3}
-              className="mb-4 w-full rounded-lg border border-neutral-300 px-3 py-2"
             />
             <div className="flex gap-3">
               <button
+                className="flex-1 rounded-lg border border-neutral-300 px-4 py-2"
                 onClick={() => {
                   setShowAcceptModal(null)
                   setAcceptComment({})
                 }}
-                className="flex-1 rounded-lg border border-neutral-300 px-4 py-2"
               >
                 Anuluj
               </button>
               <button
-                onClick={() => handleAccept(showAcceptModal)}
                 className="flex-1 rounded-lg bg-green-600 px-4 py-2 text-white"
+                onClick={() => handleAccept(showAcceptModal)}
               >
                 Zaakceptuj
               </button>
@@ -257,28 +257,28 @@ export function EventChangeRequestsPage({
           <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6">
             <h3 className="mb-4 text-lg font-bold">Odrzuć zmianę terminu</h3>
             <textarea
+              required
+              className="mb-4 w-full rounded-lg border border-neutral-300 px-3 py-2"
+              placeholder="Powód odrzucenia *"
+              rows={3}
               value={rejectReason[showRejectModal] || ''}
               onChange={(e) =>
                 setRejectReason({ ...rejectReason, [showRejectModal]: e.target.value })
               }
-              placeholder="Powód odrzucenia *"
-              rows={3}
-              className="mb-4 w-full rounded-lg border border-neutral-300 px-3 py-2"
-              required
             />
             <div className="flex gap-3">
               <button
+                className="flex-1 rounded-lg border border-neutral-300 px-4 py-2"
                 onClick={() => {
                   setShowRejectModal(null)
                   setRejectReason({})
                 }}
-                className="flex-1 rounded-lg border border-neutral-300 px-4 py-2"
               >
                 Anuluj
               </button>
               <button
-                onClick={() => handleReject(showRejectModal)}
                 className="flex-1 rounded-lg bg-red-600 px-4 py-2 text-white"
+                onClick={() => handleReject(showRejectModal)}
               >
                 Odrzuć
               </button>

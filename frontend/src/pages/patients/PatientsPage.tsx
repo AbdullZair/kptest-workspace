@@ -162,9 +162,7 @@ export const PatientsPage = () => {
   // Bulk selection handlers (US-K-05)
   const handleToggleSelect = (patientId: string) => {
     setSelectedPatientIds((prev) =>
-      prev.includes(patientId)
-        ? prev.filter((id) => id !== patientId)
-        : [...prev, patientId]
+      prev.includes(patientId) ? prev.filter((id) => id !== patientId) : [...prev, patientId]
     )
   }
 
@@ -183,15 +181,10 @@ export const PatientsPage = () => {
     setSelectedPatientIds([])
   }
 
-  const handleBulkSubmit = async (
-    operation: BulkOperationKey,
-    body: BulkPatientRequest
-  ) => {
+  const handleBulkSubmit = async (operation: BulkOperationKey, body: BulkPatientRequest) => {
     try {
       const result = await bulkOperation({ operation, body }).unwrap()
-      window.alert(
-        `Operacja zakończona: ${result.succeeded} sukcesów, ${result.failed} błędów`
-      )
+      window.alert(`Operacja zakończona: ${result.succeeded} sukcesów, ${result.failed} błędów`)
       setSelectedPatientIds([])
       refetch()
     } catch (err) {
@@ -211,7 +204,7 @@ export const PatientsPage = () => {
     return (
       <div className="py-12 text-center">
         <p className="text-error-600">Wystąpił błąd podczas ładowania pacjentów</p>
-        <Button variant="primary" onClick={() => refetch()} className="mt-4">
+        <Button className="mt-4" variant="primary" onClick={() => refetch()}>
           Spróbuj ponownie
         </Button>
       </div>
@@ -227,19 +220,19 @@ export const PatientsPage = () => {
           <p className="mt-1 text-neutral-600">Zarządzaj bazą pacjentów</p>
         </div>
         <Button
-          variant="primary"
+          data-testid="patients-add-button"
           leftIcon={
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M12 4v16m8-8H4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 4v16m8-8H4"
               />
             </svg>
           }
+          variant="primary"
           onClick={handleCreateClick}
-          data-testid="patients-add-button"
         >
           Dodaj pacjenta
         </Button>
@@ -250,53 +243,53 @@ export const PatientsPage = () => {
         <Card.Body>
           <div className="space-y-4">
             <PatientSearch
+              placeholder="Szukaj po PESEL, imieniu, nazwisku lub HIS ID..."
               value={searchQuery}
               onChange={setSearchQuery}
               onSubmit={handleSearch}
-              placeholder="Szukaj po PESEL, imieniu, nazwisku lub HIS ID..."
             />
 
             {/* Status filters */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm text-neutral-600">Status:</span>
               <button
-                onClick={() => handleFilterByStatus('PENDING')}
                 className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   filters.verificationStatus?.includes('PENDING')
                     ? 'border-amber-300 bg-amber-100 text-amber-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
                 data-testid="patients-filter-status-PENDING"
+                onClick={() => handleFilterByStatus('PENDING')}
               >
                 Oczekujący
               </button>
               <button
-                onClick={() => handleFilterByStatus('APPROVED')}
                 className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   filters.verificationStatus?.includes('APPROVED')
                     ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
                 data-testid="patients-filter-status-APPROVED"
+                onClick={() => handleFilterByStatus('APPROVED')}
               >
                 Zweryfikowany
               </button>
               <button
-                onClick={() => handleFilterByStatus('REJECTED')}
                 className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   filters.verificationStatus?.includes('REJECTED')
                     ? 'border-rose-300 bg-rose-100 text-rose-800'
                     : 'border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 } border`}
                 data-testid="patients-filter-status-REJECTED"
+                onClick={() => handleFilterByStatus('REJECTED')}
               >
                 Odrzucony
               </button>
 
               {hasActiveFilters ? (
                 <button
-                  onClick={clearFilters}
                   className="ml-auto text-sm font-medium text-primary-600 hover:text-primary-700"
+                  onClick={clearFilters}
                 >
                   Wyczyść filtry
                 </button>
@@ -308,27 +301,27 @@ export const PatientsPage = () => {
 
       {/* Bulk action bar (US-K-05) */}
       <PatientBulkActionBar
+        isLoading={isBulkLoading}
         selectedCount={selectedPatientIds.length}
         selectedIds={selectedPatientIds}
-        onSubmit={handleBulkSubmit}
         onClear={handleClearSelection}
-        isLoading={isBulkLoading}
+        onSubmit={handleBulkSubmit}
       />
 
       {/* Patient Table */}
       <Card variant="elevated">
         <Card.Body noPadding>
           <PatientTable
+            selectable
+            isLoading={isLoading}
             patients={patientsData?.data || []}
-            onPatientClick={handlePatientClick}
-            onEdit={handleEditClick}
-            onDelete={handleDeleteClick}
+            selectedIds={selectedPatientIds}
             sortField={sortField}
             sortOrder={sortOrder}
+            onDelete={handleDeleteClick}
+            onEdit={handleEditClick}
+            onPatientClick={handlePatientClick}
             onSortChange={handleSortChange}
-            isLoading={isLoading}
-            selectable
-            selectedIds={selectedPatientIds}
             onToggleSelect={handleToggleSelect}
             onToggleSelectAll={handleToggleSelectAll}
           />
@@ -345,10 +338,10 @@ export const PatientsPage = () => {
 
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.max(0, p - 1))}
                   disabled={!patientsData.has_previous}
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
                 >
                   Poprzednia
                 </Button>
@@ -358,10 +351,10 @@ export const PatientsPage = () => {
                 </span>
 
                 <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPage((p) => Math.min(patientsData.total_pages - 1, p + 1))}
                   disabled={!patientsData.has_next}
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setPage((p) => Math.min(patientsData.total_pages - 1, p + 1))}
                 >
                   Następna
                 </Button>
@@ -373,11 +366,11 @@ export const PatientsPage = () => {
 
       {/* Form Modal */}
       <PatientFormModal
+        isLoading={isCreating || isUpdating}
         isOpen={isFormModalOpen}
+        patient={editingPatient}
         onClose={handleModalClose}
         onSubmit={handleFormSubmit}
-        patient={editingPatient}
-        isLoading={isCreating || isUpdating}
       />
     </div>
   )

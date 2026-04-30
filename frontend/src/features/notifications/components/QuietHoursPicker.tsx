@@ -74,18 +74,14 @@ export const QuietHoursPicker = memo(
           {/* Start Time */}
           <div className="flex-1">
             <label
-              htmlFor="quiet-hours-start"
               className="mb-1 block text-sm font-medium text-gray-700"
+              htmlFor="quiet-hours-start"
             >
               Od godziny
             </label>
             <div className="relative">
               <input
-                id="quiet-hours-start"
-                type="time"
-                value={startTime}
-                onChange={handleStartTimeChange}
-                disabled={disabled || loading}
+                aria-describedby="quiet-hours-start-description"
                 className={clsx(
                   'block w-full rounded-md border-gray-300',
                   'shadow-sm focus:border-primary-500 focus:ring-primary-500',
@@ -93,20 +89,24 @@ export const QuietHoursPicker = memo(
                   'disabled:cursor-not-allowed disabled:bg-gray-100',
                   'border'
                 )}
-                aria-describedby="quiet-hours-start-description"
+                disabled={disabled || loading}
+                id="quiet-hours-start"
+                type="time"
+                value={startTime}
+                onChange={handleStartTimeChange}
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <svg
                   className="h-4 w-4 text-gray-400"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
               </div>
@@ -116,18 +116,14 @@ export const QuietHoursPicker = memo(
           {/* End Time */}
           <div className="flex-1">
             <label
-              htmlFor="quiet-hours-end"
               className="mb-1 block text-sm font-medium text-gray-700"
+              htmlFor="quiet-hours-end"
             >
               Do godziny
             </label>
             <div className="relative">
               <input
-                id="quiet-hours-end"
-                type="time"
-                value={endTime}
-                onChange={handleEndTimeChange}
-                disabled={disabled || loading}
+                aria-describedby="quiet-hours-end-description"
                 className={clsx(
                   'block w-full rounded-md border-gray-300',
                   'shadow-sm focus:border-primary-500 focus:ring-primary-500',
@@ -135,20 +131,24 @@ export const QuietHoursPicker = memo(
                   'disabled:cursor-not-allowed disabled:bg-gray-100',
                   'border'
                 )}
-                aria-describedby="quiet-hours-end-description"
+                disabled={disabled || loading}
+                id="quiet-hours-end"
+                type="time"
+                value={endTime}
+                onChange={handleEndTimeChange}
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <svg
                   className="h-4 w-4 text-gray-400"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
               </div>
@@ -161,14 +161,14 @@ export const QuietHoursPicker = memo(
           <svg
             className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500"
             fill="none"
-            viewBox="0 0 24 24"
             stroke="currentColor"
+            viewBox="0 0 24 24"
           >
             <path
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
           <p className="text-xs text-blue-700">

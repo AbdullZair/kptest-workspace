@@ -311,7 +311,9 @@ export const injectApiEndpoints = <T extends Record<string, unknown>>(endpoints:
   // RTK Query's injectEndpoints expects EndpointDefinitions; cast through unknown
   // since the generic signature relies on builder, not direct objects.
   api.injectEndpoints({
-    endpoints: (() => endpoints) as unknown as Parameters<typeof api.injectEndpoints>[0]['endpoints'],
+    endpoints: (() => endpoints) as unknown as Parameters<
+      typeof api.injectEndpoints
+    >[0]['endpoints'],
     overrideExisting: false,
   })
 }

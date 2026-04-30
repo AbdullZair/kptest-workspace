@@ -82,15 +82,15 @@ export const MessagesPage = function MessagesPage() {
             </div>
 
             <button
-              onClick={() => setShowCreateModal(true)}
               className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+              onClick={() => setShowCreateModal(true)}
             >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M12 4v16m8-8H4"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 4v16m8-8H4"
                 />
               </svg>
               Nowy wątek
@@ -102,12 +102,12 @@ export const MessagesPage = function MessagesPage() {
             {(['ALL', 'INDIVIDUAL', 'GROUP'] as const).map((type) => (
               <button
                 key={type}
-                onClick={() => setSelectedType(type)}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   selectedType === type
                     ? 'bg-blue-100 text-blue-800'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
+                onClick={() => setSelectedType(type)}
               >
                 {type === 'ALL' ? 'Wszystkie' : type === 'INDIVIDUAL' ? 'Indywidualne' : 'Grupowe'}
               </button>
@@ -121,9 +121,9 @@ export const MessagesPage = function MessagesPage() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div className="md:col-span-2 lg:col-span-2">
             <ThreadList
+              isLoading={isLoadingThreads}
               threads={filteredThreads}
               onSelectThread={(thread) => handleSelectThread(thread.id)}
-              isLoading={isLoadingThreads}
             />
           </div>
 
@@ -161,10 +161,10 @@ export const MessagesPage = function MessagesPage() {
       {/* Create thread modal */}
       {showCreateModal ? (
         <CreateThreadModal
+          defaultProjectId={(user as unknown as { project_id?: string } | null)?.project_id}
+          isLoading={isCreating}
           onClose={() => setShowCreateModal(false)}
           onSubmit={handleCreateThread}
-          isLoading={isCreating}
-          defaultProjectId={(user as unknown as { project_id?: string } | null)?.project_id}
         />
       ) : null}
     </div>
@@ -206,16 +206,16 @@ function CreateThreadModal({
       <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
         <h2 className="mb-4 text-xl font-bold text-neutral-900">Nowy wątek</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="mb-1 block text-sm font-medium text-neutral-700">Tytuł</label>
             <input
+              autoFocus
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Wprowadź tytuł wątku"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Wprowadź tytuł wątku"
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              autoFocus
             />
           </div>
 
@@ -223,24 +223,24 @@ function CreateThreadModal({
             <label className="mb-1 block text-sm font-medium text-neutral-700">Typ</label>
             <div className="flex gap-2">
               <button
-                type="button"
-                onClick={() => setType('INDIVIDUAL')}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   type === 'INDIVIDUAL'
                     ? 'border-2 border-blue-300 bg-blue-100 text-blue-800'
                     : 'border-2 border-transparent bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
+                type="button"
+                onClick={() => setType('INDIVIDUAL')}
               >
                 Indywidualny
               </button>
               <button
-                type="button"
-                onClick={() => setType('GROUP')}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   type === 'GROUP'
                     ? 'border-2 border-blue-300 bg-blue-100 text-blue-800'
                     : 'border-2 border-transparent bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
+                type="button"
+                onClick={() => setType('GROUP')}
               >
                 Grupowy
               </button>
@@ -249,16 +249,16 @@ function CreateThreadModal({
 
           <div className="flex gap-3 pt-4">
             <button
+              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
             >
               Anuluj
             </button>
             <button
-              type="submit"
-              disabled={!title.trim() || isLoading}
               className="flex-1 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={!title.trim() || isLoading}
+              type="submit"
             >
               {isLoading ? 'Tworzenie...' : 'Utwórz'}
             </button>

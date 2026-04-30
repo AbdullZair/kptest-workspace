@@ -103,7 +103,7 @@ export const AttachmentUpload = function AttachmentUpload({
   }, [])
 
   return (
-    <Card variant="default" size="sm" className="p-4">
+    <Card className="p-4" size="sm" variant="default">
       <div
         className={`relative rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
           dragActive ? 'border-blue-500 bg-blue-50' : 'border-neutral-300 hover:border-neutral-400'
@@ -115,11 +115,11 @@ export const AttachmentUpload = function AttachmentUpload({
       >
         <input
           ref={inputRef}
-          type="file"
-          onChange={handleInputChange}
           accept={acceptedTypes}
           className="hidden"
           disabled={isLoading}
+          type="file"
+          onChange={handleInputChange}
         />
 
         {/* Upload progress */}
@@ -145,14 +145,14 @@ export const AttachmentUpload = function AttachmentUpload({
             <svg
               className="h-6 w-6 text-neutral-600"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
               />
             </svg>
           </div>
@@ -168,11 +168,11 @@ export const AttachmentUpload = function AttachmentUpload({
           </div>
 
           <Button
+            disabled={isLoading}
+            size="sm"
             type="button"
             variant="outline"
-            size="sm"
             onClick={handleClick}
-            disabled={isLoading}
           >
             Wybierz plik
           </Button>

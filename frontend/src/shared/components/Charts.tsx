@@ -65,27 +65,27 @@ export function BarChart({
   return (
     <div className={clsx('w-full', className)} style={{ height }}>
       <svg
-        viewBox={`0 0 ${chartWidth + gap} ${height}`}
         className="h-full w-full"
         preserveAspectRatio="none"
+        viewBox={`0 0 ${chartWidth + gap} ${height}`}
       >
         {/* Grid lines */}
         {showGrid
           ? [0, 25, 50, 75, 100].map((y) => (
               <g key={y}>
                 <line
-                  x1="0"
-                  y1={height - (y / 100) * height - 20}
-                  x2={chartWidth + gap}
-                  y2={height - (y / 100) * height - 20}
                   stroke="#e5e7eb"
                   strokeWidth="1"
+                  x1="0"
+                  x2={chartWidth + gap}
+                  y1={height - (y / 100) * height - 20}
+                  y2={height - (y / 100) * height - 20}
                 />
                 <text
+                  className="fill-neutral-500 text-xs"
+                  textAnchor="end"
                   x="-5"
                   y={height - (y / 100) * height - 16}
-                  textAnchor="end"
-                  className="fill-neutral-500 text-xs"
                 >
                   {y}%
                 </text>
@@ -103,29 +103,29 @@ export function BarChart({
           return (
             <g key={d.label}>
               <rect
+                className="transition-all duration-300 hover:opacity-80"
+                fill={color}
+                height={barHeight}
+                rx="4"
+                width={barWidth}
                 x={x}
                 y={y}
-                width={barWidth}
-                height={barHeight}
-                fill={color}
-                rx="4"
-                className="transition-all duration-300 hover:opacity-80"
               />
               {showValues ? (
                 <text
+                  className="fill-neutral-700 text-xs font-medium"
+                  textAnchor="middle"
                   x={x + barWidth / 2}
                   y={y - 5}
-                  textAnchor="middle"
-                  className="fill-neutral-700 text-xs font-medium"
                 >
                   {d.value}
                 </text>
               ) : null}
               <text
+                className="fill-neutral-600 text-xs"
+                textAnchor="middle"
                 x={x + barWidth / 2}
                 y={height - 5}
-                textAnchor="middle"
-                className="fill-neutral-600 text-xs"
               >
                 {d.label}
               </text>
@@ -204,27 +204,27 @@ export function LineChart({
   return (
     <div className={clsx('w-full', className)} style={{ height }}>
       <svg
-        viewBox={`0 0 ${chartWidth + pointGap} ${height}`}
         className="h-full w-full"
         preserveAspectRatio="none"
+        viewBox={`0 0 ${chartWidth + pointGap} ${height}`}
       >
         {/* Grid lines */}
         {showGrid
           ? [0, 25, 50, 75, 100].map((y) => (
               <g key={y}>
                 <line
-                  x1="0"
-                  y1={height - (y / 100) * height - 20}
-                  x2={chartWidth + pointGap}
-                  y2={height - (y / 100) * height - 20}
                   stroke="#e5e7eb"
                   strokeWidth="1"
+                  x1="0"
+                  x2={chartWidth + pointGap}
+                  y1={height - (y / 100) * height - 20}
+                  y2={height - (y / 100) * height - 20}
                 />
                 <text
+                  className="fill-neutral-500 text-xs"
+                  textAnchor="end"
                   x="-5"
                   y={height - (y / 100) * height - 16}
-                  textAnchor="end"
-                  className="fill-neutral-500 text-xs"
                 >
                   {y}%
                 </text>
@@ -240,9 +240,9 @@ export function LineChart({
           d={linePath}
           fill="none"
           stroke={lineColor}
-          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          strokeWidth="2"
         />
 
         {/* Points */}
@@ -250,17 +250,17 @@ export function LineChart({
           ? data.map((d, i) => (
               <g key={d.label}>
                 <circle
+                  className="hover:r-6 transition-all"
                   cx={getX(i)}
                   cy={getY(d.value)}
-                  r="4"
                   fill={lineColor}
-                  className="hover:r-6 transition-all"
+                  r="4"
                 />
                 <text
+                  className="fill-neutral-600 text-xs"
+                  textAnchor="middle"
                   x={getX(i)}
                   y={height - 5}
-                  textAnchor="middle"
-                  className="fill-neutral-600 text-xs"
                 >
                   {d.label}
                 </text>
@@ -359,21 +359,21 @@ export function PieChart({
 
   return (
     <div className={clsx('flex items-center gap-4', className)}>
-      <svg width={size} height={size} className="shrink-0">
+      <svg className="shrink-0" height={size} width={size}>
         {slices.map((slice, i) => (
           <g key={i}>
             <path
+              className="transition-opacity hover:opacity-80"
               d={slice.path}
               fill={slice.color}
-              className="transition-opacity hover:opacity-80"
             />
             {showLabels && slice.percentage !== '0.0' ? (
               <text
+                className="fill-white text-xs font-medium"
+                dominantBaseline="middle"
+                textAnchor="middle"
                 x={slice.labelX}
                 y={slice.labelY}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="fill-white text-xs font-medium"
               >
                 {slice.percentage}%
               </text>

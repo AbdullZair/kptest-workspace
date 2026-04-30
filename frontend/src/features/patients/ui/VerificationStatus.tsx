@@ -94,7 +94,7 @@ export const VerificationStatus = memo(
 
     return (
       <span className={twMerge(baseStyles)}>
-        <span className={clsx('h-2 w-2 rounded-full', styles.dot)} aria-hidden="true" />
+        <span aria-hidden="true" className={clsx('h-2 w-2 rounded-full', styles.dot)} />
         {showLabel ? <span className="font-medium">{getStatusLabel(status)}</span> : null}
       </span>
     )

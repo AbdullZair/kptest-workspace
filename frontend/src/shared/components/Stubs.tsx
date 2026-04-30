@@ -31,19 +31,19 @@ export const Modal = memo(({ isOpen, onClose, title, children, footer, className
   if (!isOpen) return null
   return (
     <div
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
       role="dialog"
-      aria-modal="true"
     >
       <div className={`mx-4 w-full max-w-2xl rounded-lg bg-white shadow-xl ${className ?? ''}`}>
         {title ? (
           <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4">
             <h3 className="text-lg font-semibold text-neutral-900">{title}</h3>
             <button
+              aria-label="Zamknij"
+              className="text-neutral-500 hover:text-neutral-700"
               type="button"
               onClick={onClose}
-              className="text-neutral-500 hover:text-neutral-700"
-              aria-label="Zamknij"
             >
               ×
             </button>
@@ -81,7 +81,17 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   (
-    { label, options, errorMessage, helperText, fullWidth, className, children, placeholder, ...rest },
+    {
+      label,
+      options,
+      errorMessage,
+      helperText,
+      fullWidth,
+      className,
+      children,
+      placeholder,
+      ...rest
+    },
     ref
   ) => (
     <label className={`flex flex-col gap-1 ${fullWidth ? 'w-full' : ''}`}>
@@ -92,7 +102,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {...rest}
       >
         {placeholder ? (
-          <option value="" disabled>
+          <option disabled value="">
             {placeholder}
           </option>
         ) : null}
@@ -155,8 +165,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     <label className="inline-flex items-center gap-2 text-sm text-neutral-700">
       <input
         ref={ref}
-        type="checkbox"
         className={`h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500 ${className ?? ''}`}
+        type="checkbox"
         {...rest}
       />
       {label}
@@ -177,8 +187,8 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     <label className="inline-flex items-center gap-2 text-sm text-neutral-700">
       <input
         ref={ref}
-        type="radio"
         className={`h-4 w-4 border-neutral-300 text-primary-600 focus:ring-primary-500 ${className ?? ''}`}
+        type="radio"
         {...rest}
       />
       {label}
@@ -206,27 +216,29 @@ const ALERT_STYLES: Record<AlertVariant, string> = {
   error: 'bg-red-50 border-red-200 text-red-800',
 }
 
-export const Alert = memo(({ variant = 'info', title, children, className, onClose }: AlertProps) => (
-  <div
-    role="alert"
-    className={`flex items-start gap-2 rounded-md border px-4 py-3 text-sm ${ALERT_STYLES[variant]} ${className ?? ''}`}
-  >
-    <div className="flex-1">
-      {title ? <p className="font-semibold">{title}</p> : null}
-      {children}
+export const Alert = memo(
+  ({ variant = 'info', title, children, className, onClose }: AlertProps) => (
+    <div
+      className={`flex items-start gap-2 rounded-md border px-4 py-3 text-sm ${ALERT_STYLES[variant]} ${className ?? ''}`}
+      role="alert"
+    >
+      <div className="flex-1">
+        {title ? <p className="font-semibold">{title}</p> : null}
+        {children}
+      </div>
+      {onClose ? (
+        <button
+          aria-label="Zamknij"
+          className="text-current opacity-70 hover:opacity-100"
+          type="button"
+          onClick={onClose}
+        >
+          ×
+        </button>
+      ) : null}
     </div>
-    {onClose ? (
-      <button
-        type="button"
-        onClick={onClose}
-        className="text-current opacity-70 hover:opacity-100"
-        aria-label="Zamknij"
-      >
-        ×
-      </button>
-    ) : null}
-  </div>
-))
+  )
+)
 Alert.displayName = 'Alert'
 
 /* -------------------------------------------------------------------------- */
@@ -288,41 +300,43 @@ export interface TabsProps {
   className?: string
 }
 
-export const Tabs = memo(({ items, tabs, value, activeTab, onChange, onTabChange, className }: TabsProps) => {
-  const list = items ?? tabs ?? []
-  const activeId = value ?? activeTab ?? list[0]?.id
-  const active = list.find((i) => i.id === activeId)
-  const handleChange = (id: string) => {
-    onChange?.(id)
-    onTabChange?.(id)
-  }
-  return (
-    <div className={className}>
-      <div role="tablist" className="flex gap-1 border-b border-neutral-200">
-        {list.map((item) => {
-          const isActive = item.id === activeId
-          return (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => handleChange(item.id)}
-              className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium ${
-                isActive
-                  ? 'border-primary-500 text-primary-600'
-                  : 'border-transparent text-neutral-600 hover:text-neutral-800'
-              }`}
-            >
-              {item.label}
-            </button>
-          )
-        })}
+export const Tabs = memo(
+  ({ items, tabs, value, activeTab, onChange, onTabChange, className }: TabsProps) => {
+    const list = items ?? tabs ?? []
+    const activeId = value ?? activeTab ?? list[0]?.id
+    const active = list.find((i) => i.id === activeId)
+    const handleChange = (id: string) => {
+      onChange?.(id)
+      onTabChange?.(id)
+    }
+    return (
+      <div className={className}>
+        <div className="flex gap-1 border-b border-neutral-200" role="tablist">
+          {list.map((item) => {
+            const isActive = item.id === activeId
+            return (
+              <button
+                key={item.id}
+                aria-selected={isActive}
+                className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium ${
+                  isActive
+                    ? 'border-primary-500 text-primary-600'
+                    : 'border-transparent text-neutral-600 hover:text-neutral-800'
+                }`}
+                role="tab"
+                type="button"
+                onClick={() => handleChange(item.id)}
+              >
+                {item.label}
+              </button>
+            )
+          })}
+        </div>
+        {active?.content ? <div className="pt-4">{active.content}</div> : null}
       </div>
-      {active?.content ? <div className="pt-4">{active.content}</div> : null}
-    </div>
-  )
-})
+    )
+  }
+)
 Tabs.displayName = 'Tabs'
 
 /* Generic button-with-loading wrapper occasionally referenced. */

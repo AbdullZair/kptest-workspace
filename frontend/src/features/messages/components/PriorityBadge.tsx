@@ -54,9 +54,9 @@ export function PriorityBadge({ priority, showLabel = true, size = 'md' }: Prior
 
   return (
     <span
+      aria-label={`Priorytet: ${config.label}`}
       className={`inline-flex items-center gap-1 rounded-full border font-medium ${config.bgColor} ${config.textColor} ${config.borderColor} ${sizeClass} `}
       role="status"
-      aria-label={`Priorytet: ${config.label}`}
     >
       <span aria-hidden="true">{config.icon}</span>
       {showLabel ? <span>{config.label}</span> : null}

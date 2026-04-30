@@ -61,17 +61,7 @@ const sizeStyles: Record<IconButtonSize, string> = {
  */
 export const IconButton = memo(
   forwardRef<HTMLButtonElement, IconButtonProps>(
-    (
-      {
-        icon,
-        variant = 'ghost',
-        size = 'sm',
-        className,
-        type = 'button',
-        ...props
-      },
-      ref
-    ) => {
+    ({ icon, variant = 'ghost', size = 'sm', className, type = 'button', ...props }, ref) => {
       const baseStyles = clsx(
         'inline-flex items-center justify-center transition-colors',
         'focus:outline-none focus:ring-2 focus:ring-offset-2',
@@ -82,7 +72,7 @@ export const IconButton = memo(
       )
 
       return (
-        <button ref={ref} type={type} className={twMerge(baseStyles)} {...props}>
+        <button ref={ref} className={twMerge(baseStyles)} type={type} {...props}>
           {icon}
         </button>
       )

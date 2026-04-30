@@ -5,7 +5,10 @@ import type { ExportFormat } from '../types'
 import type { ApiError } from '@shared/api'
 
 const sanitize = (s: string): string =>
-  s.normalize('NFKD').replace(/[^\p{L}\p{N}_-]+/gu, '_').replace(/_+/g, '_') || 'pacjent'
+  s
+    .normalize('NFKD')
+    .replace(/[^\p{L}\p{N}_-]+/gu, '_')
+    .replace(/_+/g, '_') || 'pacjent'
 
 /**
  * RodoPanelPage (US-A-10/11/12 — admin RODO operations).
@@ -69,16 +72,16 @@ export const RodoPanelPage = () => {
       </div>
 
       <div className="rounded-lg border border-neutral-200 bg-white p-6">
-        <label htmlFor="patient-select" className="block text-sm font-medium text-neutral-700">
+        <label className="block text-sm font-medium text-neutral-700" htmlFor="patient-select">
           Pacjent
         </label>
         <select
-          id="patient-select"
+          className="mt-1 w-full max-w-xl rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           data-testid="patient-select"
+          disabled={isLoading || patients.length === 0}
+          id="patient-select"
           value={patientId}
           onChange={(e) => setPatientId(e.target.value)}
-          disabled={isLoading || patients.length === 0}
-          className="mt-1 w-full max-w-xl rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
           {patients.length === 0 ? (
             <option value="">{isLoading ? 'Ładowanie...' : 'Brak pacjentów'}</option>
@@ -96,26 +99,26 @@ export const RodoPanelPage = () => {
         <h2 className="text-lg font-semibold text-neutral-900">Eksport danych</h2>
         <div className="mt-4 flex gap-2">
           <button
-            type="button"
-            onClick={() => setFormat('json')}
-            data-testid="format-json"
             className={`rounded-md border px-3 py-1.5 text-sm font-medium ${
               format === 'json'
                 ? 'border-primary-600 bg-primary-50 text-primary-700'
                 : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
             }`}
+            data-testid="format-json"
+            type="button"
+            onClick={() => setFormat('json')}
           >
             JSON
           </button>
           <button
-            type="button"
-            onClick={() => setFormat('pdf')}
-            data-testid="format-pdf"
             className={`rounded-md border px-3 py-1.5 text-sm font-medium ${
               format === 'pdf'
                 ? 'border-primary-600 bg-primary-50 text-primary-700'
                 : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
             }`}
+            data-testid="format-pdf"
+            type="button"
+            onClick={() => setFormat('pdf')}
           >
             PDF
           </button>
@@ -123,20 +126,20 @@ export const RodoPanelPage = () => {
 
         <div className="mt-4 flex gap-2">
           <button
+            className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+            data-testid="export-data-button"
+            disabled={isExporting || !patientId}
             type="button"
             onClick={handleDownload}
-            disabled={isExporting || !patientId}
-            data-testid="export-data-button"
-            className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isExporting ? 'Eksportuję...' : 'Eksportuj dane'}
           </button>
           <button
+            className="rounded-md border border-primary-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 hover:bg-primary-50 disabled:cursor-not-allowed disabled:opacity-50"
+            data-testid="download-button"
+            disabled={isExporting || !patientId}
             type="button"
             onClick={handleDownload}
-            disabled={isExporting || !patientId}
-            data-testid="download-button"
-            className="rounded-md border border-primary-300 bg-white px-4 py-2 text-sm font-medium text-primary-700 hover:bg-primary-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Pobierz {format.toUpperCase()}
           </button>
@@ -145,12 +148,12 @@ export const RodoPanelPage = () => {
 
       {feedback ? (
         <div
-          role="status"
           className={
             feedback.kind === 'ok'
               ? 'rounded-md border border-success-200 bg-success-50 p-3 text-sm text-success-700'
               : 'rounded-md border border-error-200 bg-error-50 p-3 text-sm text-error-700'
           }
+          role="status"
         >
           {feedback.text}
         </div>

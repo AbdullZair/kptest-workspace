@@ -89,17 +89,17 @@ export const MaterialCard = memo(
 
     return (
       <Card
+        className="cursor-pointer"
+        size={compact ? 'sm' : 'md'}
         variant="interactive"
         onClick={handleClick}
-        size={compact ? 'sm' : 'md'}
-        className="cursor-pointer"
       >
         <div className="flex items-start justify-between gap-4">
           {/* Material info */}
           <div className="min-w-0 flex-1">
             {/* Title and type */}
             <div className="mb-2 flex items-center gap-3">
-              <MaterialTypeIcon type={material.type} size="sm" showLabel />
+              <MaterialTypeIcon showLabel size="sm" type={material.type} />
               <h3 className="truncate text-lg font-semibold text-neutral-900">{material.title}</h3>
             </div>
 
@@ -121,8 +121,8 @@ export const MaterialCard = memo(
             {/* Content preview (for articles) */}
             {!compact && material.type === 'ARTICLE' && material.content ? (
               <div
-                className="mb-3 line-clamp-2 text-sm text-neutral-600"
                 dangerouslySetInnerHTML={{ __html: stripHtml(material.content) }}
+                className="mb-3 line-clamp-2 text-sm text-neutral-600"
               />
             ) : null}
 
@@ -164,51 +164,51 @@ export const MaterialCard = memo(
             <div className="flex flex-shrink-0 flex-col gap-2">
               {!material.published && (
                 <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handlePublishClick}
-                  className="text-green-600 hover:bg-green-50 hover:text-green-700"
                   aria-label="Opublikuj materiał"
+                  className="text-green-600 hover:bg-green-50 hover:text-green-700"
+                  size="sm"
+                  variant="outline"
+                  onClick={handlePublishClick}
                 >
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
+                      d="M5 13l4 4L19 7"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M5 13l4 4L19 7"
                     />
                   </svg>
                 </Button>
               )}
               <Button
-                variant="outline"
-                size="sm"
-                onClick={handleEditClick}
                 aria-label="Edytuj materiał"
+                size="sm"
+                variant="outline"
+                onClick={handleEditClick}
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                   />
                 </svg>
               </Button>
 
               <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleDeleteClick}
-                className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
                 aria-label="Usuń materiał"
+                className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                size="sm"
+                variant="ghost"
+                onClick={handleDeleteClick}
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
               </Button>

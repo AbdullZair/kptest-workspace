@@ -52,7 +52,7 @@ export const ProjectStatisticsPage = () => {
     return (
       <div className="py-12 text-center">
         <p className="text-error-600">Nie znaleziono identyfikatora projektu</p>
-        <Button variant="primary" onClick={() => navigate('/projects')} className="mt-4">
+        <Button className="mt-4" variant="primary" onClick={() => navigate('/projects')}>
           Powrót do projektów
         </Button>
       </div>
@@ -64,13 +64,13 @@ export const ProjectStatisticsPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={handleBack}>
-            <svg className="mr-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <Button size="sm" variant="ghost" onClick={handleBack}>
+            <svg className="mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M15 19l-7-7 7-7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 19l-7-7 7-7"
               />
             </svg>
             Powrót
@@ -83,12 +83,12 @@ export const ProjectStatisticsPage = () => {
 
         <div className="flex items-center gap-3">
           <Button variant="outline" onClick={handleExport}>
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
               />
             </svg>
             Eksportuj
@@ -148,10 +148,10 @@ export const ProjectStatisticsPage = () => {
           </div>
           <div className="p-6">
             <div className="space-y-3">
-              <TeamMemberRow role="Koordynator" count={2} color="bg-primary-500" />
-              <TeamMemberRow role="Lekarze" count={4} color="bg-secondary-500" />
-              <TeamMemberRow role="Terapeuci" count={5} color="bg-success-500" />
-              <TeamMemberRow role="Pielęgniarki" count={1} color="bg-warning-500" />
+              <TeamMemberRow color="bg-primary-500" count={2} role="Koordynator" />
+              <TeamMemberRow color="bg-secondary-500" count={4} role="Lekarze" />
+              <TeamMemberRow color="bg-success-500" count={5} role="Terapeuci" />
+              <TeamMemberRow color="bg-warning-500" count={1} role="Pielęgniarki" />
             </div>
           </div>
         </Card>

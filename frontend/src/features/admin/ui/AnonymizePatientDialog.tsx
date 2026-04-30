@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useAnonymizePatientMutation } from '../api/adminApi'
-import type { AnonymizationReason } from '../types'
 import type { ApiError } from '@shared/api'
 
 interface AnonymizePatientDialogProps {
@@ -49,7 +48,7 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
   const hasValidNotes = !requiresNotes || notes.trim().length >= 3
   const canProceed = isPhraseValid && hasValidNotes && !isLoading
 
-  const errorMessage = error ? (error as ApiError)?.message ?? String(error) : null
+  const errorMessage = error ? ((error as ApiError)?.message ?? String(error)) : null
 
   const handleClose = (): void => {
     setReason('RODO_REQUEST')
@@ -65,7 +64,7 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
       await anonymizePatient({
         patientId,
         body: {
-          reason: reason as AnonymizationReason,
+          reason,
           additional_notes: notes.trim() ? notes.trim() : undefined,
         },
       }).unwrap()
@@ -81,17 +80,14 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="anonymize-dialog-title"
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      role="dialog"
     >
       <div className="mx-4 w-full max-w-lg rounded-lg bg-white shadow-xl">
         <div className="border-b border-neutral-200 px-6 py-4">
-          <h3
-            id="anonymize-dialog-title"
-            className="text-lg font-semibold text-neutral-900"
-          >
+          <h3 className="text-lg font-semibold text-neutral-900" id="anonymize-dialog-title">
             {step === 1 ? 'Anonimizacja danych pacjenta' : 'Potwierdź anonimizację'}
           </h3>
           <p className="mt-1 text-sm text-neutral-500">{patientName}</p>
@@ -101,9 +97,8 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
           <div className="space-y-4 px-6 py-4">
             <div className="rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
               <p>
-                <strong>Uwaga:</strong> Anonimizacja jest nieodwracalna. Dane
-                osobowe zostaną zastąpione wartościami pseudonimowymi zgodnie z
-                RODO (Art. 17).
+                <strong>Uwaga:</strong> Anonimizacja jest nieodwracalna. Dane osobowe zostaną
+                zastąpione wartościami pseudonimowymi zgodnie z RODO (Art. 17).
               </p>
             </div>
 
@@ -115,16 +110,16 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
 
             <div>
               <label
-                htmlFor="anonymize-reason"
                 className="mb-1 block text-sm font-medium text-neutral-700"
+                htmlFor="anonymize-reason"
               >
                 Powód anonimizacji *
               </label>
               <select
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 id="anonymize-reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value as ReasonCode)}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {REASON_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -137,18 +132,18 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
             {requiresNotes ? (
               <div>
                 <label
-                  htmlFor="anonymize-notes"
                   className="mb-1 block text-sm font-medium text-neutral-700"
+                  htmlFor="anonymize-notes"
                 >
                   Uzasadnienie *
                 </label>
                 <textarea
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   id="anonymize-notes"
+                  placeholder='Opisz powód wybrania kategorii „Inne"...'
+                  rows={3}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  rows={3}
-                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder='Opisz powód wybrania kategorii „Inne"...'
                 />
                 <p className="mt-1 text-xs text-neutral-500">
                   Minimum 3 znaki. Treść trafi do dziennika audytu.
@@ -158,37 +153,37 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
 
             <div>
               <label
-                htmlFor="anonymize-confirmation"
                 className="mb-1 block text-sm font-medium text-neutral-700"
+                htmlFor="anonymize-confirmation"
               >
                 Wpisz „{CONFIRMATION_PHRASE}", aby aktywować przycisk *
               </label>
               <input
+                autoComplete="off"
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 font-mono text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 id="anonymize-confirmation"
+                placeholder={CONFIRMATION_PHRASE}
+                spellCheck={false}
                 type="text"
                 value={confirmation}
                 onChange={(e) => setConfirmation(e.target.value)}
-                autoComplete="off"
-                spellCheck={false}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 font-mono text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                placeholder={CONFIRMATION_PHRASE}
               />
             </div>
 
             <div className="flex justify-end gap-3 border-t border-neutral-200 pt-4">
               <button
+                className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+                disabled={isLoading}
                 type="button"
                 onClick={handleClose}
-                disabled={isLoading}
-                className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
               >
                 Anuluj
               </button>
               <button
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={!canProceed}
                 type="button"
                 onClick={() => setStep(2)}
-                disabled={!canProceed}
-                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Dalej
               </button>
@@ -235,18 +230,18 @@ export const AnonymizePatientDialog: React.FC<AnonymizePatientDialogProps> = ({
 
             <div className="flex justify-end gap-3 border-t border-neutral-200 pt-4">
               <button
+                className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+                disabled={isLoading}
                 type="button"
                 onClick={() => setStep(1)}
-                disabled={isLoading}
-                className="rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
               >
                 Wstecz
               </button>
               <button
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isLoading}
                 type="button"
                 onClick={handleConfirm}
-                disabled={isLoading}
-                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading ? 'Anonimizuję...' : 'Anonimizuj nieodwracalnie'}
               </button>

@@ -110,16 +110,16 @@ export const LogViewer = memo(({ log, onClose, className }: LogViewerProps) => {
           )}
         </div>
         <button
-          onClick={onClose}
-          className="text-neutral-400 transition-colors hover:text-neutral-600"
           aria-label="Zamknij"
+          className="text-neutral-400 transition-colors hover:text-neutral-600"
+          onClick={onClose}
         >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
+              d="M6 18L18 6M6 6l12 12"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
         </button>
@@ -185,8 +185,8 @@ export const LogViewer = memo(({ log, onClose, className }: LogViewerProps) => {
             {log.old_value ? (
               <div>
                 <button
-                  onClick={() => setShowOldValue(!showOldValue)}
                   className="flex items-center text-sm font-medium text-primary-600 hover:text-primary-700"
+                  onClick={() => setShowOldValue(!showOldValue)}
                 >
                   <span>Stara wartość</span>
                   <svg
@@ -195,14 +195,14 @@ export const LogViewer = memo(({ log, onClose, className }: LogViewerProps) => {
                       showOldValue && 'rotate-180'
                     )}
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M19 9l-7 7-7-7"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
                     />
                   </svg>
                 </button>
@@ -218,8 +218,8 @@ export const LogViewer = memo(({ log, onClose, className }: LogViewerProps) => {
             {log.new_value ? (
               <div>
                 <button
-                  onClick={() => setShowNewValue(!showNewValue)}
                   className="flex items-center text-sm font-medium text-primary-600 hover:text-primary-700"
+                  onClick={() => setShowNewValue(!showNewValue)}
                 >
                   <span>Nowa wartość</span>
                   <svg
@@ -228,14 +228,14 @@ export const LogViewer = memo(({ log, onClose, className }: LogViewerProps) => {
                       showNewValue && 'rotate-180'
                     )}
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M19 9l-7 7-7-7"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
                     />
                   </svg>
                 </button>

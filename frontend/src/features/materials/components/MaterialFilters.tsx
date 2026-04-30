@@ -82,21 +82,21 @@ export const MaterialFilters = memo(
         {/* Search */}
         <div>
           <Input
-            type="text"
-            placeholder="Szukaj materiałów..."
-            value={searchQuery || ''}
-            onChange={(e) => onSearchChange?.(e.target.value)}
+            fullWidth
             leftIcon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
             }
-            fullWidth
+            placeholder="Szukaj materiałów..."
+            type="text"
+            value={searchQuery || ''}
+            onChange={(e) => onSearchChange?.(e.target.value)}
           />
         </div>
 
@@ -107,9 +107,9 @@ export const MaterialFilters = memo(
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700">Kategoria</label>
               <select
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                 value={selectedCategory || ''}
                 onChange={(e) => onCategoryChange?.(e.target.value || undefined)}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               >
                 <option value="">Wszystkie</option>
                 {categories.map((cat) => (
@@ -128,24 +128,24 @@ export const MaterialFilters = memo(
             </label>
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => onDifficultyChange?.(undefined)}
                 className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                   !selectedDifficulty
                     ? 'border-primary-200 bg-primary-50 text-primary-700'
                     : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                 }`}
+                onClick={() => onDifficultyChange?.(undefined)}
               >
                 Wszystkie
               </button>
               {DIFFICULTY_OPTIONS.map(({ value, label }) => (
                 <button
                   key={value}
-                  onClick={() => onDifficultyChange?.(value)}
                   className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                     selectedDifficulty === value
                       ? 'border-primary-200 bg-primary-50 text-primary-700'
                       : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                   }`}
+                  onClick={() => onDifficultyChange?.(value)}
                 >
                   {label}
                 </button>
@@ -158,24 +158,24 @@ export const MaterialFilters = memo(
             <label className="mb-1 block text-sm font-medium text-neutral-700">Typ materiału</label>
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => onTypeChange?.(undefined)}
                 className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                   !selectedType
                     ? 'border-primary-200 bg-primary-50 text-primary-700'
                     : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                 }`}
+                onClick={() => onTypeChange?.(undefined)}
               >
                 Wszystkie
               </button>
               {MATERIAL_TYPE_OPTIONS.map(({ value, label }) => (
                 <button
                   key={value}
-                  onClick={() => onTypeChange?.(value)}
                   className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                     selectedType === value
                       ? 'border-primary-200 bg-primary-50 text-primary-700'
                       : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                   }`}
+                  onClick={() => onTypeChange?.(value)}
                 >
                   {label}
                 </button>
@@ -187,13 +187,13 @@ export const MaterialFilters = memo(
         {/* Clear filters */}
         {hasActiveFilters ? (
           <div className="flex justify-end">
-            <Button variant="ghost" size="sm" onClick={handleClearFilters}>
-              <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Button size="sm" variant="ghost" onClick={handleClearFilters}>
+              <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M6 18L18 6M6 6l12 12"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
               Wyczyść filtry

@@ -16,7 +16,7 @@ import { useState, useEffect, useCallback } from 'react'
  * const isReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
  * ```
  */
-export const useMediaQuery = (query: string, defaultValue: boolean = false): boolean => {
+export const useMediaQuery = (query: string, defaultValue = false): boolean => {
   const getMatches = useCallback(
     (mediaQuery: string): boolean => {
       if (typeof window === 'undefined') {
@@ -63,7 +63,7 @@ export const useMediaQuery = (query: string, defaultValue: boolean = false): boo
  * @param breakpoint - Breakpoint in pixels (default: 768)
  * @returns Whether viewport is mobile
  */
-export const useIsMobile = (breakpoint: number = 768): boolean => {
+export const useIsMobile = (breakpoint = 768): boolean => {
   return useMediaQuery(`(max-width: ${breakpoint}px)`)
 }
 

@@ -16,7 +16,6 @@ import { clsx } from 'clsx'
  */
 export const ProjectStatistics = memo(({ statistics, className }: ProjectStatisticsProps) => {
   const {
-    project_name: _project_name,
     status,
     total_patients,
     active_patients,
@@ -33,57 +32,57 @@ export const ProjectStatistics = memo(({ statistics, className }: ProjectStatist
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-neutral-900">Statystyki projektu</h2>
-        <ProjectStatus status={status} size="md" showLabel={true} />
+        <ProjectStatus showLabel={true} size="md" status={status} />
       </div>
 
       {/* Overview Stats */}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard
+          color="primary"
+          icon={
+            <path
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+            />
+          }
           title="Łączna liczba pacjentów"
           value={total_patients}
+        />
+        <StatCard
+          color="emerald"
           icon={
             <path
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
             />
           }
-          color="primary"
-        />
-        <StatCard
           title="Aktywni pacjenci"
           value={active_patients}
-          icon={
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          }
-          color="emerald"
         />
         <StatCard
+          color="violet"
+          icon={
+            <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+          }
           title="Zakończone terapie"
           value={completed_patients}
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          }
-          color="violet"
         />
         <StatCard
-          title="Członkowie zespołu"
-          value={team_members}
+          color="secondary"
           icon={
             <path
+              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
             />
           }
-          color="secondary"
+          title="Członkowie zespołu"
+          value={team_members}
         />
       </div>
 
@@ -172,12 +171,12 @@ export const ProjectStatistics = memo(({ statistics, className }: ProjectStatist
         <Card variant="outlined">
           <Card.Body>
             <div className="flex items-center gap-2 text-rose-600">
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
               <span className="text-sm font-medium">
@@ -213,10 +212,10 @@ const StatCard = ({
   }
 
   return (
-    <Card variant="outlined" className="p-4">
+    <Card className="p-4" variant="outlined">
       <div className="flex items-center gap-3">
         <div className={`rounded-lg p-3 ${colorClasses[color]}`}>
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {icon}
           </svg>
         </div>
@@ -242,24 +241,24 @@ const ComplianceGauge = ({ value }: { value: number }) => {
     <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 120 120">
       <circle
         className="text-neutral-200"
-        strokeWidth="12"
-        stroke="currentColor"
-        fill="transparent"
-        r={radius}
         cx="60"
         cy="60"
+        fill="transparent"
+        r={radius}
+        stroke="currentColor"
+        strokeWidth="12"
       />
       <circle
         className={`${color} transition-all duration-500 ease-in-out`}
-        strokeWidth="12"
+        cx="60"
+        cy="60"
+        fill="transparent"
+        r={radius}
+        stroke="currentColor"
         strokeDasharray={circumference}
         strokeDashoffset={offset}
         strokeLinecap="round"
-        stroke="currentColor"
-        fill="transparent"
-        r={radius}
-        cx="60"
-        cy="60"
+        strokeWidth="12"
       />
     </svg>
   )

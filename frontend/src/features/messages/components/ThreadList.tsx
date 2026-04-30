@@ -42,23 +42,23 @@ const formatRelativeTime = (dateString: string): string => {
 const getTypeIcon = (type: string) => {
   if (type === 'GROUP') {
     return (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
         />
       </svg>
     )
   }
   return (
-    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
+        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
       />
     </svg>
   )
@@ -96,7 +96,7 @@ export const ThreadList = memo(
 
     if (isLoading) {
       return (
-        <Card variant="default" size="md" className="p-6">
+        <Card className="p-6" size="md" variant="default">
           <div className="flex h-32 items-center justify-center">
             <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500" />
           </div>
@@ -106,25 +106,25 @@ export const ThreadList = memo(
 
     if (threads.length === 0) {
       return (
-        <Card variant="default" size="md" className="p-6">
+        <Card className="p-6" size="md" variant="default">
           <div className="flex h-32 flex-col items-center justify-center text-center">
             <svg
               className="mb-4 h-12 w-12 text-neutral-400"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               />
             </svg>
             <p className="font-medium text-neutral-600">Brak wątków</p>
             <p className="mt-1 text-sm text-neutral-500">Rozpocznij nową konwersację</p>
             {onCreateThread ? (
-              <Button variant="primary" size="sm" onClick={onCreateThread} className="mt-4">
+              <Button className="mt-4" size="sm" variant="primary" onClick={onCreateThread}>
                 Nowy wątek
               </Button>
             ) : null}
@@ -139,13 +139,13 @@ export const ThreadList = memo(
         <div className="flex items-center justify-between px-4 py-2">
           <h2 className="text-lg font-semibold text-neutral-900">Wątki</h2>
           {onCreateThread ? (
-            <Button variant="outline" size="sm" onClick={onCreateThread}>
-              <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Button size="sm" variant="outline" onClick={onCreateThread}>
+              <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
+                  d="M12 4v16m8-8H4"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 4v16m8-8H4"
                 />
               </svg>
               Nowy
@@ -162,12 +162,12 @@ export const ThreadList = memo(
             return (
               <button
                 key={thread.id}
-                onClick={() => onSelectThread(thread)}
                 className={`w-full rounded-lg p-4 text-left transition-colors ${
                   isSelected
                     ? 'border-2 border-blue-300 bg-blue-50'
                     : 'border-2 border-transparent bg-white hover:bg-neutral-50'
                 }`}
+                onClick={() => onSelectThread(thread)}
               >
                 <div className="flex items-start gap-3">
                   {/* Thread type icon */}

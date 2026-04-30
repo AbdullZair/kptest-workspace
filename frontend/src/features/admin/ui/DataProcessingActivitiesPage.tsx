@@ -174,13 +174,13 @@ export const DataProcessingActivitiesPage: React.FC = () => {
           {LEGAL_BASIS_OPTIONS.map((option) => (
             <button
               key={option.value}
-              onClick={() => handleLegalBasisFilter(option.value)}
               className={`rounded-full px-3 py-1 text-sm transition-colors ${
                 filters.legal_basis === option.value ||
                 (option.value === 'ALL' && !filters.legal_basis)
                   ? 'bg-primary-600 text-white'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
+              onClick={() => handleLegalBasisFilter(option.value)}
             >
               {option.label}
             </button>
@@ -193,8 +193,8 @@ export const DataProcessingActivitiesPage: React.FC = () => {
         <div className="py-12 text-center">
           <p className="text-red-600">Wystąpił błąd podczas ładowania rejestru</p>
           <button
-            onClick={() => refetch()}
             className="mt-4 font-medium text-primary-600 hover:text-primary-700"
+            onClick={() => refetch()}
           >
             Spróbuj ponownie
           </button>
@@ -229,13 +229,13 @@ export const DataProcessingActivitiesPage: React.FC = () => {
               <tbody className="divide-y divide-neutral-200 bg-white">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-neutral-500">
+                    <td className="px-6 py-8 text-center text-neutral-500" colSpan={6}>
                       Ładowanie...
                     </td>
                   </tr>
                 ) : data?.content.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-neutral-500">
+                    <td className="px-6 py-8 text-center text-neutral-500" colSpan={6}>
                       Brak czynności przetwarzania w rejestrze
                     </td>
                   </tr>
@@ -261,16 +261,16 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                         <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleOpenEdit(activity)}
                           className="mr-2"
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleOpenEdit(activity)}
                         >
                           Edytuj
                         </Button>
                         <Button
-                          variant="danger"
                           size="sm"
+                          variant="danger"
                           onClick={() => {
                             setDeletingId(activity.id)
                             setShowDeleteDialog(true)
@@ -294,18 +294,18 @@ export const DataProcessingActivitiesPage: React.FC = () => {
               </div>
               <div className="flex gap-2">
                 <button
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isFirst}
                   onClick={() =>
                     setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page - 1) }))
                   }
-                  disabled={data.isFirst}
-                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Poprzednia
                 </button>
                 <button
-                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
-                  disabled={data.isLast}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isLast}
+                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
                 >
                   Następna
                 </button>
@@ -317,11 +317,11 @@ export const DataProcessingActivitiesPage: React.FC = () => {
 
       {/* Form Dialog */}
       <Dialog
+        className="relative z-50"
         open={showFormDialog}
         onClose={() => setShowFormDialog(false)}
-        className="relative z-50"
       >
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+        <div aria-hidden="true" className="fixed inset-0 bg-black/50" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl">
             <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -336,31 +336,31 @@ export const DataProcessingActivitiesPage: React.FC = () => {
               <div className="space-y-4 px-6 py-4">
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className="mb-1 block text-sm font-medium text-neutral-700">
+                  <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="name">
                     Nazwa *
                   </label>
                   <Input
                     id="name"
                     {...register('name')}
-                    variant={errors.name ? 'error' : 'default'}
-                    errorMessage={errors.name?.message}
                     fullWidth
+                    errorMessage={errors.name?.message}
+                    variant={errors.name ? 'error' : 'default'}
                   />
                 </div>
 
                 {/* Purpose */}
                 <div>
                   <label
-                    htmlFor="purpose"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="purpose"
                   >
                     Cel przetwarzania *
                   </label>
                   <textarea
                     id="purpose"
                     {...register('purpose')}
-                    rows={3}
                     className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    rows={3}
                   />
                   {errors.purpose ? (
                     <p className="mt-1 text-sm text-red-600">{errors.purpose.message}</p>
@@ -370,8 +370,8 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                 {/* Legal Basis */}
                 <div>
                   <label
-                    htmlFor="legal_basis"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="legal_basis"
                   >
                     Podstawa prawna *
                   </label>
@@ -394,15 +394,15 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                 {/* Categories */}
                 <div>
                   <label
-                    htmlFor="categories"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="categories"
                   >
                     Kategorie danych *
                   </label>
                   <Input
+                    fullWidth
                     id="categories"
                     placeholder="Wpisz kategorię i naciśnij Enter"
-                    fullWidth
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && e.currentTarget.value.trim()) {
                         e.preventDefault()
@@ -419,16 +419,16 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                 {/* Retention Period */}
                 <div>
                   <label
-                    htmlFor="retention_period"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="retention_period"
                   >
                     Okres przechowywania *
                   </label>
                   <Input
                     id="retention_period"
                     {...register('retention_period')}
-                    placeholder="np. 5 lat od zakończenia leczenia"
                     fullWidth
+                    placeholder="np. 5 lat od zakończenia leczenia"
                   />
                   {errors.retention_period ? (
                     <p className="mt-1 text-sm text-red-600">{errors.retention_period.message}</p>
@@ -438,16 +438,16 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                 {/* Security Measures */}
                 <div>
                   <label
-                    htmlFor="security_measures"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="security_measures"
                   >
                     Środki bezpieczeństwa *
                   </label>
                   <textarea
                     id="security_measures"
                     {...register('security_measures')}
-                    rows={3}
                     className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    rows={3}
                   />
                   {errors.security_measures ? (
                     <p className="mt-1 text-sm text-red-600">{errors.security_measures.message}</p>
@@ -457,8 +457,8 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                 {/* Data Controller */}
                 <div>
                   <label
-                    htmlFor="data_controller"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="data_controller"
                   >
                     Administrator danych *
                   </label>
@@ -471,8 +471,8 @@ export const DataProcessingActivitiesPage: React.FC = () => {
                 {/* Data Processor */}
                 <div>
                   <label
-                    htmlFor="data_processor"
                     className="mb-1 block text-sm font-medium text-neutral-700"
+                    htmlFor="data_processor"
                   >
                     Procesor danych
                   </label>
@@ -498,11 +498,11 @@ export const DataProcessingActivitiesPage: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog
+        className="relative z-50"
         open={showDeleteDialog}
         onClose={() => setShowDeleteDialog(false)}
-        className="relative z-50"
       >
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+        <div aria-hidden="true" className="fixed inset-0 bg-black/50" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="w-full max-w-md rounded-lg bg-white shadow-xl">
             <div className="px-6 py-4">

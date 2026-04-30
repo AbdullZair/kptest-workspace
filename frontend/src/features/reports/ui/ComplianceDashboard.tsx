@@ -67,27 +67,27 @@ const ComplianceGauge: React.FC<ComplianceGaugeProps> = ({
 
   return (
     <div className="relative inline-flex items-center justify-center">
-      <svg width={width} height={width} className="-rotate-90 transform">
+      <svg className="-rotate-90 transform" height={width} width={width}>
         <circle
           className="text-neutral-200"
-          strokeWidth={strokeWidth}
-          stroke="currentColor"
-          fill="transparent"
-          r={radius}
           cx={width / 2}
           cy={width / 2}
+          fill="transparent"
+          r={radius}
+          stroke="currentColor"
+          strokeWidth={strokeWidth}
         />
         <circle
           className={clsx(getColor(value), 'transition-all duration-500 ease-in-out')}
-          strokeWidth={strokeWidth}
+          cx={width / 2}
+          cy={width / 2}
+          fill="transparent"
+          r={radius}
+          stroke="currentColor"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          stroke="currentColor"
-          fill="transparent"
-          r={radius}
-          cx={width / 2}
-          cy={width / 2}
+          strokeWidth={strokeWidth}
         />
       </svg>
       {showLabel ? (
@@ -120,23 +120,23 @@ const BarChart: React.FC<BarChartProps> = ({ data, height = 200 }) => {
 
   return (
     <div className="w-full" style={{ height }}>
-      <svg viewBox={`0 0 ${data.length * (barWidth + gap)} ${height}`} className="h-full w-full">
+      <svg className="h-full w-full" viewBox={`0 0 ${data.length * (barWidth + gap)} ${height}`}>
         {/* Grid lines */}
         {[0, 25, 50, 75, 100].map((y) => (
           <g key={y}>
             <line
-              x1="0"
-              y1={height - (y / 100) * height}
-              x2={data.length * (barWidth + gap)}
-              y2={height - (y / 100) * height}
               stroke="#e5e7eb"
               strokeWidth="1"
+              x1="0"
+              x2={data.length * (barWidth + gap)}
+              y1={height - (y / 100) * height}
+              y2={height - (y / 100) * height}
             />
             <text
+              className="fill-neutral-500 text-xs"
+              textAnchor="end"
               x="-5"
               y={height - (y / 100) * height + 4}
-              textAnchor="end"
-              className="fill-neutral-500 text-xs"
             >
               {y}%
             </text>
@@ -154,27 +154,27 @@ const BarChart: React.FC<BarChartProps> = ({ data, height = 200 }) => {
           return (
             <g key={d.day}>
               <rect
+                className="transition-all duration-300 hover:opacity-80"
+                fill={color}
+                height={barHeight}
+                rx="4"
+                width={barWidth}
                 x={x}
                 y={y}
-                width={barWidth}
-                height={barHeight}
-                fill={color}
-                rx="4"
-                className="transition-all duration-300 hover:opacity-80"
               />
               <text
+                className="fill-neutral-600 text-xs"
+                textAnchor="middle"
                 x={x + barWidth / 2}
                 y={height - 5}
-                textAnchor="middle"
-                className="fill-neutral-600 text-xs"
               >
                 {d.day}
               </text>
               <text
+                className="fill-neutral-700 text-xs font-medium"
+                textAnchor="middle"
                 x={x + barWidth / 2}
                 y={y - 5}
-                textAnchor="middle"
-                className="fill-neutral-700 text-xs font-medium"
               >
                 {d.value}%
               </text>
@@ -247,13 +247,13 @@ export const ComplianceDashboard = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <Button size="sm" variant="outline">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
               />
             </svg>
             Eksportuj
@@ -268,9 +268,9 @@ export const ComplianceDashboard = () => {
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700">Okres</label>
               <select
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value as any)}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="7d">Ostatnie 7 dni</option>
                 <option value="30d">Ostatnie 30 dni</option>
@@ -281,9 +281,9 @@ export const ComplianceDashboard = () => {
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700">Projekt</label>
               <select
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                 value={selectedProject}
                 onChange={(e) => setSelectedProject(e.target.value)}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="all">Wszystkie projekty</option>
                 <option value="1">Projekt A</option>
@@ -297,7 +297,7 @@ export const ComplianceDashboard = () => {
 
       {/* Overview Stats */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-        <Card variant="elevated" className="p-6">
+        <Card className="p-6" variant="elevated">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-neutral-600">Średni compliance</p>
@@ -305,22 +305,22 @@ export const ComplianceDashboard = () => {
                 {mockComplianceData.overall}%
               </p>
               <p className="mt-1 flex items-center text-sm text-success-600">
-                <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
                   />
                 </svg>
                 {mockComplianceData.trend} vs ostatni okres
               </p>
             </div>
-            <ComplianceGauge value={mockComplianceData.overall} size="md" showLabel={false} />
+            <ComplianceGauge showLabel={false} size="md" value={mockComplianceData.overall} />
           </div>
         </Card>
 
-        <Card variant="elevated" className="p-6">
+        <Card className="p-6" variant="elevated">
           <div>
             <p className="text-sm font-medium text-neutral-600">Pacjenci z wysokim compliance</p>
             <p className="mt-2 text-3xl font-bold text-success-600">
@@ -338,7 +338,7 @@ export const ComplianceDashboard = () => {
           </div>
         </Card>
 
-        <Card variant="elevated" className="p-6">
+        <Card className="p-6" variant="elevated">
           <div>
             <p className="text-sm font-medium text-neutral-600">Pacjenci zagrożeni</p>
             <p className="mt-2 text-3xl font-bold text-error-600">{atRiskPatients}</p>
@@ -346,7 +346,7 @@ export const ComplianceDashboard = () => {
           </div>
         </Card>
 
-        <Card variant="elevated" className="p-6">
+        <Card className="p-6" variant="elevated">
           <div>
             <p className="text-sm font-medium text-neutral-600">Aktywnych pacjentów</p>
             <p className="mt-2 text-3xl font-bold text-neutral-900">{totalPatients}</p>
@@ -375,34 +375,34 @@ export const ComplianceDashboard = () => {
           <Card.Body>
             <div className="space-y-4">
               <DistributionBar
-                label="Doskonały (&gt;90%)"
-                value={mockComplianceData.distribution.excellent}
-                total={totalPatients}
                 color="bg-success-500"
+                label="Doskonały (&gt;90%)"
+                total={totalPatients}
+                value={mockComplianceData.distribution.excellent}
               />
               <DistributionBar
-                label="Dobry (70-90%)"
-                value={mockComplianceData.distribution.good}
-                total={totalPatients}
                 color="bg-emerald-500"
+                label="Dobry (70-90%)"
+                total={totalPatients}
+                value={mockComplianceData.distribution.good}
               />
               <DistributionBar
-                label="Średni (50-70%)"
-                value={mockComplianceData.distribution.average}
-                total={totalPatients}
                 color="bg-amber-500"
+                label="Średni (50-70%)"
+                total={totalPatients}
+                value={mockComplianceData.distribution.average}
               />
               <DistributionBar
-                label="Niski (30-50%)"
-                value={mockComplianceData.distribution.low}
-                total={totalPatients}
                 color="bg-orange-500"
+                label="Niski (30-50%)"
+                total={totalPatients}
+                value={mockComplianceData.distribution.low}
               />
               <DistributionBar
-                label="Krytyczny (&lt;30%)"
-                value={mockComplianceData.distribution.critical}
-                total={totalPatients}
                 color="bg-error-500"
+                label="Krytyczny (&lt;30%)"
+                total={totalPatients}
+                value={mockComplianceData.distribution.critical}
               />
             </div>
           </Card.Body>
@@ -413,7 +413,7 @@ export const ComplianceDashboard = () => {
       <Card variant="elevated">
         <Card.Header>
           <h2 className="text-lg font-semibold text-neutral-900">Pacjenci wymagający uwagi</h2>
-          <Button variant="outline" size="sm">
+          <Button size="sm" variant="outline">
             Zobacz wszystkich
           </Button>
         </Card.Header>

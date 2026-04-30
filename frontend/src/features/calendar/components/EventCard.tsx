@@ -1,11 +1,7 @@
 import React from 'react'
 import { format } from 'date-fns'
 import { pl } from 'date-fns/locale'
-import {
-  type TherapyEvent,
-  EVENT_TYPE_LABELS,
-  EVENT_TYPE_COLORS,
-} from '@entities/event'
+import { type TherapyEvent, EVENT_TYPE_LABELS, EVENT_TYPE_COLORS } from '@entities/event'
 import { EventStatusBadge } from './EventStatus'
 
 interface EventCardProps {
@@ -39,8 +35,8 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, compact = 
   if (compact) {
     return (
       <div
-        onClick={handleClick}
         className={`${borderClass} cursor-pointer rounded border-l-4 p-2 transition-shadow hover:shadow-md`}
+        onClick={handleClick}
       >
         <div className="truncate text-sm font-medium">{event.title}</div>
         <div className="text-xs text-gray-600">{format(new Date(event.scheduled_at), 'HH:mm')}</div>
@@ -50,25 +46,25 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, compact = 
 
   return (
     <div
-      onClick={handleClick}
       className={`${borderClass} cursor-pointer rounded border-l-4 bg-white p-4 transition-shadow hover:shadow-md`}
+      onClick={handleClick}
     >
       <div className="mb-2 flex items-start justify-between">
         <div>
           <h3 className="font-semibold text-gray-900">{event.title}</h3>
           <p className="text-sm text-gray-600">{EVENT_TYPE_LABELS[event.type]}</p>
         </div>
-        <EventStatusBadge status={event.status} size="sm" />
+        <EventStatusBadge size="sm" status={event.status} />
       </div>
 
       <div className="space-y-1 text-sm text-gray-600">
         <div className="flex items-center gap-2">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
           <span>{format(new Date(event.scheduled_at), 'dd MMMM yyyy, HH:mm', { locale: pl })}</span>
@@ -78,10 +74,10 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, compact = 
           <div className="flex items-center gap-2">
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
             <span>Do: {format(new Date(event.ends_at), 'HH:mm')}</span>
@@ -92,16 +88,16 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, compact = 
           <div className="flex items-center gap-2">
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
               />
               <path
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
             <span>{event.location}</span>

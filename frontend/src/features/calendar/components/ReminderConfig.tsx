@@ -37,11 +37,11 @@ export const ReminderConfig: React.FC<ReminderConfigProps> = ({
       <div className="space-y-2">
         <label className="flex cursor-pointer items-center gap-3">
           <input
-            type="checkbox"
             checked={reminders.reminder_24h}
-            onChange={(e) => handleChange('reminder_24h', e.target.checked)}
-            disabled={disabled}
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            disabled={disabled}
+            type="checkbox"
+            onChange={(e) => handleChange('reminder_24h', e.target.checked)}
           />
           <span className="text-sm text-gray-700">
             <span className="font-medium">24 godziny przed</span>
@@ -51,11 +51,11 @@ export const ReminderConfig: React.FC<ReminderConfigProps> = ({
 
         <label className="flex cursor-pointer items-center gap-3">
           <input
-            type="checkbox"
             checked={reminders.reminder_2h}
-            onChange={(e) => handleChange('reminder_2h', e.target.checked)}
-            disabled={disabled}
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            disabled={disabled}
+            type="checkbox"
+            onChange={(e) => handleChange('reminder_2h', e.target.checked)}
           />
           <span className="text-sm text-gray-700">
             <span className="font-medium">2 godziny przed</span>
@@ -67,11 +67,11 @@ export const ReminderConfig: React.FC<ReminderConfigProps> = ({
 
         <label className="flex cursor-pointer items-center gap-3">
           <input
-            type="checkbox"
             checked={reminders.reminder_30min}
-            onChange={(e) => handleChange('reminder_30min', e.target.checked)}
-            disabled={disabled}
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            disabled={disabled}
+            type="checkbox"
+            onChange={(e) => handleChange('reminder_30min', e.target.checked)}
           />
           <span className="text-sm text-gray-700">
             <span className="font-medium">30 minut przed</span>

@@ -10,6 +10,7 @@ interface ImportMetaEnv {
   readonly VITE_ENABLE_CHAT: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
@@ -72,7 +73,7 @@ declare module '*.module.scss' {
  * Allows existing Jest-style tests to work without rewriting.
  */
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace, no-var
+  // eslint-disable-next-line no-var
   var jest: typeof import('vitest').vi
   namespace jest {
     type Mock<T = unknown, P extends unknown[] = unknown[]> = import('vitest').Mock<P, T>

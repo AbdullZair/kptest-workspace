@@ -68,7 +68,7 @@ export const MaterialViewerPage = () => {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="text-error-600">Materiał nie został znaleziony</p>
-          <button onClick={handleClose} className="mt-4 text-primary-600 hover:text-primary-700">
+          <button className="mt-4 text-primary-600 hover:text-primary-700" onClick={handleClose}>
             Powrót do materiałów
           </button>
         </div>

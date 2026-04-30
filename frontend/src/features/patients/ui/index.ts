@@ -7,7 +7,4 @@ export {
   type VerificationStatusType,
 } from './VerificationStatus'
 export { PatientFormModal, type PatientFormModalProps } from './PatientFormModal'
-export {
-  PatientBulkActionBar,
-  type PatientBulkActionBarProps,
-} from './PatientBulkActionBar'
+export { PatientBulkActionBar, type PatientBulkActionBarProps } from './PatientBulkActionBar'

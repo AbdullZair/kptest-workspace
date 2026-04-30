@@ -20,25 +20,24 @@ export const ConversationPage = function ConversationPage() {
   const { threadId } = useParams<{ threadId: string }>()
   const navigate = useNavigate()
   const { user } = useAuth()
-
-  if (!threadId) {
-    navigate('/messages')
-    return null
-  }
+  const safeThreadId = threadId ?? ''
 
   // Fetch thread details
   const {
     data: thread,
     isLoading: isLoadingThread,
     error: threadError,
-  } = useGetThreadByIdQuery(threadId)
+  } = useGetThreadByIdQuery(safeThreadId, { skip: !threadId })
 
   // Fetch messages
-  const { data: messages = [], isLoading: isLoadingMessages } = useGetThreadMessagesQuery({
-    threadId,
-    page: 0,
-    size: 100,
-  })
+  const { data: messages = [], isLoading: isLoadingMessages } = useGetThreadMessagesQuery(
+    {
+      threadId: safeThreadId,
+      page: 0,
+      size: 100,
+    },
+    { skip: !threadId }
+  )
 
   // Send message mutation
   const [sendMessage, { isLoading: isSending }] = useSendMessageMutation()
@@ -46,6 +45,10 @@ export const ConversationPage = function ConversationPage() {
   // Mark as read mutation
   const [markAsRead] = useMarkAsReadMutation()
 
+  if (!threadId) {
+    navigate('/messages')
+    return null
+  }
 
   // Handle send message
   const handleSendMessage = async (data: MessageFormData) => {
@@ -96,8 +99,8 @@ export const ConversationPage = function ConversationPage() {
             Konwersacja, której szukasz, nie istnieje lub została usunięta.
           </p>
           <button
-            onClick={() => navigate('/messages')}
             className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+            onClick={() => navigate('/messages')}
           >
             Wróć do wiadomości
           </button>
@@ -114,16 +117,16 @@ export const ConversationPage = function ConversationPage() {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
               <button
-                onClick={handleBack}
-                className="rounded-lg p-2 transition-colors hover:bg-neutral-100"
                 aria-label="Wróć"
+                className="rounded-lg p-2 transition-colors hover:bg-neutral-100"
+                onClick={handleBack}
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
+                    d="M15 19l-7-7 7-7"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
                   />
                 </svg>
               </button>
@@ -137,8 +140,8 @@ export const ConversationPage = function ConversationPage() {
 
             <div className="flex items-center gap-2">
               <button
-                onClick={() => navigate('/messages')}
                 className="rounded-lg px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100"
+                onClick={() => navigate('/messages')}
               >
                 Wszystkie wiadomości
               </button>
@@ -151,14 +154,14 @@ export const ConversationPage = function ConversationPage() {
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
         {user ? (
           <ConversationView
-            thread={thread}
-            messages={messages}
             currentUserId={user.id}
             isLoading={isLoadingMessages}
             isSending={isSending}
-            onSendMessage={handleSendMessage}
-            onMarkAsRead={handleMarkAsRead}
+            messages={messages}
+            thread={thread}
             onBack={handleBack}
+            onMarkAsRead={handleMarkAsRead}
+            onSendMessage={handleSendMessage}
           />
         ) : null}
       </main>

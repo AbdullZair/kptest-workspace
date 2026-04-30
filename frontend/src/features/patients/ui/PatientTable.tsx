@@ -69,9 +69,9 @@ const SortIcon = ({ order, active }: { order: SortOrder; active: boolean }) => (
       viewBox="0 0 20 20"
     >
       <path
-        fillRule="evenodd"
-        d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
         clipRule="evenodd"
+        d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+        fillRule="evenodd"
       />
     </svg>
     <svg
@@ -80,9 +80,9 @@ const SortIcon = ({ order, active }: { order: SortOrder; active: boolean }) => (
       viewBox="0 0 20 20"
     >
       <path
-        fillRule="evenodd"
-        d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
         clipRule="evenodd"
+        d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
+        fillRule="evenodd"
       />
     </svg>
   </span>
@@ -113,14 +113,14 @@ const SortableHeader = ({
 
   return (
     <th
-      className="cursor-pointer px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600 transition-colors hover:bg-neutral-50"
-      onClick={handleClick}
-      role="columnheader"
       aria-sort={isActive ? (order === 'asc' ? 'ascending' : 'descending') : 'none'}
+      className="cursor-pointer px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600 transition-colors hover:bg-neutral-50"
+      role="columnheader"
+      onClick={handleClick}
     >
       <span className="flex items-center">
         {children}
-        <SortIcon order={isActive && order ? order : 'asc'} active={isActive} />
+        <SortIcon active={isActive} order={isActive && order ? order : 'asc'} />
       </span>
     </th>
   )
@@ -164,8 +164,7 @@ export const PatientTable = memo(
     const selectedSet = new Set(selectedIds ?? [])
     const allSelected =
       selectable && patients.length > 0 && patients.every((p) => selectedSet.has(p.id))
-    const someSelected =
-      selectable && !allSelected && patients.some((p) => selectedSet.has(p.id))
+    const someSelected = selectable && !allSelected && patients.some((p) => selectedSet.has(p.id))
 
     const baseStyles = clsx('overflow-hidden rounded-lg border border-neutral-200', className)
 
@@ -189,14 +188,14 @@ export const PatientTable = memo(
             <svg
               className="mx-auto mb-4 h-16 w-16 text-neutral-300"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={1}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
             <p className="text-neutral-500">Brak pacjentów do wyświetlenia</p>
@@ -212,26 +211,23 @@ export const PatientTable = memo(
             <thead className="bg-neutral-50">
               <tr>
                 {selectable ? (
-                  <th
-                    className="w-10 px-4 py-3 text-left"
-                    scope="col"
-                  >
+                  <th className="w-10 px-4 py-3 text-left" scope="col">
                     <input
-                      type="checkbox"
-                      aria-label="Zaznacz wszystkich"
-                      checked={allSelected}
                       ref={(el) => {
                         if (el) el.indeterminate = someSelected
                       }}
-                      onChange={() => onToggleSelectAll?.()}
-                      data-testid="patients-bulk-select-all"
+                      aria-label="Zaznacz wszystkich"
+                      checked={allSelected}
                       className="h-4 w-4 cursor-pointer rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                      data-testid="patients-bulk-select-all"
+                      type="checkbox"
+                      onChange={() => onToggleSelectAll?.()}
                     />
                   </th>
                 ) : null}
                 <SortableHeader
-                  field="name"
                   currentField={sortField}
+                  field="name"
                   order={sortOrder}
                   onSort={handleSort}
                 >
@@ -247,16 +243,16 @@ export const PatientTable = memo(
                   Płeć
                 </th>
                 <SortableHeader
-                  field="verification_status"
                   currentField={sortField}
+                  field="verification_status"
                   order={sortOrder}
                   onSort={handleSort}
                 >
                   Status
                 </SortableHeader>
                 <SortableHeader
-                  field="created_at"
                   currentField={sortField}
+                  field="created_at"
                   order={sortOrder}
                   onSort={handleSort}
                 >
@@ -280,12 +276,12 @@ export const PatientTable = memo(
                       onClick={(e) => e.stopPropagation()}
                     >
                       <input
-                        type="checkbox"
                         aria-label={`Zaznacz pacjenta ${patient.first_name} ${patient.last_name}`}
                         checked={selectedSet.has(patient.id)}
-                        onChange={() => onToggleSelect?.(patient.id)}
-                        data-testid={`patients-bulk-select-${patient.id}`}
                         className="h-4 w-4 cursor-pointer rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                        data-testid={`patients-bulk-select-${patient.id}`}
+                        type="checkbox"
+                        onChange={() => onToggleSelect?.(patient.id)}
                       />
                     </td>
                   ) : null}
@@ -307,9 +303,9 @@ export const PatientTable = memo(
                   </td>
                   <td className="whitespace-nowrap px-4 py-3">
                     <VerificationStatus
-                      status={patient.verification_status}
-                      size="sm"
                       showLabel={false}
+                      size="sm"
+                      status={patient.verification_status}
                     />
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-600">
@@ -318,46 +314,46 @@ export const PatientTable = memo(
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button
+                        aria-label="Edytuj"
+                        className="rounded p-1 text-primary-600 transition-colors hover:bg-primary-50 hover:text-primary-700"
                         onClick={(e) => {
                           e.stopPropagation()
                           onEdit?.(patient)
                         }}
-                        className="rounded p-1 text-primary-600 transition-colors hover:bg-primary-50 hover:text-primary-700"
-                        aria-label="Edytuj"
                       >
                         <svg
                           className="h-4 w-4"
                           fill="none"
-                          viewBox="0 0 24 24"
                           stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
                           <path
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                           />
                         </svg>
                       </button>
                       <button
+                        aria-label="Usuń"
+                        className="rounded p-1 text-rose-600 transition-colors hover:bg-rose-50 hover:text-rose-700"
                         onClick={(e) => {
                           e.stopPropagation()
                           onDelete?.(patient)
                         }}
-                        className="rounded p-1 text-rose-600 transition-colors hover:bg-rose-50 hover:text-rose-700"
-                        aria-label="Usuń"
                       >
                         <svg
                           className="h-4 w-4"
                           fill="none"
-                          viewBox="0 0 24 24"
                           stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
                           <path
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                           />
                         </svg>
                       </button>

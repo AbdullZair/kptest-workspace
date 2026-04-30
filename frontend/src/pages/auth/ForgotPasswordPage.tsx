@@ -48,14 +48,14 @@ export const ForgotPasswordPage = () => {
               <svg
                 className="h-8 w-8 text-success-600"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M5 13l4 4L19 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
                 />
               </svg>
             </div>
@@ -66,12 +66,12 @@ export const ForgotPasswordPage = () => {
             </p>
 
             <div className="space-y-3">
-              <Button variant="primary" fullWidth onClick={() => window.location.reload()}>
+              <Button fullWidth variant="primary" onClick={() => window.location.reload()}>
                 Wyślij ponownie
               </Button>
 
               <Link to="/login">
-                <Button variant="outline" fullWidth>
+                <Button fullWidth variant="outline">
                   Wróć do logowania
                 </Button>
               </Link>
@@ -91,14 +91,14 @@ export const ForgotPasswordPage = () => {
             <svg
               className="h-7 w-7 text-white"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
               />
             </svg>
           </div>
@@ -117,24 +117,24 @@ export const ForgotPasswordPage = () => {
         ) : null}
 
         {/* Reset form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <Input
-            label="Email"
-            type="email"
-            placeholder="wpisz@email.pl"
-            error={errors.email?.message}
             fullWidth
+            error={errors.email?.message}
+            label="Email"
+            placeholder="wpisz@email.pl"
+            type="email"
             {...register('email')}
           />
 
-          <Button type="submit" variant="primary" size="lg" fullWidth loading={isSubmitting}>
+          <Button fullWidth loading={isSubmitting} size="lg" type="submit" variant="primary">
             Wyślij instrukcje
           </Button>
         </form>
 
         {/* Back to login */}
         <p className="mt-8 text-center text-sm text-neutral-600">
-          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700">
+          <Link className="font-medium text-primary-600 hover:text-primary-700" to="/login">
             Wróć do logowania
           </Link>
         </p>

@@ -83,30 +83,30 @@ export const LangSwitcherCompact: React.FC<LangSwitcherCompactProps> = ({ varian
     return (
       <div className="flex gap-2" data-testid="language-switcher">
         <button
-          type="button"
-          onClick={() => changeLanguage('pl')}
           aria-pressed={plActive}
           className={clsx(
             'rounded-md px-3 py-1 text-sm font-medium transition-colors',
             plActive
               ? 'bg-primary-600 text-white'
-              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200',
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           )}
           data-testid="language-pl"
+          type="button"
+          onClick={() => changeLanguage('pl')}
         >
           PL
         </button>
         <button
-          type="button"
-          onClick={() => changeLanguage('en')}
           aria-pressed={enActive}
           className={clsx(
             'rounded-md px-3 py-1 text-sm font-medium transition-colors',
             enActive
               ? 'bg-primary-600 text-white'
-              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200',
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           )}
           data-testid="language-en"
+          type="button"
+          onClick={() => changeLanguage('en')}
         >
           EN
         </button>
@@ -119,30 +119,30 @@ export const LangSwitcherCompact: React.FC<LangSwitcherCompactProps> = ({ varian
   const currentLabel = plActive ? 'PL' : enActive ? 'EN' : i18n.language.toUpperCase()
 
   return (
-    <div className="relative" ref={containerRef} data-testid="language-switcher">
+    <div ref={containerRef} className="relative" data-testid="language-switcher">
       <button
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        aria-label={ariaLabel}
+        className="flex items-center gap-1 rounded-lg p-2 transition-colors hover:bg-neutral-100"
+        data-testid="lang-switcher-button"
+        title={ariaLabel}
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-1 rounded-lg p-2 transition-colors hover:bg-neutral-100"
-        aria-label={ariaLabel}
-        aria-haspopup="menu"
-        aria-expanded={isOpen}
-        title={ariaLabel}
-        data-testid="lang-switcher-button"
       >
         {/* Globe icon (Heroicons globe-alt) */}
         <svg
+          aria-hidden="true"
           className="h-5 w-5 text-neutral-600"
           fill="none"
-          viewBox="0 0 24 24"
           stroke="currentColor"
-          aria-hidden="true"
+          viewBox="0 0 24 24"
         >
           <path
+            d="M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
         <span className="text-xs font-semibold uppercase text-neutral-700">{currentLabel}</span>
@@ -150,64 +150,64 @@ export const LangSwitcherCompact: React.FC<LangSwitcherCompactProps> = ({ varian
 
       {isOpen ? (
         <div
-          role="menu"
           aria-label={ariaLabel}
           className="animate-in fade-in zoom-in-95 absolute right-0 z-50 mt-2 w-32 rounded-xl border border-neutral-200 bg-white py-1 shadow-lg duration-100"
+          role="menu"
         >
           <button
-            type="button"
-            role="menuitemradio"
             aria-checked={plActive}
-            onClick={() => changeLanguage('pl')}
             className={clsx(
               'flex w-full items-center justify-between px-4 py-2 text-sm transition-colors hover:bg-neutral-50',
-              plActive ? 'font-semibold text-primary-700' : 'text-neutral-700',
+              plActive ? 'font-semibold text-primary-700' : 'text-neutral-700'
             )}
             data-testid="lang-option-pl"
+            role="menuitemradio"
+            type="button"
+            onClick={() => changeLanguage('pl')}
           >
             <span>PL</span>
             {plActive ? (
               <svg
+                aria-hidden="true"
                 className="h-4 w-4 text-primary-600"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
-                aria-hidden="true"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M5 13l4 4L19 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
                 />
               </svg>
             ) : null}
           </button>
           <button
-            type="button"
-            role="menuitemradio"
             aria-checked={enActive}
-            onClick={() => changeLanguage('en')}
             className={clsx(
               'flex w-full items-center justify-between px-4 py-2 text-sm transition-colors hover:bg-neutral-50',
-              enActive ? 'font-semibold text-primary-700' : 'text-neutral-700',
+              enActive ? 'font-semibold text-primary-700' : 'text-neutral-700'
             )}
             data-testid="lang-option-en"
+            role="menuitemradio"
+            type="button"
+            onClick={() => changeLanguage('en')}
           >
             <span>EN</span>
             {enActive ? (
               <svg
+                aria-hidden="true"
                 className="h-4 w-4 text-primary-600"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
-                aria-hidden="true"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M5 13l4 4L19 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
                 />
               </svg>
             ) : null}

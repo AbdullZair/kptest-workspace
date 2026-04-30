@@ -168,9 +168,9 @@ export const MaterialsPage = () => {
         </div>
         {isStaff ? (
           <button
-            onClick={() => navigate('/materials/admin')}
             className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
             data-testid="materials-go-admin"
+            onClick={() => navigate('/materials/admin')}
           >
             Zarządzaj materiałami
           </button>
@@ -182,10 +182,10 @@ export const MaterialsPage = () => {
         <Card variant="outlined">
           <Card.Body>
             <ProgressList
-              total={progressStats.total}
               completed={progressStats.completed}
               inProgress={progressStats.inProgress}
               pending={progressStats.pending}
+              total={progressStats.total}
             />
           </Card.Body>
         </Card>
@@ -196,65 +196,65 @@ export const MaterialsPage = () => {
         <Card.Body>
           <MaterialFiltersComponent
             categories={categories}
+            searchQuery={searchQuery}
             selectedCategory={selectedCategory}
             selectedDifficulty={selectedDifficulty}
             selectedType={selectedType}
-            searchQuery={searchQuery}
             onCategoryChange={setSelectedCategory}
-            onDifficultyChange={setSelectedDifficulty}
-            onTypeChange={setSelectedType}
-            onSearchChange={setSearchQuery}
             onClearFilters={handleClearFilters}
+            onDifficultyChange={setSelectedDifficulty}
+            onSearchChange={setSearchQuery}
+            onTypeChange={setSelectedType}
           />
 
           {/* Status filter */}
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="text-sm text-neutral-600">Status:</span>
             <button
-              onClick={() => setFilterStatus('all')}
               className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'all'
                   ? 'border-primary-200 bg-primary-50 text-primary-700'
                   : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
+              onClick={() => setFilterStatus('all')}
             >
               Wszystkie
             </button>
             <button
-              onClick={() => setFilterStatus('pending')}
               className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'pending'
                   ? 'border-neutral-200 bg-neutral-100 text-neutral-700'
                   : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
+              onClick={() => setFilterStatus('pending')}
             >
               Do przeczytania
             </button>
             <button
-              onClick={() => setFilterStatus('in_progress')}
               className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'in_progress'
                   ? 'border-blue-200 bg-blue-50 text-blue-700'
                   : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
+              onClick={() => setFilterStatus('in_progress')}
             >
               W trakcie
             </button>
             <button
-              onClick={() => setFilterStatus('completed')}
               className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                 filterStatus === 'completed'
                   ? 'border-green-200 bg-green-50 text-green-700'
                   : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
               }`}
+              onClick={() => setFilterStatus('completed')}
             >
               Ukończone
             </button>
 
             {hasActiveFilters ? (
               <button
-                onClick={handleClearFilters}
                 className="ml-auto text-sm font-medium text-primary-600 hover:text-primary-700"
+                onClick={handleClearFilters}
               >
                 Wyczyść filtry
               </button>
@@ -271,14 +271,14 @@ export const MaterialsPage = () => {
               <svg
                 className="mx-auto mb-4 h-16 w-16 text-neutral-300"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={1.5}
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                 />
               </svg>
               <h3 className="text-lg font-semibold text-neutral-900">Brak materiałów</h3>
@@ -295,10 +295,10 @@ export const MaterialsPage = () => {
           {filteredMaterials.map((material) => (
             <MaterialCard
               key={material.id}
-              material={material}
-              onClick={handleMaterialClick}
               compact
               isStaff={false}
+              material={material}
+              onClick={handleMaterialClick}
             />
           ))}
         </div>

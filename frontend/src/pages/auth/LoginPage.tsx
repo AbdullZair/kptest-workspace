@@ -69,31 +69,36 @@ export const LoginPage = () => {
             <svg
               className="h-7 w-7 text-white"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
               />
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-neutral-900" data-testid="login-title">{t('auth.login.title')}</h1>
+          <h1 className="text-2xl font-bold text-neutral-900" data-testid="login-title">
+            {t('auth.login.title')}
+          </h1>
           <p className="mt-2 text-neutral-600">{t('auth.login.subtitle')}</p>
         </div>
 
         {/* Error message */}
         {error ? (
-          <div className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4" data-testid="error-message">
+          <div
+            className="mb-6 rounded-lg border border-error-200 bg-error-50 p-4"
+            data-testid="error-message"
+          >
             <div className="flex items-center gap-2">
               <svg className="h-5 w-5 text-error-600" fill="currentColor" viewBox="0 0 20 20">
                 <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                   clipRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  fillRule="evenodd"
                 />
               </svg>
               <p className="text-sm text-error-800">Błąd: {error}</p>
@@ -102,34 +107,34 @@ export const LoginPage = () => {
         ) : null}
 
         {/* Login form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" data-testid="login-form">
+        <form className="space-y-5" data-testid="login-form" onSubmit={handleSubmit(onSubmit)}>
           <Input
-            label={t('auth.login.email')}
-            type="email"
-            placeholder={t('auth.login.emailPlaceholder')}
-            autoComplete="email"
-            error={errors.email?.message}
             fullWidth
+            autoComplete="email"
             data-testid="email-input"
+            error={errors.email?.message}
+            label={t('auth.login.email')}
+            placeholder={t('auth.login.emailPlaceholder')}
+            type="email"
             {...register('email')}
           />
 
           <div>
             <Input
-              label={t('auth.login.password')}
-              type="password"
-              placeholder={t('auth.login.passwordPlaceholder')}
-              autoComplete="current-password"
-              error={errors.password?.message}
               fullWidth
+              autoComplete="current-password"
               data-testid="password-input"
+              error={errors.password?.message}
+              label={t('auth.login.password')}
+              placeholder={t('auth.login.passwordPlaceholder')}
+              type="password"
               {...register('password')}
             />
             <div className="mt-1 flex justify-end">
               <Link
-                to="/forgot-password"
                 className="text-sm text-primary-600 hover:text-primary-700"
                 data-testid="forgot-password-link"
+                to="/forgot-password"
               >
                 {t('auth.login.forgotPassword')}
               </Link>
@@ -138,24 +143,24 @@ export const LoginPage = () => {
 
           <div className="flex items-center">
             <input
-              type="checkbox"
-              id="rememberMe"
               className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
               data-testid="remember-me-checkbox"
+              id="rememberMe"
+              type="checkbox"
               {...register('rememberMe')}
             />
-            <label htmlFor="rememberMe" className="ml-2 text-sm text-neutral-700">
+            <label className="ml-2 text-sm text-neutral-700" htmlFor="rememberMe">
               {t('auth.login.rememberMe')}
             </label>
           </div>
 
-          <Button 
-            type="submit" 
-            variant="primary" 
-            size="lg" 
-            fullWidth 
-            loading={isSubmitting}
+          <Button
+            fullWidth
             data-testid="submit-button"
+            loading={isSubmitting}
+            size="lg"
+            type="submit"
+            variant="primary"
           >
             {t('auth.login.submit')}
           </Button>
@@ -164,13 +169,13 @@ export const LoginPage = () => {
         {/* Demo login button */}
         <div className="mt-6">
           <Button
+            fullWidth
+            data-testid="demo-login-button"
+            disabled={isSubmitting}
+            size="lg"
             type="button"
             variant="outline"
-            size="lg"
-            fullWidth
             onClick={handleDemoLogin}
-            disabled={isSubmitting}
-            data-testid="demo-login-button"
           >
             {t('auth.login.demoLogin')}
           </Button>
@@ -179,7 +184,11 @@ export const LoginPage = () => {
         {/* Register link */}
         <p className="mt-8 text-center text-sm text-neutral-600">
           {t('auth.login.noAccount')}{' '}
-          <Link to="/register" className="font-medium text-primary-600 hover:text-primary-700" data-testid="register-link">
+          <Link
+            className="font-medium text-primary-600 hover:text-primary-700"
+            data-testid="register-link"
+            to="/register"
+          >
             {t('auth.login.register')}
           </Link>
         </p>

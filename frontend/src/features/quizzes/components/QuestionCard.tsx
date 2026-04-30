@@ -105,16 +105,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 {question.type === 'SINGLE_CHOICE' || question.type === 'TRUE_FALSE' ? (
                   <Radio
                     checked={isSelected}
-                    onChange={(e) => handleAnswerChange(answer.id, e.target.checked)}
-                    disabled={disabled}
                     className="mt-1"
+                    disabled={disabled}
+                    onChange={(e) => handleAnswerChange(answer.id, e.target.checked)}
                   />
                 ) : (
                   <Checkbox
                     checked={isSelected}
-                    onChange={(e) => handleAnswerChange(answer.id, e.target.checked)}
-                    disabled={disabled}
                     className="mt-1"
+                    disabled={disabled}
+                    onChange={(e) => handleAnswerChange(answer.id, e.target.checked)}
                   />
                 )}
                 <div className="flex-1">

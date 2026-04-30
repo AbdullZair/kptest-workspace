@@ -18,7 +18,7 @@ export const ProfilePage = () => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Profile info */}
-        <Card variant="elevated" className="lg:col-span-2">
+        <Card className="lg:col-span-2" variant="elevated">
           <Card.Header>
             <h2 className="text-lg font-semibold text-neutral-900">Informacje osobiste</h2>
           </Card.Header>
@@ -64,14 +64,14 @@ export const ProfilePage = () => {
                 <svg
                   className="h-5 w-5 text-neutral-400"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                   />
                 </svg>
                 <span className="text-sm font-medium text-neutral-900">Zmień hasło</span>
@@ -81,14 +81,14 @@ export const ProfilePage = () => {
                 <svg
                   className="h-5 w-5 text-neutral-400"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
                   />
                 </svg>
                 <span className="text-sm font-medium text-neutral-900">Numer telefonu</span>
@@ -96,7 +96,7 @@ export const ProfilePage = () => {
             </div>
           </Card.Body>
           <Card.Footer>
-            <Button variant="outline" fullWidth>
+            <Button fullWidth variant="outline">
               Zmień hasło
             </Button>
           </Card.Footer>

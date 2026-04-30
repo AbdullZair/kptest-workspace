@@ -78,33 +78,35 @@ export const StageFormModal: React.FC<StageFormModalProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
       size="lg"
       title={stage ? 'Edytuj etap terapii' : 'Dodaj etap terapii'}
+      onClose={onClose}
     >
-      <form onSubmit={handleSubmit} className="p-6">
+      <form className="p-6" onSubmit={handleSubmit}>
         <div className="space-y-4">
           {/* Name */}
           <Input
+            required
             label="Nazwa etapu"
+            placeholder="np. Etap 1: Adaptacja"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="np. Etap 1: Adaptacja"
-            required
           />
 
           {/* Description */}
           <Textarea
             label="Opis"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             placeholder="Krótki opis celu tego etapu..."
             rows={3}
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />
 
           {/* Unlock Mode */}
           <Select
+            required
             label="Tryb odblokowywania"
+            options={unlockModeOptions}
             value={formData.unlock_mode}
             onChange={(e) =>
               setFormData({
@@ -113,28 +115,26 @@ export const StageFormModal: React.FC<StageFormModalProps> = ({
                 required_quiz_id: undefined,
               })
             }
-            options={unlockModeOptions}
-            required
           />
 
           {/* Required Quiz (if AUTO_QUIZ) */}
           {formData.unlock_mode === 'AUTO_QUIZ' && (
             <Select
+              required
               label="Wymagany quiz"
+              options={quizOptions}
+              placeholder="Wybierz quiz..."
               value={formData.required_quiz_id || ''}
               onChange={(e) =>
                 setFormData({ ...formData, required_quiz_id: e.target.value || undefined })
               }
-              options={quizOptions}
-              placeholder="Wybierz quiz..."
-              required
             />
           )}
 
           {/* Active */}
           <Checkbox
-            label="Etap aktywny"
             checked={formData.is_active}
+            label="Etap aktywny"
             onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
           />
         </div>
@@ -144,7 +144,7 @@ export const StageFormModal: React.FC<StageFormModalProps> = ({
           <Button type="button" variant="secondary" onClick={onClose}>
             Anuluj
           </Button>
-          <Button type="submit" variant="primary" disabled={isLoading}>
+          <Button disabled={isLoading} type="submit" variant="primary">
             {isLoading ? 'Zapisywanie...' : 'Zapisz'}
           </Button>
         </div>

@@ -59,7 +59,7 @@ describe('PrioritySelector', () => {
   })
 
   it('should be disabled when disabled prop is true', () => {
-    render(<PrioritySelector value="INFO" onChange={mockOnChange} disabled />)
+    render(<PrioritySelector disabled value="INFO" onChange={mockOnChange} />)
 
     const buttons = screen.getAllByRole('button')
     buttons.forEach((button) => {
@@ -68,14 +68,14 @@ describe('PrioritySelector', () => {
   })
 
   it('should not call onChange when disabled', () => {
-    render(<PrioritySelector value="INFO" onChange={mockOnChange} disabled />)
+    render(<PrioritySelector disabled value="INFO" onChange={mockOnChange} />)
 
     fireEvent.click(screen.getByText('Pytanie'))
     expect(mockOnChange).not.toHaveBeenCalled()
   })
 
   it('should display custom label', () => {
-    render(<PrioritySelector value="INFO" onChange={mockOnChange} label="Custom Label" />)
+    render(<PrioritySelector label="Custom Label" value="INFO" onChange={mockOnChange} />)
 
     expect(screen.getByText('Custom Label')).toBeInTheDocument()
   })
@@ -87,7 +87,7 @@ describe('PrioritySelector', () => {
   })
 
   it('should display error message', () => {
-    render(<PrioritySelector value="INFO" onChange={mockOnChange} error="Priority is required" />)
+    render(<PrioritySelector error="Priority is required" value="INFO" onChange={mockOnChange} />)
 
     expect(screen.getByText('Priority is required')).toBeInTheDocument()
     expect(screen.getByRole('alert')).toBeInTheDocument()

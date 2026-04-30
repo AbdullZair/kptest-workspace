@@ -52,14 +52,14 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
     if ('badge_icon_url' in badge && badge.badge_icon_url) {
       return (
         <img
-          src={badge.badge_icon_url}
           alt={badge.badge_name}
           className="h-16 w-16 object-contain"
+          src={badge.badge_icon_url}
         />
       )
     }
     if ('icon_url' in badge && badge.icon_url) {
-      return <img src={badge.icon_url} alt={badge.name} className="h-16 w-16 object-contain" />
+      return <img alt={badge.name} className="h-16 w-16 object-contain" src={badge.icon_url} />
     }
 
     // Default icons by category
@@ -133,7 +133,7 @@ export const BadgeCard: React.FC<BadgeCardProps> = ({
             <span className={`rounded-full px-2 py-1 text-xs ${getCategoryColor()}`}>
               {getCategoryLabel()}
             </span>
-            {!isEarned && isBadge && 'rules' in badge && badge.rules && badge.rules[0] ? (
+            {!isEarned && isBadge && 'rules' in badge && badge.rules?.[0] ? (
               <span className="text-xs text-gray-500">
                 {badge.rules[0].threshold}{' '}
                 {badge.rules[0].rule_type === 'EVENTS_COMPLETED'

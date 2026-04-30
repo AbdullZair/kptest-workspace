@@ -20,11 +20,7 @@ import type { TherapyStage } from '../types'
 export const ProjectPatientsPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-
-  if (!id) {
-    navigate('/projects')
-    return null
-  }
+  const safeId = id ?? ''
 
   // Local state
   const [selectedPatientIds, setSelectedPatientIds] = useState<string[]>([])
@@ -40,12 +36,14 @@ export const ProjectPatientsPage = () => {
   const [transferError, setTransferError] = useState<string | null>(null)
 
   // RTK Query hooks
-  const { data: project, isLoading: isLoadingProject } = useGetProjectByIdQuery(id)
+  const { data: project, isLoading: isLoadingProject } = useGetProjectByIdQuery(safeId, {
+    skip: !id,
+  })
   const {
     data: patients,
     isLoading: isLoadingPatients,
     refetch,
-  } = useGetProjectPatientsQuery({ projectId: id, activeOnly: !showInactive })
+  } = useGetProjectPatientsQuery({ projectId: safeId, activeOnly: !showInactive }, { skip: !id })
   const [removePatients, { isLoading: isRemoving }] = useRemovePatientsMutation()
   const [assignPatients] = useAssignPatientsMutation()
   const [transferPatient, { isLoading: isTransferring }] = useTransferPatientMutation()
@@ -64,6 +62,11 @@ export const ProjectPatientsPage = () => {
       ),
     [allProjects, id]
   )
+
+  if (!id) {
+    navigate('/projects')
+    return null
+  }
 
   // Handlers
   const handleTogglePatient = (patientId: string) => {
@@ -178,7 +181,7 @@ export const ProjectPatientsPage = () => {
     return (
       <div className="py-12 text-center">
         <p className="text-error-600">Nie znaleziono projektu</p>
-        <Button variant="primary" onClick={handleBackClick} className="mt-4">
+        <Button className="mt-4" variant="primary" onClick={handleBackClick}>
           Powrót
         </Button>
       </div>
@@ -190,13 +193,13 @@ export const ProjectPatientsPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm" onClick={handleBackClick}>
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <Button size="sm" variant="outline" onClick={handleBackClick}>
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M15 19l-7-7 7-7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 19l-7-7 7-7"
               />
             </svg>
           </Button>
@@ -207,24 +210,24 @@ export const ProjectPatientsPage = () => {
         </div>
         <div className="flex items-center gap-2">
           <Button
+            disabled={project.status !== 'ACTIVE'}
             variant="primary"
             onClick={handleAddPatients}
-            disabled={project.status !== 'ACTIVE'}
           >
-            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
               />
             </svg>
             Dodaj pacjenta
           </Button>
           {selectedPatientIds.length > 0 && (
             <Button
-              variant="outline"
               className="border-rose-200 text-rose-600"
+              variant="outline"
               onClick={handleRemoveClick}
             >
               Usuń zaznaczonych ({selectedPatientIds.length})
@@ -240,10 +243,10 @@ export const ProjectPatientsPage = () => {
             <div className="flex items-center gap-4">
               <label className="flex cursor-pointer items-center gap-2">
                 <input
-                  type="checkbox"
                   checked={showInactive}
-                  onChange={(e) => setShowInactive(e.target.checked)}
                   className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                  type="checkbox"
+                  onChange={(e) => setShowInactive(e.target.checked)}
                 />
                 <span className="text-sm text-neutral-700">Pokaż nieaktywnych pacjentów</span>
               </label>
@@ -264,10 +267,10 @@ export const ProjectPatientsPage = () => {
                 <tr>
                   <th className="px-4 py-3">
                     <input
-                      type="checkbox"
                       checked={patients.length > 0 && selectedPatientIds.length === patients.length}
-                      onChange={handleSelectAll}
                       className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                      type="checkbox"
+                      onChange={handleSelectAll}
                     />
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
@@ -303,17 +306,17 @@ export const ProjectPatientsPage = () => {
                   >
                     <td className="px-4 py-3">
                       <input
-                        type="checkbox"
                         checked={selectedPatientIds.includes(pp.patient_id)}
-                        onChange={() => handleTogglePatient(pp.patient_id)}
                         className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                         disabled={pp.left_at != null}
+                        type="checkbox"
+                        onChange={() => handleTogglePatient(pp.patient_id)}
                       />
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <Link
-                        to={`/patients/${pp.patient_id}`}
                         className="font-medium text-primary-600 hover:text-primary-700"
+                        to={`/patients/${pp.patient_id}`}
                       >
                         {pp.patient_name}
                       </Link>
@@ -366,10 +369,10 @@ export const ProjectPatientsPage = () => {
                     <td className="whitespace-nowrap px-4 py-3 text-right">
                       {pp.left_at ? null : (
                         <button
-                          type="button"
-                          data-testid={`transfer-patient-btn-${pp.patient_id}`}
-                          onClick={() => openTransferModal(pp.patient_id)}
                           className="text-xs font-medium text-primary-600 hover:text-primary-700"
+                          data-testid={`transfer-patient-btn-${pp.patient_id}`}
+                          type="button"
+                          onClick={() => openTransferModal(pp.patient_id)}
                         >
                           Przenieś
                         </button>
@@ -388,19 +391,19 @@ export const ProjectPatientsPage = () => {
               <svg
                 className="mx-auto mb-4 h-16 w-16 text-neutral-300"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
+                viewBox="0 0 24 24"
               >
                 <path
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={1}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                 />
               </svg>
               <p className="text-neutral-500">Brak pacjentów w tym projekcie</p>
               {project.status === 'ACTIVE' && (
-                <Button variant="primary" onClick={handleAddPatients} className="mt-4">
+                <Button className="mt-4" variant="primary" onClick={handleAddPatients}>
                   Dodaj pierwszego pacjenta
                 </Button>
               )}
@@ -411,7 +414,7 @@ export const ProjectPatientsPage = () => {
 
       {/* Remove Confirmation Modal */}
       {isRemoveModalOpen ? (
-        <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
+        <div aria-modal="true" className="fixed inset-0 z-50 overflow-y-auto" role="dialog">
           <div
             className="fixed inset-0 bg-black/50 transition-opacity"
             onClick={() => setIsRemoveModalOpen(false)}
@@ -428,18 +431,18 @@ export const ProjectPatientsPage = () => {
                   </p>
                   <div className="mb-4">
                     <label
-                      htmlFor="removalReason"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="removalReason"
                     >
                       Powód usunięcia <span className="text-rose-500">*</span>
                     </label>
                     <textarea
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       id="removalReason"
+                      placeholder="Wprowadź powód usunięcia pacjentów z projektu..."
+                      rows={3}
                       value={removalReason}
                       onChange={(e) => setRemovalReason(e.target.value)}
-                      rows={3}
-                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      placeholder="Wprowadź powód usunięcia pacjentów z projektu..."
                     />
                   </div>
                 </Card.Body>
@@ -452,11 +455,11 @@ export const ProjectPatientsPage = () => {
                     Anuluj
                   </Button>
                   <Button
+                    className="bg-rose-600 hover:bg-rose-700"
+                    disabled={!removalReason.trim() || isRemoving}
                     type="button"
                     variant="primary"
-                    className="bg-rose-600 hover:bg-rose-700"
                     onClick={handleRemoveConfirm}
-                    disabled={!removalReason.trim() || isRemoving}
                   >
                     {isRemoving ? 'Usuwanie...' : 'Usuń'}
                   </Button>
@@ -469,20 +472,20 @@ export const ProjectPatientsPage = () => {
 
       {/* Assignment Modal */}
       <PatientAssignmentModal
+        existingPatientIds={patients?.map((p) => p.patient_id)}
         isOpen={isAssignmentModalOpen}
+        projectId={id}
         onClose={() => setIsAssignmentModalOpen(false)}
         onSubmit={handleAssignPatients}
-        projectId={id}
-        existingPatientIds={patients?.map((p) => p.patient_id)}
       />
 
       {/* Transfer Patient Modal (US-K-06) */}
       {transferPatientId ? (
         <div
-          className="fixed inset-0 z-50 overflow-y-auto"
-          role="dialog"
           aria-modal="true"
+          className="fixed inset-0 z-50 overflow-y-auto"
           data-testid="transfer-patient-modal"
+          role="dialog"
         >
           <div
             className="fixed inset-0 bg-black/50 transition-opacity"
@@ -501,17 +504,17 @@ export const ProjectPatientsPage = () => {
 
                   <div className="mb-4">
                     <label
-                      htmlFor="transferTarget"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="transferTarget"
                     >
                       Projekt docelowy <span className="text-rose-500">*</span>
                     </label>
                     <select
-                      id="transferTarget"
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       data-testid="transfer-target-select"
+                      id="transferTarget"
                       value={transferTargetProject}
                       onChange={(e) => setTransferTargetProject(e.target.value)}
-                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option value="">— Wybierz projekt —</option>
                       {transferTargets.map((p) => (
@@ -524,20 +527,20 @@ export const ProjectPatientsPage = () => {
 
                   <div className="mb-4">
                     <label
-                      htmlFor="transferReason"
                       className="mb-1 block text-sm font-medium text-neutral-700"
+                      htmlFor="transferReason"
                     >
                       Uzasadnienie <span className="text-rose-500">*</span>
                     </label>
                     <textarea
-                      id="transferReason"
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       data-testid="transfer-reason-input"
+                      id="transferReason"
+                      minLength={10}
+                      placeholder="Min. 10 znaków — zapisywane w audycie."
+                      rows={3}
                       value={transferReason}
                       onChange={(e) => setTransferReason(e.target.value)}
-                      rows={3}
-                      minLength={10}
-                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      placeholder="Min. 10 znaków — zapisywane w audycie."
                     />
                     <p className="mt-1 text-xs text-neutral-500">
                       {transferReason.trim().length}/10 znaków
@@ -552,23 +555,21 @@ export const ProjectPatientsPage = () => {
                 </Card.Body>
                 <Card.Footer className="flex items-center justify-end gap-3">
                   <Button
+                    disabled={isTransferring}
                     type="button"
                     variant="outline"
                     onClick={closeTransferModal}
-                    disabled={isTransferring}
                   >
                     Anuluj
                   </Button>
                   <Button
+                    data-testid="transfer-confirm-btn"
+                    disabled={
+                      isTransferring || !transferTargetProject || transferReason.trim().length < 10
+                    }
                     type="button"
                     variant="primary"
-                    data-testid="transfer-confirm-btn"
                     onClick={handleTransferConfirm}
-                    disabled={
-                      isTransferring ||
-                      !transferTargetProject ||
-                      transferReason.trim().length < 10
-                    }
                   >
                     {isTransferring ? 'Przenoszenie...' : 'Przenieś'}
                   </Button>

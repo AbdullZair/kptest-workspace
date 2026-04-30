@@ -75,14 +75,14 @@ export function AdminAuditLogsPage() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={() => handleExport('CSV')}
             className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+            onClick={() => handleExport('CSV')}
           >
             Eksport CSV
           </button>
           <button
-            onClick={() => handleExport('JSON')}
             className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+            onClick={() => handleExport('JSON')}
           >
             Eksport JSON
           </button>
@@ -97,13 +97,13 @@ export function AdminAuditLogsPage() {
             {actions.map((action) => (
               <button
                 key={action}
-                onClick={() => handleActionFilter(action)}
                 className={clsx(
                   'rounded-full px-3 py-1 text-sm transition-colors',
                   filters.action === action || (action === 'ALL' && !filters.action)
                     ? 'bg-primary-600 text-white'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 )}
+                onClick={() => handleActionFilter(action)}
               >
                 {action === 'ALL' ? 'Wszystkie' : action}
               </button>
@@ -117,8 +117,8 @@ export function AdminAuditLogsPage() {
         <div className="py-12 text-center">
           <p className="text-red-600">Wystąpił błąd podczas ładowania logów audytu</p>
           <button
-            onClick={() => refetch()}
             className="mt-4 font-medium text-primary-600 hover:text-primary-700"
+            onClick={() => refetch()}
           >
             Spróbuj ponownie
           </button>
@@ -126,13 +126,13 @@ export function AdminAuditLogsPage() {
       ) : (
         <>
           <AuditLogTable
-            logs={data?.content || []}
             isLoading={isLoading}
-            onLogClick={setSelectedLog}
-            onViewDetails={handleViewDetails}
+            logs={data?.content || []}
             sortField="created_at"
             sortOrder="desc"
+            onLogClick={setSelectedLog}
             onSortChange={handleSortChange}
+            onViewDetails={handleViewDetails}
           />
 
           {/* Pagination */}
@@ -143,18 +143,18 @@ export function AdminAuditLogsPage() {
               </div>
               <div className="flex gap-2">
                 <button
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isFirst}
                   onClick={() =>
                     setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page! - 1) }))
                   }
-                  disabled={data.isFirst}
-                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Poprzednia
                 </button>
                 <button
-                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
-                  disabled={data.isLast}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isLast}
+                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
                 >
                   Następna
                 </button>

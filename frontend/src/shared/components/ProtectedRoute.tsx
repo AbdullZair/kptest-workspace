@@ -53,7 +53,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: location }} />
+    return <Navigate replace state={{ from: location }} to="/login" />
   }
 
   // Check role-based access if roles are specified.
@@ -69,7 +69,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
 
     if (!userRole || !allowedRoles.includes(userRole)) {
       // Redirect to unauthorized page or dashboard
-      return <Navigate to="/dashboard" replace />
+      return <Navigate replace to="/dashboard" />
     }
   }
 

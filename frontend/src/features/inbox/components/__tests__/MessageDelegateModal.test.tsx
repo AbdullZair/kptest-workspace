@@ -23,9 +23,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={false}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -36,9 +36,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -53,9 +53,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -71,9 +71,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -92,9 +92,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -134,9 +134,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -160,9 +160,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -177,9 +177,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 
@@ -195,9 +195,9 @@ describe('MessageDelegateModal', () => {
     render(
       <MessageDelegateModal
         isOpen={true}
-        onClose={mockOnClose}
         threadId="thread-123"
         threadTitle="Test Thread"
+        onClose={mockOnClose}
       />
     )
 

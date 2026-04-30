@@ -46,8 +46,8 @@ export const ForcePasswordResetButton: React.FC<ForcePasswordResetButtonProps> =
   return (
     <>
       <button
-        onClick={() => setShowModal(true)}
         className="text-sm font-medium text-orange-600 hover:text-orange-900"
+        onClick={() => setShowModal(true)}
       >
         Resetuj hasło
       </button>
@@ -60,7 +60,7 @@ export const ForcePasswordResetButton: React.FC<ForcePasswordResetButtonProps> =
               <p className="mt-1 text-sm text-gray-500">{userEmail}</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="px-6 py-4">
+            <form className="px-6 py-4" onSubmit={handleSubmit}>
               {error ? (
                 <div className="mb-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                   Błąd: {String(error)}
@@ -68,17 +68,17 @@ export const ForcePasswordResetButton: React.FC<ForcePasswordResetButtonProps> =
               ) : null}
 
               <div className="mb-4">
-                <label htmlFor="reason" className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-gray-700" htmlFor="reason">
                   Powód *
                 </label>
                 <textarea
+                  required
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   id="reason"
+                  placeholder="Podaj powód wymuszenia resetu hasła (wymagane do audytu)"
+                  rows={4}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  rows={4}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  placeholder="Podaj powód wymuszenia resetu hasła (wymagane do audytu)"
-                  required
                 />
                 <p className="mt-1 text-xs text-gray-500">
                   Powód zostanie zapisany w dzienniku audytu.
@@ -96,19 +96,19 @@ export const ForcePasswordResetButton: React.FC<ForcePasswordResetButtonProps> =
 
               <div className="flex justify-end space-x-3">
                 <button
+                  className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                   type="button"
                   onClick={() => {
                     setShowModal(false)
                     setReason('')
                   }}
-                  className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   Anuluj
                 </button>
                 <button
-                  type="submit"
-                  disabled={isLoading}
                   className="rounded-md bg-orange-600 px-4 py-2 text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
+                  disabled={isLoading}
+                  type="submit"
                 >
                   {isLoading ? 'Resetowanie...' : 'Resetuj hasło'}
                 </button>

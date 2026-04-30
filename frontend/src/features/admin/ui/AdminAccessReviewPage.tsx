@@ -96,7 +96,7 @@ export function AdminAccessReviewPage() {
     } catch (e) {
       const message =
         typeof e === 'object' && e && 'data' in e
-          ? `Nie udało się wyłączyć konta: ${JSON.stringify((e as { data: unknown }).data)}`
+          ? `Nie udało się wyłączyć konta: ${JSON.stringify(e.data)}`
           : 'Nie udało się wyłączyć konta'
       setDeactivateError(message)
     }
@@ -117,9 +117,7 @@ export function AdminAccessReviewPage() {
         <span className="text-sm font-medium text-neutral-700">Rola:</span>
         {REVIEWABLE_ROLES.map((role) => (
           <button
-            type="button"
             key={role}
-            onClick={() => setRoleFilter(role)}
             className={clsx(
               'rounded-full px-3 py-1 text-sm transition-colors',
               roleFilter === role
@@ -127,6 +125,8 @@ export function AdminAccessReviewPage() {
                 : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             )}
             data-testid={`access-review-role-${role}`}
+            type="button"
+            onClick={() => setRoleFilter(role)}
           >
             {role === 'ALL' ? 'Wszystkie' : role}
           </button>
@@ -134,7 +134,10 @@ export function AdminAccessReviewPage() {
       </div>
 
       {deactivateError ? (
-        <div role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div
+          className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+          role="alert"
+        >
           {deactivateError}
         </div>
       ) : null}
@@ -143,9 +146,9 @@ export function AdminAccessReviewPage() {
         <div className="py-12 text-center">
           <p className="text-red-600">Nie udało się załadować listy użytkowników</p>
           <button
+            className="mt-4 font-medium text-primary-600 hover:text-primary-700"
             type="button"
             onClick={() => refetch()}
-            className="mt-4 font-medium text-primary-600 hover:text-primary-700"
           >
             Spróbuj ponownie
           </button>
@@ -175,13 +178,13 @@ export function AdminAccessReviewPage() {
             <tbody className="divide-y divide-neutral-200 bg-white">
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-sm text-neutral-500">
+                  <td className="px-4 py-8 text-center text-sm text-neutral-500" colSpan={5}>
                     Ładowanie...
                   </td>
                 </tr>
               ) : sortedUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-sm text-neutral-500">
+                  <td className="px-4 py-8 text-center text-sm text-neutral-500" colSpan={5}>
                     Brak użytkowników do przeglądu
                   </td>
                 </tr>
@@ -192,14 +195,14 @@ export function AdminAccessReviewPage() {
                   return (
                     <AccessReviewRow
                       key={user.user_id}
-                      user={user}
-                      inactive={inactive}
                       expanded={expanded}
+                      inactive={inactive}
                       isDeactivating={isDeactivating}
+                      user={user}
+                      onDeactivate={() => handleDeactivate(user)}
                       onToggle={() =>
                         setExpandedUserId((prev) => (prev === user.user_id ? null : user.user_id))
                       }
-                      onDeactivate={() => handleDeactivate(user)}
                     />
                   )
                 })
@@ -239,8 +242,8 @@ const AccessReviewRow: React.FC<AccessReviewRowProps> = ({
     <>
       <tr
         className={clsx('cursor-pointer hover:bg-neutral-50', expanded && 'bg-primary-50/40')}
-        onClick={onToggle}
         data-testid={`access-review-row-${user.user_id}`}
+        onClick={onToggle}
       >
         <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-neutral-900">
           {user.email}
@@ -255,9 +258,7 @@ const AccessReviewRow: React.FC<AccessReviewRowProps> = ({
           <span
             className={clsx(
               'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-              inactive
-                ? 'bg-amber-100 text-amber-800'
-                : 'bg-green-100 text-green-800'
+              inactive ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'
             )}
             data-testid={`access-review-status-${user.user_id}`}
           >
@@ -267,14 +268,14 @@ const AccessReviewRow: React.FC<AccessReviewRowProps> = ({
         <td className="whitespace-nowrap px-4 py-3 text-right text-sm">
           {canDeactivate ? (
             <button
+              className="rounded-md border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50"
+              data-testid={`access-review-deactivate-${user.user_id}`}
+              disabled={isDeactivating}
               type="button"
               onClick={(e) => {
                 e.stopPropagation()
                 onDeactivate()
               }}
-              disabled={isDeactivating}
-              className="rounded-md border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50"
-              data-testid={`access-review-deactivate-${user.user_id}`}
             >
               {isDeactivating ? 'Wyłączanie...' : 'Wyłącz konto'}
             </button>
@@ -285,7 +286,7 @@ const AccessReviewRow: React.FC<AccessReviewRowProps> = ({
       </tr>
       {expanded ? (
         <tr>
-          <td colSpan={5} className="bg-neutral-50 px-4 py-4">
+          <td className="bg-neutral-50 px-4 py-4" colSpan={5}>
             <UserAuditLogPreview userId={user.user_id} />
           </td>
         </tr>
@@ -322,9 +323,7 @@ const UserAuditLogPreview: React.FC<UserAuditLogPreviewProps> = ({ userId }) => 
 
   return (
     <div>
-      <h4 className="mb-2 text-sm font-semibold text-neutral-700">
-        Ostatnie 10 wpisów audytu
-      </h4>
+      <h4 className="mb-2 text-sm font-semibold text-neutral-700">Ostatnie 10 wpisów audytu</h4>
       <ul className="space-y-1 text-sm">
         {data.content.map((entry) => (
           <li

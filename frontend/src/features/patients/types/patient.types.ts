@@ -159,7 +159,4 @@ export interface BulkOperationResponse {
 /**
  * Bulk operation key (US-K-05)
  */
-export type BulkOperationKey =
-  | 'assign-to-project'
-  | 'update-status'
-  | 'anonymize'
+export type BulkOperationKey = 'assign-to-project' | 'update-status' | 'anonymize'

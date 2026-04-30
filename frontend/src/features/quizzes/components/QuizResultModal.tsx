@@ -44,7 +44,7 @@ export const QuizResultModal: React.FC<QuizResultModalProps> = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg" title="Wyniki Quizu">
+    <Modal isOpen={isOpen} size="lg" title="Wyniki Quizu" onClose={onClose}>
       <div className="p-6">
         {/* Header Result */}
         <div className="mb-6 text-center">
@@ -78,7 +78,7 @@ export const QuizResultModal: React.FC<QuizResultModalProps> = ({
             <span className="text-gray-600">Postęp</span>
             <span className={`font-semibold ${getScoreColor()}`}>{percentage}%</span>
           </div>
-          <ProgressBar value={percentage} color={getProgressBarColor()} />
+          <ProgressBar color={getProgressBarColor()} value={percentage} />
         </div>
 
         {/* Answer Summary */}

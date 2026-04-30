@@ -87,14 +87,14 @@ export function AdminSystemLogsPage() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={() => handleExport('CSV')}
             className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+            onClick={() => handleExport('CSV')}
           >
             Eksport CSV
           </button>
           <button
-            onClick={() => handleExport('JSON')}
             className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+            onClick={() => handleExport('JSON')}
           >
             Eksport JSON
           </button>
@@ -109,13 +109,13 @@ export function AdminSystemLogsPage() {
             {levels.map((level) => (
               <button
                 key={level}
-                onClick={() => handleLevelFilter(level)}
                 className={clsx(
                   'rounded-full px-3 py-1 text-sm transition-colors',
                   filters.level === level || (level === 'ALL' && !filters.level)
                     ? 'bg-primary-600 text-white'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 )}
+                onClick={() => handleLevelFilter(level)}
               >
                 {level === 'ALL' ? 'Wszystkie' : level}
               </button>
@@ -126,23 +126,23 @@ export function AdminSystemLogsPage() {
         <div className="min-w-64 flex-1">
           <div className="relative">
             <input
+              className="w-full rounded-md border border-neutral-300 px-4 py-2 pl-10 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
+              placeholder="Szukaj w wiadomościach..."
               type="text"
               value={filters.search || ''}
               onChange={handleSearchChange}
-              placeholder="Szukaj w wiadomościach..."
-              className="w-full rounded-md border border-neutral-300 px-4 py-2 pl-10 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
             />
             <svg
               className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
           </div>
@@ -154,8 +154,8 @@ export function AdminSystemLogsPage() {
         <div className="py-12 text-center">
           <p className="text-red-600">Wystąpił błąd podczas ładowania logów systemowych</p>
           <button
-            onClick={() => refetch()}
             className="mt-4 font-medium text-primary-600 hover:text-primary-700"
+            onClick={() => refetch()}
           >
             Spróbuj ponownie
           </button>
@@ -207,18 +207,18 @@ export function AdminSystemLogsPage() {
                     ))
                   ) : data?.content.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-12 text-center">
+                      <td className="py-12 text-center" colSpan={5}>
                         <svg
                           className="mx-auto mb-4 h-16 w-16 text-neutral-300"
                           fill="none"
-                          viewBox="0 0 24 24"
                           stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
                           <path
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={1}
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                           />
                         </svg>
                         <p className="text-neutral-500">Brak logów systemowych do wyświetlenia</p>
@@ -256,11 +256,11 @@ export function AdminSystemLogsPage() {
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-right">
                           <button
+                            className="text-sm font-medium text-primary-600 hover:text-primary-700"
                             onClick={(e) => {
                               e.stopPropagation()
                               handleViewDetails(log)
                             }}
-                            className="text-sm font-medium text-primary-600 hover:text-primary-700"
                           >
                             Szczegóły
                           </button>
@@ -281,18 +281,18 @@ export function AdminSystemLogsPage() {
               </div>
               <div className="flex gap-2">
                 <button
+                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isFirst}
                   onClick={() =>
                     setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page! - 1) }))
                   }
-                  disabled={data.isFirst}
-                  className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Poprzednia
                 </button>
                 <button
-                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
-                  disabled={data.isLast}
                   className="rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={data.isLast}
+                  onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
                 >
                   Następna
                 </button>

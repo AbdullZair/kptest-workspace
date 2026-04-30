@@ -42,7 +42,7 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.timezone')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.timezoneValue')}</p>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button size="sm" variant="outline">
                   {t('settings.change')}
                 </Button>
               </div>
@@ -52,7 +52,7 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.theme')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.themeValue')}</p>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button size="sm" variant="outline">
                   {t('settings.change')}
                 </Button>
               </div>
@@ -72,7 +72,7 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.password')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.passwordDesc')}</p>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => setIsChangePasswordOpen(true)}>
+                <Button size="sm" variant="outline" onClick={() => setIsChangePasswordOpen(true)}>
                   {t('settings.change')}
                 </Button>
               </div>
@@ -82,7 +82,7 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.twoFactor')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.twoFactorDesc')}</p>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button size="sm" variant="outline">
                   {t('settings.enable')}
                 </Button>
               </div>
@@ -105,9 +105,9 @@ export const SettingsPage = () => {
                   <p className="text-sm text-neutral-500">{t('settings.emailDesc')}</p>
                 </div>
                 <input
-                  type="checkbox"
-                  className="h-5 w-5 rounded text-primary-600"
                   defaultChecked
+                  className="h-5 w-5 rounded text-primary-600"
+                  type="checkbox"
                 />
               </div>
 
@@ -116,7 +116,7 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.push')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.pushDesc')}</p>
                 </div>
-                <input type="checkbox" className="h-5 w-5 rounded text-primary-600" />
+                <input className="h-5 w-5 rounded text-primary-600" type="checkbox" />
               </div>
 
               <div className="flex items-center justify-between py-3">
@@ -124,7 +124,7 @@ export const SettingsPage = () => {
                   <p className="font-medium text-neutral-900">{t('settings.sms')}</p>
                   <p className="text-sm text-neutral-500">{t('settings.smsDesc')}</p>
                 </div>
-                <input type="checkbox" className="h-5 w-5 rounded text-primary-600" />
+                <input className="h-5 w-5 rounded text-primary-600" type="checkbox" />
               </div>
             </div>
           </Card.Body>

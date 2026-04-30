@@ -85,14 +85,14 @@ export const TwoFaPage = () => {
             <svg
               className="h-7 w-7 text-white"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
+                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
               />
             </svg>
           </div>
@@ -109,9 +109,9 @@ export const TwoFaPage = () => {
             <div className="flex items-center gap-2">
               <svg className="h-5 w-5 text-error-600" fill="currentColor" viewBox="0 0 20 20">
                 <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                   clipRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  fillRule="evenodd"
                 />
               </svg>
               <p className="text-sm text-error-800">{error}</p>
@@ -120,15 +120,14 @@ export const TwoFaPage = () => {
         ) : null}
 
         {/* 2FA form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {/* OTP Input */}
           <div className="flex justify-center">
             <input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
+              aria-describedby={errors.code ? 'code-error' : undefined}
+              aria-invalid={!!errors.code}
+              aria-label="6-cyfrowy kod weryfikacyjny"
               autoComplete="one-time-code"
-              placeholder="000000"
               className={cn(
                 'w-48 text-center text-3xl font-bold tracking-widest',
                 'rounded-lg border-2 border-neutral-300 px-4 py-3',
@@ -136,11 +135,12 @@ export const TwoFaPage = () => {
                 'transition-colors duration-200',
                 errors.code && 'border-error-500 focus:border-error-500 focus:ring-error-500/20'
               )}
-              maxLength={6}
               disabled={isSubmitting}
-              aria-label="6-cyfrowy kod weryfikacyjny"
-              aria-invalid={!!errors.code}
-              aria-describedby={errors.code ? 'code-error' : undefined}
+              inputMode="numeric"
+              maxLength={6}
+              pattern="[0-9]*"
+              placeholder="000000"
+              type="text"
               {...register('code')}
               onChange={handleInputChange}
             />
@@ -148,15 +148,15 @@ export const TwoFaPage = () => {
 
           {errors.code ? (
             <p
-              id="code-error"
               className="flex items-center justify-center gap-1 text-center text-sm text-error-600"
+              id="code-error"
               role="alert"
             >
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
                   clipRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  fillRule="evenodd"
                 />
               </svg>
               {errors.code.message}
@@ -177,8 +177,8 @@ export const TwoFaPage = () => {
                 />
                 <path
                   className="opacity-75"
-                  fill="currentColor"
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  fill="currentColor"
                 />
               </svg>
               <span className="text-sm">Weryfikacja...</span>
@@ -186,12 +186,12 @@ export const TwoFaPage = () => {
           ) : null}
 
           <Button
+            fullWidth
+            disabled={code.length !== 6 || isSubmitting}
+            loading={isSubmitting}
+            size="lg"
             type="submit"
             variant="primary"
-            size="lg"
-            fullWidth
-            loading={isSubmitting}
-            disabled={code.length !== 6 || isSubmitting}
           >
             Zweryfikuj
           </Button>
@@ -202,15 +202,15 @@ export const TwoFaPage = () => {
           <p className="text-sm text-neutral-600">
             Nie otrzymałeś kodu?{' '}
             <button
-              type="button"
-              onClick={handleResendCode}
-              disabled={resendCooldown > 0}
               className={cn(
                 'font-medium',
                 resendCooldown > 0
                   ? 'cursor-not-allowed text-neutral-400'
                   : 'text-primary-600 hover:text-primary-700'
               )}
+              disabled={resendCooldown > 0}
+              type="button"
+              onClick={handleResendCode}
             >
               {resendCooldown > 0 ? `Wyślij ponownie za ${resendCooldown}s` : 'Wyślij kod ponownie'}
             </button>
@@ -219,7 +219,7 @@ export const TwoFaPage = () => {
 
         {/* Back to login */}
         <p className="mt-8 text-center text-sm text-neutral-600">
-          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700">
+          <Link className="font-medium text-primary-600 hover:text-primary-700" to="/login">
             Wróć do logowania
           </Link>
         </p>

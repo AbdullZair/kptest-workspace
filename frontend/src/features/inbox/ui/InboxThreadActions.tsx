@@ -109,9 +109,9 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
           Akcje
           <svg className="-mr-1 ml-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
             <path
-              fillRule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
               clipRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              fillRule="evenodd"
             />
           </svg>
         </Menu.Button>
@@ -137,10 +137,10 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
                 <Menu.Item key={option.value}>
                   {({ active }) => (
                     <button
-                      onClick={() => handleStatusChange(option.value)}
                       className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm ${
                         active ? 'bg-neutral-100' : ''
                       }`}
+                      onClick={() => handleStatusChange(option.value)}
                     >
                       <span className="text-neutral-700">{option.label}</span>
                       {thread.status === option.value && (
@@ -167,10 +167,10 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
                 <Menu.Item key={option.value}>
                   {({ active }) => (
                     <button
-                      onClick={() => handlePriorityChange(option.value)}
                       className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm ${
                         active ? 'bg-neutral-100' : ''
                       }`}
+                      onClick={() => handlePriorityChange(option.value)}
                     >
                       <span className={`text-neutral-700 ${option.color}`}>{option.label}</span>
                     </button>
@@ -188,10 +188,10 @@ export const InboxThreadActions: React.FC<InboxThreadActionsProps> = ({
                 <Menu.Item key={member.id}>
                   {({ active }) => (
                     <button
-                      onClick={() => handleAssigneeChange(member.id)}
                       className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm ${
                         active ? 'bg-neutral-100' : ''
                       }`}
+                      onClick={() => handleAssigneeChange(member.id)}
                     >
                       <div>
                         <span className="text-neutral-700">{member.name}</span>
