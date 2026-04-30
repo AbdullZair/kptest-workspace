@@ -93,7 +93,11 @@ const getNavigationByRole = (role?: UserRole): NavItem[] => {
     },
     {
       name: 'Materiały',
-      href: '/materials',
+      // Personel medyczny zarządza materiałami; pacjent (i inne role) tylko przegląda.
+      href:
+        role && ['ADMIN', 'DOCTOR', 'COORDINATOR', 'NURSE', 'THERAPIST'].includes(role)
+          ? '/materials/admin'
+          : '/materials',
       icon: (
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path

@@ -35,6 +35,8 @@ export const MaterialAdminPage = () => {
   const [showPublished, setShowPublished] = useState<boolean | undefined>()
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
   const [editingMaterial, setEditingMaterial] = useState<EducationalMaterial | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Load all projects (no status filter on backend, we filter client-side)
   const { data: allProjects = [] } = useGetProjectsQuery({})
@@ -121,11 +123,29 @@ export const MaterialAdminPage = () => {
     }
   }
 
+  const extractErrorMessage = (err: unknown): string => {
+    if (typeof err === 'object' && err !== null) {
+      const anyErr = err as {
+        data?: { message?: string; error_code?: string }
+        status?: number
+        message?: string
+      }
+      if (anyErr.data?.message) {
+        return `${anyErr.data.message}${anyErr.data.error_code ? ` (${anyErr.data.error_code})` : ''}`
+      }
+      if (anyErr.status) return `HTTP ${anyErr.status}`
+      if (anyErr.message) return anyErr.message
+    }
+    return 'Nieznany błąd zapisu materiału.'
+  }
+
   const handleFormSubmit = async (data: MaterialFormData) => {
+    setSubmitError(null)
     if (!selectedProjectId) {
-      console.error('Cannot submit material without selectedProjectId')
+      setSubmitError('Nie wybrano projektu — wybierz projekt z listy powyżej.')
       return
     }
+    setIsSubmitting(true)
     try {
       if (editingMaterial) {
         await updateMaterial({ id: editingMaterial.id, material: data }).unwrap()
@@ -141,12 +161,16 @@ export const MaterialAdminPage = () => {
       refetch()
     } catch (err) {
       console.error('Failed to save material:', err)
+      setSubmitError(extractErrorMessage(err))
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleModalClose = () => {
     setIsFormModalOpen(false)
     setEditingMaterial(null)
+    setSubmitError(null)
   }
 
   const handleClearFilters = () => {
@@ -338,6 +362,8 @@ export const MaterialAdminPage = () => {
           onSubmit={handleFormSubmit}
           material={editingMaterial}
           projectId={selectedProjectId}
+          submitError={submitError}
+          isSubmitting={isSubmitting}
         />
       ) : null}
     </div>
@@ -353,6 +379,8 @@ interface MaterialFormModalProps {
   onSubmit: (data: MaterialFormData) => void
   material?: EducationalMaterial | null
   projectId: string
+  submitError?: string | null
+  isSubmitting?: boolean
 }
 
 const MaterialFormModal = ({
@@ -361,6 +389,8 @@ const MaterialFormModal = ({
   onSubmit,
   material,
   projectId,
+  submitError,
+  isSubmitting = false,
 }: MaterialFormModalProps) => {
   const [formData, setFormData] = useState<MaterialFormData>({
     title: material?.title || '',
@@ -412,6 +442,18 @@ const MaterialFormModal = ({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 p-6" data-testid="material-form">
+          {/* Error banner */}
+          {submitError ? (
+            <div
+              className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              role="alert"
+              data-testid="material-form-error"
+            >
+              <strong className="font-semibold">Nie udało się zapisać materiału.</strong>{' '}
+              {submitError}
+            </div>
+          ) : null}
+
           {/* Title */}
           <div>
             <label className="mb-1 block text-sm font-medium text-neutral-700">Tytuł *</label>
@@ -582,11 +624,26 @@ const MaterialFormModal = ({
 
           {/* Actions */}
           <div className="flex justify-end gap-3 border-t border-neutral-200 pt-4">
-            <Button type="button" variant="ghost" onClick={onClose} data-testid="material-cancel">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={onClose}
+              disabled={isSubmitting}
+              data-testid="material-cancel"
+            >
               Anuluj
             </Button>
-            <Button type="submit" variant="primary" data-testid="material-save">
-              {material ? 'Zapisz zmiany' : 'Dodaj materiał'}
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isSubmitting}
+              data-testid="material-save"
+            >
+              {isSubmitting
+                ? 'Zapisywanie...'
+                : material
+                  ? 'Zapisz zmiany'
+                  : 'Dodaj materiał'}
             </Button>
           </div>
         </form>

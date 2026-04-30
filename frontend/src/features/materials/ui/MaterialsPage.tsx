@@ -11,12 +11,16 @@ import {
   useRecordViewMutation,
 } from '../api/materialApi'
 import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '@app/store'
+import { selectUser } from '@features/auth/slices/authSlice'
 import type {
   EducationalMaterial,
   MaterialProgress,
   MaterialType,
   DifficultyLevel,
 } from '../types/material.types'
+
+const STAFF_ROLES = ['ADMIN', 'DOCTOR', 'COORDINATOR', 'NURSE', 'THERAPIST']
 
 /**
  * MaterialsPage Component
@@ -25,6 +29,8 @@ import type {
  */
 export const MaterialsPage = () => {
   const navigate = useNavigate()
+  const currentUser = useAppSelector(selectUser)
+  const isStaff = !!currentUser?.role && STAFF_ROLES.includes(currentUser.role)
 
   // Mock patient ID - in real app, get from auth context
   const patientId = '00000000-0000-0000-0000-000000000000'
@@ -155,9 +161,20 @@ export const MaterialsPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-900">Materiały edukacyjne</h1>
-        <p className="mt-1 text-neutral-600">Przeglądaj i czytaj materiały edukacyjne</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-neutral-900">Materiały edukacyjne</h1>
+          <p className="mt-1 text-neutral-600">Przeglądaj i czytaj materiały edukacyjne</p>
+        </div>
+        {isStaff ? (
+          <button
+            onClick={() => navigate('/materials/admin')}
+            className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+            data-testid="materials-go-admin"
+          >
+            Zarządzaj materiałami
+          </button>
+        ) : null}
       </div>
 
       {/* Progress Summary */}
