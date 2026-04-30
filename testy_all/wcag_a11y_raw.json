@@ -1,6 +1,79 @@
 {
   "results": [
     {
+      "route": "/calendar",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/materials",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/messages",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/admin/users",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/admin/audit-logs",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/admin/system",
+      "scanned": true,
+      "violations": 3,
+      "byImpact": {
+        "serious": 3
+      },
+      "topViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 1,
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright"
+        },
+        {
+          "id": "definition-list",
+          "impact": "serious",
+          "help": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
+          "nodes": 1,
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/definition-list?application=playwright"
+        },
+        {
+          "id": "dlitem",
+          "impact": "serious",
+          "help": "<dt> and <dd> elements must be contained by a <dl>",
+          "nodes": 2,
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/dlitem?application=playwright"
+        }
+      ]
+    },
+    {
+      "route": "/admin/pending-verifications",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
       "route": "/login",
       "scanned": true,
       "violations": 0,
@@ -40,107 +113,6 @@
     },
     {
       "route": "/projects",
-      "scanned": true,
-      "violations": 2,
-      "byImpact": {
-        "critical": 1,
-        "serious": 1
-      },
-      "topViolations": [
-        {
-          "id": "button-name",
-          "impact": "critical",
-          "help": "Buttons must have discernible text",
-          "nodes": 200,
-          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/button-name?application=playwright"
-        },
-        {
-          "id": "nested-interactive",
-          "impact": "serious",
-          "help": "Interactive controls must not be nested",
-          "nodes": 100,
-          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/nested-interactive?application=playwright"
-        }
-      ]
-    },
-    {
-      "route": "/calendar",
-      "scanned": true,
-      "violations": 2,
-      "byImpact": {
-        "critical": 2
-      },
-      "topViolations": [
-        {
-          "id": "button-name",
-          "impact": "critical",
-          "help": "Buttons must have discernible text",
-          "nodes": 2,
-          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/button-name?application=playwright"
-        },
-        {
-          "id": "select-name",
-          "impact": "critical",
-          "help": "Select element must have an accessible name",
-          "nodes": 2,
-          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/select-name?application=playwright"
-        }
-      ]
-    },
-    {
-      "route": "/materials",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/messages",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/admin/users",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/admin/audit-logs",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/admin/system",
-      "scanned": true,
-      "violations": 2,
-      "byImpact": {
-        "serious": 2
-      },
-      "topViolations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "help": "Elements must meet minimum color contrast ratio thresholds",
-          "nodes": 1,
-          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright"
-        },
-        {
-          "id": "dlitem",
-          "impact": "serious",
-          "help": "<dt> and <dd> elements must be contained by a <dl>",
-          "nodes": 33,
-          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/dlitem?application=playwright"
-        }
-      ]
-    },
-    {
-      "route": "/admin/pending-verifications",
       "scanned": true,
       "violations": 0,
       "byImpact": {},

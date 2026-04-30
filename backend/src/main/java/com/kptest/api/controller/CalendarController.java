@@ -5,6 +5,8 @@ import com.kptest.api.dto.CreateTherapyEventRequest;
 import com.kptest.api.dto.TherapyEventDto;
 import com.kptest.api.dto.UpdateTherapyEventRequest;
 import com.kptest.application.service.CalendarService;
+import com.kptest.domain.patient.Patient;
+import com.kptest.domain.patient.PatientRepository;
 import com.kptest.domain.schedule.EventStatus;
 import com.kptest.domain.schedule.EventType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -36,6 +40,7 @@ import java.util.UUID;
 public class CalendarController {
 
     private final CalendarService calendarService;
+    private final PatientRepository patientRepository;
 
     /**
      * Get all events with optional filters.
@@ -176,15 +181,44 @@ public class CalendarController {
     ) {
         log.debug("GET /api/v1/calendar/upcoming - patientId={}", patientId);
 
-        if (patientId == null) {
-            // TODO: Get current user's patient ID from security context
-            // For now, return empty list if no patient ID provided
-            return ResponseEntity.ok(List.of());
+        UUID effectivePatientId = patientId;
+        if (effectivePatientId == null) {
+            // Resolve patient ID from authenticated user (PATIENT role accessing own events)
+            UUID currentUserId = getCurrentUserId();
+            if (currentUserId == null) {
+                log.warn("GET /api/v1/calendar/upcoming - no patientId provided and no authenticated user");
+                return ResponseEntity.ok(List.of());
+            }
+            effectivePatientId = patientRepository.findByUserId(currentUserId)
+                    .map(Patient::getId)
+                    .orElse(null);
+            if (effectivePatientId == null) {
+                log.debug("GET /api/v1/calendar/upcoming - authenticated user {} is not a patient", currentUserId);
+                return ResponseEntity.ok(List.of());
+            }
         }
 
-        List<TherapyEventDto> events = calendarService.getUpcomingEvents(patientId);
+        List<TherapyEventDto> events = calendarService.getUpcomingEvents(effectivePatientId);
 
         return ResponseEntity.ok(events);
+    }
+
+    /**
+     * Resolve current user UUID from the security context.
+     * Returns null if there is no authentication or principal cannot be parsed as UUID.
+     */
+    private UUID getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        String name = authentication.getName();
+        try {
+            return UUID.fromString(name);
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to parse user ID from security context: {}", name);
+            return null;
+        }
     }
 
     /**

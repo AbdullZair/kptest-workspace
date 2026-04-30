@@ -21,18 +21,20 @@ export function AdminSystemPage() {
     fileSizeMb: number
   } | null>(null)
 
+  // US-A-08: auto-refresh health & metrics every 30s
+  const SYSTEM_POLLING_MS = 30_000
   const {
     data: health,
     isLoading: healthLoading,
     error: healthError,
     refetch: refetchHealth,
-  } = useGetSystemHealthQuery()
+  } = useGetSystemHealthQuery(undefined, { pollingInterval: SYSTEM_POLLING_MS })
   const {
     data: metrics,
     isLoading: metricsLoading,
     error: metricsError,
     refetch: refetchMetrics,
-  } = useGetSystemMetricsQuery()
+  } = useGetSystemMetricsQuery(undefined, { pollingInterval: SYSTEM_POLLING_MS })
   const [clearCache, { isLoading: isClearingCache }] = useClearCacheMutation()
   const [createBackup, { isLoading: isCreatingBackup }] = useCreateBackupMutation()
 
@@ -70,7 +72,7 @@ export function AdminSystemPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">Status systemu</h1>
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-sm text-neutral-700">
             Monitoruj zdrowie systemu i wykonuj operacje administracyjne
           </p>
         </div>

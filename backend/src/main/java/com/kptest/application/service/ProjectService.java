@@ -1,6 +1,8 @@
 package com.kptest.application.service;
 
 import com.kptest.api.dto.*;
+import com.kptest.domain.audit.AuditLog;
+import com.kptest.domain.audit.repository.AuditLogRepository;
 import com.kptest.domain.patient.Patient;
 import com.kptest.domain.patient.PatientRepository;
 import com.kptest.domain.project.*;
@@ -8,6 +10,7 @@ import com.kptest.domain.staff.Staff;
 import com.kptest.domain.staff.StaffRepository;
 import com.kptest.domain.user.User;
 import com.kptest.domain.user.UserRepository;
+import com.kptest.exception.BusinessRuleException;
 import com.kptest.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +31,15 @@ import java.util.stream.Collectors;
 @Transactional
 public class ProjectService {
 
+    private static final String AUDIT_ENTITY_TYPE = "Patient";
+
     private final ProjectRepository projectRepository;
     private final PatientProjectRepository patientProjectRepository;
     private final ProjectTeamRepository projectTeamRepository;
     private final StaffRepository staffRepository;
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
+    private final AuditLogRepository auditLogRepository;
 
     /**
      * Find all projects with optional filtering.
@@ -285,6 +291,75 @@ public class ProjectService {
     }
 
     /**
+     * Transfer a patient between projects (US-K-06).
+     *
+     * <p>Atomically removes the patient from {@code fromProjectId} (with audit
+     * trail / reason) and re-enrolls them into {@code toProjectId} in a single
+     * transaction. Both source removal and target assignment use the existing
+     * {@link #removePatients} / {@link #assignPatients} flows, so per-row audit
+     * logs and timestamps are preserved. An additional aggregated TRANSFER
+     * audit entry is persisted for traceability.</p>
+     *
+     * @param fromProjectId source project ID (patient must be actively enrolled here)
+     * @param patientId     patient ID
+     * @param toProjectId   target project ID (patient must NOT already be enrolled here)
+     * @param reason        business motive (min 10 chars validated by DTO)
+     * @return UUID of the persisted audit log entry, or {@code null} if audit failed
+     * @throws ResourceNotFoundException if any of the projects or the patient does not exist
+     * @throws BusinessRuleException     if the patient is not in {@code fromProjectId},
+     *                                   already in {@code toProjectId},
+     *                                   or {@code fromProjectId} == {@code toProjectId}
+     */
+    public UUID transferPatient(UUID fromProjectId, UUID patientId, UUID toProjectId, String reason) {
+        log.info("Transferring patient {} from project {} to project {}", patientId, fromProjectId, toProjectId);
+
+        // Guard: refuse self-transfer
+        if (fromProjectId.equals(toProjectId)) {
+            throw new BusinessRuleException(
+                "Source and target projects must be different (got " + fromProjectId + ")");
+        }
+
+        // Validate both projects exist (cheap; we want a clean 404 not a stale ref)
+        projectRepository.findById(fromProjectId)
+            .orElseThrow(() -> new ResourceNotFoundException("Source project not found with id: " + fromProjectId));
+        projectRepository.findById(toProjectId)
+            .orElseThrow(() -> new ResourceNotFoundException("Target project not found with id: " + toProjectId));
+
+        // Patient must exist
+        patientRepository.findById(patientId)
+            .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + patientId));
+
+        // Patient must currently be in source project
+        if (!patientProjectRepository.existsActiveEnrollment(patientId, fromProjectId)) {
+            throw new BusinessRuleException(
+                "Patient " + patientId + " is not actively enrolled in source project " + fromProjectId);
+        }
+
+        // Patient must NOT already be in target project
+        if (patientProjectRepository.existsActiveEnrollment(patientId, toProjectId)) {
+            throw new BusinessRuleException(
+                "Patient " + patientId + " is already enrolled in target project " + toProjectId);
+        }
+
+        // Step 1: remove from source (per-patient audit handled internally)
+        List<UUID> removed = removePatients(fromProjectId, List.of(patientId), reason);
+        if (removed.isEmpty()) {
+            throw new BusinessRuleException(
+                "Failed to remove patient " + patientId + " from project " + fromProjectId);
+        }
+
+        // Step 2: enroll into target
+        List<UUID> assigned = assignPatients(toProjectId, List.of(patientId));
+        if (assigned.isEmpty()) {
+            throw new BusinessRuleException(
+                "Failed to enroll patient " + patientId + " into project " + toProjectId);
+        }
+
+        // Step 3: aggregated TRANSFER audit log entry
+        return recordTransferAudit(patientId, fromProjectId, toProjectId, reason);
+    }
+
+    /**
      * Get project statistics.
      *
      * @param projectId Project ID
@@ -473,6 +548,30 @@ public class ProjectService {
                 },
                 Collectors.counting()
             ));
+    }
+
+    /**
+     * Persist a TRANSFER audit log entry. Failures are logged but never abort the transaction.
+     */
+    private UUID recordTransferAudit(UUID patientId, UUID fromProjectId, UUID toProjectId, String reason) {
+        try {
+            AuditLog auditLog = AuditLog.create(
+                patientId,
+                AuditLog.AuditAction.UPDATE,
+                AUDIT_ENTITY_TYPE,
+                patientId
+            );
+            String safeReason = reason == null ? "" : reason.replace("\"", "'");
+            auditLog.setOldValue(String.format("{\"project_id\":\"%s\"}", fromProjectId));
+            auditLog.setNewValue(String.format(
+                "{\"action\":\"TRANSFER\",\"from_project_id\":\"%s\",\"to_project_id\":\"%s\",\"reason\":\"%s\"}",
+                fromProjectId, toProjectId, safeReason));
+            auditLogRepository.save(auditLog);
+            return auditLog.getId();
+        } catch (Exception ex) {
+            log.error("Failed to persist transfer audit log for patient {}", patientId, ex);
+            return null;
+        }
     }
 
     /**

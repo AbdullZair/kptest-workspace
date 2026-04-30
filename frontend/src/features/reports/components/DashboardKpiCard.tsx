@@ -34,6 +34,10 @@ export interface KpiMetricProps {
    * Color variant
    */
   variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
+  /**
+   * Stable hook for E2E selectors / a11y test queries.
+   */
+  testId?: string
 }
 
 /**
@@ -41,7 +45,8 @@ export interface KpiMetricProps {
  *
  * Displays a single KPI metric
  */
-const KpiMetric = memo(({ title, value, change, icon, variant = 'primary' }: KpiMetricProps) => {
+const KpiMetric = memo(
+  ({ title, value, change, icon, variant = 'primary', testId }: KpiMetricProps) => {
   const variantColors: Record<string, string> = {
     primary: 'bg-primary-50 text-primary-600',
     secondary: 'bg-secondary-50 text-secondary-600',
@@ -51,7 +56,7 @@ const KpiMetric = memo(({ title, value, change, icon, variant = 'primary' }: Kpi
   }
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow">
+    <div className="rounded-lg bg-white p-6 shadow" data-testid={testId}>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-neutral-600">{title}</p>
@@ -85,10 +90,11 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
   }
 
   return (
-    <div className={clsx('space-y-6', className)}>
+    <div className={clsx('space-y-6', className)} data-testid="dashboard-kpi-card">
       {/* Main Metrics */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiMetric
+          testId="dashboard-active-projects"
           title="Projekty"
           value={`${kpi.active_projects}/${kpi.total_projects}`}
           icon={
@@ -104,6 +110,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
           variant="primary"
         />
         <KpiMetric
+          testId="dashboard-active-patients"
           title="Pacjenci"
           value={`${kpi.active_patients}/${kpi.total_patients}`}
           icon={
@@ -119,6 +126,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
           variant="secondary"
         />
         <KpiMetric
+          testId="dashboard-total-staff"
           title="Personel"
           value={kpi.total_staff}
           icon={
@@ -134,6 +142,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
           variant="success"
         />
         <KpiMetric
+          testId="dashboard-pending-messages"
           title="Wiadomości"
           value={kpi.pending_messages}
           icon={
@@ -152,7 +161,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
 
       {/* Compliance & Attendance */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="rounded-lg bg-white p-6 shadow" data-testid="dashboard-avg-compliance">
           <h4 className="mb-2 text-sm font-medium text-neutral-600">Średni Compliance</h4>
           <p
             className={clsx(
@@ -181,7 +190,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
           </div>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="rounded-lg bg-white p-6 shadow" data-testid="dashboard-attendance">
           <h4 className="mb-2 text-sm font-medium text-neutral-600">Frekwencja na Sesjach</h4>
           <p className="text-3xl font-bold text-neutral-900">
             {kpi.overall_session_attendance.toFixed(1)}%
@@ -194,7 +203,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
           </div>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="rounded-lg bg-white p-6 shadow" data-testid="dashboard-materials-completion">
           <h4 className="mb-2 text-sm font-medium text-neutral-600">Ukończenie Materiałów</h4>
           <p className="text-3xl font-bold text-neutral-900">
             {kpi.materials_completion_rate.toFixed(1)}%
@@ -210,7 +219,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
 
       {/* Alerts & Risk */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="rounded-lg bg-white p-6 shadow" data-testid="dashboard-projects-at-risk">
           <div className="mb-4 flex items-center justify-between">
             <h4 className="text-sm font-medium text-neutral-600">Projekty Zagrożone</h4>
             <span className="rounded-full bg-red-100 px-2 py-1 text-sm font-medium text-red-800">
@@ -220,7 +229,7 @@ export const DashboardKpiCard = memo(({ kpi, className }: DashboardKpiCardProps)
           <p className="text-sm text-neutral-500">Projekty z compliance poniżej progu</p>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="rounded-lg bg-white p-6 shadow" data-testid="dashboard-upcoming-sessions">
           <div className="mb-4 flex items-center justify-between">
             <h4 className="text-sm font-medium text-neutral-600">Nadchodzące Sesje</h4>
             <span className="rounded-full bg-blue-100 px-2 py-1 text-sm font-medium text-blue-800">

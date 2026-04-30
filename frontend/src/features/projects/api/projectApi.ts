@@ -138,6 +138,38 @@ export const projectApiSlice = api.injectEndpoints({
     }),
 
     /**
+     * Transfer a patient between projects (US-K-06).
+     * Removes the patient from the source project (with audit reason) and
+     * re-enrolls them into the target project in a single transaction.
+     * @mutation
+     */
+    transferPatient: builder.mutation<
+      {
+        message: string
+        patient_id: string
+        from_project_id: string
+        to_project_id: string
+        audit_log_id?: string
+      },
+      { fromProjectId: string; patientId: string; toProjectId: string; reason: string }
+    >({
+      query: ({ fromProjectId, patientId, toProjectId, reason }) => ({
+        url: `/projects/${fromProjectId}/patients/${patientId}/transfer/${toProjectId}`,
+        method: 'POST',
+        body: { reason },
+      }),
+      invalidatesTags: (_result, _error, { fromProjectId, toProjectId }) => [
+        { type: 'Project', id: fromProjectId },
+        { type: 'Project', id: toProjectId },
+        { type: 'Project', id: 'LIST' },
+        { type: 'PatientProject', projectId: fromProjectId },
+        { type: 'PatientProject', projectId: toProjectId },
+        { type: 'ProjectStatistics', id: fromProjectId },
+        { type: 'ProjectStatistics', id: toProjectId },
+      ],
+    }),
+
+    /**
      * Get project statistics
      * @query
      */
@@ -249,6 +281,7 @@ export const {
   useDeleteProjectMutation,
   useAssignPatientsMutation,
   useRemovePatientsMutation,
+  useTransferPatientMutation,
   useGetProjectStatisticsQuery,
   useGetProjectPatientsQuery,
   useGetProjectPatientSummariesQuery,

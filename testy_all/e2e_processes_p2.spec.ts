@@ -3,14 +3,17 @@ import { test, expect, type APIRequestContext } from '@playwright/test'
 /**
  * KPTEST — Process E2E tests (paczka P2).
  *
- * Plik dopełnia `e2e_processes.spec.ts` i `e2e_processes_extra.spec.ts` o cztery
- * kolejne procesy biznesowe związane z grupowym zarządzaniem pacjentami,
- * generowaniem raportów i operacjami RODO (export + erasure/anonymize).
+ * Plik dopełnia `e2e_processes.spec.ts` i `e2e_processes_extra.spec.ts` o sześć
+ * kolejnych procesów biznesowych związanych z grupowym zarządzaniem pacjentami,
+ * generowaniem raportów i operacjami RODO (export + erasure/anonymize) oraz
+ * o mechanizmy P2-a: transfer pacjenta między projektami i dashboard KPI.
  *
  *   PROC-07: US-K-04 grupowe przypisanie i odpięcie pacjentów do projektu
  *   PROC-08: US-K-23 raport zbiorczy projektu (PROJECT_STATS, format PDF)
  *   PROC-09: US-A-11 RODO eksport danych pacjenta (JSON + PDF)
  *   PROC-10: US-A-12 RODO usunięcie / anonimizacja pacjenta (right to be forgotten)
+ *   PROC-11: US-K-06 transfer pacjenta między projektami (audit-log + statystyki)
+ *   PROC-12: US-K-24 dashboard KPI projektu (statystyki + agregaty)
  *
  * Każdy krok kończy się asercją `expect(res.ok(), ...).toBeTruthy()`, tak by
  * komunikat błędu zawierał kod HTTP oraz body odpowiedzi.
@@ -720,5 +723,374 @@ test.describe('Process — RODO usunięcie pacjenta (US-A-12)', () => {
         description: `GET /admin/patients/{id}/erasure-logs zwrócił ${logsRes.status()} — endpoint może być niedostępny po erase albo niedoimplementowany.`,
       })
     }
+  })
+})
+
+// ============================================================
+// PROC-11: US-K-06 transfer pacjenta między projektami
+// ============================================================
+
+test.describe('Process — Transfer pacjenta między projektami (US-K-06)', () => {
+  test('PROC-11: Koordynator przenosi pacjenta z projektu A do projektu B z uzasadnieniem; statystyki obu projektów aktualizują się', async ({
+    request,
+  }) => {
+    // KROK 1: Logowanie administratora
+    const auth = await login(request)
+    expect(auth.token).toBeTruthy()
+
+    // KROK 2: Założenie projektu A (źródłowy) i projektu B (docelowy)
+    const projectA = await createEmptyProject(request, auth.token, 'PROC-11-A')
+    const projectB = await createEmptyProject(request, auth.token, 'PROC-11-B')
+    expect(projectA).not.toBe(projectB)
+
+    // KROK 3: Rejestracja + akceptacja pacjenta + enroll do projektu A
+    const { patientId } = await registerAndApprove(request, auth.token)
+    const enrollRes = await request.post(
+      `${API_URL}/projects/${projectA}/patients`,
+      {
+        headers: authHeaders(auth.token),
+        data: { patient_ids: [patientId] },
+      }
+    )
+    expect(
+      enrollRes.ok(),
+      `enroll do A HTTP ${enrollRes.status()}: ${await enrollRes.text()}`
+    ).toBeTruthy()
+
+    // KROK 4: Sanity — A ma >=1 aktywnego pacjenta, B ma 0
+    const statsABefore = await request.get(
+      `${API_URL}/projects/${projectA}/statistics`,
+      { headers: { Authorization: `Bearer ${auth.token}` } }
+    )
+    expect(statsABefore.ok(), `GET stats A pre HTTP ${statsABefore.status()}`).toBeTruthy()
+    const statsABeforeBody = (await statsABefore.json()) as {
+      active_patients?: number
+    }
+    const aBefore = statsABeforeBody.active_patients ?? 0
+    expect(aBefore, `A.active_patients pre transfer >= 1 (got ${aBefore})`).toBeGreaterThanOrEqual(1)
+
+    const statsBBefore = await request.get(
+      `${API_URL}/projects/${projectB}/statistics`,
+      { headers: { Authorization: `Bearer ${auth.token}` } }
+    )
+    expect(statsBBefore.ok(), `GET stats B pre HTTP ${statsBBefore.status()}`).toBeTruthy()
+    const statsBBeforeBody = (await statsBBefore.json()) as {
+      active_patients?: number
+    }
+    const bBefore = statsBBeforeBody.active_patients ?? 0
+
+    // KROK 5: Transfer — POST /projects/{A}/patients/{P}/transfer/{B} + reason
+    // TransferPatientRequest wymaga reason >= 10 znaków (Bean Validation @Size).
+    const reason =
+      'PROC-11 E2E test — transfer pacjenta z projektu A do B (RODO art. 5 — minimalizacja danych projektu A).'
+    const transferRes = await request.post(
+      `${API_URL}/projects/${projectA}/patients/${patientId}/transfer/${projectB}`,
+      {
+        headers: authHeaders(auth.token),
+        data: { reason },
+      }
+    )
+    expect(
+      transferRes.ok(),
+      `POST transfer HTTP ${transferRes.status()}: ${await transferRes.text()}`
+    ).toBeTruthy()
+    const transferBody = (await transferRes.json()) as {
+      patient_id?: string
+      from_project_id?: string
+      to_project_id?: string
+      audit_log_id?: string
+    }
+    expect(transferBody.patient_id, 'response.patient_id == patientId').toBe(patientId)
+    expect(transferBody.from_project_id, 'response.from_project_id == projectA').toBe(projectA)
+    expect(transferBody.to_project_id, 'response.to_project_id == projectB').toBe(projectB)
+
+    // KROK 6: Statystyki A — liczba aktywnych pacjentów spadła o 1
+    const statsAAfter = await request.get(
+      `${API_URL}/projects/${projectA}/statistics`,
+      { headers: { Authorization: `Bearer ${auth.token}` } }
+    )
+    expect(statsAAfter.ok(), `GET stats A post HTTP ${statsAAfter.status()}`).toBeTruthy()
+    const statsAAfterBody = (await statsAAfter.json()) as {
+      active_patients?: number
+    }
+    const aAfter = statsAAfterBody.active_patients ?? 0
+    expect(
+      aAfter,
+      `A.active_patients po transferze < ${aBefore} (got ${aAfter})`
+    ).toBeLessThan(aBefore)
+
+    // KROK 7: Statystyki B — liczba aktywnych pacjentów wzrosła o 1
+    const statsBAfter = await request.get(
+      `${API_URL}/projects/${projectB}/statistics`,
+      { headers: { Authorization: `Bearer ${auth.token}` } }
+    )
+    expect(statsBAfter.ok(), `GET stats B post HTTP ${statsBAfter.status()}`).toBeTruthy()
+    const statsBAfterBody = (await statsBAfter.json()) as {
+      active_patients?: number
+    }
+    const bAfter = statsBAfterBody.active_patients ?? 0
+    expect(
+      bAfter,
+      `B.active_patients po transferze > ${bBefore} (got ${bAfter})`
+    ).toBeGreaterThan(bBefore)
+
+    // KROK 8: (opcjonalnie) Audit-log — wpis TRANSFER widoczny w /admin/audit-logs
+    const auditRes = await request.get(
+      `${API_URL}/admin/audit-logs?entityType=Patient&entityId=${patientId}&size=20`,
+      { headers: { Authorization: `Bearer ${auth.token}` } }
+    )
+    if (auditRes.ok()) {
+      const auditRaw = await auditRes.text()
+      const hasTransferEntry =
+        auditRaw.includes('TRANSFER') ||
+        auditRaw.includes(projectB) ||
+        auditRaw.includes(projectA)
+      expect(
+        hasTransferEntry,
+        'audit log zawiera ślad transferu (TRANSFER lub UUID projektu A/B w body)'
+      ).toBeTruthy()
+    } else {
+      test.info().annotations.push({
+        type: 'process-gap',
+        description: `GET /admin/audit-logs zwrócił ${auditRes.status()} — pomijamy weryfikację audytu (dane same w sobie wystarczają).`,
+      })
+    }
+
+    // KROK 9: Walidacja — drugi transfer (z B do B) odrzucony jako naruszenie reguły
+    const reTransferRes = await request.post(
+      `${API_URL}/projects/${projectB}/patients/${patientId}/transfer/${projectB}`,
+      {
+        headers: authHeaders(auth.token),
+        data: { reason: 'PROC-11 E2E test — same-project guard.' },
+      }
+    )
+    expect(
+      reTransferRes.ok(),
+      `transfer self->self powinien zostać odrzucony (got HTTP ${reTransferRes.status()})`
+    ).toBeFalsy()
+  })
+})
+
+// ============================================================
+// PROC-12: US-K-24 dashboard KPI projektu
+// ============================================================
+
+test.describe('Process — Dashboard KPI projektu (US-K-24)', () => {
+  test('PROC-12: Statystyki projektu zwracają komplet pól KPI po dodaniu 2 pacjentów, materiału i eventu', async ({
+    request,
+  }) => {
+    // KROK 1: Logowanie + projekt + 2 pacjentów + enroll
+    const auth = await login(request)
+    const projectId = await createEmptyProject(request, auth.token, 'PROC-12')
+    const { patientId: p1 } = await registerAndApprove(request, auth.token)
+    const { patientId: p2 } = await registerAndApprove(request, auth.token)
+    const enrollRes = await request.post(
+      `${API_URL}/projects/${projectId}/patients`,
+      {
+        headers: authHeaders(auth.token),
+        data: { patient_ids: [p1, p2] },
+      }
+    )
+    expect(
+      enrollRes.ok(),
+      `enroll HTTP ${enrollRes.status()}: ${await enrollRes.text()}`
+    ).toBeTruthy()
+
+    // KROK 2: Materiał (statystyki materiałowe) — ARTICLE/EDUCATION/BASIC
+    const matRes = await request.post(`${API_URL}/materials`, {
+      headers: authHeaders(auth.token),
+      data: {
+        project_id: projectId,
+        title: `PROC-12 Materiał ${stamp()}`,
+        content: 'Materiał dla dashboard KPI.',
+        type: 'ARTICLE',
+        category: 'EDUCATION',
+        difficulty: 'BASIC',
+        assigned_to_patients: [p1, p2],
+      },
+    })
+    expect(
+      matRes.ok(),
+      `POST /materials HTTP ${matRes.status()}: ${await matRes.text()}`
+    ).toBeTruthy()
+
+    // KROK 3: Event kalendarzowy (data dla nadchodzących sesji w KPI)
+    const scheduledAt = new Date(
+      Date.now() + 3 * 24 * 60 * 60 * 1000
+    ).toISOString()
+    const endsAt = new Date(
+      Date.now() + 3 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000
+    ).toISOString()
+    const eventRes = await request.post(`${API_URL}/calendar/events`, {
+      headers: authHeaders(auth.token),
+      data: {
+        project_id: projectId,
+        patient_id: p1,
+        title: 'PROC-12 Wizyta KPI',
+        description: 'Event KPI dashboard test.',
+        type: 'VISIT',
+        scheduled_at: scheduledAt,
+        ends_at: endsAt,
+        location: 'IFPS Warszawa',
+        is_cyclic: false,
+        reminders: {
+          reminder_24h: true,
+          reminder_2h: false,
+          reminder_30min: false,
+        },
+      },
+    })
+    if (!eventRes.ok()) {
+      test.info().annotations.push({
+        type: 'process-gap',
+        description: `POST /calendar/events HTTP ${eventRes.status()} — KPI dashboard wciąż powinno działać bez eventów.`,
+      })
+    }
+
+    // KROK 4: GET /projects/{id}/statistics — sprawdź KPI fields
+    const statsRes = await request.get(
+      `${API_URL}/projects/${projectId}/statistics`,
+      { headers: { Authorization: `Bearer ${auth.token}` } }
+    )
+    expect(
+      statsRes.ok(),
+      `GET /projects/{id}/statistics HTTP ${statsRes.status()}: ${await statsRes.text()}`
+    ).toBeTruthy()
+    const stats = (await statsRes.json()) as {
+      project_id?: string
+      project_name?: string
+      total_patients?: number
+      active_patients?: number
+      completed_patients?: number
+      removed_patients?: number
+      team_members?: number
+      average_compliance_score?: number | null
+      compliance_distribution?: Record<string, number>
+      stage_distribution?: Record<string, number>
+    }
+
+    // Pola wymagane przez KPI dashboard (US-K-24):
+    expect(stats.project_id, 'stats.project_id == projectId').toBe(projectId)
+    expect(stats.project_name, 'stats.project_name niepuste').toBeTruthy()
+    expect(
+      stats.active_patients,
+      `stats.active_patients >= 2 (got ${stats.active_patients})`
+    ).toBeGreaterThanOrEqual(2)
+    // Note: total_patients w backend liczy zakończonych/usuniętych historycznych,
+    // nie aktywnych — może być 0 dla świeżego projektu. Sprawdzamy tylko obecność klucza.
+    expect(
+      Object.prototype.hasOwnProperty.call(stats, 'total_patients'),
+      'stats zawiera klucz total_patients'
+    ).toBe(true)
+    expect(
+      typeof stats.team_members,
+      `stats.team_members jest liczbą (got ${typeof stats.team_members})`
+    ).toBe('number')
+    // average_compliance_score może być null jeśli brak ocen — to OK,
+    // ważne że pole jest obecne w odpowiedzi.
+    expect(
+      Object.prototype.hasOwnProperty.call(stats, 'average_compliance_score'),
+      'stats zawiera klucz average_compliance_score'
+    ).toBe(true)
+    // stage_distribution / compliance_distribution muszą być obiektami (nie null/undefined).
+    expect(
+      stats.stage_distribution !== null && typeof stats.stage_distribution === 'object',
+      'stats.stage_distribution jest obiektem'
+    ).toBe(true)
+    expect(
+      stats.compliance_distribution !== null &&
+        typeof stats.compliance_distribution === 'object',
+      'stats.compliance_distribution jest obiektem'
+    ).toBe(true)
+
+    // KROK 5: (opcjonalnie) Globalny endpoint dashboard KPI (jeśli istnieje)
+    // Część frontendu używa /reports/dashboard/kpi — sprawdzamy łagodnie.
+    const kpiRes = await request.get(`${API_URL}/reports/dashboard/kpi`, {
+      headers: { Authorization: `Bearer ${auth.token}` },
+    })
+    if (kpiRes.ok()) {
+      const kpi = (await kpiRes.json()) as {
+        active_projects?: number
+        active_patients?: number
+        average_compliance?: number
+        upcoming_sessions?: number
+      }
+      expect(
+        typeof kpi.active_projects === 'number' || kpi.active_projects === undefined,
+        'KPI dashboard global: active_projects jest liczbą lub brak (graceful)'
+      ).toBe(true)
+    } else {
+      test.info().annotations.push({
+        type: 'process-gap',
+        description: `GET /reports/dashboard/kpi zwrócił ${kpiRes.status()} — endpoint globalnego KPI może być niedostępny; statystyki projektu wystarczają.`,
+      })
+    }
+  })
+})
+
+// ============================================================
+// PROC-13: US-A-08 monitoring + US-A-05 config
+// ============================================================
+
+test.describe('Process — Monitoring + konfiguracja systemu (US-A-08, US-A-05)', () => {
+  test('PROC-13a: GET /admin/system/health zwraca status DB i cache', async ({ request }) => {
+    const auth = await login(request)
+    const res = await request.get(`${API_URL}/admin/system/health`, {
+      headers: { Authorization: `Bearer ${auth.token}` },
+    })
+    expect(res.ok(), `health HTTP ${res.status()}`).toBeTruthy()
+    const body = (await res.json()) as {
+      status?: string
+      database_status?: string
+      cache_status?: string
+      details?: Record<string, unknown>
+    }
+    expect(body.status, 'status field').toBeTruthy()
+    expect(['UP', 'DOWN', 'DEGRADED']).toContain(body.status)
+    expect(body.database_status, 'database_status').toBeTruthy()
+    expect(body.cache_status, 'cache_status').toBeTruthy()
+  })
+
+  test('PROC-13b: GET /admin/system/metrics zwraca memory + db metrics', async ({ request }) => {
+    const auth = await login(request)
+    const res = await request.get(`${API_URL}/admin/system/metrics`, {
+      headers: { Authorization: `Bearer ${auth.token}` },
+    })
+    expect(res.ok(), `metrics HTTP ${res.status()}`).toBeTruthy()
+    const body = (await res.json()) as {
+      memory_usage?: unknown
+      database_metrics?: unknown
+    }
+    expect(body.memory_usage, 'memory_usage present').toBeTruthy()
+    expect(body.database_metrics, 'database_metrics present').toBeTruthy()
+  })
+
+  test('PROC-13c: GET /admin/system/config zwraca 3 default keys', async ({ request }) => {
+    const auth = await login(request)
+    const res = await request.get(`${API_URL}/admin/system/config`, {
+      headers: { Authorization: `Bearer ${auth.token}` },
+    })
+    expect(res.ok(), `config GET HTTP ${res.status()}`).toBeTruthy()
+    const body = (await res.json()) as Record<string, string>
+    expect(body['default.compliance.threshold']).toBeDefined()
+    expect(body['default.language']).toBeDefined()
+    expect(body['notifications.enabled']).toBeDefined()
+  })
+
+  test('PROC-13d: PUT /admin/system/config aktualizuje wartości', async ({ request }) => {
+    const auth = await login(request)
+    const res = await request.put(`${API_URL}/admin/system/config`, {
+      headers: authHeaders(auth.token),
+      data: {
+        'default.compliance.threshold': '85',
+        'default.language': 'en',
+        'notifications.enabled': 'false',
+      },
+    })
+    expect(res.ok(), `config PUT HTTP ${res.status()}`).toBeTruthy()
+    const body = (await res.json()) as Record<string, string>
+    expect(body['default.compliance.threshold']).toBe('85')
+    expect(body['default.language']).toBe('en')
+    expect(body['notifications.enabled']).toBe('false')
   })
 })

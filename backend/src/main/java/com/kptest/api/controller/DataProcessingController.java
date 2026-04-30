@@ -210,14 +210,22 @@ public class DataProcessingController {
 
     /**
      * Get current user ID from security context.
+     * Endpoints in this controller are @PreAuthorize-protected (ADMIN role) so missing
+     * authentication or a non-UUID principal name is a misconfiguration — fail fast
+     * rather than silently attributing RODO Art. 30 records to "null".
      */
     private UUID getCurrentUserId() {
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("No authenticated user in security context");
+        }
+        String userId = authentication.getName();
         try {
             return UUID.fromString(userId);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             log.warn("Failed to parse user ID from security context: {}", userId);
-            return null;
+            throw new IllegalStateException(
+                "Authenticated principal is not a valid user UUID: " + userId, e);
         }
     }
 }

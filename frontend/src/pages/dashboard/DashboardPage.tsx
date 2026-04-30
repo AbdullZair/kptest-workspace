@@ -24,10 +24,10 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend }) => {
   const { t } = useTranslation()
   const colorStyles = {
-    primary: 'bg-primary-100 text-primary-600',
-    secondary: 'bg-secondary-100 text-secondary-600',
-    warning: 'bg-warning-100 text-warning-600',
-    success: 'bg-success-100 text-success-600',
+    primary: 'bg-primary-100 text-primary-700',
+    secondary: 'bg-secondary-100 text-secondary-700',
+    warning: 'bg-warning-100 text-warning-800',
+    success: 'bg-success-100 text-success-700',
   }
 
   return (
@@ -66,7 +66,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend })
                 {trend.isPositive ? '+' : '-'}
                 {Math.abs(trend.value)}%
               </span>
-              <span className="text-sm text-neutral-500">{t('dashboard.lastMonth')}</span>
+              <span className="text-sm text-neutral-700">{t('dashboard.lastMonth')}</span>
             </div>
           ) : null}
         </div>
@@ -103,10 +103,10 @@ const QuickAction: React.FC<QuickActionProps> = ({ title, description, icon, hre
   }
 
   const iconColorStyles = {
-    primary: 'text-primary-600',
-    secondary: 'text-secondary-600',
-    warning: 'text-warning-600',
-    success: 'text-success-600',
+    primary: 'text-primary-700',
+    secondary: 'text-secondary-700',
+    warning: 'text-warning-800',
+    success: 'text-success-700',
   }
 
   return (

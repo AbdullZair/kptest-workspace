@@ -33,6 +33,7 @@ import type {
   RejectVerificationRequest,
   VerificationDecisionResponse,
   CreateStaffRequest,
+  SystemConfig,
 } from '../types'
 
 /**
@@ -258,6 +259,26 @@ export const adminApiSlice = api.injectEndpoints({
     }),
 
     /**
+     * Get system configuration (US-A-05)
+     */
+    getSystemConfig: builder.query<SystemConfig, void>({
+      query: () => '/admin/system/config',
+      providesTags: ['SystemConfig'],
+    }),
+
+    /**
+     * Update system configuration (US-A-05)
+     */
+    updateSystemConfig: builder.mutation<SystemConfig, SystemConfig>({
+      query: (body) => ({
+        url: '/admin/system/config',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['SystemConfig'],
+    }),
+
+    /**
      * Clear cache
      */
     clearCache: builder.mutation<{ status: string; message: string }, void>({
@@ -474,6 +495,8 @@ export const {
   useExportSystemLogsMutation,
   useGetSystemHealthQuery,
   useGetSystemMetricsQuery,
+  useGetSystemConfigQuery,
+  useUpdateSystemConfigMutation,
   useClearCacheMutation,
   useCreateBackupMutation,
   // RODO / Patient Data

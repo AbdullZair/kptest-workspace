@@ -96,11 +96,11 @@ const MetricCard = ({
   <div className="rounded-lg bg-neutral-50 p-4">
     <div className="flex items-center gap-3">
       <div className={clsx('rounded-lg p-2', iconColor)}>{icon}</div>
-      <div>
+      <dl>
         <dt className="text-sm font-medium text-neutral-500">{title}</dt>
         <dd className="text-lg font-semibold text-neutral-900">{value}</dd>
         {subtitle ? <dd className="text-xs text-neutral-500">{subtitle}</dd> : null}
-      </div>
+      </dl>
     </div>
   </div>
 )

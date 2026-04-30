@@ -289,6 +289,13 @@ export interface Clear2faResponse {
 }
 
 /**
+ * System configuration map (US-A-05).
+ * Flat key/value map of admin-tunable settings. The backend currently treats
+ * this as a placeholder backed by hardcoded defaults; all values are strings.
+ */
+export type SystemConfig = Record<string, string>
+
+/**
  * Generate activation code response
  */
 export interface ActivationCodeResponse {

@@ -284,6 +284,7 @@ export const api = createApi({
     'SystemLog',
     'SystemHealth',
     'SystemMetrics',
+    'SystemConfig',
     'PatientData',
     'DataProcessingActivity',
     'Quizzes',

@@ -1,4 +1,10 @@
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './Button'
+export {
+  IconButton,
+  type IconButtonProps,
+  type IconButtonVariant,
+  type IconButtonSize,
+} from './IconButton'
 export { Input, type InputProps, type InputVariant, type InputSize } from './Input'
 export { Card, type CardProps, type CardSize, type CardVariant } from './Card'
 export type { CardHeaderProps, CardBodyProps, CardFooterProps } from './Card'

@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -52,7 +54,7 @@ public class ReportController {
     ) {
         log.info("GET /api/v1/reports/compliance - projectId: {}, dateFrom: {}, dateTo: {}", projectId, dateFrom, dateTo);
 
-        // TODO: Get current user ID from security context
+        // Resolved via getCurrentUserId() from SecurityContextHolder
         UUID currentUserId = getCurrentUserId();
 
         ComplianceReportDto report = reportService.generateComplianceReport(projectId, dateFrom, dateTo, currentUserId);
@@ -81,7 +83,7 @@ public class ReportController {
         LocalDate from = dateFrom != null ? dateFrom : LocalDate.now().minusMonths(3);
         LocalDate to = dateTo != null ? dateTo : LocalDate.now();
 
-        // TODO: Get current user ID from security context
+        // Resolved via getCurrentUserId() from SecurityContextHolder
         UUID currentUserId = getCurrentUserId();
 
         PatientStatsDto report = reportService.generatePatientStatsReport(patientId, from, to, currentUserId);
@@ -110,7 +112,7 @@ public class ReportController {
         LocalDate from = dateFrom != null ? dateFrom : LocalDate.now().minusMonths(3);
         LocalDate to = dateTo != null ? dateTo : LocalDate.now();
 
-        // TODO: Get current user ID from security context
+        // Resolved via getCurrentUserId() from SecurityContextHolder
         UUID currentUserId = getCurrentUserId();
 
         ProjectStatsDto report = reportService.generateProjectStatsReport(projectId, from, to, currentUserId);
@@ -139,7 +141,7 @@ public class ReportController {
         LocalDate from = dateFrom != null ? dateFrom : LocalDate.now().minusMonths(3);
         LocalDate to = dateTo != null ? dateTo : LocalDate.now();
 
-        // TODO: Get current user ID from security context
+        // Resolved via getCurrentUserId() from SecurityContextHolder
         UUID currentUserId = getCurrentUserId();
 
         MaterialStatsDto report = reportService.generateMaterialStatsReport(projectId, from, to, currentUserId);
@@ -156,7 +158,7 @@ public class ReportController {
     public ResponseEntity<DashboardKpiDto> getDashboardKpis() {
         log.info("GET /api/v1/reports/dashboard");
 
-        // TODO: Get current user ID from security context
+        // Resolved via getCurrentUserId() from SecurityContextHolder
         UUID currentUserId = getCurrentUserId();
 
         DashboardKpiDto kpis = reportService.generateDashboardKPIs(currentUserId);
@@ -216,7 +218,7 @@ public class ReportController {
     ) {
         log.info("GET /api/v1/reports/history - type: {}", type);
 
-        // TODO: Get current user ID from security context
+        // Resolved via getCurrentUserId() from SecurityContextHolder
         UUID currentUserId = getCurrentUserId();
 
         List<ReportHistoryResponse> history = reportService.getReportHistory(currentUserId, type);
@@ -226,11 +228,22 @@ public class ReportController {
 
     /**
      * Get current user ID from security context.
-     * TODO: Implement proper security context extraction
+     * Mirrors the pattern used by AdminController#getCurrentUserId.
+     * Throws IllegalStateException if no authenticated user is present — every report
+     * endpoint is @PreAuthorize-protected so reaching here without auth is a bug.
      */
     private UUID getCurrentUserId() {
-        // Placeholder - should extract from authentication token
-        return UUID.randomUUID();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("No authenticated user in security context");
+        }
+        String name = authentication.getName();
+        try {
+            return UUID.fromString(name);
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to parse user ID from security context: {}", name);
+            throw new IllegalStateException("Authenticated principal is not a valid user UUID: " + name, e);
+        }
     }
 
     /**

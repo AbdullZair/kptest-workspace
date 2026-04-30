@@ -447,6 +447,61 @@ public class AdminController {
         return ResponseEntity.ok(metrics);
     }
 
+    // ==================== US-A-05: SYSTEM CONFIGURATION ====================
+
+    /**
+     * Default in-memory system configuration (US-A-05).
+     * <p>
+     * NOTE: This is a placeholder for a future feature-flag / settings module
+     * backed by a database table. For now we return hardcoded defaults that
+     * reflect the documented compliance threshold, default UI language and the
+     * notifications toggle. Updates are accepted but not persisted.
+     */
+    private static final java.util.Map<String, String> DEFAULT_SYSTEM_CONFIG = java.util.Map.of(
+        "default.compliance.threshold", "80",
+        "default.language", "pl",
+        "notifications.enabled", "true"
+    );
+
+    /**
+     * Get system configuration (US-A-05).
+     * Returns a flat key/value map of system-wide settings.
+     */
+    @GetMapping("/system/config")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get system configuration",
+        description = "US-A-05: Returns global system configuration (compliance threshold, language, notifications). Placeholder backed by hardcoded defaults until a feature-flag store is implemented.")
+    public ResponseEntity<Map<String, String>> getSystemConfig() {
+        log.info("GET /api/v1/admin/system/config");
+        return ResponseEntity.ok(new java.util.HashMap<>(DEFAULT_SYSTEM_CONFIG));
+    }
+
+    /**
+     * Update system configuration (US-A-05).
+     * <p>
+     * Accepts a flat key/value map and currently only logs the requested
+     * changes. Persistence is intentionally not implemented yet (TODO: feature
+     * flags / app_settings table). Returns the merged effective configuration.
+     */
+    @PutMapping("/system/config")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update system configuration",
+        description = "US-A-05: Accepts a key/value map of settings. Currently logs requested updates but does not persist them (placeholder for feature-flag store).")
+    public ResponseEntity<Map<String, String>> updateSystemConfig(
+        @RequestBody Map<String, String> updates
+    ) {
+        log.info("PUT /api/v1/admin/system/config - keys: {}", updates == null ? 0 : updates.size());
+        if (updates != null) {
+            updates.forEach((k, v) -> log.info("System config update requested: {}={} (NOT persisted - placeholder)", k, v));
+        }
+        // TODO: persist to app_settings table once feature-flag module ships
+        java.util.Map<String, String> merged = new java.util.HashMap<>(DEFAULT_SYSTEM_CONFIG);
+        if (updates != null) {
+            merged.putAll(updates);
+        }
+        return ResponseEntity.ok(merged);
+    }
+
     /**
      * Clear cache.
      */
@@ -638,14 +693,23 @@ public class AdminController {
 
     /**
      * Get current user ID from security context.
+     * All endpoints in this controller are @PreAuthorize-protected and the resolved
+     * user ID is recorded in audit logs for RODO Art. 17/20/30 operations — silently
+     * returning null would attribute these critical actions to "unknown", so we fail
+     * fast instead.
      */
     private UUID getCurrentUserId() {
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("No authenticated user in security context");
+        }
+        String userId = authentication.getName();
         try {
             return UUID.fromString(userId);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             log.warn("Failed to parse user ID from security context: {}", userId);
-            return null;
+            throw new IllegalStateException(
+                "Authenticated principal is not a valid user UUID: " + userId, e);
         }
     }
 

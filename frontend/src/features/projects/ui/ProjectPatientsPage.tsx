@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { Card, Button, PageLoader } from '@shared/components'
 import { PatientAssignmentModal } from '.'
 import {
   useGetProjectByIdQuery,
   useGetProjectPatientsQuery,
+  useGetProjectsQuery,
   useRemovePatientsMutation,
   useAssignPatientsMutation,
+  useTransferPatientMutation,
 } from '../api/projectApi'
 import type { TherapyStage } from '../types'
 
@@ -31,6 +33,12 @@ export const ProjectPatientsPage = () => {
   const [removalReason, setRemovalReason] = useState('')
   const [showInactive, setShowInactive] = useState(false)
 
+  // Transfer modal state (US-K-06)
+  const [transferPatientId, setTransferPatientId] = useState<string | null>(null)
+  const [transferTargetProject, setTransferTargetProject] = useState('')
+  const [transferReason, setTransferReason] = useState('')
+  const [transferError, setTransferError] = useState<string | null>(null)
+
   // RTK Query hooks
   const { data: project, isLoading: isLoadingProject } = useGetProjectByIdQuery(id)
   const {
@@ -40,6 +48,22 @@ export const ProjectPatientsPage = () => {
   } = useGetProjectPatientsQuery({ projectId: id, activeOnly: !showInactive })
   const [removePatients, { isLoading: isRemoving }] = useRemovePatientsMutation()
   const [assignPatients] = useAssignPatientsMutation()
+  const [transferPatient, { isLoading: isTransferring }] = useTransferPatientMutation()
+  // Fetch all projects so coordinator can pick a transfer target.
+  const { data: allProjects } = useGetProjectsQuery({})
+
+  /**
+   * Eligible target projects for transfer:
+   *  - exclude current project,
+   *  - keep ACTIVE / PLANNED only (you cannot enroll into archived / completed).
+   */
+  const transferTargets = useMemo(
+    () =>
+      (allProjects ?? []).filter(
+        (p) => p.id !== id && (p.status === 'ACTIVE' || p.status === 'PLANNED')
+      ),
+    [allProjects, id]
+  )
 
   // Handlers
   const handleTogglePatient = (patientId: string) => {
@@ -93,6 +117,47 @@ export const ProjectPatientsPage = () => {
 
   const handleBackClick = () => {
     navigate(`/projects/${id}`)
+  }
+
+  // --- US-K-06 transfer handlers ---
+  const openTransferModal = (patientId: string) => {
+    setTransferPatientId(patientId)
+    setTransferTargetProject('')
+    setTransferReason('')
+    setTransferError(null)
+  }
+
+  const closeTransferModal = () => {
+    setTransferPatientId(null)
+    setTransferTargetProject('')
+    setTransferReason('')
+    setTransferError(null)
+  }
+
+  const handleTransferConfirm = async () => {
+    if (!transferPatientId || !transferTargetProject) {
+      setTransferError('Wybierz projekt docelowy.')
+      return
+    }
+    if (transferReason.trim().length < 10) {
+      setTransferError('Uzasadnienie musi mieć co najmniej 10 znaków.')
+      return
+    }
+    try {
+      await transferPatient({
+        fromProjectId: id,
+        patientId: transferPatientId,
+        toProjectId: transferTargetProject,
+        reason: transferReason.trim(),
+      }).unwrap()
+      closeTransferModal()
+      refetch()
+    } catch (err) {
+      const msg =
+        (err as { data?: { message?: string } })?.data?.message ??
+        'Nie udało się przenieść pacjenta.'
+      setTransferError(msg)
+    }
   }
 
   // Format date
@@ -223,6 +288,9 @@ export const ProjectPatientsPage = () => {
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-600">
                     Status
                   </th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-neutral-600">
+                    Akcje
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100 bg-white">
@@ -293,6 +361,18 @@ export const ProjectPatientsPage = () => {
                         <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
                           Aktywny
                         </span>
+                      )}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right">
+                      {pp.left_at ? null : (
+                        <button
+                          type="button"
+                          data-testid={`transfer-patient-btn-${pp.patient_id}`}
+                          onClick={() => openTransferModal(pp.patient_id)}
+                          className="text-xs font-medium text-primary-600 hover:text-primary-700"
+                        >
+                          Przenieś
+                        </button>
                       )}
                     </td>
                   </tr>
@@ -395,6 +475,109 @@ export const ProjectPatientsPage = () => {
         projectId={id}
         existingPatientIds={patients?.map((p) => p.patient_id)}
       />
+
+      {/* Transfer Patient Modal (US-K-06) */}
+      {transferPatientId ? (
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          data-testid="transfer-patient-modal"
+        >
+          <div
+            className="fixed inset-0 bg-black/50 transition-opacity"
+            onClick={closeTransferModal}
+          />
+          <div className="flex min-h-full items-center justify-center p-4">
+            <div className="relative w-full max-w-md">
+              <Card variant="elevated">
+                <Card.Body>
+                  <h3 className="mb-2 text-lg font-semibold text-neutral-900">
+                    Przenieś pacjenta do innego projektu
+                  </h3>
+                  <p className="mb-4 text-sm text-neutral-600">
+                    Pacjent zostanie odpięty z bieżącego projektu i zapisany do projektu docelowego.
+                  </p>
+
+                  <div className="mb-4">
+                    <label
+                      htmlFor="transferTarget"
+                      className="mb-1 block text-sm font-medium text-neutral-700"
+                    >
+                      Projekt docelowy <span className="text-rose-500">*</span>
+                    </label>
+                    <select
+                      id="transferTarget"
+                      data-testid="transfer-target-select"
+                      value={transferTargetProject}
+                      onChange={(e) => setTransferTargetProject(e.target.value)}
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    >
+                      <option value="">— Wybierz projekt —</option>
+                      {transferTargets.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.name} ({p.status})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="mb-4">
+                    <label
+                      htmlFor="transferReason"
+                      className="mb-1 block text-sm font-medium text-neutral-700"
+                    >
+                      Uzasadnienie <span className="text-rose-500">*</span>
+                    </label>
+                    <textarea
+                      id="transferReason"
+                      data-testid="transfer-reason-input"
+                      value={transferReason}
+                      onChange={(e) => setTransferReason(e.target.value)}
+                      rows={3}
+                      minLength={10}
+                      className="w-full rounded-lg border border-neutral-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="Min. 10 znaków — zapisywane w audycie."
+                    />
+                    <p className="mt-1 text-xs text-neutral-500">
+                      {transferReason.trim().length}/10 znaków
+                    </p>
+                  </div>
+
+                  {transferError ? (
+                    <p className="mb-2 text-sm text-rose-600" role="alert">
+                      {transferError}
+                    </p>
+                  ) : null}
+                </Card.Body>
+                <Card.Footer className="flex items-center justify-end gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={closeTransferModal}
+                    disabled={isTransferring}
+                  >
+                    Anuluj
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    data-testid="transfer-confirm-btn"
+                    onClick={handleTransferConfirm}
+                    disabled={
+                      isTransferring ||
+                      !transferTargetProject ||
+                      transferReason.trim().length < 10
+                    }
+                  >
+                    {isTransferring ? 'Przenoszenie...' : 'Przenieś'}
+                  </Button>
+                </Card.Footer>
+              </Card>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

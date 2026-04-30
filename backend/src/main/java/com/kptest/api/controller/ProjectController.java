@@ -187,6 +187,49 @@ public class ProjectController {
     }
 
     /**
+     * Transfer a patient between two projects (US-K-06).
+     *
+     * <p>Atomically removes the patient from the source project (with audit reason)
+     * and re-enrolls them into the target project.</p>
+     */
+    @PostMapping("/{fromProjectId}/patients/{patientId}/transfer/{toProjectId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'COORDINATOR')")
+    @Operation(
+        summary = "Transfer patient between projects",
+        description = "Removes the patient from the source project (with audit reason) and enrolls them into the target project in a single transaction"
+    )
+    public ResponseEntity<Map<String, Object>> transferPatient(
+        @Parameter(description = "Source project ID")
+        @PathVariable UUID fromProjectId,
+
+        @Parameter(description = "Patient ID")
+        @PathVariable UUID patientId,
+
+        @Parameter(description = "Target project ID")
+        @PathVariable UUID toProjectId,
+
+        @Parameter(description = "Transfer payload (reason)")
+        @Valid @RequestBody TransferPatientRequest request
+    ) {
+        log.info("POST /api/v1/projects/{}/patients/{}/transfer/{}", fromProjectId, patientId, toProjectId);
+
+        UUID auditLogId = projectService.transferPatient(
+            fromProjectId, patientId, toProjectId, request.reason()
+        );
+
+        Map<String, Object> body = new java.util.HashMap<>();
+        body.put("message", "Patient transferred successfully");
+        body.put("patient_id", patientId.toString());
+        body.put("from_project_id", fromProjectId.toString());
+        body.put("to_project_id", toProjectId.toString());
+        if (auditLogId != null) {
+            body.put("audit_log_id", auditLogId.toString());
+        }
+
+        return ResponseEntity.ok(body);
+    }
+
+    /**
      * Get project statistics.
      */
     @GetMapping("/{id}/statistics")

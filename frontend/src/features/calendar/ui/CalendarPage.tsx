@@ -154,31 +154,39 @@ export const CalendarPage: React.FC = () => {
 
         {/* Filters */}
         <div className="mt-4 flex flex-wrap gap-4">
-          <select
-            value={selectedEventType || ''}
-            onChange={(e) => setSelectedEventType((e.target.value as EventType) || undefined)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          >
-            <option value="">Wszystkie typy</option>
-            <option value="VISIT">Wizyty</option>
-            <option value="SESSION">Sesje</option>
-            <option value="MEDICATION">Leki</option>
-            <option value="EXERCISE">Ćwiczenia</option>
-            <option value="MEASUREMENT">Pomiary</option>
-            <option value="OTHER">Inne</option>
-          </select>
+          <label className="flex flex-col gap-1">
+            <span className="sr-only">Filtruj według typu wydarzenia</span>
+            <select
+              aria-label="Filtruj według typu wydarzenia"
+              value={selectedEventType || ''}
+              onChange={(e) => setSelectedEventType((e.target.value as EventType) || undefined)}
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              <option value="">Wszystkie typy</option>
+              <option value="VISIT">Wizyty</option>
+              <option value="SESSION">Sesje</option>
+              <option value="MEDICATION">Leki</option>
+              <option value="EXERCISE">Ćwiczenia</option>
+              <option value="MEASUREMENT">Pomiary</option>
+              <option value="OTHER">Inne</option>
+            </select>
+          </label>
 
-          <select
-            value={selectedEventStatus || ''}
-            onChange={(e) => setSelectedEventStatus((e.target.value as EventStatus) || undefined)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          >
-            <option value="">Wszystkie statusy</option>
-            <option value="SCHEDULED">Zaplanowane</option>
-            <option value="COMPLETED">Wykonane</option>
-            <option value="MISSED">Przeterminowane</option>
-            <option value="CANCELLED">Anulowane</option>
-          </select>
+          <label className="flex flex-col gap-1">
+            <span className="sr-only">Filtruj według statusu wydarzenia</span>
+            <select
+              aria-label="Filtruj według statusu wydarzenia"
+              value={selectedEventStatus || ''}
+              onChange={(e) => setSelectedEventStatus((e.target.value as EventStatus) || undefined)}
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              <option value="">Wszystkie statusy</option>
+              <option value="SCHEDULED">Zaplanowane</option>
+              <option value="COMPLETED">Wykonane</option>
+              <option value="MISSED">Przeterminowane</option>
+              <option value="CANCELLED">Anulowane</option>
+            </select>
+          </label>
         </div>
       </div>
 
@@ -194,10 +202,19 @@ export const CalendarPage: React.FC = () => {
             </button>
             <div className="flex items-center gap-1">
               <button
+                type="button"
                 onClick={goToPrevious}
+                aria-label="Poprzedni okres"
+                title="Poprzedni okres"
                 className="rounded p-1.5 text-gray-600 hover:bg-gray-100"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -206,8 +223,20 @@ export const CalendarPage: React.FC = () => {
                   />
                 </svg>
               </button>
-              <button onClick={goToNext} className="rounded p-1.5 text-gray-600 hover:bg-gray-100">
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button
+                type="button"
+                onClick={goToNext}
+                aria-label="Następny okres"
+                title="Następny okres"
+                className="rounded p-1.5 text-gray-600 hover:bg-gray-100"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -519,8 +548,20 @@ const EventDetailModal: React.FC<{
         <div className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">Szczegóły wydarzenia</h3>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Zamknij"
+              title="Zamknij"
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

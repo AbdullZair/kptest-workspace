@@ -75,6 +75,8 @@ const DataProcessingActivitiesPage = lazy(
 const PendingVerificationsPage = lazy(
   () => import('@features/admin/ui/PendingVerificationsPage')
 )
+const AdminAccessReviewPage = lazy(() => import('@features/admin/ui/AdminAccessReviewPage'))
+const AdminSystemConfigPage = lazy(() => import('@features/admin/ui/AdminSystemConfigPage'))
 
 /**
  * Route configuration
@@ -382,6 +384,26 @@ export const routes: RouteObject[] = [
           <ProtectedRoute allowedRoles={['ADMIN', 'COORDINATOR', 'DOCTOR']}>
             <Suspense fallback={<PageLoader />}>
               <PendingVerificationsPage />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/access-review',
+        element: (
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <AdminAccessReviewPage />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/settings',
+        element: (
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Suspense fallback={<PageLoader />}>
+              <AdminSystemConfigPage />
             </Suspense>
           </ProtectedRoute>
         ),

@@ -46,14 +46,19 @@ export const ProjectCard = memo(
     return (
       <Card
         variant="elevated"
-        className={clsx('cursor-pointer transition-shadow hover:shadow-lg', className)}
-        onClick={handleClick}
+        className={clsx('transition-shadow hover:shadow-lg', className)}
       >
         <Card.Body>
           {/* Header */}
           <div className="mb-4 flex items-start justify-between">
             <div className="min-w-0 flex-1">
-              <h3 className="truncate text-lg font-semibold text-neutral-900">{project.name}</h3>
+              <button
+                type="button"
+                onClick={handleClick}
+                className="block w-full truncate text-left text-lg font-semibold text-neutral-900 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
+              >
+                {project.name}
+              </button>
               {project.description ? (
                 <p className="mt-1 line-clamp-2 text-sm text-neutral-600">{project.description}</p>
               ) : null}
@@ -130,8 +135,16 @@ export const ProjectCard = memo(
                 onClick={handleEditClick}
                 className="border-primary-200 text-primary-600 hover:bg-primary-50"
                 data-testid="project-edit-button"
+                aria-label={`Edytuj projekt ${project.name}`}
+                title="Edytuj projekt"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -145,8 +158,16 @@ export const ProjectCard = memo(
                 size="sm"
                 onClick={handleDeleteClick}
                 className="border-rose-200 text-rose-600 hover:bg-rose-50"
+                aria-label={`Usuń projekt ${project.name}`}
+                title="Usuń projekt"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

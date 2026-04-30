@@ -82,7 +82,7 @@ export const SystemHealthCard = memo(({ health, className = '' }: SystemHealthCa
       {/* Content */}
       <div className="space-y-4 p-6">
         {/* Uptime */}
-        <div className="flex items-center justify-between rounded-lg bg-neutral-50 p-4">
+        <dl className="flex items-center justify-between rounded-lg bg-neutral-50 p-4">
           <div className="flex items-center gap-3">
             <div className="rounded-lg bg-blue-100 p-2">
               <svg
@@ -90,6 +90,7 @@ export const SystemHealthCard = memo(({ health, className = '' }: SystemHealthCa
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -110,7 +111,7 @@ export const SystemHealthCard = memo(({ health, className = '' }: SystemHealthCa
             <dt className="text-sm font-medium text-neutral-500">Wersja</dt>
             <dd className="font-mono text-sm text-neutral-700">{health.version}</dd>
           </div>
-        </div>
+        </dl>
 
         {/* Component Status */}
         <div className="space-y-3">
