@@ -1,5 +1,8 @@
 import { api } from '@shared/api'
 import type {
+  BulkOperationKey,
+  BulkOperationResponse,
+  BulkPatientRequest,
   Patient,
   PatientFormData,
   PatientSearchRequest,
@@ -118,6 +121,22 @@ export const patientApiSlice = api.injectEndpoints({
     }),
 
     /**
+     * Bulk operation on patients (US-K-05)
+     * @mutation
+     */
+    bulkOperation: builder.mutation<
+      BulkOperationResponse,
+      { operation: BulkOperationKey; body: BulkPatientRequest }
+    >({
+      query: ({ operation, body }) => ({
+        url: `/patients/bulk/${operation}`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Patient', id: 'LIST' }],
+    }),
+
+    /**
      * Search patients by query
      * @query
      */
@@ -145,6 +164,7 @@ export const {
   useVerifyPatientMutation,
   useSearchPatientsQuery,
   useLazySearchPatientsQuery,
+  useBulkOperationMutation,
 } = patientApiSlice
 
 export default patientApiSlice

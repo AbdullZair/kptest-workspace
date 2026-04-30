@@ -133,7 +133,9 @@ const scanRoute = async (page: Page, route: string, requiresAuth: boolean): Prom
   }
 }
 
-test.describe.serial('WCAG 2.1 AA — full route audit', () => {
+test.describe('WCAG 2.1 AA — full route audit', () => {
+  test.setTimeout(60000) // 60s — duże strony /projects po fixach a11y mają więcej węzłów do skanu
+
   // Public routes — no auth needed
   for (const route of PUBLIC_ROUTES) {
     test(`a11y public ${route}`, async ({ page }) => {

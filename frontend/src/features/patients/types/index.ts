@@ -8,4 +8,8 @@ export type {
   PatientVerifyResponse,
   PatientTableFilters,
   VerificationStatus,
+  BulkPatientRequest,
+  BulkItemResult,
+  BulkOperationResponse,
+  BulkOperationKey,
 } from './patient.types'

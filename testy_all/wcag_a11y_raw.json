@@ -1,6 +1,44 @@
 {
   "results": [
     {
+      "route": "/register",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/login",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/dashboard",
+      "scanned": true,
+      "violations": 1,
+      "byImpact": {
+        "serious": 1
+      },
+      "topViolations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 3,
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright"
+        }
+      ]
+    },
+    {
+      "route": "/patients",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
       "route": "/calendar",
       "scanned": true,
       "violations": 0,
@@ -23,6 +61,13 @@
     },
     {
       "route": "/admin/users",
+      "scanned": true,
+      "violations": 0,
+      "byImpact": {},
+      "topViolations": []
+    },
+    {
+      "route": "/projects",
       "scanned": true,
       "violations": 0,
       "byImpact": {},
@@ -68,51 +113,6 @@
     },
     {
       "route": "/admin/pending-verifications",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/login",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/register",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/dashboard",
-      "scanned": true,
-      "violations": 1,
-      "byImpact": {
-        "serious": 1
-      },
-      "topViolations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "help": "Elements must meet minimum color contrast ratio thresholds",
-          "nodes": 3,
-          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright"
-        }
-      ]
-    },
-    {
-      "route": "/patients",
-      "scanned": true,
-      "violations": 0,
-      "byImpact": {},
-      "topViolations": []
-    },
-    {
-      "route": "/projects",
       "scanned": true,
       "violations": 0,
       "byImpact": {},

@@ -3,6 +3,7 @@ package com.kptest.api.controller;
 import com.kptest.api.dto.*;
 import com.kptest.application.service.AdminService;
 import com.kptest.application.service.PatientService;
+import com.kptest.infrastructure.scheduler.EventReminderScheduler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,6 +35,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final PatientService patientService;
+    private final EventReminderScheduler eventReminderScheduler;
 
     // ==================== USER MANAGEMENT ====================
 
@@ -514,6 +516,26 @@ public class AdminController {
         Map<String, String> result = adminService.clearCache();
 
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Manually trigger event reminders (US-K-25).
+     * Runs the same logic as the @Scheduled task and returns counts/eventIds.
+     */
+    @PostMapping("/system/notifications/run-reminders")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+        summary = "Run event reminders manually",
+        description = "US-K-25: Triggers the event reminder scan for the 24h-ahead window. Returns count + event IDs that matched."
+    )
+    public ResponseEntity<Map<String, Object>> runEventReminders() {
+        log.info("POST /api/v1/admin/system/notifications/run-reminders");
+        EventReminderScheduler.ReminderRunResult result = eventReminderScheduler.runReminders();
+        return ResponseEntity.ok(Map.of(
+            "count", result.getCount(),
+            "events", result.getEventIds(),
+            "notifications_created", result.getNotificationsCreated()
+        ));
     }
 
     /**

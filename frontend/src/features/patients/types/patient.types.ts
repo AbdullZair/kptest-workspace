@@ -127,3 +127,39 @@ export interface PatientTableFilters {
   verificationStatus?: VerificationStatus[]
   status?: string[]
 }
+
+/**
+ * Bulk operation request body (US-K-05)
+ */
+export interface BulkPatientRequest {
+  patient_ids: string[]
+  target_project_id?: string
+  new_status?: 'ACTIVE' | 'BLOCKED' | 'DEACTIVATED'
+}
+
+/**
+ * Bulk operation per-item result (US-K-05)
+ */
+export interface BulkItemResult {
+  patient_id: string
+  status: 'OK' | 'ERROR'
+  error?: string
+}
+
+/**
+ * Bulk operation aggregated response (US-K-05)
+ */
+export interface BulkOperationResponse {
+  total: number
+  succeeded: number
+  failed: number
+  results: BulkItemResult[]
+}
+
+/**
+ * Bulk operation key (US-K-05)
+ */
+export type BulkOperationKey =
+  | 'assign-to-project'
+  | 'update-status'
+  | 'anonymize'

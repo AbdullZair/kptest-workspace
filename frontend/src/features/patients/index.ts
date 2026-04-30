@@ -9,6 +9,7 @@ export {
   useVerifyPatientMutation,
   useSearchPatientsQuery,
   useLazySearchPatientsQuery,
+  useBulkOperationMutation,
 } from './api/patientApi'
 
 // Patient slice
@@ -40,4 +41,8 @@ export type {
   PatientVerifyResponse,
   PatientTableFilters,
   VerificationStatus,
+  BulkPatientRequest,
+  BulkItemResult,
+  BulkOperationResponse,
+  BulkOperationKey,
 } from './types'

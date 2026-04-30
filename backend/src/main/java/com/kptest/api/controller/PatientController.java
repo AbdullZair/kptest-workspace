@@ -2,6 +2,7 @@ package com.kptest.api.controller;
 
 import com.kptest.api.dto.*;
 import com.kptest.application.service.HisService;
+import com.kptest.application.service.PatientBulkService;
 import com.kptest.application.service.PatientService;
 import com.kptest.domain.user.VerificationStatus;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -34,6 +36,7 @@ public class PatientController {
 
     private final PatientService patientService;
     private final HisService hisService;
+    private final PatientBulkService patientBulkService;
 
     /**
      * Get all patients with filtering and pagination.
@@ -215,6 +218,55 @@ public class PatientController {
         );
 
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Execute a bulk operation on a list of patients (US-K-05).
+     *
+     * <p>Supported operations:
+     * <ul>
+     *   <li>{@code assign-to-project} — assigns patients to a target project</li>
+     *   <li>{@code update-status} — sets account status (ACTIVE|BLOCKED|DEACTIVATED)</li>
+     *   <li>{@code anonymize} — anonymizes patient PII (right to be forgotten)</li>
+     * </ul>
+     * Each patient is processed independently; one failure does not abort the batch.
+     * </p>
+     */
+    @PostMapping("/bulk/{operation}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'COORDINATOR')")
+    @Operation(
+        summary = "Bulk patient operation",
+        description = "Executes a bulk operation (assign-to-project|update-status|anonymize) on a list of patients"
+    )
+    public ResponseEntity<BulkOperationResponse> bulkOperation(
+        @Parameter(description = "Operation key")
+        @PathVariable String operation,
+
+        @Parameter(description = "Bulk operation request")
+        @Valid @RequestBody BulkPatientRequest request
+    ) {
+        log.info("POST /api/v1/patients/bulk/{} - {} patients", operation, request.patientIds().size());
+
+        UUID currentUserId = resolveCurrentUserId();
+        BulkOperationResponse response = patientBulkService.execute(operation, request, currentUserId);
+
+        log.info("Bulk operation '{}' completed: total={}, succeeded={}, failed={}",
+            operation, response.total(), response.succeeded(), response.failed());
+
+        return ResponseEntity.ok(response);
+    }
+
+    private UUID resolveCurrentUserId() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("No authenticated user in security context");
+        }
+        try {
+            return UUID.fromString(authentication.getName());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException(
+                "Authenticated principal is not a valid user UUID: " + authentication.getName(), e);
+        }
     }
 
     /**

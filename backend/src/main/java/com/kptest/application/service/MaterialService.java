@@ -10,6 +10,9 @@ import com.kptest.domain.material.EducationalMaterial.MaterialType;
 import com.kptest.domain.material.MaterialProgress;
 import com.kptest.domain.material.repository.EducationalMaterialRepository;
 import com.kptest.domain.material.repository.MaterialProgressRepository;
+import com.kptest.domain.notification.Notification;
+import com.kptest.domain.notification.NotificationType;
+import com.kptest.domain.notification.repository.NotificationRepository;
 import com.kptest.domain.patient.PatientRepository;
 import com.kptest.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,7 @@ public class MaterialService {
     private final MaterialProgressRepository progressRepository;
     private final PatientRepository patientRepository;
     private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     /**
      * Get materials with filters.
@@ -247,6 +251,44 @@ public class MaterialService {
 
         EducationalMaterial publishedMaterial = materialRepository.save(material);
         log.info("Published material with ID: {}", publishedMaterial.getId());
+
+        // US-L-05: notify assigned patients about the new published material.
+        List<UUID> assignedPatients = publishedMaterial.getAssignedToPatients();
+        if (assignedPatients == null || assignedPatients.isEmpty()) {
+            // TODO(US-L-05): broadcast to all patients enrolled in the project once
+            // a project-wide patient roster is wired in. For now we only notify
+            // explicitly assigned patients to avoid spamming the whole project.
+            log.info(
+                "MATERIAL_PUBLISHED notification skipped (no assignedToPatients) for material {} \"{}\"",
+                publishedMaterial.getId(),
+                publishedMaterial.getTitle()
+            );
+        } else {
+            for (UUID patientId : assignedPatients) {
+                log.info(
+                    "MATERIAL_PUBLISHED notification: patient {} -> material {} \"{}\"",
+                    patientId,
+                    publishedMaterial.getId(),
+                    publishedMaterial.getTitle()
+                );
+                try {
+                    Notification notification = Notification.create(
+                        patientId,
+                        NotificationType.MATERIAL,
+                        "Nowy materiał edukacyjny",
+                        "Opublikowano materiał: " + publishedMaterial.getTitle(),
+                        "/materials/" + publishedMaterial.getId()
+                    );
+                    notificationRepository.save(notification);
+                } catch (RuntimeException e) {
+                    log.warn(
+                        "Failed to persist MATERIAL_PUBLISHED notification for patient {}: {}",
+                        patientId,
+                        e.getMessage()
+                    );
+                }
+            }
+        }
 
         return EducationalMaterialDto.fromMaterial(publishedMaterial);
     }

@@ -26,6 +26,14 @@ export interface PatientTableProps {
   onSortChange?: (field: SortField, order: SortOrder) => void
   isLoading?: boolean
   className?: string
+  /** Selected patient IDs for bulk operations (US-K-05). */
+  selectedIds?: string[]
+  /** Toggle a single row selection. */
+  onToggleSelect?: (patientId: string) => void
+  /** Toggle select-all on the current page. */
+  onToggleSelectAll?: () => void
+  /** Whether selection UI should be rendered. */
+  selectable?: boolean
 }
 
 /**
@@ -145,10 +153,19 @@ export const PatientTable = memo(
     onSortChange,
     isLoading = false,
     className,
+    selectedIds,
+    onToggleSelect,
+    onToggleSelectAll,
+    selectable = false,
   }: PatientTableProps) => {
     const handleSort = (field: SortField, order: SortOrder) => {
       onSortChange?.(field, order)
     }
+    const selectedSet = new Set(selectedIds ?? [])
+    const allSelected =
+      selectable && patients.length > 0 && patients.every((p) => selectedSet.has(p.id))
+    const someSelected =
+      selectable && !allSelected && patients.some((p) => selectedSet.has(p.id))
 
     const baseStyles = clsx('overflow-hidden rounded-lg border border-neutral-200', className)
 
@@ -194,6 +211,24 @@ export const PatientTable = memo(
           <table className="min-w-full divide-y divide-neutral-200" data-testid="patients-table">
             <thead className="bg-neutral-50">
               <tr>
+                {selectable ? (
+                  <th
+                    className="w-10 px-4 py-3 text-left"
+                    scope="col"
+                  >
+                    <input
+                      type="checkbox"
+                      aria-label="Zaznacz wszystkich"
+                      checked={allSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = someSelected
+                      }}
+                      onChange={() => onToggleSelectAll?.()}
+                      data-testid="patients-bulk-select-all"
+                      className="h-4 w-4 cursor-pointer rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                    />
+                  </th>
+                ) : null}
                 <SortableHeader
                   field="name"
                   currentField={sortField}
@@ -239,6 +274,21 @@ export const PatientTable = memo(
                   className="cursor-pointer transition-colors hover:bg-neutral-50"
                   onClick={() => onPatientClick?.(patient)}
                 >
+                  {selectable ? (
+                    <td
+                      className="w-10 whitespace-nowrap px-4 py-3"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <input
+                        type="checkbox"
+                        aria-label={`Zaznacz pacjenta ${patient.first_name} ${patient.last_name}`}
+                        checked={selectedSet.has(patient.id)}
+                        onChange={() => onToggleSelect?.(patient.id)}
+                        data-testid={`patients-bulk-select-${patient.id}`}
+                        className="h-4 w-4 cursor-pointer rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                      />
+                    </td>
+                  ) : null}
                   <td className="whitespace-nowrap px-4 py-3">
                     <div className="text-sm font-medium text-neutral-900">
                       {patient.first_name} {patient.last_name}

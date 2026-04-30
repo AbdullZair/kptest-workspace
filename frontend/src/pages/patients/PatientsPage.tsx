@@ -4,12 +4,14 @@ import {
   PatientTable,
   PatientSearch,
   PatientFormModal,
+  PatientBulkActionBar,
 } from '@features/patients/ui'
 import {
   useGetPatientsQuery,
   useCreatePatientMutation,
   useUpdatePatientMutation,
   useDeletePatientMutation,
+  useBulkOperationMutation,
   openCreateModal,
   openEditModal,
   closeFormModal,
@@ -20,6 +22,8 @@ import {
 } from '@features/patients'
 import { useDispatch, useSelector } from 'react-redux'
 import type {
+  BulkOperationKey,
+  BulkPatientRequest,
   Patient,
   PatientFormData,
   PatientSearchRequest,
@@ -48,11 +52,13 @@ export const PatientsPage = () => {
   const [page, setPage] = useState(0)
   const [pageSize] = useState(20)
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedPatientIds, setSelectedPatientIds] = useState<string[]>([])
 
   // RTK Query hooks
   const [createPatient, { isLoading: isCreating }] = useCreatePatientMutation()
   const [updatePatient, { isLoading: isUpdating }] = useUpdatePatientMutation()
   const [deletePatient] = useDeletePatientMutation()
+  const [bulkOperation, { isLoading: isBulkLoading }] = useBulkOperationMutation()
 
   // Build query params
   const queryParams: PatientSearchRequest = useMemo(
@@ -151,6 +157,47 @@ export const PatientsPage = () => {
     dispatch(updateFilter({ key: 'name', value: undefined }))
     dispatch(updateFilter({ key: 'verificationStatus', value: undefined }))
     dispatch(updateFilter({ key: 'status', value: undefined }))
+  }
+
+  // Bulk selection handlers (US-K-05)
+  const handleToggleSelect = (patientId: string) => {
+    setSelectedPatientIds((prev) =>
+      prev.includes(patientId)
+        ? prev.filter((id) => id !== patientId)
+        : [...prev, patientId]
+    )
+  }
+
+  const handleToggleSelectAll = () => {
+    const visibleIds = (patientsData?.data ?? []).map((p) => p.id)
+    const allSelected =
+      visibleIds.length > 0 && visibleIds.every((id) => selectedPatientIds.includes(id))
+    if (allSelected) {
+      setSelectedPatientIds((prev) => prev.filter((id) => !visibleIds.includes(id)))
+    } else {
+      setSelectedPatientIds((prev) => Array.from(new Set([...prev, ...visibleIds])))
+    }
+  }
+
+  const handleClearSelection = () => {
+    setSelectedPatientIds([])
+  }
+
+  const handleBulkSubmit = async (
+    operation: BulkOperationKey,
+    body: BulkPatientRequest
+  ) => {
+    try {
+      const result = await bulkOperation({ operation, body }).unwrap()
+      window.alert(
+        `Operacja zakończona: ${result.succeeded} sukcesów, ${result.failed} błędów`
+      )
+      setSelectedPatientIds([])
+      refetch()
+    } catch (err) {
+      console.error('Bulk operation failed:', err)
+      window.alert('Operacja nie powiodła się')
+    }
   }
 
   const hasActiveFilters =
@@ -259,6 +306,15 @@ export const PatientsPage = () => {
         </Card.Body>
       </Card>
 
+      {/* Bulk action bar (US-K-05) */}
+      <PatientBulkActionBar
+        selectedCount={selectedPatientIds.length}
+        selectedIds={selectedPatientIds}
+        onSubmit={handleBulkSubmit}
+        onClear={handleClearSelection}
+        isLoading={isBulkLoading}
+      />
+
       {/* Patient Table */}
       <Card variant="elevated">
         <Card.Body noPadding>
@@ -271,6 +327,10 @@ export const PatientsPage = () => {
             sortOrder={sortOrder}
             onSortChange={handleSortChange}
             isLoading={isLoading}
+            selectable
+            selectedIds={selectedPatientIds}
+            onToggleSelect={handleToggleSelect}
+            onToggleSelectAll={handleToggleSelectAll}
           />
         </Card.Body>
 

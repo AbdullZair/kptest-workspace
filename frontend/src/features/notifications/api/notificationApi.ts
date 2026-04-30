@@ -125,7 +125,7 @@ export const notificationApiSlice = api.injectEndpoints({
      */
     getPreferences: builder.query<NotificationPreferences, void>({
       query: () => ({
-        url: '/notifications/preferences',
+        url: '/me/notification-preferences',
         method: 'GET',
       }),
       providesTags: ['NotificationPreferences'],
@@ -137,7 +137,7 @@ export const notificationApiSlice = api.injectEndpoints({
      */
     updatePreferences: builder.mutation<NotificationPreferences, NotificationPreferencesFormData>({
       query: (preferences) => ({
-        url: '/notifications/preferences',
+        url: '/me/notification-preferences',
         method: 'PUT',
         body: preferences,
       }),

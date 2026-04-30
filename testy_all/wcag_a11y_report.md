@@ -1,6 +1,6 @@
 # WCAG 2.1 AA Accessibility Audit — KPTEST Portal
 
-Date: 2026-04-29T14:10:33.239Z
+Date: 2026-04-30T07:20:43.624Z
 Tool: @axe-core/playwright (tags: wcag2a, wcag2aa, wcag21a, wcag21aa)
 Routes scanned: 12/12
 Total violations across portal: 4
