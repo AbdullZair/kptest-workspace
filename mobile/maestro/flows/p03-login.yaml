@@ -1,0 +1,65 @@
+# US-P-03: Logowanie pacjenta (email + hasło)
+# Akceptacja:
+#   - Walidacja pustych pól blokuje submit (lokalna)
+#   - Błędne hasło -> alert "Nieprawidłowy email lub hasło"
+#   - Poprawne hasło -> przejście na 2FA (jeśli włączone) LUB Home
+#   - "Zapamiętaj mnie" persisuje token (US-S-04 follow-up)
+appId: com.kptest.mobile
+name: US-P-03 Login patient
+tags:
+  - patient
+  - auth
+  - smoke
+env:
+  TEST_EMAIL: "patient.demo@kptest.example.com"
+  TEST_PASSWORD: "DemoP@ssw0rd123"
+---
+- launchApp:
+    clearState: true
+
+# 1. Ekran startowy
+- assertVisible: "KPTEST"
+- assertVisible: "Zaloguj się"
+
+# --- Negative path: empty submit ---
+- tapOn: "Zaloguj się"
+- assertVisible:
+    text: "Wprowadź email i hasło|Błąd"
+    optional: true
+
+# --- Negative path: wrong password ---
+- tapOn:
+    text: "twój@email.com"
+- inputText: ${TEST_EMAIL}
+- tapOn:
+    text: "••••••••"
+- inputText: "wrong-password-xx"
+- tapOn: "Zaloguj się"
+- assertVisible:
+    text: "Nieprawidłowy email lub hasło|Błąd logowania"
+    optional: true
+- tapOn:
+    text: "OK"
+    optional: true
+
+# --- Positive path ---
+- tapOn:
+    text: "twój@email.com"
+- eraseText
+- inputText: ${TEST_EMAIL}
+- tapOn:
+    text: "••••••••"
+- eraseText
+- inputText: ${TEST_PASSWORD}
+
+# Toggle "Zapamiętaj mnie"
+- tapOn:
+    text: "Zapamiętaj mnie"
+
+- tapOn:
+    text: "Zaloguj się"
+
+# Po sukcesie: 2FA albo Home
+- assertVisible:
+    text: "Kod weryfikacyjny|2FA|Witaj|Home|Pulpit"
+    optional: false

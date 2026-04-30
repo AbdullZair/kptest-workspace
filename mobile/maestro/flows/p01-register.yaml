@@ -1,0 +1,81 @@
+# US-P-01: Rejestracja pacjenta
+# Akceptacja:
+#   - Pacjent może otworzyć formularz rejestracji z LoginScreen
+#   - Wprowadza email, telefon, imię, nazwisko, PESEL, hasło spełniające policy
+#   - Akceptuje regulamin (RODO checkbox) i wysyła formularz
+#   - Po pomyślnej rejestracji: alert/komunikat o weryfikacji HIS LUB
+#     przejście na ekran TwoFa/Home (zależnie od konfiguracji backendu)
+appId: com.kptest.mobile
+name: US-P-01 Register patient
+tags:
+  - patient
+  - auth
+  - smoke
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+    permissions:
+      notifications: allow
+
+# 1. Ekran startowy = LoginScreen. Klik "Załóż konto"
+- assertVisible: "KPTEST"
+- assertVisible: "Zaloguj się"
+- tapOn: "Załóż konto"
+
+# 2. Formularz rejestracji
+- assertVisible:
+    text: "Rejestracja|Zarejestruj"
+    optional: true
+
+# 3. Imię
+- tapOn:
+    text: "Jan"
+- inputText: "Pacjent01"
+
+# 4. Nazwisko
+- tapOn:
+    text: "Kowalski"
+- inputText: "Maestro"
+
+# 5. Email (z losowym suffixem aby uniknąć konfliktu unique)
+- tapOn:
+    text: "twoj@email.com"
+- inputText: "p01.${maestro.timestamp()}@kptest.example.com"
+
+# 6. Telefon
+- tapOn:
+    text: "+48 123 456 789"
+- inputText: "+48500111222"
+
+# 7. PESEL
+- tapOn:
+    text: "90010112345"
+- inputText: "90010112345"
+
+# 8. Hasło + powtórzenie (policy: min 10, duże/małe/cyfra/znak specjalny)
+- tapOn:
+    id: "password"
+    optional: true
+- inputText: "MaestroP@ss123"
+- tapOn:
+    id: "confirm-password"
+    optional: true
+- inputText: "MaestroP@ss123"
+
+# 9. Akceptacja regulaminu (RODO)
+- tapOn:
+    text: "Akceptuję|regulamin|Regulamin"
+    optional: true
+
+# 10. Submit
+- tapOn:
+    text: "Zarejestruj się|Zarejestruj|Utwórz konto"
+
+# 11. Oczekiwany rezultat — jeden z trzech:
+#  a) komunikat o weryfikacji HIS (US-P-02 follow-up),
+#  b) ekran 2FA (US-P-04),
+#  c) Home (gdy backend dev pomija HIS).
+- assertVisible:
+    text: "Weryfikacja|weryfikacji|pending|2FA|Witaj|Home"
+    optional: false

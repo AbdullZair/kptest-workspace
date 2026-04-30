@@ -1,7 +1,9 @@
 package com.kptest.infrastructure.scheduler;
 
 import com.kptest.domain.notification.Notification;
+import com.kptest.domain.notification.NotificationPreference;
 import com.kptest.domain.notification.NotificationType;
+import com.kptest.domain.notification.repository.NotificationPreferenceRepository;
 import com.kptest.domain.notification.repository.NotificationRepository;
 import com.kptest.domain.project.ProjectTeam;
 import com.kptest.domain.project.ProjectTeamRepository;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +48,7 @@ public class EventReminderScheduler {
 
     private final TherapyEventRepository therapyEventRepository;
     private final NotificationRepository notificationRepository;
+    private final NotificationPreferenceRepository notificationPreferenceRepository;
     private final ProjectTeamRepository projectTeamRepository;
     private final UserRepository userRepository;
 
@@ -120,6 +124,12 @@ public class EventReminderScheduler {
         String actionUrl = "/calendar/events/" + event.getId();
 
         for (UUID userId : recipients) {
+            // Respect user preferences (US-K-26): skip if reminders/push disabled or
+            // if current time falls within the user's configured quiet hours.
+            if (shouldSkipForPreferences(userId)) {
+                continue;
+            }
+
             // De-duplicate: skip if a reminder for this event already exists for this user
             // (cheap check: scan recent notifications for this user; MVP scope is small)
             boolean alreadyNotified = notificationRepository
@@ -147,6 +157,72 @@ public class EventReminderScheduler {
             created++;
         }
         return created;
+    }
+
+    /**
+     * Check if a reminder should be skipped for the given user based on stored
+     * {@link NotificationPreference}. Returns true and emits an INFO log when:
+     * <ul>
+     *   <li>{@code reminderNotifications == false}</li>
+     *   <li>{@code pushEnabled == false}</li>
+     *   <li>current local time falls inside the user's quiet hours window</li>
+     * </ul>
+     * Missing preferences default to "do not skip" so that users without a
+     * preference row continue to receive reminders.
+     */
+    private boolean shouldSkipForPreferences(UUID userId) {
+        NotificationPreference pref = notificationPreferenceRepository
+            .findByUserId(userId)
+            .orElse(null);
+        if (pref == null) {
+            return false;
+        }
+        if (Boolean.FALSE.equals(pref.getReminderNotifications())
+            || Boolean.FALSE.equals(pref.getPushEnabled())) {
+            log.info("Skipping reminder for user {} — quiet hours / disabled", userId);
+            return true;
+        }
+        if (isInQuietHours(pref, LocalTime.now())) {
+            log.info("Skipping reminder for user {} — quiet hours / disabled", userId);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return whether the supplied {@code now} falls inside the preference's
+     * quiet hours window. Handles cross-midnight intervals (e.g. 22:00–07:00)
+     * and tolerates malformed strings by returning {@code false}.
+     *
+     * @param pref preference holding optional HH:MM start/end strings
+     * @param now  reference time (use {@link LocalTime#now()} in production)
+     * @return true when notifications should be suppressed
+     */
+    static boolean isInQuietHours(NotificationPreference pref, LocalTime now) {
+        if (pref == null) {
+            return false;
+        }
+        String start = pref.getQuietHoursStart();
+        String end = pref.getQuietHoursEnd();
+        if (start == null || end == null) {
+            return false;
+        }
+        try {
+            LocalTime startTime = LocalTime.parse(start);
+            LocalTime endTime = LocalTime.parse(end);
+            if (startTime.equals(endTime)) {
+                return false;
+            }
+            if (startTime.isAfter(endTime)) {
+                // Cross-midnight window: (start, 24:00) ∪ (00:00, end)
+                return !now.isBefore(startTime) || now.isBefore(endTime);
+            }
+            // Same-day window
+            return !now.isBefore(startTime) && now.isBefore(endTime);
+        } catch (RuntimeException e) {
+            log.debug("Malformed quiet hours [{} – {}]: {}", start, end, e.getMessage());
+            return false;
+        }
     }
 
     private UUID resolvePatientUserId(UUID patientId) {

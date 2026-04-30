@@ -1,0 +1,62 @@
+# US-P-15: Przeglądanie materiałów edukacyjnych
+# Akceptacja:
+#   - Zakładka "Materiały" (MaterialsTab) dostępna po zalogowaniu
+#   - Search input + filter chips (typ, status: all/active/completed)
+#   - Tap na kartę materiału otwiera MaterialDetailScreen
+#   - "Otwórz" -> MaterialViewerScreen z URL pliku
+appId: com.kptest.mobile
+name: US-P-15 Materials browse
+tags:
+  - patient
+  - materials
+env:
+  TEST_EMAIL: "patient.demo@kptest.example.com"
+  TEST_PASSWORD: "DemoP@ssw0rd123"
+---
+- runFlow:
+    file: p03-login.yaml
+    env:
+      TEST_EMAIL: ${TEST_EMAIL}
+      TEST_PASSWORD: ${TEST_PASSWORD}
+
+# 1. Otwarcie zakładki Materiały
+- tapOn:
+    text: "Materiały|Materials"
+
+# 2. Wyszukiwarka istnieje
+- assertVisible:
+    text: "Szukaj|Wyszukaj|Search"
+    optional: true
+
+# 3. Filtrowanie statusem (chip)
+- tapOn:
+    text: "Wszystkie|All"
+    optional: true
+
+# 4. Lista zwraca przynajmniej jeden materiał (seed)
+- assertVisible:
+    text: "min|h|min."
+    optional: true
+
+# 5. Wpisz frazę do searcha
+- tapOn:
+    id: "materials-search"
+    optional: true
+- inputText: "edukacja"
+
+# 6. Otwórz pierwszy materiał
+- tapOn:
+    index: 0
+    text: ".*"
+    optional: true
+
+# 7. Detail screen
+- assertVisible:
+    text: "Otwórz|Open|Pobierz"
+    optional: true
+
+# 8. Powrót
+- back
+- back
+- assertVisible:
+    text: "Materiały|Materials"

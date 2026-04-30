@@ -13,22 +13,24 @@ date: 2026-04-29
 
 ## 1. Stan zastany — przegląd
 
-W repozytorium zinwentaryzowano **3 ekstension pointy zrealizowane jako interfejsy
-strategii** (provider pattern) plus **1 anty-wzorzec** (HIS bez interfejsu):
+W repozytorium zinwentaryzowano **4 extension pointy zrealizowane jako interfejsy
+strategii** (provider pattern) plus **OAuth2 szkielet** dla Authentication:
 
 | # | Extension point                                  | Lokalizacja interfejsu                                                                  | Implementacje                                       | Pluggable? |
 |---|--------------------------------------------------|------------------------------------------------------------------------------------------|-----------------------------------------------------|------------|
 | 1 | `EmailProvider`                                  | `backend/src/main/java/com/kptest/infrastructure/email/EmailProvider.java`               | `SendGridEmailProvider`                             | TAK        |
 | 2 | `SmsProvider`                                    | `backend/src/main/java/com/kptest/infrastructure/sms/SmsProvider.java`                   | `TwilioSmsProvider`                                 | TAK        |
 | 3 | `PushNotificationProvider`                       | `backend/src/main/java/com/kptest/infrastructure/push/PushNotificationProvider.java`     | `FcmPushProvider` (`@Profile("prod")`), `LogPushProvider` (`@Profile("dev")`) | TAK        |
-| 4 | `HisService` (klasa konkretna — **anti-pattern**) | `backend/src/main/java/com/kptest/application/service/HisService.java`                   | jedna implementacja, używa `HisClient` (Apache HC5) | NIE        |
-| 5 | `AuthenticationService` (klasa konkretna)        | `backend/src/main/java/com/kptest/application/service/AuthenticationService.java`        | jedna ścieżka: hasło + opcjonalny TOTP              | NIE        |
+| 4 | `HisService` (interfejs — **OK, pluggable** od ADR-003) | `backend/src/main/java/com/kptest/application/service/HisService.java`                   | `RestHisProvider` (`@Profile("!test")`, używa `HisClient` Apache HC5), `MockHisProvider` (`@Profile("test")`, in-memory fixtures) | TAK        |
+| 5 | `AuthenticationService` + OAuth2 szkielet (ADR-004) | `backend/src/main/java/com/kptest/application/service/AuthenticationService.java` + `infrastructure/config/SecurityConfig.java` | hasło + TOTP (default); OAuth2 ready przez `application-oauth2.yml` (Google placeholder) | TAK (OAuth2 disabled by default) |
 
 **Wynik analizy konwencji KPTEST:**
 - Zgodnie z `backend/CLAUDE.md` warstwa biznesowa powinna mieć interfejs + implementację.
-- Realnie tylko warstwa **infrastructure/** (email, sms, push) trzyma się tej zasady.
-- Warstwa **application/service** (HIS, Auth, Notification, Patient, Project itd.) to klasy konkretne `@Service`.
-- Konsekwencja: zmiana providera HIS lub dodanie OAuth wymaga refaktoru, a nie wpięcia nowej klasy.
+- Warstwy **infrastructure/** (email, sms, push) i **application/service.HisService** (od ADR-003) trzymają się tej zasady.
+- Pozostała warstwa **application/service** (Auth — częściowo, Notification, Patient, Project itd.) to klasy konkretne `@Service`.
+- Po ekstrakcji `HisService` (ADR-003) dodanie HL7 FHIR / CGM providera nie wymaga zmiany callerów (`PatientController`, `PatientService`), wystarczy nowa klasa `FhirHisProvider implements HisService`.
+- OAuth2 (Authentication) — od ADR-004 (2026-04-29) szkielet w `SecurityConfig`
+  z `Customizer.withDefaults()` + profil `application-oauth2.yml` z Google placeholder.
 
 ---
 
@@ -156,42 +158,46 @@ wywoływane w pętli po tokenach urządzeń z `UserDeviceTokenRepository`).
 
 ---
 
-## 5. Extension Point #4 (BRAKUJĄCY) — `HisService`
+## 5. Extension Point #4 — `HisService` (OK — pluggable od ADR-003)
 
-### Stan zastany
-`com.kptest.application.service.HisService` to **klasa konkretna** `@Service` używająca
-`com.kptest.infrastructure.his.HisClient` (Apache HttpClient 5 + REST do mocka HIS na
-`http://kptest-his-mock:8080`).
-
-### Problem
-- Brak interfejsu = nie da się podmienić providera bez modyfikacji kodu.
-- Nie da się równolegle wspierać dwóch HISów (np. szpital A → REST mock, szpital B → HL7 FHIR).
-- Trudno mockować w testach jednostkowych (musi być pełny `RestClient` mock).
-
-### Rekomendowany refactor (nadal w ramach P5d — TYLKO dokumentacja, nie kod)
+### Kontrakt
 
 ```java
-// 1. Wyciągnij interfejs:
 package com.kptest.application.service;
-public interface HisVerificationProvider {
-    Optional<HisDemographicsDto> getDemographics(String pesel);
-    HisVerificationResult verify(HisVerifyRequest req);
-    String name(); // np. "rest-mock", "hl7-fhir"
+
+public interface HisService {
+    HisVerificationResult verifyPatient(String pesel, String cartNumber);
+    HisDemographicsDto getDemographics(String pesel);
 }
-
-// 2. Domyślną implementację przemianuj na:
-//    HisServiceImpl (lub: RestMockHisProvider) implements HisVerificationProvider
-//    @Component @ConditionalOnProperty(name="his.provider", havingValue="rest", matchIfMissing=true)
-
-// 3. Konsumerzy (PatientService, RegistrationService) wstrzykują interfejs:
-private final HisVerificationProvider his;
 ```
 
+### Implementacje
+
+| Klasa                          | Pakiet                                        | Profil           | Opis                                                                                       |
+|--------------------------------|-----------------------------------------------|------------------|--------------------------------------------------------------------------------------------|
+| `RestHisProvider`              | `com.kptest.infrastructure.his`               | `!test`          | Produkcyjna ścieżka — wywołuje `his-mock` REST przez `HisClient` (Apache HttpClient 5).   |
+| `MockHisProvider`              | `com.kptest.infrastructure.his`               | `test`           | In-memory fixturze (3 PESELE: 12345678901, 98765432109, 11111111111). Bez ruchu sieciowego. |
+
+### Konsumerzy
+- `com.kptest.api.controller.PatientController` (`private final HisService hisService`).
+- `com.kptest.application.service.PatientService` (`private final HisService hisService`).
+
+Spring wstrzyknie odpowiednią implementację na podstawie aktywnego profilu;
+callerzy nie wiedzą która implementacja jest aktywna.
+
+### Status
+- **Pluggable**: TAK.
+- Decyzja architektoniczna: **ADR-003** (`docs/architecture/adr/ADR-003.md`).
+- Sygnatury publiczne nie zmieniły się przy ekstrakcji — caller refactor zerowy.
+
 ### Jak dodać HL7 FHIR provider
-1. `com.kptest.infrastructure.his.fhir.FhirHisProvider implements HisVerificationProvider`.
-2. `@Component @ConditionalOnProperty(name="his.provider", havingValue="fhir")`.
-3. Zależność: `implementation 'ca.uhn.hapi.fhir:hapi-fhir-client:7.0.0'`.
-4. Konfiguracja:
+1. Klasa: `com.kptest.infrastructure.his.fhir.FhirHisProvider implements HisService`.
+2. Adnotacje: `@Service @ConditionalOnProperty(name="his.provider", havingValue="fhir")`.
+3. Aby uniknąć kolizji z `RestHisProvider` (`@Profile("!test")`), trzeba dodać tam
+   również `@ConditionalOnProperty(name="his.provider", havingValue="rest", matchIfMissing=true)`
+   albo wprowadzić dispatcher `Map<String, HisService>`.
+4. Zależność: `implementation 'ca.uhn.hapi.fhir:hapi-fhir-client:7.0.0'`.
+5. Konfiguracja:
    ```yaml
    his:
      provider: fhir
@@ -200,21 +206,47 @@ private final HisVerificationProvider his;
        client-id: kptest-portal
        client-secret: ${HIS_FHIR_SECRET}
    ```
-5. Mapowanie: `Patient` (FHIR resource) → `HisDemographicsDto`.
+6. Mapowanie: `Patient` (FHIR resource) → `HisDemographicsDto`.
+
+### Jak dodać CGM / OptiMed provider
+Analogicznie do FHIR — nowa klasa `CgmHisProvider implements HisService` lub
+`OptiMedHisProvider implements HisService` w `infrastructure/his/<vendor>/`,
+aktywowana przez `@ConditionalOnProperty`.
 
 ---
 
-## 6. Extension Point #5 (BRAKUJĄCY) — Authentication
+## 6. Extension Point #5 — Authentication (OK — OAuth2 ready, disabled by default)
 
-### Stan zastany
-`AuthenticationService` to klasa konkretna z hardcoded'owanym flow:
-`PasswordEncoder` + opcjonalny `TotpService`. `AuthController` (`/api/v1/auth/*`) ma
-endpointy `login`, `register`, `verify-2fa`, `reset-password`, `refresh`. Brak
-`OAuth2LoginConfigurer` w `SecurityConfig`.
+> **Status: OK — OAuth2 ready (disabled by default).** Po realizacji ADR-004
+> (zob. `docs/architecture/adr/ADR-004.md`) `SecurityConfig` zawiera
+> `oauth2Login(Customizer.withDefaults())` a `build.gradle` ma startery
+> `spring-boot-starter-oauth2-client` + `spring-boot-starter-oauth2-resource-server`.
+> Aktywacja providera (Google / Microsoft / Keycloak) sprowadza się do
+> wpisów w `application-oauth2.yml` + env vars — bez refaktoru kodu Java.
 
-### Problem
-Niemożliwe jest dodanie SSO (OAuth/OIDC, SAML) bez edycji `AuthController` i
-`AuthenticationService`. Brak interfejsu `AuthenticationProvider` na poziomie aplikacji.
+### Stan zastany (po ADR-004)
+- `SecurityConfig.SecurityFilterChain` — dodano `.oauth2Login(Customizer.withDefaults())`
+  jako szkielet; aktywuje się wyłącznie gdy `spring.security.oauth2.client.registration.*`
+  zawiera niepuste `client-id`.
+- `application-oauth2.yml` — profil z placeholderami dla Google (aktywny, env vars puste)
+  i Microsoft (zakomentowany).
+- `AuthenticationService` (klasa konkretna) — bez zmian: nadal trzyma flow
+  `PasswordEncoder` + opcjonalny `TotpService`. JWT auth jest **default**, OAuth2
+  to **opcjonalna druga ścieżka** logowania.
+
+### Co pozostaje do zrobienia (US-S-05 implementation sprint)
+- `GoogleOidcUserService extends OidcUserService` — mapowanie `OidcUser` → lokalny `User`
+  (po `email`), polityka auto-create vs invite-only, allowed-domains.
+- `OAuthLoginSuccessHandler` — generowanie lokalnego JWT przez `JwtService`,
+  redirect na `/oauth-callback?token=...`.
+- Tabela `user_external_identity` (Flyway) — link `User` → `(provider, subject)`.
+- Refactor `AuthenticationService` na interfejs `AuthProvider` (`local` / `google` /
+  `azure-ad`) z `AuthProviderRegistry` jako mapą `Map<String, AuthProvider>`.
+
+### Problem (historyczny — przed ADR-004)
+Dodanie SSO (OAuth/OIDC, SAML) wymagało edycji `SecurityConfig`, dependencies,
+profilu i całej ścieżki integracji. Po ADR-004 dependencies + szkielet konfiguracji
+są już wbudowane.
 
 ### Rekomendowana abstrakcja
 
@@ -380,9 +412,75 @@ Domyślny `LocalAuthProvider` opakowuje obecny `AuthenticationService`. Nowe pro
 | Email                 | OK            | Dodać `@ConditionalOnProperty` na `SendGridEmailProvider`, by uniknąć kolizji.                 |
 | SMS                   | OK            | Analogicznie do email.                                                                         |
 | Push                  | OK (stub)     | Dokończyć `FcmPushProvider` (sekcja 7.3) + dodać APNs (alternatywnie unified FCM HTTP v1).     |
-| HIS                   | **DŁUG**      | Wyciągnąć `HisVerificationProvider`. Bez tego nie da się dodać HL7 FHIR bez refaktoru.         |
-| Auth                  | **DŁUG**      | Wyciągnąć `AuthProvider` (lokalny / OAuth / SAML). Zaplanowane do US-S-05 follow-up.            |
+| HIS                   | OK            | Interfejs `HisService` + `RestHisProvider` (`@Profile("!test")`) + `MockHisProvider` (`@Profile("test")`) — ADR-003. Dodanie HL7 FHIR / CGM nie wymaga ruszania callerów. |
+| Auth                  | OK / częściowy DŁUG | OAuth2 szkielet w `SecurityConfig` (ADR-004) — gotowy do aktywacji env vars. Pełny `AuthProvider` (lokalny / OAuth / SAML) z `AuthProviderRegistry` nadal do zrobienia w US-S-05 implementation sprint. |
 | Notification dispatch | częściowo OK  | Rozważyć dispatcher rozdzielający kanał (email vs sms vs push) na podstawie `NotificationPreference` użytkownika. |
 
-**Łącznie zidentyfikowano 5 extension points** (3 zaimplementowane jako interfejsy,
-2 wymagające ekstrakcji). Trzy konkretne plany integracji opisano powyżej.
+**Łącznie zidentyfikowano 5 extension points** (4 zaimplementowane jako interfejsy
+po ADR-003, 1 — Authentication — nadal w fazie szkieletu OAuth2). Trzy konkretne
+plany integracji opisano powyżej.
+
+---
+
+## 9. Mobile build & distribution (US-S-14, ADR-007)
+
+> **Status: OK — pipeline skonfigurowany.** EAS Build (Expo Application Services)
+> jest punktem rozszerzenia dla build/dystrybucji mobile na obu platformach
+> (iOS + Android), z kanałami `preview` i `production` oraz integracją
+> TestFlight / Play Internal Testing.
+
+### Stan zastany (po ADR-007)
+
+| Element                            | Lokalizacja                                                      | Profil/Trigger                                  |
+|------------------------------------|------------------------------------------------------------------|-------------------------------------------------|
+| `eas.json`                         | `mobile/eas.json`                                                | 3 profile: `development`, `preview`, `production` |
+| Expo project config                | `mobile/app.json`                                                | `runtimeVersion: { policy: 'appVersion' }`, `extra.eas.projectId`, `updates.url`, `ios.bundleIdentifier=com.kptest.mobile`, `android.package=com.kptest.mobile` |
+| GitHub Actions workflow            | `.github/workflows/eas-build.yml`                                | `push: main` (paths `mobile/**`), `pull_request`, `workflow_dispatch` (manual profile/platform) |
+| Runbook                            | `mobile/EAS_BUILD.md`                                            | Lokalny build, submit, CI/CD, wymagania kont    |
+| Build CI step (legacy validation)  | `.github/workflows/mobile-ci.yml` (`eas-build` job)              | `expo-doctor` + `eas build:configure` smoke check |
+
+### Submit ścieżki
+
+- **Android** → `eas submit --platform android` → Google Play **Internal Testing**
+  track (`submit.production.android.track: internal` w `eas.json`).
+  Wymaga `google-service-account.json` (service account z rolą Release Manager).
+- **iOS** → `eas submit --platform ios` → App Store Connect **TestFlight**
+  (`submit.production.ios.appleId/ascAppId/appleTeamId`).
+  Wymaga Apple Developer Program ($99/rok) + App-Specific Password lub
+  `eas credentials` z App Store Connect API key.
+
+### Profile build — environment variables
+
+| Profile        | `API_BASE_URL`                          | Channel       | Format Android      | Format iOS                    |
+|----------------|------------------------------------------|---------------|---------------------|--------------------------------|
+| `development`  | (default — `app.json.extra.apiUrl`)      | —             | debug APK (gradle)  | simulator build               |
+| `preview`      | `https://staging-api.kptest.com`         | `preview`     | APK (`buildType: apk`) | device build (no simulator) |
+| `production`   | `https://api.kptest.com`                 | `production`  | AAB (`app-bundle`)  | autoIncrement build number    |
+
+### Jak dodać kolejny target dystrybucji (np. App Store Public + Play Production)
+
+1. Rozszerzyć sekcję `submit` w `mobile/eas.json`:
+   ```json
+   "submit": {
+     "production-store": {
+       "android": { "track": "production", "serviceAccountKeyPath": "./google-service-account.json" },
+       "ios":     { "appleId": "...", "ascAppId": "...", "appleTeamId": "..." }
+     }
+   }
+   ```
+2. Workflow `eas-build.yml` rozszerzyć o krok `eas submit --profile production-store`
+   z manual approval (env `production`).
+3. Compliance: changelog + release notes per platform przed publikacją.
+
+### Otwarte gaps (wymagają człowieka)
+
+- Apple Developer Program enrollment ($99/rok) — KYC, D-U-N-S number dla
+  organizacji.
+- Google Play Developer account ($25 jednorazowo) — KYC, payment.
+- `EXPO_TOKEN` w GitHub Secrets (jednorazowo z
+  `expo.dev/accounts/[user]/settings/access-tokens`).
+- `extra.eas.projectId` w `mobile/app.json` jest placeholderem
+  (`00000000-0000-0000-0000-000000000000`) — pierwsze uruchomienie
+  `eas build:configure` nadpisze go realnym UUID.
+- `google-service-account.json` (Play) — wymagany przed `eas submit --platform android`.
+

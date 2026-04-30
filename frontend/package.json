@@ -15,7 +15,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "generate:api": "openapi-typescript http://localhost:8080/v3/api-docs --output src/shared/api/generated/types.ts",
+    "generate:api:offline": "openapi-typescript ./openapi.json --output src/shared/api/generated/types.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -58,6 +60,7 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "jsdom": "^25.0.1",
     "msw": "^2.4.11",
+    "openapi-typescript": "^7.4.0",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",

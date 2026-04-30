@@ -1,0 +1,54 @@
+# US-P-18: Kalendarz wydarzeń (terapia, kontrole, spotkania)
+# Akceptacja:
+#   - Zakładka "Kalendarz" (CalendarTab) dostępna po zalogowaniu
+#   - Toggle widoków: day / week / month
+#   - Tap na wydarzenie -> EventDetailScreen z opcją "Zaproponuj zmianę"
+appId: com.kptest.mobile
+name: US-P-18 Calendar events
+tags:
+  - patient
+  - calendar
+env:
+  TEST_EMAIL: "patient.demo@kptest.example.com"
+  TEST_PASSWORD: "DemoP@ssw0rd123"
+---
+- runFlow:
+    file: p03-login.yaml
+    env:
+      TEST_EMAIL: ${TEST_EMAIL}
+      TEST_PASSWORD: ${TEST_PASSWORD}
+
+# 1. Otwarcie zakładki Kalendarz
+- tapOn:
+    text: "Kalendarz|Calendar"
+
+# 2. Toggle widoków
+- assertVisible:
+    text: "Dzień|Day|day"
+- assertVisible:
+    text: "Tydzień|Week|week"
+- assertVisible:
+    text: "Miesiąc|Month|month"
+
+- tapOn:
+    text: "Tydzień|Week"
+- tapOn:
+    text: "Miesiąc|Month"
+- tapOn:
+    text: "Dzień|Day"
+
+# 3. Pierwsze wydarzenie z seed (jeśli istnieje)
+- tapOn:
+    index: 0
+    text: ".*"
+    optional: true
+
+# 4. Detail screen
+- assertVisible:
+    text: "Szczegóły|Details|Zaproponuj zmianę|Propose"
+    optional: true
+
+# 5. Powrót
+- back
+- assertVisible:
+    text: "Kalendarz|Calendar"

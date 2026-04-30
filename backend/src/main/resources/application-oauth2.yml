@@ -1,0 +1,46 @@
+# Profil 'oauth2' — aktywuje OAuth2 logowanie (Google + Microsoft).
+#
+# Aby uzyc:
+#   1. Odkomentuj wybrane provider klucze ponizej (google / microsoft).
+#   2. Ustaw env vars: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET (i/lub MICROSOFT_*)
+#   3. Uruchom z SPRING_PROFILES_ACTIVE=dev,oauth2
+#
+# UWAGA: Bez ustawionych env vars Spring poprawnie zignoruje tego providera
+# (placeholder rozwija sie do pustego stringa). JWT auth pozostaje domyslny.
+# Patrz: docs/architecture/adr/ADR-004.md, docs/architecture/extension-points.md
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:}
+            client-secret: ${GOOGLE_CLIENT_SECRET:}
+            scope:
+              - openid
+              - email
+              - profile
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            authorization-grant-type: authorization_code
+          # microsoft:
+          #   client-id: ${MICROSOFT_CLIENT_ID:}
+          #   client-secret: ${MICROSOFT_CLIENT_SECRET:}
+          #   scope:
+          #     - openid
+          #     - email
+          #     - profile
+          #   redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+          #   authorization-grant-type: authorization_code
+        provider:
+          google:
+            issuer-uri: https://accounts.google.com
+          # microsoft:
+          #   issuer-uri: https://login.microsoftonline.com/${MICROSOFT_TENANT_ID:common}/v2.0
+
+# kptest specyficzna konfiguracja (zarezerwowane dla follow-up US-S-05):
+# kptest:
+#   oauth:
+#     allowed-domains:
+#       - kptest-szpital.pl
+#     auto-create-users: false

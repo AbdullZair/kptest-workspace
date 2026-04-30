@@ -1,0 +1,35 @@
+# Local Alertmanager configuration for docker-compose stack.
+# Production alertmanager.yml uses ${SLACK_WEBHOOK_URL} / ${SMTP_PASSWORD}
+# placeholders that fail to start without env-substitution. This minimal
+# config sends alerts to a local webhook stub (or just logs them).
+
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'default'
+  group_by: ['alertname', 'severity', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - match:
+        severity: critical
+      receiver: 'default'
+      group_wait: 10s
+      repeat_interval: 1h
+
+receivers:
+  - name: 'default'
+    # No-op receiver — alerts are visible at http://localhost:9093/#/alerts
+    # but no external notifications are sent in local mode.
+    webhook_configs:
+      - url: 'http://localhost:9999/alerts'
+        send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service']

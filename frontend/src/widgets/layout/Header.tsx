@@ -5,6 +5,7 @@ import { useAuth } from '@features/auth'
 import { useTheme } from '@app/providers'
 import type { UserRole } from '@shared/components'
 import { HelpDialog } from '@widgets/help'
+import { LangSwitcherCompact } from './LangSwitcherCompact'
 
 /**
  * Header props
@@ -238,6 +239,9 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
         {/* Right side: Actions */}
         <div className="flex items-center gap-2">
+          {/* Language switcher (US-S-17) */}
+          <LangSwitcherCompact variant="icon" />
+
           {/* Theme toggle */}
           <button
             type="button"

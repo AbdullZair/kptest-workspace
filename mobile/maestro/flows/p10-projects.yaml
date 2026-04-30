@@ -1,0 +1,49 @@
+# US-P-10: Lista aktywnych projektów pacjenta
+# Akceptacja:
+#   - Po zalogowaniu w bottom-tab dostępna zakładka "Projekty" (ProjectsTab)
+#   - Lista wyświetla: nazwa, opis, daty, liczba pacjentów, cele terapii
+#   - Tap na element otwiera ProjectDetailScreen z poprawnymi parametrami
+appId: com.kptest.mobile
+name: US-P-10 Projects list
+tags:
+  - patient
+  - projects
+env:
+  TEST_EMAIL: "patient.demo@kptest.example.com"
+  TEST_PASSWORD: "DemoP@ssw0rd123"
+---
+- runFlow:
+    file: p03-login.yaml
+    env:
+      TEST_EMAIL: ${TEST_EMAIL}
+      TEST_PASSWORD: ${TEST_PASSWORD}
+
+# 1. Otwarcie zakładki Projekty
+- tapOn:
+    text: "Projekty|Projects"
+
+# 2. Lista (FlatList) — przynajmniej jeden projekt seed
+- assertVisible:
+    text: "Rozpoczęcie:"
+    optional: false
+- assertVisible:
+    text: "Pacjenci:"
+    optional: true
+
+# 3. Tap pierwszego projektu
+- tapOn:
+    index: 0
+    text: "Rozpoczęcie:"
+
+# 4. Detail screen
+- assertVisible:
+    text: "Cele terapii|Etapy|Stage"
+    optional: true
+- assertVisible:
+    text: "Pacjenci|Compliance"
+    optional: true
+
+# 5. Powrót
+- back
+- assertVisible:
+    text: "Projekty|Projects"

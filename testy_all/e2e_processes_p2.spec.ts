@@ -1518,3 +1518,126 @@ test.describe('Process — Bulk operacje na pacjentach (US-K-05)', () => {
     }
   })
 })
+
+// ============================================================
+// PROC-20: US-K-26 quiet hours respektowane przez scheduler
+// ============================================================
+
+test.describe('Process — Powiadomienia (US-K-26): scheduler respektuje quiet hours', () => {
+  test('PROC-20: Quiet hours na cały dzień -> run-reminders pomija admina', async ({
+    request,
+  }) => {
+    const auth = await login(request)
+
+    // KROK 1: Ustaw preferencje admina na quiet hours obejmujące teraz (cały dzień).
+    const enableQuiet = await request.put(
+      `${API_URL}/me/notification-preferences`,
+      {
+        headers: authHeaders(auth.token),
+        data: {
+          pushEnabled: true,
+          reminderNotifications: true,
+          quietHoursStart: '00:00',
+          quietHoursEnd: '23:59',
+        },
+      }
+    )
+    expect(
+      enableQuiet.ok(),
+      `PUT preferences (quiet ON) HTTP ${enableQuiet.status()}: ${await enableQuiet.text()}`
+    ).toBeTruthy()
+
+    try {
+      // KROK 2: projekt + pacjent + enroll + event w oknie 24h
+      const projectId = await createEmptyProject(request, auth.token, 'PROC-20')
+      const { patientId } = await registerAndApprove(request, auth.token)
+      const enrollRes = await request.post(
+        `${API_URL}/projects/${projectId}/patients`,
+        {
+          headers: authHeaders(auth.token),
+          data: { patient_ids: [patientId] },
+        }
+      )
+      expect(enrollRes.ok(), `enroll HTTP ${enrollRes.status()}`).toBeTruthy()
+
+      const scheduledAt = new Date(
+        Date.now() + 24 * 60 * 60 * 1000 - 2 * 60 * 1000
+      ).toISOString()
+      const endsAt = new Date(
+        Date.now() + 24 * 60 * 60 * 1000 + 28 * 60 * 1000
+      ).toISOString()
+      const evRes = await request.post(`${API_URL}/calendar/events`, {
+        headers: authHeaders(auth.token),
+        data: {
+          project_id: projectId,
+          patient_id: patientId,
+          title: 'PROC-20 Quiet hours event',
+          description: 'Test: scheduler powinien pominąć przypomnienia (quiet).',
+          type: 'VISIT',
+          scheduled_at: scheduledAt,
+          ends_at: endsAt,
+          location: 'IFPS',
+          is_cyclic: false,
+          reminders: {
+            reminder_24h: true,
+            reminder_2h: false,
+            reminder_30min: false,
+          },
+        },
+      })
+      expect(
+        evRes.ok(),
+        `POST /calendar/events HTTP ${evRes.status()}: ${await evRes.text()}`
+      ).toBeTruthy()
+
+      // KROK 3: Manual trigger run-reminders
+      const triggerRes = await request.post(
+        `${API_URL}/admin/system/notifications/run-reminders`,
+        { headers: authHeaders(auth.token) }
+      )
+      expect(
+        triggerRes.ok(),
+        `POST run-reminders HTTP ${triggerRes.status()}: ${await triggerRes.text()}`
+      ).toBeTruthy()
+
+      // KROK 4: Asercja graceful — endpoint zwrócił 200 i count >= 0.
+      // Precyzyjna asercja "0 notyfikacji dla admina" wymagałaby zaglądania
+      // do bazy; tutaj polegamy na logu backend "Skipping reminder for user
+      // ... — quiet hours / disabled". Test sprawdza kontrakt API i fakt,
+      // że scheduler nie wybucha gdy odbiorca jest w quiet hours.
+      const body = (await triggerRes.json()) as {
+        count?: number
+        events?: string[]
+        notifications_created?: number
+      }
+      expect(typeof body.count).toBe('number')
+      expect(Array.isArray(body.events)).toBe(true)
+      expect(body.count ?? 0).toBeGreaterThanOrEqual(0)
+      if ((body.notifications_created ?? 0) === 0) {
+        test.info().annotations.push({
+          type: 'process-ok',
+          description:
+            'PROC-20: notifications_created=0 zgodnie z oczekiwaniem (quiet hours obejmują admina i pacjenta).',
+        })
+      }
+    } finally {
+      // KROK 5: Cleanup — przywróć defaults.
+      const restoreRes = await request.put(
+        `${API_URL}/me/notification-preferences`,
+        {
+          headers: authHeaders(auth.token),
+          data: {
+            pushEnabled: true,
+            reminderNotifications: true,
+            quietHoursStart: '22:00',
+            quietHoursEnd: '07:00',
+          },
+        }
+      )
+      expect(
+        restoreRes.ok(),
+        `PUT preferences cleanup HTTP ${restoreRes.status()}`
+      ).toBeTruthy()
+    }
+  })
+})

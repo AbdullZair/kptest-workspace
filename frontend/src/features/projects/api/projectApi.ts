@@ -10,6 +10,21 @@ import type {
   ProjectPatientSummary,
   ProjectTeam,
 } from '../types'
+// Sample: types generated from backend OpenAPI spec via `npm run generate:api`
+// (B3/US-S-06). Available for incremental adoption — see docs/architecture/adr/ADR-005.md
+// Example shape (kept as type-only import to avoid runtime impact and any clashes
+// with the existing local Project type used across this slice):
+//   import type { components, operations } from '@shared/api/generated/types'
+//   type ProjectResponse = components['schemas']['ProjectResponse']
+//   type GetProjectByIdResponse =
+//     operations['getProjectById']['responses']['200']['content']['application/json']
+import type { components } from '@shared/api/generated/types'
+/**
+ * Generated DTO from backend OpenAPI spec. Use this instead of local `Project`
+ * type when refactoring incrementally — keeps portal/mobile/backend in sync.
+ * @see docs/architecture/adr/ADR-005.md
+ */
+export type GeneratedProjectResponse = components['schemas']['ProjectResponse']
 
 /**
  * Project API slice using RTK Query

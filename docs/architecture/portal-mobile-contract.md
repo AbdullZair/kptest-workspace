@@ -178,7 +178,22 @@ Mimo prefixu `/api/v1`, nie ma planu migracji do `/v2`. Mobile auto-update przez
 
 ## 6. Rekomendacja: OpenAPI codegen
 
-### Plan wdrożenia (estymata: 1 sprint)
+> **Status (B3 / US-S-06): ZAIMPLEMENTOWANE — 2026-04-29.**
+>
+> - `frontend/src/shared/api/generated/types.ts` — 8155 linii, 122 schemas, 129 paths.
+> - `mobile/src/shared/api/generated/types.ts` — wygenerowane z tego samego snapshot.
+> - Snapshot OpenAPI commitowany jako `frontend/openapi.json` (single source of truth).
+> - Skrypty: `npm run generate:api` (live z `localhost:8080`) i
+>   `npm run generate:api:offline` (z `frontend/openapi.json`) — w obu aplikacjach.
+> - Sample użycia: `frontend/src/features/projects/api/projectApi.ts`
+>   (`GeneratedProjectResponse = components['schemas']['ProjectResponse']`).
+> - Decyzja architektoniczna i konsekwencje: zob. `docs/architecture/adr/ADR-005.md`.
+>
+> Adopcja jest **incremental** — istniejące typy lokalne (`features/*/types.ts`)
+> pozostają, nowe miejsca importują typy z `@shared/api/generated/types`.
+> Pre-commit hook + CI verify są follow-upem (TODO).
+
+### Plan wdrożenia (estymata: 1 sprint) — historia decyzji
 
 1. **Backend** — zapewnić, że springdoc generuje pełny `openapi.json`:
    ```yaml
@@ -352,9 +367,9 @@ backend ALBO konsumenta przed mergem.
 
 | Pytanie z US-S-06                            | Odpowiedź                                                |
 |----------------------------------------------|----------------------------------------------------------|
-| Czy istnieje shared types package?           | **NIE**. Brak `shared-types/`, brak OpenAPI codegen.     |
-| Czy frontend i mobile mają osobne typy?      | **TAK**, dwa równoległe drzewa.                          |
+| Czy istnieje shared types package?           | **TAK (B3, 2026-04-29)** — `openapi-typescript` codegen, snapshot `frontend/openapi.json`. |
+| Czy frontend i mobile mają osobne typy?      | **TAK (lokalne, legacy)** + **NIE (generowane, single-source)** — adopcja incremental. |
 | Ile endpointów konsumuje mobile?             | **~65** (z czego ~5 jest mobile-only).                    |
 | Czy auth jest spójny?                        | **TAK** co do endpointów i JWT, **NIE** co do prefixu URL. |
-| Główne ryzyka                                | desynchronizacja DTO, niespójny base URL, brak contract testów |
-| Rekomendacja                                 | OpenAPI codegen + Pact dla 8–10 kluczowych endpointów    |
+| Główne ryzyka                                | desynchronizacja DTO (zaadresowane B3), niespójny base URL, brak contract testów |
+| Rekomendacja                                 | ~~OpenAPI codegen~~ (DONE — B3, ADR-005) + Pact dla 8–10 kluczowych endpointów (TODO) |

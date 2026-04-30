@@ -10,7 +10,12 @@
     "test": "jest --watchAll",
     "lint": "expo lint",
     "type-check": "tsc --noEmit",
-    "format": "prettier --write \"**/*.{ts,tsx}\""
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "generate:api": "openapi-typescript http://localhost:8080/v3/api-docs --output src/shared/api/generated/types.ts",
+    "generate:api:offline": "openapi-typescript ../frontend/openapi.json --output src/shared/api/generated/types.ts",
+    "test:e2e": "maestro test maestro/flows/",
+    "test:e2e:single": "maestro test maestro/flows/p01-register.yaml",
+    "test:e2e:report": "maestro test --format junit --output build/maestro-junit.xml maestro/flows/"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
@@ -65,6 +70,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "jest": "^29.7.0",
     "jest-expo": "~50.0.4",
+    "openapi-typescript": "^7.4.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },

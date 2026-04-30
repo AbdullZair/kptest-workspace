@@ -82,9 +82,14 @@
     },
     "extra": {
       "apiUrl": "https://api.kptest.com",
-      "environment": "production"
+      "environment": "production",
+      "eas": {
+        "projectId": "00000000-0000-0000-0000-000000000000"
+      }
     },
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "owner": "kptest"
   }
 }

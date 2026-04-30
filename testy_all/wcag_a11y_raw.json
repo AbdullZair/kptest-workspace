@@ -1,14 +1,14 @@
 {
   "results": [
     {
-      "route": "/register",
+      "route": "/login",
       "scanned": true,
       "violations": 0,
       "byImpact": {},
       "topViolations": []
     },
     {
-      "route": "/login",
+      "route": "/register",
       "scanned": true,
       "violations": 0,
       "byImpact": {},

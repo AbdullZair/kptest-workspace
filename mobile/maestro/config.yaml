@@ -1,0 +1,17 @@
+# Maestro runtime configuration for KPTEST mobile E2E
+# Project: KPTEST Mobile (React Native + Expo SDK 50)
+# Target appId comes from app.json -> ios.bundleIdentifier / android.package
+appId: com.kptest.mobile
+
+# Default timeouts (Maestro CLI flags --waitTimeout)
+flows:
+  - flows/
+
+# Notes:
+# - 5 flows are implemented (US-P-01, P-03, P-10, P-15, P-18) — see flows/_todo.md.
+# - Remaining 18 user stories are stubbed in flows/_todo.md and must be added
+#   incrementally as their corresponding screens stabilize testIDs.
+# - Maestro 1.36+ recommended (curl -Ls "https://get.maestro.mobile.dev" | bash).
+# - Backend must be reachable from device:
+#     Android emulator -> http://10.0.2.2:8080
+#     iOS simulator    -> http://localhost:8080

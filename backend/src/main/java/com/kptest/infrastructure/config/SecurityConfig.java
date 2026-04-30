@@ -2,6 +2,7 @@ package com.kptest.infrastructure.config;
 
 import com.kptest.infrastructure.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,11 +12,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -38,7 +41,10 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+        HttpSecurity http,
+        ObjectProvider<ClientRegistrationRepository> clientRegistrationRepositoryProvider
+    ) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
@@ -68,6 +74,16 @@ public class SecurityConfig {
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .userDetailsService(userDetailsService);
+
+        // OAuth2 login — szkielet (US-S-05). Aktywuje się dopiero gdy
+        // `spring.security.oauth2.client.registration.*` zostanie skonfigurowane
+        // (np. profil `oauth2`, env vars GOOGLE_CLIENT_ID/SECRET). Bez tej
+        // konfiguracji OAuth2 jest "no-op" — JWT auth flow pozostaje domyślny.
+        // TODO: skonfiguruj providerów (Google/Microsoft/Keycloak) w application.yml
+        //       lub uruchom z SPRING_PROFILES_ACTIVE=...,oauth2
+        if (clientRegistrationRepositoryProvider.getIfAvailable() != null) {
+            http.oauth2Login(Customizer.withDefaults());
+        }
 
         return http.build();
     }

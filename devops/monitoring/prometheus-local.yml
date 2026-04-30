@@ -1,0 +1,105 @@
+# Prometheus LOCAL Configuration (docker-compose)
+# Stripped-down version of prometheus.yml — removes Kubernetes service discovery,
+# leaves static_configs targets that resolve on the host (network_mode: host).
+# Use this with docker-compose.monitoring.yml for local stack runs.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'kptest-local'
+    environment: 'local'
+    cluster: 'kptest'
+
+# Alertmanager (running on host, port 9093)
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'localhost:9093'
+      scheme: http
+      timeout: 10s
+      api_version: v2
+
+rule_files:
+  - '/etc/prometheus/alert-rules.yml'
+  - '/etc/prometheus/recording-rules.yml'
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          application: 'prometheus'
+          service: 'monitoring'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Alertmanager
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['localhost:9093']
+        labels:
+          application: 'alertmanager'
+          service: 'monitoring'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # KPTEST Backend (Spring Boot Actuator) — running locally on 8080
+  - job_name: 'backend'
+    static_configs:
+      - targets: ['localhost:8080']
+        labels:
+          application: 'kptest-backend'
+          service: 'api'
+    metrics_path: /actuator/prometheus
+    scheme: http
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # KPTEST Frontend (Vite/Nginx) — optional metrics if exposed on :3000
+  - job_name: 'frontend'
+    static_configs:
+      - targets: ['localhost:3000']
+        labels:
+          application: 'kptest-frontend'
+          service: 'web'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Postgres exporter (optional, expects postgres_exporter on 9187)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['localhost:9187']
+        labels:
+          application: 'kptest-postgres'
+          service: 'database'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Redis exporter (optional, expects redis_exporter on 9121)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['localhost:9121']
+        labels:
+          application: 'kptest-redis'
+          service: 'cache'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s
+
+  # Node exporter (optional, expects node_exporter on 9100)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+        labels:
+          application: 'node-exporter'
+          service: 'infrastructure'
+    metrics_path: /metrics
+    scheme: http
+    scrape_interval: 30s

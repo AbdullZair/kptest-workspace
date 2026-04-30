@@ -3,123 +3,74 @@ package com.kptest.application.service;
 import com.kptest.api.dto.HisDemographicsDto;
 import com.kptest.api.dto.HisVerificationResult;
 import com.kptest.exception.HisIntegrationException;
-import com.kptest.infrastructure.his.HisClient;
-import com.kptest.infrastructure.his.HisClient.HisDemographicsHttpResponse;
-import com.kptest.infrastructure.his.HisClient.HisPatientPayload;
-import com.kptest.infrastructure.his.HisClient.HisVerifyHttpResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.Optional;
 
 /**
- * Application service orchestrating HIS (Hospital Information System)
- * patient identity checks (US-P-02 / US-S-04, Must-Have).
+ * Application-level abstraction for the Hospital Information System (HIS)
+ * integration (US-P-02 / US-S-04, Must-Have; ekstrakcja interface — US-S-05).
  *
- * <p>Responsibilities:
+ * <p>The contract intentionally exposes only domain-level outcomes
+ * ({@link HisVerificationResult} / {@link HisDemographicsDto}) so that
+ * callers (controllers, application services) remain agnostic of the
+ * underlying transport (REST mock, HL7 FHIR, vendor-specific HIS).</p>
+ *
+ * <p>Two implementations are wired:
  * <ul>
- *     <li>Translate HTTP-level responses returned by {@link HisClient}
- *         into domain-level {@link HisVerificationResult}.</li>
- *     <li>Mask the PESEL on outgoing DTOs - clients only ever see the
- *         last 4 digits.</li>
- *     <li>Re-throw transport/5xx errors as {@link HisIntegrationException}
- *         so the {@code GlobalExceptionHandler} can render a uniform
- *         503 response.</li>
+ *     <li>{@link com.kptest.infrastructure.his.RestHisProvider} — production
+ *         path backed by the {@code his-mock} REST contract via
+ *         {@link com.kptest.infrastructure.his.HisClient} (Apache HttpClient 5).</li>
+ *     <li>{@link com.kptest.infrastructure.his.MockHisProvider} — in-memory
+ *         implementation activated under the {@code test} Spring profile;
+ *         no network traffic, no {@code his-mock} container required.</li>
  * </ul>
+ *
+ * <p>Future implementations (e.g. {@code FhirHisProvider} for HL7 FHIR R4,
+ * {@code CgmHisProvider} for CGM CompuGroup, {@code OptiMedHisProvider})
+ * are expected to plug in through this same interface without touching
+ * any caller — see {@code docs/architecture/adr/ADR-003.md}.</p>
+ *
+ * @see com.kptest.infrastructure.his.HisClient
+ * @see HisVerificationResult
+ * @see HisDemographicsDto
  */
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class HisService {
-
-    private final HisClient hisClient;
+public interface HisService {
 
     /**
-     * Verify a patient's identity in the HIS.
+     * Verify a patient's identity in the HIS by matching a PESEL against
+     * the cart / chart number assigned by the Hospital Information System.
      *
-     * @param pesel patient PESEL (11 digits)
-     * @param cartNumber HIS cart / chart number
-     * @return matched / not-found / mismatch outcome
-     * @throws HisIntegrationException on transport or 5xx errors
+     * <p>Domain-level outcomes:
+     * <ul>
+     *     <li>{@link HisVerificationResult.Status#MATCHED} — PESEL + cart match,
+     *         demographics included.</li>
+     *     <li>{@link HisVerificationResult.Status#NOT_FOUND} — PESEL is not
+     *         present in the HIS at all.</li>
+     *     <li>{@link HisVerificationResult.Status#MISMATCH} — PESEL exists
+     *         but the supplied cart number does not match the HIS record.</li>
+     * </ul>
+     *
+     * <p>Transport / 5xx errors are not represented as a result; they
+     * raise {@link HisIntegrationException} instead so the
+     * {@code GlobalExceptionHandler} can render a uniform 503 response.</p>
+     *
+     * @param pesel patient PESEL (11 digits, unmasked)
+     * @param cartNumber HIS cart / chart number assigned to the patient
+     * @return matched / not-found / mismatch outcome (never {@code null})
+     * @throws HisIntegrationException on transport, 5xx, or unexpected errors
      */
-    public HisVerificationResult verifyPatient(String pesel, String cartNumber) {
-        log.debug("HIS verify - pesel={}, cartNumber={}",
-            HisDemographicsDto.maskPesel(pesel), cartNumber);
-
-        try {
-            Optional<HisVerifyHttpResponse> response = hisClient.verify(pesel, cartNumber);
-
-            if (response.isEmpty()) {
-                log.info("HIS verify - patient not found, pesel={}",
-                    HisDemographicsDto.maskPesel(pesel));
-                return HisVerificationResult.notFound();
-            }
-
-            HisVerifyHttpResponse body = response.get();
-            if (Boolean.TRUE.equals(body.verified()) && body.patient() != null) {
-                HisDemographicsDto demographics = toDemographics(body.patient());
-                return HisVerificationResult.matched(demographics);
-            }
-
-            log.info("HIS verify - cart mismatch, pesel={}",
-                HisDemographicsDto.maskPesel(pesel));
-            return HisVerificationResult.mismatch();
-        } catch (HisIntegrationException ex) {
-            log.warn("HIS verify failed - pesel={}, error={}",
-                HisDemographicsDto.maskPesel(pesel), ex.getMessage());
-            throw ex;
-        }
-    }
+    HisVerificationResult verifyPatient(String pesel, String cartNumber);
 
     /**
      * Fetch HIS demographics by PESEL.
      *
-     * @param pesel patient PESEL (11 digits)
-     * @return demographics with masked PESEL
+     * <p>The returned DTO always carries a masked PESEL — only the last
+     * four digits are visible — to limit exposure of sensitive personal
+     * data in API responses and logs.</p>
+     *
+     * @param pesel patient PESEL (11 digits, unmasked)
+     * @return demographics with masked PESEL (never {@code null})
      * @throws HisIntegrationException on transport, 5xx, or 404 errors
+     *         (a missing patient is treated as an integration failure
+     *         on this endpoint, unlike {@link #verifyPatient})
      */
-    public HisDemographicsDto getDemographics(String pesel) {
-        log.debug("HIS getDemographics - pesel={}", HisDemographicsDto.maskPesel(pesel));
-
-        try {
-            HisDemographicsHttpResponse body = hisClient.getDemographics(pesel)
-                .orElseThrow(() -> new HisIntegrationException(
-                    "HIS demographics not found for pesel=" + HisDemographicsDto.maskPesel(pesel)));
-
-            return HisDemographicsDto.maskedFrom(
-                body.firstName(),
-                body.lastName(),
-                body.pesel(),
-                parseDate(body.dateOfBirth())
-            );
-        } catch (HisIntegrationException ex) {
-            log.warn("HIS getDemographics failed - pesel={}, error={}",
-                HisDemographicsDto.maskPesel(pesel), ex.getMessage());
-            throw ex;
-        }
-    }
-
-    private HisDemographicsDto toDemographics(HisPatientPayload patient) {
-        return HisDemographicsDto.maskedFrom(
-            patient.firstName(),
-            patient.lastName(),
-            patient.pesel(),
-            parseDate(patient.dateOfBirth())
-        );
-    }
-
-    private LocalDate parseDate(String isoDate) {
-        if (isoDate == null || isoDate.isBlank()) {
-            return null;
-        }
-        try {
-            return LocalDate.parse(isoDate);
-        } catch (DateTimeParseException ex) {
-            log.warn("HIS returned malformed date_of_birth: {}", isoDate);
-            return null;
-        }
-    }
+    HisDemographicsDto getDemographics(String pesel);
 }
